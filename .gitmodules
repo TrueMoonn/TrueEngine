@@ -1,3 +1,6 @@
 [submodule "ECS"]
 	path = ECS
 	url = https://github.com/TrueMoonn/ECS.git
+[submodule "Network"]
+	path = Network
+	url = git@github.com:TrueMoonn/Network.git
