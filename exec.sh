@@ -1,16 +1,14 @@
 #!/bin/bash
 if [[ $1 == "--build" || $1 == "-b" ]]
 then
-    clear
     echo "------------BUILD"------------
     if [ ! -d "./build/" ]
     then
         mkdir ./build/ && cd ./build/
         cmake ..
         cd ..
-    else
-        cmake --build ./build/
     fi
+    cmake --build ./build/
     echo "------------END------------"
 
 elif [[ $1 == "--re-build" || $1 == "-rb" ]]
