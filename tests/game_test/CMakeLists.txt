@@ -25,7 +25,35 @@ target_include_directories( ${PROJECT_NAME}
         ${TE_HDR_DIR}
 )
 
-target_link_libraries( ${PROJECT_NAME}
-    PRIVATE
-        TrueEngine
-)
+########## SFML ##########
+find_library(SFML_GRAPHICS libsfml-graphics.so.3.0.2)
+find_library(SFML_SYSTEM libsfml-system.so.3.0.2)
+find_library(SFML_AUDIO libsfml-audio.so.3.0.2)
+
+if (${SFML_GRAPHICS} STREQUAL "SFML_GRAPHICS-NOTFOUND" OR
+    ${SFML_SYSTEM} STREQUAL "SFML_SYSTEM-NOTFOUND" OR
+    ${SFML_AUDIO} STREQUAL "SFML_AUDIO-NOTFOUND")
+    include(FetchContent)
+    FetchContent_Declare(SFML
+        GIT_REPOSITORY https://github.com/SFML/SFML.git
+        GIT_TAG 3.0.2
+        GIT_SHALLOW ON
+        EXCLUDE_FROM_ALL
+        SYSTEM)
+    FetchContent_MakeAvailable(SFML)
+    target_link_libraries(${PROJECT_NAME}
+        PUBLIC
+            TrueEngine
+            SFML::Graphics
+            SFML::Systems
+            SFML::Audio
+    )
+else ()
+    target_link_libraries(${PROJECT_NAME}
+        PUBLIC
+            TrueEngine
+            ${SFML_GRAPHICS}
+            ${SFML_SYSTEM}
+            ${SFML_AUDIO}
+    )
+endif ()
