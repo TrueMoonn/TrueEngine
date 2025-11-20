@@ -1,4 +1,5 @@
 #!/bin/bash
+git submodule update
 if [[ $1 == "--build" || $1 == "-b" ]]
 then
     echo "------------BUILD"------------
