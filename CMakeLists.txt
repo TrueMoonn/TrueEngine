@@ -45,6 +45,17 @@ add_library( ${PROJECT_NAME} STATIC
     $<TARGET_OBJECTS:ECS>
     $<TARGET_OBJECTS:Network>
 
+    # OTHERS
+    ${TE_SRC_DIR}/hitbox_management.cpp
+
+    # COMPONENTS
+    ${TE_SRC_DIR}/components/clock.cpp
+    ${TE_SRC_DIR}/components/hitbox.cpp
+    ${TE_SRC_DIR}/components/interactive.cpp
+    ${TE_SRC_DIR}/components/position.cpp
+    ${TE_SRC_DIR}/components/velocity.cpp
+    ${TE_SRC_DIR}/components/window.cpp
+
     # SYSTEMS
     ${TE_SRC_DIR}/systems/display.cpp
     ${TE_SRC_DIR}/systems/draw.cpp
