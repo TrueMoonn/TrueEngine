@@ -5,12 +5,12 @@
 ** hitbox_management.hpp
 */
 
-#ifndef HITBOX_MANAGEMENT_HPP_
-    #define HITBOX_MANAGEMENT_HPP_
+#pragma once
+
+    #include <vector>
 
     #include <ECS/Registry.hpp>
 
-std::vector<ECS::Entity> entity_hit(ECS::Registry& reg, const ECS::Entity entity);
+std::vector<ECS::Entity> entity_hit(ECS::Registry& reg,
+    const ECS::Entity entity);
 void entity_interaction(ECS::Registry& reg, const ECS::Entity entity);
-
-#endif

@@ -10,8 +10,7 @@
 
 #include "scenes/in_game/InGame.hpp"
 
-int main(int, const char **)
-{
+int main(int, const char **) {
     std::unique_ptr<IScene> scene = std::make_unique<InGame>();
 
     scene->run();

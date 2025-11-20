@@ -11,44 +11,38 @@
 #include "scenes/in_game/in_game.sys.hpp"
 #include "components/clock.hpp"
 
-InGame::InGame()
-{
+InGame::InGame() {
     setECS();
     setEntities();
 }
 
-using namespace te;
+void InGame::setECS(void) {
+    _reg.registerComponent<te::Drawable>();
+    _reg.registerComponent<te::Position2>();
+    _reg.registerComponent<te::Movable>();
+    _reg.registerComponent<te::Velocity2>();
+    _reg.registerComponent<te::Sprite>();
+    _reg.registerComponent<te::Window>();
+    _reg.registerComponent<te::Player>();
+    _reg.registerComponent<te::Hitbox>();
+    _reg.registerComponent<te::Interactive>();
 
-void InGame::setECS(void)
-{
-    _reg.registerComponent<Drawable>();
-    _reg.registerComponent<Position2>();
-    _reg.registerComponent<Movable>();
-    _reg.registerComponent<Velocity2>();
-    _reg.registerComponent<Sprite>();
-    _reg.registerComponent<Window>();
-    _reg.registerComponent<Player>();
-    _reg.registerComponent<Hitbox>();
-    _reg.registerComponent<Interactive>();
-
-    _reg.addSystem(&movement2_sys);
-    _reg.addSystem(&hitbox2_sys);
-    _reg.addSystem(&player_interaction_sys);
-    _reg.addSystem(&manageEvent);
-    _reg.addSystem(&follow_player_sys);
-    _reg.addSystem(&draw_sys);
-    _reg.addSystem(&display_sys);
+    _reg.addSystem(&te::movement2_sys);
+    _reg.addSystem(&te::hitbox2_sys);
+    _reg.addSystem(&te::player_interaction_sys);
+    _reg.addSystem(&te::manageEvent);
+    _reg.addSystem(&te::follow_player_sys);
+    _reg.addSystem(&te::draw_sys);
+    _reg.addSystem(&te::display_sys);
 }
 
-void InGame::setEntities(void)
-{
-    _reg.addComponent(MAIN_WINDOW, Window());
+void InGame::setEntities(void) {
+    _reg.addComponent(MAIN_WINDOW, te::Window());
     load_map(_reg, MAPS_PATHS.at("test1"));
 }
 
-void InGame::run(void)
-{
-    struct Clock clock(CLOCK_RATE);
+void InGame::run(void) {
+    struct te::Clock clock(CLOCK_RATE);
 
     while (MAIN_WIN_EXIST && MAIN_WIN_ISOPEN) {
         if (clock.checkCooldown()) {

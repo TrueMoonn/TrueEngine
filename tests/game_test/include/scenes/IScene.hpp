@@ -5,13 +5,9 @@
 ** IScene.hpp
 */
 
-#ifndef ISCENE_HPP_
-    #define ISCENE_HPP_
+#pragma once
 
 class IScene {
-    public:
-        virtual void run(void) = 0;
-        
+ public:
+    virtual void run(void) = 0;
 };
-
-#endif

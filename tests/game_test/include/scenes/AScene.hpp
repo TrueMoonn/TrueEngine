@@ -5,19 +5,16 @@
 ** AScene.hpp
 */
 
-#ifndef ASCENE_HPP_
-    #define ASCENE_HPP_
+#pragma once
 
     #include <ECS/Registry.hpp>
 
     #include "scenes/IScene.hpp"
 
 class AScene : public IScene {
-    public:
-        virtual void run(void) = 0;
+ public:
+    virtual void run(void) = 0;
 
-    protected:
-        ECS::Registry _reg;
+ protected:
+    ECS::Registry _reg;
 };
-
-#endif

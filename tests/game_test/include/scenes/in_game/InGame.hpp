@@ -5,8 +5,7 @@
 ** InGame.hpp
 */
 
-#ifndef IN_GAME_HPP_
-    #define IN_GAME_HPP_
+#pragma once
 
     #include <map>
     #include <vector>
@@ -23,18 +22,20 @@ enum IG_entities_e : ECS::Entity {
     MIN_BG = MAP_ENTITY_BACKGROUND,
     MAX_BG = MAP_MAX_ENTITY_BACKGROUND,
 };
-    
+
     /**
      * @brief Check if the MAIN_WINDOW entity exist
-     * 
+     *
      * Search in the local registry if the SparceArray of Window component has the
      * MAIN_WINDOW entity inside
      * @param MAIN_WINDOW is Entity index for the main window
      * @param Window is SFML like type RenderWindow component
      * @param _reg The local registry of the class
-     * @return TRUE if the window exist, FALSE if not 
+     * @return TRUE if the window exist, FALSE if not
      */
-    #define MAIN_WIN_EXIST (this->_reg.getComponents<Window>().size() > MAIN_WINDOW && this->_reg.getComponents<Window>()[MAIN_WINDOW].has_value())
+    #define MAIN_WIN_EXIST \
+        (this->_reg.getComponents<te::Window>().size() > MAIN_WINDOW \
+        && this->_reg.getComponents<te::Window>()[MAIN_WINDOW].has_value())
 
     /**
      * @brief Check if the MAIN_WINDOW entity is open
@@ -45,20 +46,19 @@ enum IG_entities_e : ECS::Entity {
      * @param MAIN_WINDOW is Entity index for the main window
      * @param Window is SFML like type RenderWindow component
      * @param _reg The local registry of the class
-     * @return TRUE if the window is open, FALSE if not 
+     * @return TRUE if the window is open, FALSE if not
      */
-    #define MAIN_WIN_ISOPEN (this->_reg.getComponents<Window>()[MAIN_WINDOW].value().isOpen())
-  
+    #define MAIN_WIN_ISOPEN \
+        (this->_reg.getComponents<te::Window>()[MAIN_WINDOW].value().isOpen())
+
 class InGame : public AScene {
-    public:
-        InGame();
-        ~InGame() = default;
+ public:
+    InGame();
+    ~InGame() = default;
 
-        void run(void) override;
+    void run(void) override;
 
-    private:
-        void setECS(void);
-        void setEntities(void);
+ private:
+    void setECS(void);
+    void setEntities(void);
 };
-
-#endif

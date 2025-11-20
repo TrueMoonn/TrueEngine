@@ -5,8 +5,7 @@
 ** map_management.hpp
 */
 
-#ifndef MAP_MANAGEMENT_HPP_
-    #define MAP_MANAGEMENT_HPP_
+#pragma once
 
     #include <string>
     #include <map>
@@ -16,18 +15,26 @@
 
     #include <ECS/Registry.hpp>
 
-    #define MAP_MAX_WIDTH 100 /* Maximim width readed from file */
-    #define MAP_MAX_HEIGHT 100 /* Maximum heigth readed from file */
+    /* Maximim width readed from file */
+    #define MAP_MAX_WIDTH 100
+    /* Maximum heigth readed from file */
+    #define MAP_MAX_HEIGHT 100
 
-    #define MAP_ENTITY_PLAYER 999 /* Player entity pose in sparse array */
-    #define MAP_ENTITY_BACKGROUND 1000 /* First wall entity pose in sparse array */
-    #define MAP_MAX_ENTITY_BACKGROUND MAP_ENTITY_BACKGROUND + MAP_MAX_WIDTH * MAP_MAX_HEIGHT
+    /* Player entity pose in sparse array */
+    #define MAP_ENTITY_PLAYER 999
+    /* First wall entity pose in sparse array */
+    #define MAP_ENTITY_BACKGROUND 1000
+    /* Max wall entity in sparse array */
+    #define MAP_MAX_ENTITY_BACKGROUND MAP_ENTITY_BACKGROUND \
+        + MAP_MAX_WIDTH * MAP_MAX_HEIGHT
 
 
     #define SQUARE_WIDTH 50
     #define SQUARE_HEIGHT 50
 
-static const std::string MAP_EXTENTION(".ddmap"); /* Extention for map initialisation */
+/* Extention for map initialisation */
+static const char *MAP_EXTENTION(".ddmap");
+static const size_t MAP_EXTENTION_SIZE(7);
 
 void load_map(ECS::Registry& reg, const std::string& path);
 
@@ -43,9 +50,9 @@ static const std::map<std::string, std::string> MAPS_PATHS = {
 };
 
 static const std::unordered_map<MAP_TYPES, sf::Texture> TEXTURE_MAP {
-    {MAP_WALL, sf::Texture(sf::Image(sf::Vector2u(SQUARE_WIDTH, SQUARE_WIDTH), sf::Color::Red))},
-    {MAP_DOOR, sf::Texture(sf::Image(sf::Vector2u(SQUARE_WIDTH, SQUARE_WIDTH), sf::Color::Yellow))},
+    {MAP_WALL, sf::Texture(sf::Image(sf::Vector2u(SQUARE_WIDTH, SQUARE_WIDTH),
+        sf::Color::Red))},
+    {MAP_DOOR, sf::Texture(sf::Image(sf::Vector2u(SQUARE_WIDTH, SQUARE_WIDTH),
+        sf::Color::Yellow))},
     {MAP_PLAYER, sf::Texture(sf::Image(sf::Vector2u(30, 30), sf::Color::Blue))}
 };
-
-#endif
