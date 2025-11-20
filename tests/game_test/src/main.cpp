@@ -1,24 +1,19 @@
 /*
 ** EPITECH PROJECT, 2025
-** TrueEngine
+** ECS
 ** File description:
 ** main.cpp
 */
 
-#include <iostream>
-#include <ECS/Registry.hpp>
+#include <memory>
+#include <SFML/Graphics/RenderWindow.hpp>
 
-#include "game.hpp"
+#include "scenes/in_game/InGame.hpp"
 
-int main(void) {
-    ECS::Registry reg;
+int main(int, const char **)
+{
+    std::unique_ptr<IScene> scene = std::make_unique<InGame>();
 
-    auto& ints = reg.registerComponent<int>();
-    reg.addComponent<int>(3, 4);
-
-    reg.addSystem([](ECS::Registry& reg){std::cout << "hihi" << std::endl;});
-
-    std::cout << ints[3].value() << std::endl;
-    reg.runSystems();
-    return 0;
+    scene->run();
+    return EXIT_SUCCESS;
 }

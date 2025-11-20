@@ -11,7 +11,7 @@
 
     #include <SFML/Graphics/Rect.hpp>
 
-    #include "Registry.hpp"
+    #include <ECS/Registry.hpp>
 
 namespace te {
 

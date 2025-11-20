@@ -7,7 +7,7 @@
 
 #pragma once
 
-    #include "Registry.hpp"
+    #include <ECS/Registry.hpp>
 
 namespace te {
 

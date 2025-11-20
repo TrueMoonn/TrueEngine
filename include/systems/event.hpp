@@ -11,7 +11,7 @@
     #include <SFML/System/Vector2.hpp>
     #include <SFML/Window/Keyboard.hpp>
 
-    #include "Registry.hpp"
+    #include <ECS/Registry.hpp>
 
 namespace te {
 

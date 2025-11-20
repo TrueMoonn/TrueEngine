@@ -17,6 +17,8 @@ link_directories(
 ########## EXECUTABLE ##########
 add_executable( ${PROJECT_NAME}
     ${GT_SRC_DIR}/main.cpp
+    ${GT_SRC_DIR}/scenes/InGame.cpp
+    ${GT_SRC_DIR}/map_management.cpp
 )
 
 target_include_directories( ${PROJECT_NAME}
