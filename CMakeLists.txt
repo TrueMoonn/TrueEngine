@@ -72,15 +72,9 @@ target_include_directories(${PROJECT_NAME}
 )
 
 ########## SFML ##########
-find_library(
-    SFML_GRAPHICS libsfml-graphics.so.3.0.2
-)
-find_library(
-    SFML_SYSTEM libsfml-system.so.3.0.2
-)
-find_library(
-    SFML_AUDIO libsfml-audio.so.3.0.2
-)
+find_library(SFML_GRAPHICS libsfml-graphics.so.3.0.2)
+find_library(SFML_SYSTEM libsfml-system.so.3.0.2)
+find_library(SFML_AUDIO libsfml-audio.so.3.0.2)
 
 if (${SFML_GRAPHICS} STREQUAL "SFML_GRAPHICS-NOTFOUND" OR
     ${SFML_SYSTEM} STREQUAL "SFML_SYSTEM-NOTFOUND" OR
