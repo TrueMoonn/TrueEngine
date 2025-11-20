@@ -1,3 +1,7 @@
+#Headers from sub-libs
+include/ECS
+include/Network
+
 #Local Files
 build/
 *.a
