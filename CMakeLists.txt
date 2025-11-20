@@ -12,9 +12,8 @@ message("Updating project header from ECS and Network...")
 execute_process (
     COMMAND bash -c "
         rm -rf ../include/ECS && rm -rf ../include/Network
-        mkdir ../include/ECS && mkdir ../include/Network
-        cp -R ../ECS/include/. ../include/ECS/
-        cp -R ../Network/include/. ../include/Network
+        cp -R ../ECS/include/. ../include/
+        cp -R ../Network/include/. ../include/
     "
 )
 message("Updating project header from ECS and Network... DONE")
