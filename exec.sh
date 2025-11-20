@@ -54,6 +54,18 @@ then
     rm -rf ./build/ ./*.a
     clear
 
+elif [[ $1 == "--game-testing" || $1 == "-gt" ]]
+then
+    echo "------------GAME TESTING"------------
+    cd tests/game_test
+    rm -rf ./build/ ./*.a
+    mkdir ./build/ && cd ./build/
+    cmake ..
+    cmake --build .
+    cd ../../..
+    ./tests/game_test/GameTest
+    echo "------------END------------"
+
 elif [[ $1 == "--style-check" || $1 == "-cs" ]]
 then
     echo "------------CS CHECKER------------"
