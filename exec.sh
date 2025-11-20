@@ -63,8 +63,9 @@ then
     mkdir ./build/ && cd ./build/
     cmake ..
     cmake --build .
-    cd ../../..
-    ./tests/game_test/GameTest
+    cd ..
+    ./GameTest
+    cd ../..
     echo "------------END------------"
 
 elif [[ $1 == "--style-check" || $1 == "-cs" ]]
