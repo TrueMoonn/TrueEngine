@@ -52,6 +52,7 @@ then
 elif [[ $1 == "--clear" || $1 == "-c" ]]
 then
     rm -rf ./build/ ./*.a
+    rm -rf include/ECS && rm -rf include/Network
     clear
 
 elif [[ $1 == "--game-testing" || $1 == "-gt" ]]
@@ -69,7 +70,8 @@ then
 elif [[ $1 == "--style-check" || $1 == "-cs" ]]
 then
     echo "------------CS CHECKER------------"
-    rm -rf ./build/
+    rm -rf ./build/ ./*.a
+    rm -rf include/ECS && rm -rf include/Network
     pip install cpplint
     cpplint --recursive .
     echo "------------END------------"

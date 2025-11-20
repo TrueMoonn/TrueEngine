@@ -5,6 +5,7 @@
 ** main.cpp
 */
 
+#include <iostream>
 #include <ECS/Registry.hpp>
 
 #include "game.hpp"

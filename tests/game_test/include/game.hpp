@@ -5,9 +5,9 @@
 ** game.hpp
 */
 
-#ifndef INCLUDE_GAME_HPP_
-    #define INCLUDE_GAME_HPP_
+#ifndef TESTS_GAME_TEST_INCLUDE_GAME_HPP_
+    #define TESTS_GAME_TEST_INCLUDE_GAME_HPP_
 
 
 
-#endif  //INCLUDE_GAME_HPP_
+#endif  // TESTS_GAME_TEST_INCLUDE_GAME_HPP_
