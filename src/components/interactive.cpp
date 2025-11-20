@@ -7,8 +7,10 @@
 
 #include "components/interactive.hpp"
 
-Interactive::Interactive(const sf::FloatRect& rect, const interactive_func& func)
-{
+namespace te {
+
+Interactive::Interactive(const sf::FloatRect& rect,
+    const interactive_func& func) {
     hitbox.size.y = rect.size.y;
     hitbox.size.x = rect.size.x;
     hitbox.position.y = rect.position.y;
@@ -16,8 +18,8 @@ Interactive::Interactive(const sf::FloatRect& rect, const interactive_func& func
     event = func;
 }
 
-Interactive::Interactive(const sf::Vector2f& pos, const sf::Vector2f& size, const interactive_func& func)
-{
+Interactive::Interactive(const sf::Vector2f& pos, const sf::Vector2f& size,
+    const interactive_func& func) {
     hitbox.size.y = size.y;
     hitbox.size.x = size.x;
     hitbox.position.y = pos.y;
@@ -25,11 +27,13 @@ Interactive::Interactive(const sf::Vector2f& pos, const sf::Vector2f& size, cons
     event = func;
 }
 
-Interactive::Interactive(float left, float top, float width, float height, const interactive_func& func)
-{
+Interactive::Interactive(float left, float top, float width, float height,
+    const interactive_func& func) {
     hitbox.size.y = height;
     hitbox.size.x = width;
     hitbox.position.y = top;
     hitbox.position.x = left;
     event = func;
 }
+
+}  // namespace te

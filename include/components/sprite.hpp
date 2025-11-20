@@ -5,14 +5,15 @@
 ** sprite.hpp
 */
 
-#ifndef SPRITE_HPP_
-    #define SPRITE_HPP_
+#pragma once
 
     #include <SFML/Graphics/Sprite.hpp>
     #include <SFML/Graphics/Texture.hpp>
 
+namespace te {
+
 struct Sprite : public sf::Sprite {
-    Sprite(const sf::Texture& texture) : sf::Sprite(texture) {};
+    explicit Sprite(const sf::Texture& texture) : sf::Sprite(texture) {}
 };
 
-#endif
+}  // namespace te

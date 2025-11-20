@@ -5,11 +5,12 @@
 ** drawable.hpp
 */
 
-#ifndef DRAWABLE_CMPT_HPP_
-    #define DRAWABLE_CMPT_HPP_
+#pragma once
+
+namespace te {
 
 struct Drawable {
     unsigned drawable = 1;
 };
 
-#endif
+}  // namespace te

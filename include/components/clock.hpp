@@ -5,20 +5,18 @@
 ** clock.hpp
 */
 
-#ifndef CLOCK_HPP_
-    #define CLOCK_HPP_
+#pragma once
 
-    #include <chrono>
+#include <chrono>
 
-namespace te
-{
+namespace te {
 
 typedef std::chrono::high_resolution_clock hr_clock;
 typedef std::chrono::time_point<hr_clock> hr_time_point;
 typedef std::chrono::milliseconds ms;
 
 struct Clock {
-    Clock(double cooldown_ms, bool active = true, size_t delta = 0);
+    explicit Clock(double cooldown_ms, bool active = true, size_t delta = 0);
     bool active;
     size_t delta;
     double cooldown_ms;
@@ -28,6 +26,4 @@ struct Clock {
     bool checkCooldown(void);
 };
 
-} // namespace trueengine
-
-#endif
+}  // namespace te

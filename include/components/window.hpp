@@ -5,15 +5,17 @@
 ** window.hpp
 */
 
-#ifndef WINDOW_CMPT_HPP_
-    #define WINDOW_CMPT_HPP_
+#pragma once
 
+    #include <string>
     #include <SFML/Graphics/RenderWindow.hpp>
     #include "SparseArray.hpp"
 
-    #define DEFAULT_FRAME_LIMIT 60
-    #define DEFAULT_WIN_NAME "Deepest Dungeon"
-    #define DEFAULT_VIDEO_MODE sf::VideoMode({1280, 720})
+namespace te {
+
+#define DEFAULT_FRAME_LIMIT 60
+#define DEFAULT_WIN_NAME "Deepest Dungeon"
+#define DEFAULT_VIDEO_MODE sf::VideoMode({1280, 720})
 
 struct Window : public sf::RenderWindow {
     Window();
@@ -22,6 +24,7 @@ struct Window : public sf::RenderWindow {
     std::string name;
 };
 
-std::optional<std::reference_wrapper<Window>> findActiveWindow(ECS::SparseArray<Window>&);
+std::optional<std::reference_wrapper<Window>>
+    findActiveWindow(ECS::SparseArray<Window>&);
 
-#endif
+}  // namespace te
