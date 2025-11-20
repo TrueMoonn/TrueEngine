@@ -5,11 +5,12 @@
 ** player.hpp
 */
 
-#ifndef PLAYER_CMPT_HPP_
-    #define PLAYER_CMPT_HPP_
+#pragma once
+
+namespace te {
 
 struct Player {
     unsigned player = 1;
 };
 
-#endif
+}  // namespace te
