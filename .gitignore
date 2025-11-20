@@ -6,3 +6,6 @@ include/Network
 build/
 *.a
 tests/game_test/GameTest
+
+#Editor config
+.vscode
