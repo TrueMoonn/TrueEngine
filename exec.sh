@@ -52,15 +52,56 @@ then
 elif [[ $1 == "--clear" || $1 == "-c" ]]
 then
     rm -rf ./build/ ./*.a
+    rm -rf include/ECS && rm -rf include/Network
     clear
 
-elif [[ $1 == "--style-checker" || $1 == "-cs" ]]
+elif [[ $1 == "--game-testing" || $1 == "-gt" ]]
+then
+    echo "------------GAME TESTING"------------
+    cd tests/game_test
+    rm -rf ./build/ ./*.a
+    mkdir ./build/ && cd ./build/
+    cmake ..
+    cmake --build .
+    cd ..
+    ./GameTest
+    cd ../..
+    echo "------------END------------"
+
+elif [[ $1 == "--style-check" || $1 == "-cs" ]]
 then
     echo "------------CS CHECKER------------"
-    rm -rf ./build/
+    rm -rf ./build/ ./*.a
+    rm -rf include/ECS && rm -rf include/Network
     pip install cpplint
     cpplint --recursive .
     echo "------------END------------"
+elif [[ $1 == "--help" || $1 == "-h" ]]
+then
+    echo "To use this executer you must use a flag:
+    --build, -b             Build the program with CMake
+    --clear, -c             Clear files created by the compilation
+    --style-check, -cs      Check for coding style using cpplint
+    --help, -h              More information about this script
+    --game-testing, -gt     Build and launch test game
+
+    << This section delete the old files created by the compilation >>
+    --re-build, -rb         Build the program with CMake
+    --build-test, -t        Launch unit tests with coverage using GTest
+    --debug-build, -d       Build the program with debug and verbose
+"
 else
-    echo "Missing flag"
+    echo "error: missing or wrong flag
+To use this executer you must use a flag:
+    --build, -b             Build the program with CMake
+    --clear, -c             Clear files created by the compilation
+    --style-check, -cs      Check for coding style using cpplint
+    --help, -h              More information about this script
+    --game-testing, -gt     Build and launch test game
+
+    << This section delete the old files created by the compilation >>
+    --re-build, -rb         Build the program with CMake
+    --build-test, -t        Launch unit tests with coverage using GTest
+    --debug-build, -d       Build the program with debug and verbose
+"
 fi
