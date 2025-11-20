@@ -74,11 +74,13 @@ target_include_directories(${PROJECT_NAME}
 ########## SFML ##########
 find_library(SFML_GRAPHICS libsfml-graphics.so.3.0.2)
 find_library(SFML_SYSTEM libsfml-system.so.3.0.2)
+find_library(SFML_WINDOW libsfml-window.so.3.0.2)
 find_library(SFML_AUDIO libsfml-audio.so.3.0.2)
 
 if (${SFML_GRAPHICS} STREQUAL "SFML_GRAPHICS-NOTFOUND" OR
     ${SFML_SYSTEM} STREQUAL "SFML_SYSTEM-NOTFOUND" OR
-    ${SFML_AUDIO} STREQUAL "SFML_AUDIO-NOTFOUND")
+    ${SFML_AUDIO} STREQUAL "SFML_AUDIO-NOTFOUND" OR
+    ${SFML_WINDOW} STREQUAL "SFML_WINDOW-NOTFOUND")
     include(FetchContent)
     FetchContent_Declare(SFML
         GIT_REPOSITORY https://github.com/SFML/SFML.git
@@ -93,6 +95,7 @@ if (${SFML_GRAPHICS} STREQUAL "SFML_GRAPHICS-NOTFOUND" OR
             Network
             SFML::Graphics
             SFML::Systems
+            SFML::Window
             SFML::Audio
     )
 else ()
@@ -102,6 +105,7 @@ else ()
             Network
             ${SFML_GRAPHICS}
             ${SFML_SYSTEM}
+            ${SFML_WINDOW}
             ${SFML_AUDIO}
     )
 endif ()
