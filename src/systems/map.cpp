@@ -14,21 +14,25 @@
 
 #include "systems/map.hpp"
 
-static void interaction_hitbox(ECS::Registry& reg)
-{
+namespace te {
+
+static void interaction_hitbox(ECS::Registry& reg) {
     auto& players = reg.getComponents<Player>();
     auto& interactives = reg.getComponents<Interactive>();
 
-    for (ECS::Entity e = 0; e < players.size() && e < interactives.size(); ++e) {
+    for (ECS::Entity e = 0; e < players.size() &&
+        e < interactives.size(); ++e) {
         if (players[e].has_value() && interactives[e].has_value()) {
             entity_interaction(reg, e);
         }
     }
 }
 
-void player_interaction_sys(ECS::Registry& reg)
-{
+void player_interaction_sys(ECS::Registry& reg) {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::E)) {
         interaction_hitbox(reg);
     }
 }
+
+}  // namespace te
+

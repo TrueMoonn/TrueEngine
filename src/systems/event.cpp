@@ -13,8 +13,9 @@
 #include "components/position.hpp"
 #include "components/velocity.hpp"
 
-void playerMovementEvent(ECS::Registry& reg)
-{
+namespace te {
+
+void playerMovementEvent(ECS::Registry& reg) {
     auto& players = reg.getComponents<Player>();
 
     for (ECS::Entity e = 0; e < players.size(); ++e) {
@@ -38,16 +39,18 @@ void playerMovementEvent(ECS::Registry& reg)
     }
 }
 
-void manageEvent(ECS::Registry& reg)
-{
-    std::optional<std::reference_wrapper<Window>> opt_win = findActiveWindow(reg.getComponents<Window>());
+void manageEvent(ECS::Registry& reg) {
+    std::optional<std::reference_wrapper<Window>> opt_win =
+        findActiveWindow(reg.getComponents<Window>());
     if (!opt_win.has_value())
         return;
     std::reference_wrapper<Window> win = opt_win.value();
 
-    while(std::optional event = win.get().pollEvent()) {
+    while (std::optional event = win.get().pollEvent()) {
         if (event->is<sf::Event::Closed>())
             win.get().close();
     }
     playerMovementEvent(reg);
 }
+
+}  // namespace te

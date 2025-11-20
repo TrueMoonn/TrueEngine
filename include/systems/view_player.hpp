@@ -5,11 +5,12 @@
 ** view_player.hpp
 */
 
-#ifndef VIEW_PLAYER_HPP_
-    #define VIEW_PLAYER_HPP_
+#pragma once
 
     #include "Registry.hpp"
 
+namespace te {
+
 void follow_player_sys(ECS::Registry& reg);
 
-#endif
+}  // namespace te

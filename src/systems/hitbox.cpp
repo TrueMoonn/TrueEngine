@@ -13,17 +13,20 @@
 
 #include "systems/movement.hpp"
 
-void hitbox2_sys(ECS::Registry& reg)
-{
+namespace te {
+
+void hitbox2_sys(ECS::Registry& reg) {
     auto& positions = reg.getComponents<Position2>();
     auto& velocities = reg.getComponents<Velocity2>();
     auto& hitboxs = reg.getComponents<Hitbox>();
     auto& movable = reg.getComponents<Movable>();
 
-    for (ECS::Entity entity = 0; entity < hitboxs.size() && entity < velocities.size(); ++entity) {
+    for (ECS::Entity entity = 0; entity < hitboxs.size() &&
+        entity < velocities.size(); ++entity) {
         if (!movable[entity].has_value())
             continue;
-        if (positions[entity].has_value() && velocities[entity].has_value() && hitboxs[entity].has_value()) {
+        if (positions[entity].has_value() && velocities[entity].has_value()
+            && hitboxs[entity].has_value()) {
             auto& pos = positions[entity].value();
             auto& vel = velocities[entity].value();
             // Refacto
@@ -42,3 +45,5 @@ void hitbox2_sys(ECS::Registry& reg)
         }
     }
 }
+
+}  // namespace te

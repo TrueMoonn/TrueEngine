@@ -5,12 +5,13 @@
 ** movement.hpp
 */
 
-#ifndef MOVEMENT_HPP_
-    #define MOVEMENT_HPP_
+#pragma once
 
     #include "Registry.hpp"
+
+namespace te {
 
 void movement2_sys(ECS::Registry& reg);
 void movement3_sys(ECS::Registry& reg);
 
-#endif
+}  // namespace te

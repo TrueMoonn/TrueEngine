@@ -5,8 +5,7 @@
 ** event.hpp
 */
 
-#ifndef EVENT_SYS_HPP_
-    #define EVENT_SYS_HPP_
+#pragma once
 
     #include <map>
     #include <SFML/System/Vector2.hpp>
@@ -14,14 +13,16 @@
 
     #include "Registry.hpp"
 
+namespace te {
+
 enum player_movement_e {
-    P_LEFT_MOV = int(sf::Keyboard::Key::Q),
-    P_RIGHT_MOV = int(sf::Keyboard::Key::D),
-    P_TOP_MOV = int(sf::Keyboard::Key::Z),
-    P_BOT_MOV = int(sf::Keyboard::Key::S),
+    P_LEFT_MOV = static_cast<int>(sf::Keyboard::Key::Q),
+    P_RIGHT_MOV = static_cast<int>(sf::Keyboard::Key::D),
+    P_TOP_MOV = static_cast<int>(sf::Keyboard::Key::Z),
+    P_BOT_MOV = static_cast<int>(sf::Keyboard::Key::S),
 };
 
-    #define P_MOV_FACTOR 3.0f
+#define P_MOV_FACTOR 3.0f
 static const std::map<player_movement_e, float> P_MOVEMENT = {
     {P_LEFT_MOV, -P_MOV_FACTOR},
     {P_RIGHT_MOV, P_MOV_FACTOR},
@@ -31,4 +32,4 @@ static const std::map<player_movement_e, float> P_MOVEMENT = {
 
 void manageEvent(ECS::Registry& reg);
 
-#endif
+}  // namespace te

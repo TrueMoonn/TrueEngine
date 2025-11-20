@@ -5,11 +5,13 @@
 ** map.hpp
 */
 
-#ifndef MAP_HPP_
-    #define MAP_HPP_
+#pragma once
 
     #include "Registry.hpp"
 
+namespace te {
+
 void player_interaction_sys(ECS::Registry& reg);
 
-#endif
+}  // namespace te
+

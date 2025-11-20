@@ -9,8 +9,9 @@
 
 #include "components/window.hpp"
 
-void display_sys(ECS::Registry& reg)
-{
+namespace te {
+
+void display_sys(ECS::Registry& reg) {
     auto& windows = reg.getComponents<Window>();
 
     for (ECS::Entity e = 0; e < windows.size(); ++e) {
@@ -20,3 +21,5 @@ void display_sys(ECS::Registry& reg)
         }
     }
 }
+
+}  // namespace te

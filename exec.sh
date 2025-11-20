@@ -71,7 +71,7 @@ then
 elif [[ $1 == "--style-check" || $1 == "-cs" ]]
 then
     echo "------------CS CHECKER------------"
-    rm -rf ./build/ ./*.a
+    rm -rf ./build/ ./*.a ./tests/game_test/build/
     rm -rf include/ECS && rm -rf include/Network
     pip install cpplint
     cpplint --recursive .

@@ -7,7 +7,10 @@
 
 #pragma once
 
-#include "Registry.hpp"
+    #include "Registry.hpp"
+
+namespace te {
 
 void hitbox2_sys(ECS::Registry& reg);
 
+}  // namespace te

@@ -5,11 +5,12 @@
 ** display.hpp
 */
 
-#ifndef DISPLAY_SYS_HPP_
-    #define DISPLAY_SYS_HPP_
+#pragma once
 
     #include "Registry.hpp"
 
+namespace te {
+
 void display_sys(ECS::Registry&);
 
-#endif
+}  // namespace te

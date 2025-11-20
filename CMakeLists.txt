@@ -44,7 +44,15 @@ add_subdirectory(Network)
 add_library( ${PROJECT_NAME} STATIC
     $<TARGET_OBJECTS:ECS>
     $<TARGET_OBJECTS:Network>
-    ${TE_SRC_DIR}/temp.cpp
+
+    # SYSTEMS
+    ${TE_SRC_DIR}/systems/display.cpp
+    ${TE_SRC_DIR}/systems/draw.cpp
+    ${TE_SRC_DIR}/systems/event.cpp
+    ${TE_SRC_DIR}/systems/hitbox.cpp
+    ${TE_SRC_DIR}/systems/map.cpp
+    ${TE_SRC_DIR}/systems/movement.cpp
+    ${TE_SRC_DIR}/systems/view_player.cpp
 )
 
 target_include_directories(${PROJECT_NAME}

@@ -5,11 +5,12 @@
 ** draw.hpp
 */
 
-#ifndef DRAW_HPP_
-    #define DRAW_HPP_
+#pragma once
 
     #include "Registry.hpp"
 
+namespace te {
+
 void draw_sys(ECS::Registry& reg);
 
-#endif
+}  // namespace te
