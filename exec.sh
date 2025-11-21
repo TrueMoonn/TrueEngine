@@ -52,7 +52,7 @@ then
 
 elif [[ $1 == "--clear" || $1 == "-c" ]]
 then
-    rm -rf ./build/ ./*.a
+    rm -rf ./build/ ./*.a ./tests/game_test/build ./tests/game_test/GameTest
     rm -rf include/ECS && rm -rf include/Network
     clear
 
@@ -60,7 +60,7 @@ elif [[ $1 == "--game-testing" || $1 == "-gt" ]]
 then
     echo "------------GAME TESTING"------------
     cd tests/game_test
-    rm -rf ./build/ ./*.a
+    rm -rf ./build/ GameTest
     mkdir ./build/ && cd ./build/
     cmake ..
     cmake --build .
