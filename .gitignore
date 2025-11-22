@@ -5,6 +5,7 @@ include/Network
 #Local Files
 build/
 *.a
+*.so
 tests/game_test/GameTest
 
 #Editor config
