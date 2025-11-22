@@ -7,15 +7,15 @@
 
 #pragma once
 
-#include <cstddef>
+#include <cstdint>
 
 namespace te {
 
 struct Health {
-    explicit Health(const std::size_t&);
-    void reduceSafely(const std::size_t&);
+    explicit Health(const std::int64_t &);
+    void reduceSafely(const std::int64_t &);
 
-    std::size_t amount;
+    std::int64_t  amount;
 };
 
 }  // namespace te

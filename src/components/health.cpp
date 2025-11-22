@@ -7,16 +7,14 @@
 
 #include "components/health.hpp"
 
-namespace te
-{
+namespace te {
 
-Health::Health(const std::size_t &amount) :
+Health::Health(const std::int64_t &amount) :
 amount(amount)
 {}
 
-void Health::reduceSafely(const std::size_t &value)
-{
+void Health::reduceSafely(const std::int64_t &value) {
     amount -= value > amount ? amount : value;
 }
 
-} // namespace te
+}  // namespace te

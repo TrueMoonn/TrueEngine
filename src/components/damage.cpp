@@ -7,11 +7,10 @@
 
 #include "components/damage.hpp"
 
-namespace te
-{
+namespace te {
 
-Damage::Damage(long long amount) :
+Damage::Damage(const std::int64_t &amount) :
 amount(amount)
 {}
 
-} // namespace te
+}  // namespace te

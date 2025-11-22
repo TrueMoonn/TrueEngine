@@ -5,6 +5,8 @@
 ** movement.cpp
 */
 
+#include <ECS/Zipper.hpp>
+
 #include "components/position.hpp"
 #include "components/velocity.hpp"
 #include "components/movable.hpp"
@@ -21,27 +23,18 @@ void hitbox2_sys(ECS::Registry& reg) {
     auto& hitboxs = reg.getComponents<Hitbox>();
     auto& movable = reg.getComponents<Movable>();
 
-    for (ECS::Entity entity = 0; entity < hitboxs.size() &&
-        entity < velocities.size(); ++entity) {
-        if (!movable[entity].has_value())
-            continue;
-        if (positions[entity].has_value() && velocities[entity].has_value()
-            && hitboxs[entity].has_value()) {
-            auto& pos = positions[entity].value();
-            auto& vel = velocities[entity].value();
-            // Refacto
-            if (entity_hit(reg, entity).size() != 0) {
-                pos.x -= vel.x;
-                if (entity_hit(reg, entity).size() != 0) {
-                    pos.x += vel.x;
-                    pos.y -= vel.y;
-                    if (entity_hit(reg, entity).size() != 0) {
-                        pos.x -= vel.x;
-                        return;
-                    }
+    for (auto &&[id, pos, vel, hit, mob] : ECS::IndexedZipper(positions,
+        velocities, hitboxs, movable)) {
+        if (entity_hit(reg, id).size() != 0) {
+            pos.value().x -= vel.value().x;
+            if (entity_hit(reg, id).size() != 0) {
+                pos.value().x += vel.value().x;
+                pos.value().y -= vel.value().y;
+                if (entity_hit(reg, id).size() != 0) {
+                    pos.value().x -= vel.value().x;
+                    return;
                 }
             }
-            //
         }
     }
 }

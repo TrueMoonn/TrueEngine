@@ -7,12 +7,14 @@
 
 #pragma once
 
+#include <cstdint>
+
 namespace te {
 
 struct Damage {
-    explicit Damage(long long);
+    explicit Damage(const std::int64_t &);
 
-    long long amount;
+    std::int64_t amount;
 };
 
 }  // namespace te
