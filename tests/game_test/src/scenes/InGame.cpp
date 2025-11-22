@@ -22,12 +22,15 @@ void InGame::setECS(void) {
     _reg.registerComponent<te::Movable>();
     _reg.registerComponent<te::Velocity2>();
     _reg.registerComponent<te::Sprite>();
+    _reg.registerComponent<te::Health>();
+    _reg.registerComponent<te::Damage>();
     _reg.registerComponent<te::Window>();
     _reg.registerComponent<te::Player>();
     _reg.registerComponent<te::Hitbox>();
     _reg.registerComponent<te::Interactive>();
 
     _reg.addSystem(&te::movement2_sys);
+    _reg.addSystem(&te::deal_damage);
     _reg.addSystem(&te::hitbox2_sys);
     _reg.addSystem(&te::player_interaction_sys);
     _reg.addSystem(&te::manageEvent);

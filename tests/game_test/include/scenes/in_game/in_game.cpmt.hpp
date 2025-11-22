@@ -16,3 +16,5 @@
     #include "components/player.hpp"
     #include "components/hitbox.hpp"
     #include "components/interactive.hpp"
+    #include "components/damage.hpp"
+    #include "components/health.hpp"

@@ -50,6 +50,8 @@ add_library( ${PROJECT_NAME} STATIC
     # COMPONENTS
     ${TE_SRC_DIR}/components/clock.cpp
     ${TE_SRC_DIR}/components/hitbox.cpp
+    ${TE_SRC_DIR}/components/health.cpp
+    ${TE_SRC_DIR}/components/damage.cpp
     ${TE_SRC_DIR}/components/interactive.cpp
     ${TE_SRC_DIR}/components/position.cpp
     ${TE_SRC_DIR}/components/velocity.cpp
@@ -59,6 +61,7 @@ add_library( ${PROJECT_NAME} STATIC
     ${TE_SRC_DIR}/systems/display.cpp
     ${TE_SRC_DIR}/systems/draw.cpp
     ${TE_SRC_DIR}/systems/event.cpp
+    ${TE_SRC_DIR}/systems/deal_damage.cpp
     ${TE_SRC_DIR}/systems/hitbox.cpp
     ${TE_SRC_DIR}/systems/map.cpp
     ${TE_SRC_DIR}/systems/movement.cpp

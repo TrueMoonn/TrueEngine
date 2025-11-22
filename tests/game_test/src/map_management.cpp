@@ -21,10 +21,13 @@
 #include "components/hitbox.hpp"
 #include "components/velocity.hpp"
 #include "components/player.hpp"
+#include "components/health.hpp"
+#include "components/damage.hpp"
 #include "components/interactive.hpp"
 
 static void load_player(ECS::Registry& reg, const sf::Vector2u& pos) {
     reg.addComponent(MAP_ENTITY_PLAYER, te::Drawable());
+    reg.addComponent(MAP_ENTITY_PLAYER, te::Health(10));
     reg.addComponent(MAP_ENTITY_PLAYER,
             te::Position2(pos.x * SQUARE_WIDTH, pos.y * SQUARE_HEIGHT));
     reg.addComponent(MAP_ENTITY_PLAYER, te::Sprite(TEXTURE_MAP.at(MAP_PLAYER)));
@@ -40,6 +43,7 @@ static void create_square(ECS::Registry& reg, const ECS::Entity& entity_id,
     char type, const sf::Vector2u& pos) {
     if (type == MAP_WALL) {
         reg.addComponent(entity_id, te::Drawable());
+        reg.addComponent(entity_id, te::Damage(1));
         reg.addComponent(entity_id,
             te::Position2(pos.x * SQUARE_WIDTH, pos.y * SQUARE_HEIGHT));
         reg.addComponent(entity_id, te::Sprite(TEXTURE_MAP.at(MAP_WALL)));
