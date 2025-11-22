@@ -8,7 +8,7 @@
 #include "systems/draw.hpp"
 
 #include "components/drawable.hpp"
-#include "components/position.hpp"
+#include "movement/components/position.hpp"
 #include "components/sprite.hpp"
 #include "components/window.hpp"
 

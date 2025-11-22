@@ -10,8 +10,8 @@
 #include "systems/event.hpp"
 #include "components/window.hpp"
 #include "components/player.hpp"
-#include "components/position.hpp"
-#include "components/velocity.hpp"
+#include "movement/components/position.hpp"
+#include "movement/components/velocity.hpp"
 
 namespace te {
 

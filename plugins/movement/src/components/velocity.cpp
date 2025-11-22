@@ -5,7 +5,7 @@
 ** velocity.cpp
 */
 
-#include "components/velocity.hpp"
+#include "movement/components/velocity.hpp"
 
 namespace te {
 

@@ -5,12 +5,10 @@
 ** movement.cpp
 */
 
-#include "components/position.hpp"
-#include "components/velocity.hpp"
-#include "components/hitbox.hpp"
-#include "hitbox_management.hpp"
+#include "movement/components/position.hpp"
+#include "movement/components/velocity.hpp"
 
-#include "systems/movement.hpp"
+#include "movement/systems/movement.hpp"
 
 namespace te {
 

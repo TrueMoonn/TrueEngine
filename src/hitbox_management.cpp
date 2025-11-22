@@ -7,8 +7,8 @@
 
 #include <vector>
 
-#include "components/position.hpp"
-#include "components/velocity.hpp"
+#include "movement/components/position.hpp"
+#include "movement/components/velocity.hpp"
 #include "components/hitbox.hpp"
 #include "components/interactive.hpp"
 

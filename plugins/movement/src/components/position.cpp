@@ -5,7 +5,7 @@
 ** position.cpp
 */
 
-#include "components/position.hpp"
+#include "movement/components/position.hpp"
 
 namespace te {
 

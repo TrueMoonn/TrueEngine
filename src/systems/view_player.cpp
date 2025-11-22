@@ -9,7 +9,7 @@
 
 #include "components/player.hpp"
 #include "components/window.hpp"
-#include "components/position.hpp"
+#include "movement/components/position.hpp"
 
 namespace te {
 
