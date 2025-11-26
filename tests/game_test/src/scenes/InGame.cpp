@@ -5,35 +5,34 @@
 ** InGame.cpp
 */
 
+#include <plugin/PluginManager.hpp>
+
 #include "scenes/in_game/InGame.hpp"
 
 #include "scenes/in_game/in_game.cpmt.hpp"
 #include "scenes/in_game/in_game.sys.hpp"
 #include "components/clock.hpp"
 
-InGame::InGame() {
+InGame::InGame() : AScene() {
+    te::PluginManager::loadPlugins(_reg);
     setECS();
     setEntities();
 }
 
 void InGame::setECS(void) {
-    _reg.registerComponent<te::Drawable>();
-    _reg.registerComponent<te::Position2>();
     _reg.registerComponent<te::Movable>();
-    _reg.registerComponent<te::Velocity2>();
-    _reg.registerComponent<te::Sprite>();
-    _reg.registerComponent<te::Window>();
     _reg.registerComponent<te::Player>();
     _reg.registerComponent<te::Hitbox>();
     _reg.registerComponent<te::Interactive>();
+    _reg.registerComponent<te::Window>();
 
-    _reg.addSystem(&te::movement2_sys);
+    te::PluginManager::loadSystem("movement", "movement2");
     _reg.addSystem(&te::hitbox2_sys);
     _reg.addSystem(&te::player_interaction_sys);
     _reg.addSystem(&te::manageEvent);
-    _reg.addSystem(&te::follow_player_sys);
-    _reg.addSystem(&te::draw_sys);
-    _reg.addSystem(&te::display_sys);
+    te::PluginManager::loadSystem("window", "follow_player");
+    te::PluginManager::loadSystem("window", "draw");
+    te::PluginManager::loadSystem("window", "display");
 }
 
 void InGame::setEntities(void) {

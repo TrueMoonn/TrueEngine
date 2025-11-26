@@ -12,23 +12,38 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/Image.hpp>
 
+#include <plugin/PluginManager.hpp>
+
 #include "map_management.hpp"
 
-#include "components/drawable.hpp"
+#include "movement/components/position.hpp"
+#include "movement/components/velocity.hpp"
+#include "window/components/drawable.hpp"
+#include "window/components/sprite.hpp"
 #include "components/movable.hpp"
-#include "components/position.hpp"
-#include "components/sprite.hpp"
 #include "components/hitbox.hpp"
-#include "components/velocity.hpp"
 #include "components/player.hpp"
 #include "components/interactive.hpp"
 
 static void load_player(ECS::Registry& reg, const sf::Vector2u& pos) {
-    reg.addComponent(MAP_ENTITY_PLAYER, te::Drawable());
-    reg.addComponent(MAP_ENTITY_PLAYER,
-            te::Position2(pos.x * SQUARE_WIDTH, pos.y * SQUARE_HEIGHT));
-    reg.addComponent(MAP_ENTITY_PLAYER, te::Sprite(TEXTURE_MAP.at(MAP_PLAYER)));
-    reg.addComponent(MAP_ENTITY_PLAYER, te::Velocity2(0.0f, 0.0f));
+    std::unordered_map<std::string, std::any> posinfo;
+    posinfo["x"] = static_cast<float>(pos.x * SQUARE_WIDTH);
+    posinfo["y"] = static_cast<float>(pos.y * SQUARE_WIDTH);
+    std::unordered_map<std::string, std::any> velinfo;
+    velinfo["x"] = static_cast<float>(0);
+    velinfo["y"] = static_cast<float>(0);
+    std::unordered_map<std::string, std::any> sprite;
+    sprite["path"] = static_cast<std::string>("./assets/test.png");
+    sprite["size"] = sf::Vector2f(30.f, 30.f);
+    sprite["rect"] = sf::IntRect({0, 0}, sf::Vector2i(30, 30));
+
+    te::PluginManager::loadComponent("window", "drawable", MAP_ENTITY_PLAYER);
+    te::PluginManager::loadComponent("movement", "position2",
+        MAP_ENTITY_PLAYER, posinfo);
+    te::PluginManager::loadComponent("window", "sprite",
+        MAP_ENTITY_PLAYER, sprite);
+    te::PluginManager::loadComponent("movement", "velocity2",
+        MAP_ENTITY_PLAYER, velinfo);
     reg.addComponent(MAP_ENTITY_PLAYER, te::Player());
     reg.addComponent(MAP_ENTITY_PLAYER, te::Movable());
     reg.addComponent(MAP_ENTITY_PLAYER, te::Hitbox(0.0f, 0.0f, 30.0f, 30.0f));
@@ -38,20 +53,30 @@ static void load_player(ECS::Registry& reg, const sf::Vector2u& pos) {
 
 static void create_square(ECS::Registry& reg, const ECS::Entity& entity_id,
     char type, const sf::Vector2u& pos) {
+    std::unordered_map<std::string, std::any> posinfo;
+    posinfo["x"] = static_cast<float>(pos.x * SQUARE_WIDTH);
+    posinfo["y"] = static_cast<float>(pos.y * SQUARE_HEIGHT);
+    std::unordered_map<std::string, std::any> spriteDoor;
+    spriteDoor["texture"] = sf::Texture(TEMP_MAP_IMAGE.at(MAP_DOOR));
+    std::unordered_map<std::string, std::any> spriteWall;
+    spriteWall["texture"] = sf::Texture(TEMP_MAP_IMAGE.at(MAP_WALL));
+
     if (type == MAP_WALL) {
-        reg.addComponent(entity_id, te::Drawable());
+        te::PluginManager::loadComponent("window", "drawable", entity_id);
+        te::PluginManager::loadComponent("movement", "position2",
+            entity_id, posinfo);
+        te::PluginManager::loadComponent("window", "sprite",
+            entity_id, spriteWall);
         reg.addComponent(entity_id,
-            te::Position2(pos.x * SQUARE_WIDTH, pos.y * SQUARE_HEIGHT));
-        reg.addComponent(entity_id, te::Sprite(TEXTURE_MAP.at(MAP_WALL)));
-        reg.addComponent(entity_id,
-            te::Hitbox(0.0f, 0.0f, SQUARE_WIDTH, SQUARE_WIDTH));
+            te::Hitbox(0.0f, 0.0f, SQUARE_WIDTH, SQUARE_HEIGHT));
     } else if (type == MAP_DOOR) {
-        reg.addComponent(entity_id, te::Drawable());
+        te::PluginManager::loadComponent("window", "drawable", entity_id);
+        te::PluginManager::loadComponent("movement", "position2",
+            entity_id, posinfo);
+        te::PluginManager::loadComponent("window", "sprite",
+            entity_id, spriteDoor);
         reg.addComponent(entity_id,
-            te::Position2(pos.x * SQUARE_WIDTH, pos.y * SQUARE_HEIGHT));
-        reg.addComponent(entity_id, te::Sprite(TEXTURE_MAP.at(MAP_DOOR)));
-        reg.addComponent(entity_id,
-            te::Hitbox(0.0f, 0.0f, SQUARE_WIDTH, SQUARE_WIDTH));
+            te::Hitbox(0.0f, 0.0f, SQUARE_WIDTH, SQUARE_HEIGHT));
         reg.addComponent(entity_id,
             te::Interactive(-15.0f, -15.0f, 60.0f, 60.0f,
             [](ECS::Registry& reg) {
