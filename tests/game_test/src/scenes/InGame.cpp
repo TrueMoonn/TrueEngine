@@ -30,9 +30,9 @@ void InGame::setECS(void) {
     _reg.addSystem(&te::hitbox2_sys);
     _reg.addSystem(&te::player_interaction_sys);
     _reg.addSystem(&te::manageEvent);
-    te::PluginManager::loadSystem("window", "follow_player");
-    te::PluginManager::loadSystem("window", "draw");
-    te::PluginManager::loadSystem("window", "display");
+    te::PluginManager::loadSystem("display", "follow_player");
+    te::PluginManager::loadSystem("display", "draw");
+    te::PluginManager::loadSystem("display", "display");
 }
 
 void InGame::setEntities(void) {

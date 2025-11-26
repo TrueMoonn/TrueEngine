@@ -16,10 +16,6 @@
 
 #include "map_management.hpp"
 
-#include "movement/components/position.hpp"
-#include "movement/components/velocity.hpp"
-#include "window/components/drawable.hpp"
-#include "window/components/sprite.hpp"
 #include "components/movable.hpp"
 #include "components/hitbox.hpp"
 #include "components/player.hpp"
@@ -35,12 +31,11 @@ static void load_player(ECS::Registry& reg, const sf::Vector2u& pos) {
     std::unordered_map<std::string, std::any> sprite;
     sprite["path"] = static_cast<std::string>("./assets/test.png");
     sprite["size"] = sf::Vector2f(30.f, 30.f);
-    sprite["rect"] = sf::IntRect({0, 0}, sf::Vector2i(30, 30));
 
-    te::PluginManager::loadComponent("window", "drawable", MAP_ENTITY_PLAYER);
+    te::PluginManager::loadComponent("display", "drawable", MAP_ENTITY_PLAYER);
     te::PluginManager::loadComponent("movement", "position2",
         MAP_ENTITY_PLAYER, posinfo);
-    te::PluginManager::loadComponent("window", "sprite",
+    te::PluginManager::loadComponent("display", "sprite",
         MAP_ENTITY_PLAYER, sprite);
     te::PluginManager::loadComponent("movement", "velocity2",
         MAP_ENTITY_PLAYER, velinfo);
@@ -62,18 +57,18 @@ static void create_square(ECS::Registry& reg, const ECS::Entity& entity_id,
     spriteWall["texture"] = sf::Texture(TEMP_MAP_IMAGE.at(MAP_WALL));
 
     if (type == MAP_WALL) {
-        te::PluginManager::loadComponent("window", "drawable", entity_id);
+        te::PluginManager::loadComponent("display", "drawable", entity_id);
         te::PluginManager::loadComponent("movement", "position2",
             entity_id, posinfo);
-        te::PluginManager::loadComponent("window", "sprite",
+        te::PluginManager::loadComponent("display", "sprite",
             entity_id, spriteWall);
         reg.addComponent(entity_id,
             te::Hitbox(0.0f, 0.0f, SQUARE_WIDTH, SQUARE_HEIGHT));
     } else if (type == MAP_DOOR) {
-        te::PluginManager::loadComponent("window", "drawable", entity_id);
+        te::PluginManager::loadComponent("display", "drawable", entity_id);
         te::PluginManager::loadComponent("movement", "position2",
             entity_id, posinfo);
-        te::PluginManager::loadComponent("window", "sprite",
+        te::PluginManager::loadComponent("display", "sprite",
             entity_id, spriteDoor);
         reg.addComponent(entity_id,
             te::Hitbox(0.0f, 0.0f, SQUARE_WIDTH, SQUARE_HEIGHT));
