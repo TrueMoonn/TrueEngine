@@ -17,13 +17,13 @@
     #include "plugin/APlugin.hpp"
 
 
-class Window : public APlugin {
+class Display : public APlugin {
  public:
-    Window(ECS::Registry& reg);
+    Display(ECS::Registry& reg);
 };
 
 extern "C" {
-    std::unique_ptr<Window> get_pfactory(ECS::Registry& reg) {
-        return std::make_unique<Window>(reg);
+    std::unique_ptr<Display> get_pfactory(ECS::Registry& reg) {
+        return std::make_unique<Display>(reg);
     }
 }

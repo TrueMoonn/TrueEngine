@@ -7,10 +7,10 @@
 
 #include <SFML/System/Exception.hpp>
 
-#include "Window.hpp"
-#include "window/factory.hpp"
+#include "Display.hpp"
+#include "display/factory.hpp"
 
-Window::Window(ECS::Registry& reg) : APlugin(reg) {
+Display::Display(ECS::Registry& reg) : APlugin(reg) {
     reg.registerComponent<te::Drawable>();
     _components["drawable"] = [](ECS::Registry& reg, const ECS::Entity& e,
         const json_like json) {

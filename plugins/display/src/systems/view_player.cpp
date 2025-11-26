@@ -11,7 +11,7 @@
 #include "movement/components/position.hpp"
 #include "components/window.hpp"
 
-#include "window/systems/view_player.hpp"
+#include "display/systems/view_player.hpp"
 
 namespace te {
 

@@ -14,10 +14,10 @@ execute_process(
 )
 
 # WINDOW
-add_subdirectory(${PROJECT_SOURCE_DIR}/window)
+add_subdirectory(${PROJECT_SOURCE_DIR}/display)
 execute_process(
     COMMAND bash -c "
-    rm -rf ../include/window Window.hpp
-    cp -R ../plugins/window/include/. ../include
+    rm -rf ../include/display Display.hpp
+    cp -R ../plugins/display/include/. ../include
     "
 )
