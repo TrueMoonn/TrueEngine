@@ -1,0 +1,73 @@
+/*
+** EPITECH PROJECT, 2025
+** TrueEngine
+** File description:
+** PluginManager.hpp
+*/
+
+#pragma once
+
+    #include <memory>
+    #include <filesystem>
+    #include <functional>
+    #include <iostream>
+
+    #include "plugin/DlManager.hpp"
+    #include "plugin/APlugin.hpp"
+
+    #define ENDPOINT_NAME "get_pfactory"
+    #define DEFAULT_PLUGIN_RPATH "./plugins/"
+
+namespace te {
+
+class PluginManager {
+    typedef std::unique_ptr<APlugin>(*maker)(ECS::Registry&);
+ public:
+    PluginManager() = delete;
+    ~PluginManager() = default;
+
+    static void loadPlugins(ECS::Registry& reg) {
+        clear();
+        for (const auto &file :
+            std::filesystem::directory_iterator(DEFAULT_PLUGIN_RPATH)) {
+            if (!std::filesystem::path(file).extension().compare(".so")) {
+                _manager.load(file.path());
+                if (_plugins.find(file.path().stem()) == _plugins.end()) {
+                    try {
+                        _plugins[file.path().stem()] =
+                            _manager.access<maker>(file.path().stem(),
+                            ENDPOINT_NAME)(reg);
+                    } catch (const std::runtime_error& e) {
+                        std::cerr << e.what() << std::endl;
+                    }
+                }
+            }
+        }
+    }
+
+    static void clear(void) {
+        _manager.clear();
+        _plugins.clear();
+    }
+
+    static void loadComponent(const std::string& plugin, const std::string& name,
+        const ECS::Entity& e, const json_like& json = {}) {
+        if (_plugins.find(plugin) != _plugins.end()) {
+            _plugins.at(plugin)->createComponent(name, e, json);
+        }
+    }
+
+    static void loadSystem(const std::string& plugin,
+            const std::string& name) {
+        if (_plugins.find(plugin) != _plugins.end()) {
+            _plugins.at(plugin)->createSystem(name);
+        }
+    }
+
+ private:
+    static inline DlManager _manager;
+    static inline std::unordered_map<std::string,
+        std::unique_ptr<APlugin>> _plugins;
+};
+
+}  // namespace te
