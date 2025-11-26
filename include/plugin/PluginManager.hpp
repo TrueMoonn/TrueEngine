@@ -11,6 +11,8 @@
     #include <filesystem>
     #include <functional>
     #include <iostream>
+    #include <string>
+    #include <unordered_map>
 
     #include "plugin/DlManager.hpp"
     #include "plugin/APlugin.hpp"
@@ -22,9 +24,12 @@ namespace te {
 
 class PluginManager {
     typedef std::unique_ptr<APlugin>(*maker)(ECS::Registry&);
+
  public:
     PluginManager() = delete;
-    ~PluginManager() = default;
+    ~PluginManager() {
+        clear();
+    }
 
     static void loadPlugins(ECS::Registry& reg) {
         clear();
@@ -50,8 +55,9 @@ class PluginManager {
         _plugins.clear();
     }
 
-    static void loadComponent(const std::string& plugin, const std::string& name,
-        const ECS::Entity& e, const json_like& json = {}) {
+    static void loadComponent(const std::string& plugin,
+        const std::string& name, const ECS::Entity& e,
+        const json_like& json = {}) {
         if (_plugins.find(plugin) != _plugins.end()) {
             _plugins.at(plugin)->createComponent(name, e, json);
         }
