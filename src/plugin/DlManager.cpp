@@ -5,6 +5,9 @@
 ** DlManager.cpp
 */
 
+#include <string>
+#include <iostream>
+
 #include "plugin/DlManager.hpp"
 
 namespace te {
@@ -55,4 +58,4 @@ void DlManager::closeHandlers(const std::string& id) {
     _handles.clear();
 }
 
-} // namespace te
+}  // namespace te

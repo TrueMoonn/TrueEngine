@@ -5,13 +5,15 @@
 ** factory.cpp
 */
 
+#include <iostream>
+
 #include "Movement.hpp"
 #include "movement/factory.hpp"
 
-Movement::Movement(ECS::Registry& reg) : APlugin(reg) {
+Movement::Movement(ECS::Registry& reg) : te::APlugin(reg) {
     reg.registerComponent<te::Position2>();
     _components["position2"] = [](ECS::Registry& reg, const ECS::Entity& e,
-        const json_like json) {
+        const te::json_like json) {
         try {
             float x = std::any_cast<float>(json.at("x"));
             float y = std::any_cast<float>(json.at("y"));
@@ -23,7 +25,7 @@ Movement::Movement(ECS::Registry& reg) : APlugin(reg) {
     };
     reg.registerComponent<te::Velocity2>();
     _components["velocity2"] = [](ECS::Registry& reg, const ECS::Entity& e,
-        const json_like json) {
+        const te::json_like json) {
         try {
             float x = std::any_cast<float>(json.at("x"));
             float y = std::any_cast<float>(json.at("y"));

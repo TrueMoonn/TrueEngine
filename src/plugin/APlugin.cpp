@@ -5,6 +5,9 @@
 ** APlugin.cpp
 */
 
+#include <string>
+#include <iostream>
+
 #include "plugin/APlugin.hpp"
 
 namespace te {

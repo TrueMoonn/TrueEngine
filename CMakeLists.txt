@@ -48,6 +48,10 @@ add_library( ${PROJECT_NAME} STATIC
     $<TARGET_OBJECTS:ECS>
     $<TARGET_OBJECTS:Network>
 
+    #PLUGIN
+    ${TE_SRC_DIR}/plugin/APlugin.cpp
+    ${TE_SRC_DIR}/plugin/DlManager.cpp
+
     # OTHERS
     ${TE_SRC_DIR}/hitbox_management.cpp
 

@@ -23,7 +23,8 @@ void draw_sys(ECS::Registry& reg) {
     auto& windows = reg.getComponents<Window>();
 
     for (auto &&[win] : ECS::Zipper(windows)) {
-        for (auto &&[sprite, pos, drawable] : ECS::Zipper(sprites, positions, drawables)) {
+        for (auto &&[sprite, pos, drawable] :
+            ECS::Zipper(sprites, positions, drawables)) {
             sprite.value().setPosition(pos.value());
             win.value().draw(sprite.value());
         }

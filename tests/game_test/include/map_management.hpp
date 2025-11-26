@@ -50,7 +50,9 @@ static const std::map<std::string, std::string> MAPS_PATHS = {
 };
 
 static const std::unordered_map<MAP_TYPES, sf::Image> TEMP_MAP_IMAGE {
-    {MAP_WALL, sf::Image(sf::Vector2u(SQUARE_WIDTH, SQUARE_HEIGHT), sf::Color::Red)},
-    {MAP_DOOR, sf::Image(sf::Vector2u(SQUARE_WIDTH, SQUARE_HEIGHT), sf::Color::Blue)},
+    {MAP_WALL, sf::Image(sf::Vector2u(SQUARE_WIDTH, SQUARE_HEIGHT),
+        sf::Color::Red)},
+    {MAP_DOOR, sf::Image(sf::Vector2u(SQUARE_WIDTH, SQUARE_HEIGHT),
+        sf::Color::Blue)},
     {MAP_PLAYER, sf::Image(sf::Vector2u(30, 30), sf::Color::Yellow)}
 };

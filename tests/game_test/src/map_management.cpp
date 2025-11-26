@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <fstream>
+#include <unordered_map>
 #include <string>
 
 #include <SFML/System/Vector2.hpp>

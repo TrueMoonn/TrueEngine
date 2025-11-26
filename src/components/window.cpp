@@ -5,6 +5,8 @@
 ** window.cpp
 */
 
+#include <utility>
+
 #include "components/window.hpp"
 
 namespace te {

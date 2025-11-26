@@ -17,9 +17,9 @@
     #include "plugin/APlugin.hpp"
 
 
-class Display : public APlugin {
+class Display : public te::APlugin {
  public:
-    Display(ECS::Registry& reg);
+    explicit Display(ECS::Registry& reg);
 };
 
 extern "C" {

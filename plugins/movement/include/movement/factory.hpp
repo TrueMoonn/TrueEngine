@@ -17,9 +17,9 @@
     #include "plugin/APlugin.hpp"
 
 
-class Movement : APlugin {
+class Movement : public te::APlugin {
  public:
-    Movement(ECS::Registry& reg);
+    explicit Movement(ECS::Registry& reg);
 };
 
 extern "C" {
