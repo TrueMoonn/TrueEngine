@@ -5,7 +5,9 @@
 ** display.cpp
 */
 
-#include "systems/display.hpp"
+#include <ECS/Zipper.hpp>
+
+#include "window/systems/display.hpp"
 
 #include "components/window.hpp"
 
@@ -14,11 +16,9 @@ namespace te {
 void display_sys(ECS::Registry& reg) {
     auto& windows = reg.getComponents<Window>();
 
-    for (ECS::Entity e = 0; e < windows.size(); ++e) {
-        if (windows[e].has_value()) {
-            windows[e].value().display();
-            windows[e].value().clear();
-        }
+    for (auto &&[win] : ECS::Zipper(windows)) {
+        win.value().display();
+        win.value().clear();
     }
 }
 

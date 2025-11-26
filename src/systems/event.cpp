@@ -7,6 +7,8 @@
 
 #include <SFML/Window/Event.hpp>
 
+#include <ECS/Zipper.hpp>
+
 #include "systems/event.hpp"
 #include "components/window.hpp"
 #include "components/player.hpp"
@@ -40,17 +42,15 @@ void playerMovementEvent(ECS::Registry& reg) {
 }
 
 void manageEvent(ECS::Registry& reg) {
-    std::optional<std::reference_wrapper<Window>> opt_win =
-        findActiveWindow(reg.getComponents<Window>());
-    if (!opt_win.has_value())
-        return;
-    std::reference_wrapper<Window> win = opt_win.value();
+    auto& windows = reg.getComponents<te::Window>();
 
-    while (std::optional event = win.get().pollEvent()) {
-        if (event->is<sf::Event::Closed>())
-            win.get().close();
+    for (auto &&[win] : ECS::Zipper(windows)) {
+        while (std::optional event = win.value().pollEvent()) {
+            if (event->is<sf::Event::Closed>())
+                win.value().close();
+        }
+        playerMovementEvent(reg);
     }
-    playerMovementEvent(reg);
 }
 
 }  // namespace te

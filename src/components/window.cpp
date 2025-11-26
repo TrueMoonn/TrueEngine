@@ -20,10 +20,9 @@ Window::Window(const Window& win): sf::RenderWindow(sf::VideoMode(
     name = win.name;
 }
 
-Window::Window(Window&& win) : sf::RenderWindow(sf::VideoMode(
-    sf::Vector2u(win.getSize().x, win.getSize().y)), win.name) {
+Window::Window(Window&& win) : sf::RenderWindow(std::move(win)),
+    name(std::move(win.name)) {
     setFramerateLimit(DEFAULT_FRAME_LIMIT);
-    name = win.name;
 }
 
 std::optional<std::reference_wrapper<Window>> findActiveWindow(

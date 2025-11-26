@@ -4,9 +4,9 @@ project(TrueEngine)
 ########## SETUP ##########
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR})
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 set(TE_SRC_DIR "${PROJECT_SOURCE_DIR}/src")
 set(TE_HDR_DIR "${PROJECT_SOURCE_DIR}/include")
-set(TE_PLUGIN_DIR "${PROJECT_SOURCE_DIR}/plugins")
 
 ########## HEADER UPDATE ##########
 message("\nUpdating project header from ECS and Network...")
@@ -41,25 +41,7 @@ add_subdirectory(ECS)
 add_subdirectory(Network)
 
 ########## PLUGINS ##########
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/plugins)
-
-# MOVEMENT
-add_subdirectory(${TE_PLUGIN_DIR}/movement)
-execute_process(
-    COMMAND bash -c "
-    rm -rf ../include/movement
-    cp -R ../plugins/movement/include/. ../include
-    "
-)
-
-# WINDOW
-# add_subdirectory(${TE_PLUGIN_DIR}/window)
-# execute_process(
-#     COMMAND bash -c "
-#     rm -rf ../include/window
-#     cp -R ../plugins/window/include/. ../include
-#     "
-# )
+add_subdirectory(plugins)
 
 ########## TRUE ENGINE ##########
 add_library( ${PROJECT_NAME} STATIC
@@ -76,12 +58,9 @@ add_library( ${PROJECT_NAME} STATIC
     ${TE_SRC_DIR}/components/window.cpp
 
     # SYSTEMS
-    ${TE_SRC_DIR}/systems/display.cpp
-    ${TE_SRC_DIR}/systems/draw.cpp
     ${TE_SRC_DIR}/systems/event.cpp
     ${TE_SRC_DIR}/systems/hitbox.cpp
     ${TE_SRC_DIR}/systems/map.cpp
-    ${TE_SRC_DIR}/systems/view_player.cpp
 )
 
 target_include_directories(${PROJECT_NAME}

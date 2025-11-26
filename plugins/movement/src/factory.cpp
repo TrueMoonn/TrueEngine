@@ -5,16 +5,13 @@
 ** factory.cpp
 */
 
-#include "movement/components/position.hpp"
-#include "movement/components/velocity.hpp"
-#include "movement/systems/movement.hpp"
-
+#include "Movement.hpp"
 #include "movement/factory.hpp"
 
 Movement::Movement(ECS::Registry& reg) : APlugin(reg) {
     reg.registerComponent<te::Position2>();
-    _builders[typeid(te::Position2)] = [](const ECS::Entity& e,
-        ECS::Registry& reg, const json_like json) {
+    _components["position2"] = [](ECS::Registry& reg, const ECS::Entity& e,
+        const json_like json) {
         try {
             float x = std::any_cast<float>(json.at("x"));
             float y = std::any_cast<float>(json.at("y"));
@@ -25,8 +22,8 @@ Movement::Movement(ECS::Registry& reg) : APlugin(reg) {
         }
     };
     reg.registerComponent<te::Velocity2>();
-    _builders[typeid(te::Velocity2)] = [](const ECS::Entity& e,
-        ECS::Registry& reg, const json_like json) {
+    _components["velocity2"] = [](ECS::Registry& reg, const ECS::Entity& e,
+        const json_like json) {
         try {
             float x = std::any_cast<float>(json.at("x"));
             float y = std::any_cast<float>(json.at("y"));
@@ -36,5 +33,7 @@ Movement::Movement(ECS::Registry& reg) : APlugin(reg) {
                 e.what() << std::endl;
         }
     };
-    reg.addSystem(&te::movement2_sys);
+    _systems["movement2"] = [](ECS::Registry& reg) {
+        reg.addSystem(&te::movement2_sys);
+    };
 }
