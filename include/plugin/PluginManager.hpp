@@ -13,6 +13,7 @@
     #include <iostream>
     #include <string>
     #include <unordered_map>
+    #include <vector>
 
     #include "plugin/DlManager.hpp"
     #include "plugin/APlugin.hpp"
