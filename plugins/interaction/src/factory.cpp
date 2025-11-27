@@ -5,6 +5,8 @@
 ** factory.cpp
 */
 
+#include <iostream>
+
 #include "Interaction.hpp"
 #include "interaction/factory.hpp"
 
@@ -27,7 +29,8 @@ Interaction::Interaction(ECS::Registry& reg) : te::APlugin(reg) {
             float top = std::any_cast<float>(json.at("top"));
             float width = std::any_cast<float>(json.at("width"));
             float height = std::any_cast<float>(json.at("height"));
-            reg.addComponent(e, te::Interactive(left, top, width, height, func));
+            reg.addComponent(e, te::Interactive(
+                left, top, width, height, func));
         } catch (const std::bad_any_cast& e) {
             std::cerr << "error(Plugin-Interactive): " <<
                 e.what() << std::endl;

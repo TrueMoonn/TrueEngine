@@ -39,12 +39,13 @@ static void load_player(ECS::Registry& reg, const sf::Vector2u& pos) {
         MAP_ENTITY_PLAYER, sprite);
     te::PluginManager::loadComponent("movement", "velocity2",
         MAP_ENTITY_PLAYER, velinfo);
-    te::PluginManager::loadComponent("interaction", "player", MAP_ENTITY_PLAYER);
+    te::PluginManager::loadComponent("interaction", "player",
+        MAP_ENTITY_PLAYER);
     te::PluginManager::loadComponent("physic", "movable", MAP_ENTITY_PLAYER);
     te::PluginManager::loadComponent("physic", "hitbox", MAP_ENTITY_PLAYER,
         hitbox);
-    te::PluginManager::loadComponent("interaction", "interactive", MAP_ENTITY_PLAYER,
-        interactive);
+    te::PluginManager::loadComponent("interaction", "interactive",
+        MAP_ENTITY_PLAYER, interactive);
 }
 
 static void create_square(ECS::Registry& reg, const ECS::Entity& entity_id,
