@@ -5,7 +5,7 @@
 ** hitbox.cpp
 */
 
-#include "components/hitbox.hpp"
+#include "physic/components/hitbox.hpp"
 
 namespace te {
 

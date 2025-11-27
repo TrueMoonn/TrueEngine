@@ -7,11 +7,10 @@
 
 #include "movement/components/position.hpp"
 #include "movement/components/velocity.hpp"
-#include "components/movable.hpp"
-#include "components/hitbox.hpp"
-#include "hitbox_management.hpp"
 
-#include "movement/systems/movement.hpp"
+#include "physic/components/movable.hpp"
+#include "physic/components/hitbox.hpp"
+#include "physic/hitbox_management.hpp"
 
 namespace te {
 

@@ -52,19 +52,14 @@ add_library( ${PROJECT_NAME} STATIC
     ${TE_SRC_DIR}/plugin/APlugin.cpp
     ${TE_SRC_DIR}/plugin/DlManager.cpp
 
-    # OTHERS
-    ${TE_SRC_DIR}/hitbox_management.cpp
-
     # COMPONENTS
     ${TE_SRC_DIR}/components/clock.cpp
-    ${TE_SRC_DIR}/components/hitbox.cpp
     ${TE_SRC_DIR}/components/interactive.cpp
     ${TE_SRC_DIR}/components/window.cpp
 
     # SYSTEMS
     ${TE_SRC_DIR}/systems/event.cpp
-    ${TE_SRC_DIR}/systems/hitbox.cpp
-    ${TE_SRC_DIR}/systems/interaction.cpp
+    # ${TE_SRC_DIR}/systems/interaction.cpp
 )
 
 target_include_directories(${PROJECT_NAME}

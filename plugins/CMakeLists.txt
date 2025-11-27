@@ -21,3 +21,12 @@ execute_process(
     cp -R ../plugins/display/include/. ../include
     "
 )
+
+# PHYSIC
+add_subdirectory(${PROJECT_SOURCE_DIR}/physic)
+execute_process(
+    COMMAND bash -c "
+    rm -rf ../include/physic Physic.hpp
+    cp -R ../plugins/physic/include/. ../include
+    "
+)

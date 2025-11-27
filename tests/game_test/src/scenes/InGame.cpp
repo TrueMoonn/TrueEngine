@@ -20,15 +20,13 @@ InGame::InGame() : AScene() {
 }
 
 void InGame::setECS(void) {
-    _reg.registerComponent<te::Movable>();
     _reg.registerComponent<te::Player>();
-    _reg.registerComponent<te::Hitbox>();
     _reg.registerComponent<te::Interactive>();
     _reg.registerComponent<te::Window>();
 
     te::PluginManager::loadSystem("movement", "movement2");
-    _reg.addSystem(&te::hitbox2_sys);
-    _reg.addSystem(&te::player_interaction_sys);
+    te::PluginManager::loadSystem("physic", "bound_hitbox");
+    // _reg.addSystem(&te::player_interaction_sys);
     _reg.addSystem(&te::manageEvent);
     te::PluginManager::loadSystem("display", "follow_player");
     te::PluginManager::loadSystem("display", "draw");

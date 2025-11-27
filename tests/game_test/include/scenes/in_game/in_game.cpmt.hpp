@@ -8,7 +8,5 @@
 #pragma once
 
     #include "components/window.hpp"
-    #include "components/movable.hpp"
     #include "components/player.hpp"
-    #include "components/hitbox.hpp"
     #include "components/interactive.hpp"

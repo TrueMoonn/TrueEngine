@@ -7,6 +7,8 @@ include/Display.hpp
 include/display
 include/Movement.hpp
 include/movement
+include/Physic.hpp
+include/physic
 
 # Local Files
 build/
