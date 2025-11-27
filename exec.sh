@@ -55,12 +55,15 @@ then
 
 elif [[ $1 == "--clear" || $1 == "-c" ]]
 then
+    rm -rf ./include/movement ./include/Movement.hpp
+    rm -rf ./include/display ./include/Display.hpp
+    rm -rf ./include/physic ./include/Physic.hpp
+    rm -rf ./include/interaction ./include/Interaction.hpp
     rm -rf ./build/ ./*.a ./plugins/*.so
     rm -rf include/ECS include/Network
     cd ./tests/game_test/
     rm -rf ./build ./GameTest ./plugins
     cd ../..
-    clear
 
 elif [[ $1 == "--game-testing" || $1 == "-gt" ]]
 then
