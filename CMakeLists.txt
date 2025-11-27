@@ -64,7 +64,7 @@ add_library( ${PROJECT_NAME} STATIC
     # SYSTEMS
     ${TE_SRC_DIR}/systems/event.cpp
     ${TE_SRC_DIR}/systems/hitbox.cpp
-    ${TE_SRC_DIR}/systems/map.cpp
+    ${TE_SRC_DIR}/systems/interaction.cpp
 )
 
 target_include_directories(${PROJECT_NAME}
