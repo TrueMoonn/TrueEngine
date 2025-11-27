@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2025
 ** TrueEngine
 ** File description:
-** Physics.hpp
+** Physic.hpp
 */
 
 #pragma once

@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-#include "Physics.hpp"
+#include "Physic.hpp"
 #include "physic/factory.hpp"
 
 Physic::Physic(ECS::Registry& reg) : te::APlugin(reg) {
