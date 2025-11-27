@@ -52,12 +52,12 @@ add_library( ${PROJECT_NAME} STATIC
     ${TE_SRC_DIR}/plugin/APlugin.cpp
     ${TE_SRC_DIR}/plugin/DlManager.cpp
 
-    # COMPONENTS
-    ${TE_SRC_DIR}/components/clock.cpp
-    ${TE_SRC_DIR}/components/window.cpp
+    # SYSTEM OBJECTS
+    ${TE_SRC_DIR}/clock.cpp
+    ${TE_SRC_DIR}/window.cpp
 
-    # SYSTEMS
-    ${TE_SRC_DIR}/systems/event.cpp
+    # EVENTS
+    ${TE_SRC_DIR}/event.cpp
 )
 
 target_include_directories(${PROJECT_NAME}

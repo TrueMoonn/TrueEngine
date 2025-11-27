@@ -7,7 +7,7 @@
 
 #include <utility>
 
-#include "components/window.hpp"
+#include "window.hpp"
 
 namespace te {
 

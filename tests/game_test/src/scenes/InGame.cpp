@@ -7,11 +7,11 @@
 
 #include <plugin/PluginManager.hpp>
 
-#include "scenes/in_game/InGame.hpp"
+#include "clock.hpp"
+#include "window.hpp"
+#include "event.hpp"
 
-#include "scenes/in_game/in_game.cpmt.hpp"
-#include "scenes/in_game/in_game.sys.hpp"
-#include "components/clock.hpp"
+#include "scenes/InGame.hpp"
 
 InGame::InGame() : AScene() {
     te::PluginManager::loadPlugins(_reg);

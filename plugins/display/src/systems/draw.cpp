@@ -7,7 +7,7 @@
 
 #include <ECS/Zipper.hpp>
 
-#include "components/window.hpp"
+#include "window.hpp"
 #include "movement/components/position.hpp"
 #include "display/components/drawable.hpp"
 #include "display/components/sprite.hpp"

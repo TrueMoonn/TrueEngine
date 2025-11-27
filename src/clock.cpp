@@ -5,7 +5,7 @@
 ** clock.cpp
 */
 
-#include "components/clock.hpp"
+#include "clock.hpp"
 
 namespace te {
 

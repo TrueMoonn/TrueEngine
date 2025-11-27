@@ -7,7 +7,6 @@
 
 #pragma once
 
-    #include <iostream>
     #include <SFML/Graphics/Sprite.hpp>
     #include <SFML/Graphics/Texture.hpp>
 
