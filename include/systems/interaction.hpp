@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2025
 ** DeepestDungeon
 ** File description:
-** map.hpp
+** interaction.hpp
 */
 
 #pragma once

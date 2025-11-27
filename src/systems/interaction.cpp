@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2025
 ** DeepestDungeon
 ** File description:
-** map.cpp
+** interaction.cpp
 */
 
 #include <SFML/Window/Event.hpp>
@@ -12,7 +12,7 @@
 #include "components/player.hpp"
 #include "components/interactive.hpp"
 
-#include "systems/map.hpp"
+#include "systems/interaction.hpp"
 
 namespace te {
 
