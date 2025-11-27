@@ -49,10 +49,10 @@ static const std::map<std::string, std::string> MAPS_PATHS = {
     {"test2", "./assets/maps/test2.ddmap"},
 };
 
-static const std::unordered_map<MAP_TYPES, sf::Texture> TEXTURE_MAP {
-    {MAP_WALL, sf::Texture(sf::Image(sf::Vector2u(SQUARE_WIDTH, SQUARE_WIDTH),
-        sf::Color::Red))},
-    {MAP_DOOR, sf::Texture(sf::Image(sf::Vector2u(SQUARE_WIDTH, SQUARE_WIDTH),
-        sf::Color::Yellow))},
-    {MAP_PLAYER, sf::Texture(sf::Image(sf::Vector2u(30, 30), sf::Color::Blue))}
+static const std::unordered_map<MAP_TYPES, sf::Image> TEMP_MAP_IMAGE {
+    {MAP_WALL, sf::Image(sf::Vector2u(SQUARE_WIDTH, SQUARE_HEIGHT),
+        sf::Color::Red)},
+    {MAP_DOOR, sf::Image(sf::Vector2u(SQUARE_WIDTH, SQUARE_HEIGHT),
+        sf::Color::Blue)},
+    {MAP_PLAYER, sf::Image(sf::Vector2u(30, 30), sf::Color::Yellow)}
 };
