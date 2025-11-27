@@ -30,7 +30,6 @@ static void load_player(ECS::Registry& reg, const sf::Vector2u& pos) {
     reg.addComponent(MAP_ENTITY_PLAYER, te::Sprite(TEXTURE_MAP.at(MAP_PLAYER)));
     reg.addComponent(MAP_ENTITY_PLAYER, te::Velocity2(0.0f, 0.0f));
     reg.addComponent(MAP_ENTITY_PLAYER, te::Player());
-    reg.addComponent(MAP_ENTITY_PLAYER, te::Movable());
     reg.addComponent(MAP_ENTITY_PLAYER, te::Hitbox(0.0f, 0.0f, 30.0f, 30.0f));
     reg.addComponent(MAP_ENTITY_PLAYER,
         te::Interactive(-15.0f, -15.0f, 60.0f, 60.0f));
@@ -40,6 +39,8 @@ static void create_square(ECS::Registry& reg, const ECS::Entity& entity_id,
     char type, const sf::Vector2u& pos) {
     if (type == MAP_WALL) {
         reg.addComponent(entity_id, te::Drawable());
+        reg.addComponent(entity_id, te::Velocity2(0.0f, 0.0f));
+        reg.addComponent(entity_id, te::Movable());
         reg.addComponent(entity_id,
             te::Position2(pos.x * SQUARE_WIDTH, pos.y * SQUARE_HEIGHT));
         reg.addComponent(entity_id, te::Sprite(TEXTURE_MAP.at(MAP_WALL)));
