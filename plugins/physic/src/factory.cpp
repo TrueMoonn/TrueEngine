@@ -16,7 +16,8 @@ Physic::Physic(ECS::Registry& reg) : te::APlugin(reg) {
         const te::json_like json) {
         try {
             if (json.find("rect") != json.end()) {
-                sf::FloatRect rect = std::any_cast<sf::FloatRect>(json.at("rect"));
+                sf::FloatRect rect =
+                    std::any_cast<sf::FloatRect>(json.at("rect"));
                 reg.addComponent(e, te::Hitbox(rect));
                 return;
             }
