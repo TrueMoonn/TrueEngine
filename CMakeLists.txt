@@ -4,11 +4,12 @@ project(TrueEngine)
 ########## SETUP ##########
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR})
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 set(TE_SRC_DIR "${PROJECT_SOURCE_DIR}/src")
 set(TE_HDR_DIR "${PROJECT_SOURCE_DIR}/include")
 
 ########## HEADER UPDATE ##########
-message("Updating project header from ECS and Network...")
+message("\nUpdating project header from ECS and Network...")
 execute_process (
     COMMAND bash -c "
         rm -rf ../include/ECS && rm -rf ../include/Network
@@ -16,11 +17,18 @@ execute_process (
         cp -R ../Network/include/. ../include/
     "
 )
-message("Updating project header from ECS and Network... DONE")
+message("Updating project header from ECS and Network... DONE\n")
 
 ########## OPTIONS ##########
 option(ENABLE_TE_TESTS "Build tests along with the library" OFF)
 option(ENABLE_TE_COVERAGE "Enable coverage reporting" OFF)
+
+########## LIBS ##########
+add_subdirectory(ECS)
+add_subdirectory(Network)
+
+########## PLUGINS ##########
+add_subdirectory(plugins)
 
 ########## UNIT TESTS ##########
 if(ENABLE_TE_COVERAGE)
@@ -35,34 +43,21 @@ if (ENABLE_TE_TESTS)
   add_subdirectory(tests/unit_tests)
 endif ()
 
-########## LIBS ##########
-add_subdirectory(ECS)
-add_subdirectory(Network)
-
 ########## TRUE ENGINE ##########
 add_library( ${PROJECT_NAME} STATIC
     $<TARGET_OBJECTS:ECS>
     $<TARGET_OBJECTS:Network>
 
-    # OTHERS
-    ${TE_SRC_DIR}/hitbox_management.cpp
+    #PLUGIN
+    ${TE_SRC_DIR}/plugin/APlugin.cpp
+    ${TE_SRC_DIR}/plugin/DlManager.cpp
 
-    # COMPONENTS
-    ${TE_SRC_DIR}/components/clock.cpp
-    ${TE_SRC_DIR}/components/hitbox.cpp
-    ${TE_SRC_DIR}/components/interactive.cpp
-    ${TE_SRC_DIR}/components/position.cpp
-    ${TE_SRC_DIR}/components/velocity.cpp
-    ${TE_SRC_DIR}/components/window.cpp
+    # SYSTEM OBJECTS
+    ${TE_SRC_DIR}/clock.cpp
+    ${TE_SRC_DIR}/window.cpp
 
-    # SYSTEMS
-    ${TE_SRC_DIR}/systems/display.cpp
-    ${TE_SRC_DIR}/systems/draw.cpp
-    ${TE_SRC_DIR}/systems/event.cpp
-    ${TE_SRC_DIR}/systems/hitbox.cpp
-    ${TE_SRC_DIR}/systems/map.cpp
-    ${TE_SRC_DIR}/systems/movement.cpp
-    ${TE_SRC_DIR}/systems/view_player.cpp
+    # EVENTS
+    ${TE_SRC_DIR}/event.cpp
 )
 
 target_include_directories(${PROJECT_NAME}

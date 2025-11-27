@@ -1,11 +1,22 @@
-#Headers from sub-libs
+# Headers from sub-libs
 include/ECS
 include/Network
 
-#Local Files
+# Header from plugins
+include/Display.hpp
+include/display
+include/Movement.hpp
+include/movement
+include/Physic.hpp
+include/physic
+include/Interaction.hpp
+include/interaction
+
+# Local Files
 build/
 *.a
+*.so
 tests/game_test/GameTest
 
-#Editor config
+# Editor config
 .vscode
