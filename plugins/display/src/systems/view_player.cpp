@@ -7,9 +7,9 @@
 
 #include <ECS/Zipper.hpp>
 
-#include "components/player.hpp"
-#include "movement/components/position.hpp"
 #include "components/window.hpp"
+#include "interaction/components/player.hpp"
+#include "movement/components/position.hpp"
 
 #include "display/systems/view_player.hpp"
 

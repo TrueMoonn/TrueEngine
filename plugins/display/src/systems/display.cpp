@@ -7,9 +7,9 @@
 
 #include <ECS/Zipper.hpp>
 
-#include "display/systems/display.hpp"
-
 #include "components/window.hpp"
+
+#include "display/systems/display.hpp"
 
 namespace te {
 

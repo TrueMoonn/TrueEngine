@@ -7,12 +7,9 @@
 
 #include <SFML/Window/Event.hpp>
 
-#include "hitbox_management.hpp"
-#include "components/window.hpp"
-#include "components/player.hpp"
-#include "components/interactive.hpp"
-
-#include "systems/interaction.hpp"
+#include "interaction/components/player.hpp"
+#include "interaction/components/interactive.hpp"
+#include "interaction/systems/interaction.hpp"
 
 namespace te {
 
@@ -23,7 +20,7 @@ static void interaction_hitbox(ECS::Registry& reg) {
     for (ECS::Entity e = 0; e < players.size() &&
         e < interactives.size(); ++e) {
         if (players[e].has_value() && interactives[e].has_value()) {
-            entity_interaction(reg, e);
+            // entity_interaction(reg, e);
         }
     }
 }

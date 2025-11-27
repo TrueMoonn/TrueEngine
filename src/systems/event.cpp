@@ -9,11 +9,12 @@
 
 #include <ECS/Zipper.hpp>
 
-#include "systems/event.hpp"
 #include "components/window.hpp"
-#include "components/player.hpp"
+#include "interaction/components/player.hpp"
 #include "movement/components/position.hpp"
 #include "movement/components/velocity.hpp"
+
+#include "systems/event.hpp"
 
 namespace te {
 

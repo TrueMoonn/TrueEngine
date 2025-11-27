@@ -54,12 +54,10 @@ add_library( ${PROJECT_NAME} STATIC
 
     # COMPONENTS
     ${TE_SRC_DIR}/components/clock.cpp
-    ${TE_SRC_DIR}/components/interactive.cpp
     ${TE_SRC_DIR}/components/window.cpp
 
     # SYSTEMS
     ${TE_SRC_DIR}/systems/event.cpp
-    # ${TE_SRC_DIR}/systems/interaction.cpp
 )
 
 target_include_directories(${PROJECT_NAME}

@@ -9,6 +9,8 @@ include/Movement.hpp
 include/movement
 include/Physic.hpp
 include/physic
+include/Interaction.hpp
+include/interaction
 
 # Local Files
 build/

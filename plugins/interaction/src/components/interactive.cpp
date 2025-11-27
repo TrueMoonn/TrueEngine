@@ -5,7 +5,7 @@
 ** interactive.cpp
 */
 
-#include "components/interactive.hpp"
+#include "interaction/components/interactive.hpp"
 
 namespace te {
 

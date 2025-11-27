@@ -13,13 +13,14 @@
     #include "plugin/APlugin.hpp"
 
 
-class Movement : public te::APlugin {
+class Interaction : public te::APlugin {
  public:
-    explicit Movement(ECS::Registry& reg);
+    explicit Interaction(ECS::Registry& reg);
 };
 
 extern "C" {
-    std::unique_ptr<Movement> get_pfactory(ECS::Registry& reg) {
-        return std::make_unique<Movement>(reg);
+    std::unique_ptr<Interaction> get_pfactory(ECS::Registry& reg) {
+        return std::make_unique<Interaction>(reg);
     }
 }
+

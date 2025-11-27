@@ -8,7 +8,7 @@ set(CMAKE_SHARED_LIBRARY_PREFIX "")
 add_subdirectory(${PROJECT_SOURCE_DIR}/movement)
 execute_process(
     COMMAND bash -c "
-    rm -rf ../include/movement Movement.hpp
+    rm -rf ../include/movement ../include/Movement.hpp
     cp -R ../plugins/movement/include/. ../include
     "
 )
@@ -17,7 +17,7 @@ execute_process(
 add_subdirectory(${PROJECT_SOURCE_DIR}/display)
 execute_process(
     COMMAND bash -c "
-    rm -rf ../include/display Display.hpp
+    rm -rf ../include/display ../include/Display.hpp
     cp -R ../plugins/display/include/. ../include
     "
 )
@@ -26,7 +26,16 @@ execute_process(
 add_subdirectory(${PROJECT_SOURCE_DIR}/physic)
 execute_process(
     COMMAND bash -c "
-    rm -rf ../include/physic Physic.hpp
+    rm -rf ../include/physic ../include/Physic.hpp
     cp -R ../plugins/physic/include/. ../include
+    "
+)
+
+# INTERACTION
+add_subdirectory(${PROJECT_SOURCE_DIR}/interaction)
+execute_process(
+    COMMAND bash -c "
+    rm -rf ../include/interaction ../include/Interaction.hpp
+    cp -R ../plugins/interaction/include/. ../include
     "
 )
