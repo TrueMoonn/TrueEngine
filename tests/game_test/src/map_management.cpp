@@ -30,7 +30,6 @@ static void load_player(ECS::Registry& reg, const sf::Vector2u& pos) {
     reg.addComponent(MAP_ENTITY_PLAYER, te::Sprite(TEXTURE_MAP.at(MAP_PLAYER)));
     reg.addComponent(MAP_ENTITY_PLAYER, te::Velocity2(0.0f, 0.0f));
     reg.addComponent(MAP_ENTITY_PLAYER, te::Player());
-    // reg.addComponent(MAP_ENTITY_PLAYER, te::Movable());
     reg.addComponent(MAP_ENTITY_PLAYER, te::Hitbox(0.0f, 0.0f, 30.0f, 30.0f));
     reg.addComponent(MAP_ENTITY_PLAYER,
         te::Interactive(-15.0f, -15.0f, 60.0f, 60.0f));
