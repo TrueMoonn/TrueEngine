@@ -10,12 +10,13 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(googletest)
 
 ########## LINKAGE ##########
-add_executable(${PROJECT_NAME} 
-    temp.cpp
+add_executable(${PROJECT_NAME}
+    DlManager.cpp
+    PluginManager.cpp
 )
 
 target_link_libraries(${PROJECT_NAME} 
-    PRIVATE 
+    PRIVATE
         TrueEngine
         GTest::gtest_main
 )

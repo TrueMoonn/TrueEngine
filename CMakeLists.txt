@@ -23,6 +23,13 @@ message("Updating project header from ECS and Network... DONE\n")
 option(ENABLE_TE_TESTS "Build tests along with the library" OFF)
 option(ENABLE_TE_COVERAGE "Enable coverage reporting" OFF)
 
+########## LIBS ##########
+add_subdirectory(ECS)
+add_subdirectory(Network)
+
+########## PLUGINS ##########
+add_subdirectory(plugins)
+
 ########## UNIT TESTS ##########
 if(ENABLE_TE_COVERAGE)
     if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
@@ -35,13 +42,6 @@ if (ENABLE_TE_TESTS)
   enable_testing()
   add_subdirectory(tests/unit_tests)
 endif ()
-
-########## LIBS ##########
-add_subdirectory(ECS)
-add_subdirectory(Network)
-
-########## PLUGINS ##########
-add_subdirectory(plugins)
 
 ########## TRUE ENGINE ##########
 add_library( ${PROJECT_NAME} STATIC

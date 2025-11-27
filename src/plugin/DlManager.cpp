@@ -15,7 +15,7 @@ namespace te {
 DlManager::DlManager() : _handles() {}
 
 DlManager::~DlManager() {
-    clear();
+    closeHandlers();
 }
 
 void DlManager::load(const std::string& path) {
@@ -29,10 +29,6 @@ void DlManager::loadDirectory(const std::string& path) {
         if (!std::filesystem::path(file).extension().compare(".so"))
             setHandler(file);
     }
-}
-
-void DlManager::clear(void) {
-    closeHandlers();
 }
 
 void DlManager::setHandler(const std::filesystem::path& path) {

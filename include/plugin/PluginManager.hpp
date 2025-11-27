@@ -31,10 +31,11 @@ class PluginManager {
         clear();
     }
 
-    static void loadPlugins(ECS::Registry& reg) {
+    static void loadPlugins(ECS::Registry& reg,
+        const std::string& directory = DEFAULT_PLUGIN_RPATH) {
         clear();
         for (const auto &file :
-            std::filesystem::directory_iterator(DEFAULT_PLUGIN_RPATH)) {
+            std::filesystem::directory_iterator(directory)) {
             if (!std::filesystem::path(file).extension().compare(".so")) {
                 _manager.load(file.path());
                 if (_plugins.find(file.path().stem()) == _plugins.end()) {
@@ -50,8 +51,16 @@ class PluginManager {
         }
     }
 
+    static std::vector<std::string> getPlugins() {
+        std::vector<std::string> names(_plugins.size());
+
+        for (auto& node : _plugins)
+            names.push_back(node.first);
+        return names;
+    }
+
     static void clear(void) {
-        _manager.clear();
+        _manager.closeHandlers();
         _plugins.clear();
     }
 

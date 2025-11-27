@@ -23,7 +23,7 @@ class DlManager {
 
     void load(const std::string& path);
     void loadDirectory(const std::string& path);
-    void clear(void);
+    void closeHandlers(const std::string& id = "");
 
     template <typename Symbol>
     Symbol access(const std::string& handle_name,
@@ -43,7 +43,6 @@ class DlManager {
 
  protected:
     void setHandler(const std::filesystem::path& path);
-    void closeHandlers(const std::string& id = "");
 
     std::unordered_map<std::string, void *> _handles;
 };
