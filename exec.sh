@@ -82,8 +82,6 @@ then
 elif [[ $1 == "--style-check" || $1 == "-cs" ]]
 then
     echo "------------CS CHECKER------------"
-    rm -rf ./build/ ./*.a ./plugins/*.so
-    rm -rf include/ECS include/Network
     cd ./tests/game_test/
     rm -rf ./build ./GameTest ./plugins
     cd ../..
@@ -94,28 +92,28 @@ elif [[ $1 == "--help" || $1 == "-h" ]]
 then
     echo "To use this executer you must use a flag:
     --build, -b             Build the program with CMake
-    --clear, -c             Clear files created by the compilation
     --style-check, -cs      Check for coding style using cpplint
     --help, -h              More information about this script
-    --game-testing, -gt     Build and launch test game
 
     << This section delete the old files created by the compilation >>
     --re-build, -rb         Build the program with CMake
-    --build-test, -t        Launch unit tests with coverage using GTest
     --debug-build, -d       Build the program with debug and verbose
+    --clear, -c             Clear files created by the compilation and more
+    --game-testing, -gt     Build and launch test game
+    --build-test, -t        Launch unit tests with coverage using GTest
 "
 else
     echo "error: missing or wrong flag
 To use this executer you must use a flag:
     --build, -b             Build the program with CMake
-    --clear, -c             Clear files created by the compilation
     --style-check, -cs      Check for coding style using cpplint
     --help, -h              More information about this script
-    --game-testing, -gt     Build and launch test game
 
     << This section delete the old files created by the compilation >>
     --re-build, -rb         Build the program with CMake
-    --build-test, -t        Launch unit tests with coverage using GTest
     --debug-build, -d       Build the program with debug and verbose
+    --clear, -c             Clear files created by the compilation and more
+    --game-testing, -gt     Build and launch test game
+    --build-test, -t        Launch unit tests with coverage using GTest
 "
 fi
