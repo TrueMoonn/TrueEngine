@@ -9,6 +9,7 @@
 #include <utility>
 #include <iostream>
 #include <SFML/System/Exception.hpp>
+#include <toml++/toml.hpp>
 
 #include "Display.hpp"
 #include "display/factory.hpp"
@@ -16,38 +17,26 @@
 Display::Display(ECS::Registry& reg) : te::APlugin(reg) {
     reg.registerComponent<te::Drawable>();
     _components["drawable"] = [](ECS::Registry& reg, const ECS::Entity& e,
-        const te::json_like json) {
-        (void)json;
+        const toml::table& params) {
+        (void)params;
         reg.addComponent(e, te::Drawable());
     };
     reg.registerComponent<te::Sprite>();
     _components["sprite"] = [](ECS::Registry& reg, const ECS::Entity& e,
-        const te::json_like json) {
+        const toml::table& params) {
         try {
-            if (json.find("texture") != json.end()) {
-                sf::Texture texture =
-                    std::any_cast<sf::Texture>(json.at("texture"));
-                reg.addComponent(e, te::Sprite(std::move(texture)));
-                return;
-            }
-            std::filesystem::path path(
-                std::any_cast<std::string>(json.at("path")));
-            sf::Texture texture(path);
-            if (json.find("size") != json.end()) {
-                sf::Vector2f size =
-                    std::any_cast<sf::Vector2f>(json.at("size"));
-                sf::Vector2f scale(size.x / texture.getSize().x,
-                    size.y / texture.getSize().y);
-                reg.addComponent(e, te::Sprite(std::move(texture), scale));
-            } else {
-                reg.addComponent(e, te::Sprite(std::move(texture)));
-            }
-        } catch (const std::bad_any_cast& e) {
-            std::cerr << "error(Plugin-Sprite): " <<
-                e.what() << std::endl;
+            sf::Texture texture(params["path"].value_or(""));
+            sf::Vector2f size(
+                params["width"].value_or(50.0),
+                params["height"].value_or(50.0));
+            sf::Vector2f scale(size.x / texture.getSize().x,
+                size.y / texture.getSize().y);
+            reg.addComponent(e, te::Sprite(std::move(texture), scale));
         } catch (const std::out_of_range&) {
             std::cerr << "error(Plugin-Sprite): key not found" << std::endl;
-        } catch (const sf::Exception& e) {}
+        } catch (const sf::Exception& e) {
+            std::cerr << e.what() << std::endl;
+        }
     };
     _systems["display"] = [](ECS::Registry& reg) {
         reg.addSystem(&te::display_sys);

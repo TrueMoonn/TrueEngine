@@ -23,6 +23,7 @@ Sprite::Sprite(const Sprite& other) :
 Sprite::Sprite(Sprite&& other) noexcept :
     texture(std::move(other.texture)), sf::Sprite(texture) {
     setTextureRect(other.getTextureRect());
+    setScale(other.getScale());
 }
 
 }  // namespace te

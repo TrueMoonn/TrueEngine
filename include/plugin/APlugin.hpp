@@ -12,17 +12,15 @@
     #include <functional>
     #include <any>
     #include <iostream>
+    #include <vector>
+    #include <toml++/toml.hpp>
 
     #include <ECS/Registry.hpp>
 
-    #define DEFAULT_PLUGINS_RPATH "./plugins/"
-
 namespace te {
 
-typedef std::unordered_map<std::string, std::any> json_like;
 typedef std::function<void(
-    ECS::Registry&, const ECS::Entity&, const json_like&)> cmpt_builder;
-
+    ECS::Registry&, const ECS::Entity&, const toml::table&)> cmpt_builder;
 typedef std::function<void(ECS::Registry&)> sys_builder;
 
 class APlugin {
@@ -30,9 +28,11 @@ class APlugin {
     explicit APlugin(ECS::Registry& reg);
 
     void createComponent(const std::string& name,
-        const ECS::Entity& e, const json_like& json);
+        const ECS::Entity& e, const toml::table& json);
+    std::vector<std::string> getComponents(void) const;
 
     void createSystem(const std::string& name);
+    std::vector<std::string> getSystems(void) const;
 
  protected:
     std::unordered_map<std::string, cmpt_builder> _components;

@@ -36,8 +36,6 @@
 static const char *MAP_EXTENTION(".ddmap");
 static const size_t MAP_EXTENTION_SIZE(7);
 
-void load_map(ECS::Registry& reg, const std::string& path);
-
 enum MAP_TYPES : char {
     MAP_WALL = 'X',
     MAP_PLAYER = 'P',

@@ -6,6 +6,7 @@
 */
 
 #include <iostream>
+#include <toml++/toml.hpp>
 
 #include "Movement.hpp"
 #include "movement/factory.hpp"
@@ -13,10 +14,10 @@
 Movement::Movement(ECS::Registry& reg) : te::APlugin(reg) {
     reg.registerComponent<te::Position2>();
     _components["position2"] = [](ECS::Registry& reg, const ECS::Entity& e,
-        const te::json_like json) {
+        const toml::table& params) {
         try {
-            float x = std::any_cast<float>(json.at("x"));
-            float y = std::any_cast<float>(json.at("y"));
+            float x = params["x"].value_or(0.f);
+            float y = params["y"].value_or(0.f);
             reg.addComponent(e, te::Position2(x, y));
         } catch (const std::bad_any_cast& e) {
             std::cerr << "error(Plugin-Position2): " <<
@@ -25,10 +26,10 @@ Movement::Movement(ECS::Registry& reg) : te::APlugin(reg) {
     };
     reg.registerComponent<te::Velocity2>();
     _components["velocity2"] = [](ECS::Registry& reg, const ECS::Entity& e,
-        const te::json_like json) {
+        const toml::table& params) {
         try {
-            float x = std::any_cast<float>(json.at("x"));
-            float y = std::any_cast<float>(json.at("y"));
+            float x = params["x"].value_or(0.f);
+            float y = params["y"].value_or(0.f);
             reg.addComponent(e, te::Velocity2(x, y));
         } catch (const std::bad_any_cast& e) {
             std::cerr << "error(Plugin-Velocity2): " <<

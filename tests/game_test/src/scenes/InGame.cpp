@@ -6,6 +6,7 @@
 */
 
 #include <plugin/PluginManager.hpp>
+#include <config/map_loader.hpp>
 
 #include "clock.hpp"
 #include "window.hpp"
@@ -22,17 +23,18 @@ InGame::InGame() : AScene() {
 void InGame::setECS(void) {
     _reg.registerComponent<te::Window>();
 
-    te::PluginManager::loadSystem("movement", "movement2");
-    te::PluginManager::loadSystem("physic", "bound_hitbox");
+    te::PluginManager::loadSystem("movement2");
+    te::PluginManager::loadSystem("bound_hitbox");
     _reg.addSystem(&te::manageEvent);
-    te::PluginManager::loadSystem("display", "follow_player");
-    te::PluginManager::loadSystem("display", "draw");
-    te::PluginManager::loadSystem("display", "display");
+    te::PluginManager::loadSystem("follow_player");
+    te::PluginManager::loadSystem("draw");
+    te::PluginManager::loadSystem("display");
 }
 
 void InGame::setEntities(void) {
+    te::MapLoader loader(MAP_ENTITY_BACKGROUND, MAP_MAX_ENTITY_BACKGROUND);
     _reg.addComponent(MAIN_WINDOW, te::Window());
-    load_map(_reg, MAPS_PATHS.at("test1"));
+    loader.loadMap(_reg, MAPS_PATHS.at("test1"));
 }
 
 void InGame::run(void) {
