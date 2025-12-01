@@ -2,25 +2,25 @@
 git submodule update
 if [[ $1 == "--build" || $1 == "-b" ]]
 then
-    echo "------------BUILD"------------
+    echo "------------BUILD------------"
     if [ ! -d "./build/" ]
     then
         mkdir ./build/ && cd ./build/
         cmake ..
         cd ..
     fi
-    cmake --build ./build/
+    cmake --build ./build/ -j
     echo "------------END------------"
 
 elif [[ $1 == "--re-build" || $1 == "-rb" ]]
 then
     clear
-    echo "------------RE-BUILD"------------
+    echo "------------RE-BUILD------------"
     rm -rf ./build/ ./*.a ./plugins/*.so
     rm -rf include/ECS include/Network
     mkdir ./build/ && cd ./build/
     cmake ..
-    cmake --build .
+    cmake --build . -j
     cd ..
     echo "------------END------------"
 
@@ -32,7 +32,7 @@ then
     rm -rf include/ECS include/Network
     mkdir ./build/ && cd ./build/
     cmake .. -DENABLE_TE_TESTS=ON -DENABLE_TE_COVERAGE=ON
-    cmake --build .
+    cmake --build . -j
     ctest --output-on-failure
     gcovr --root .. \
         --filter '../src/plugin/*' \
@@ -44,12 +44,12 @@ then
 
 elif [[ $1 == "--debug-build" || $1 == "-d" ]]
 then
-    echo ""------------DEBUG"------------"
+    echo "------------DEBUG------------"
     rm -rf ./build/ ./*.a ./plugins/*.so
     rm -rf include/ECS include/Network
     mkdir ./build/ && cd ./build/
     cmake .. -DCMAKE_BUILD_TYPE=Debug
-    cmake --build . -v
+    cmake --build . -v -j
     cd ..
     echo "------------END------------"
 
@@ -67,13 +67,13 @@ then
 
 elif [[ $1 == "--game-testing" || $1 == "-gt" ]]
 then
-    echo "------------GAME TESTING"------------
+    echo "------------GAME TESTING------------"
     cd tests/game_test
     rm -rf ./build/ GameTest ./plugins/
     mkdir ./plugins/ && cp ../../plugins/*.so ./plugins/
     mkdir ./build/ && cd ./build/
     cmake ..
-    cmake --build .
+    cmake --build . -j
     cd ..
     ./GameTest
     cd ../..
