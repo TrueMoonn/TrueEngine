@@ -82,9 +82,6 @@ then
 elif [[ $1 == "--style-check" || $1 == "-cs" ]]
 then
     echo "------------CS CHECKER------------"
-    cd ./tests/game_test/
-    rm -rf ./build ./GameTest ./plugins
-    cd ../..
     pip install cpplint
     cpplint --recursive .
     echo "------------END------------"
