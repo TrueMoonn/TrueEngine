@@ -18,15 +18,16 @@ namespace te {
 MapLoader::MapLoader(const ECS::Entity& first_entity,
     const ECS::Entity& max_entity) : _first(first_entity), _max(max_entity) {}
 
-
 void MapLoader::loadMap(ECS::Registry& reg, const std::string& path) {
     std::ifstream file(path);
     if (!file.is_open())
-        return;
+        throw MapLoader::FileNotFound(path);
     std::stringstream buffer;
     buffer << file.rdbuf();
     std::string map(buffer.str());
     std::size_t index_split = map.find(MAP_CONFIG_SPLIT_KEY);
+    if (index_split == map.size())
+        throw MapLoader::ParsingError("config separator '---' not found");
     readConfig(map.substr(index_split +
         std::strlen(MAP_CONFIG_SPLIT_KEY), map.size()));
     readMap(map.substr(0, index_split));
@@ -74,13 +75,12 @@ void MapLoader::readConfig(const std::string& raw) {
     try {
         config = toml::parse(raw);
     } catch (const toml::parse_error& err) {
-        std::cerr << "Parsing failed:\n" << err << "\n";
-        return;
+        throw MapLoader::ParsingError(err.what());
     }
     toml::table *entities =
         config[MAP_CONFIG_ENTITIES_TABLE_NAME].as_table();
     if (entities == nullptr)
-        return;
+        throw MapLoader::ParsingError("can't find ENTITY table");
     for (auto &&[ename, entity] : *entities) {
         if (entity.is_table()) {
             _entities[ename.data()] = *entity.as_table();

@@ -33,6 +33,35 @@ class MapLoader {
     typedef std::vector<std::vector<mtile_t>> map_t;
 
  public:
+    class FileNotFound : public std::exception {
+     public:
+        FileNotFound(const std::string& path) {
+            _msg = "error: file not found ";
+            _msg += path;
+        }
+        const char* what() const noexcept {
+            return _msg.c_str();
+        }
+
+     private:
+        std::string _msg;
+    };
+
+    class ParsingError : public std::exception {
+     public:
+        ParsingError(const std::string& message)
+            : _msg("error: parsing file: ") {
+            _msg += message;
+        }
+        const char* what() const noexcept {
+            return _msg.c_str();
+        }
+
+     private:
+        std::string _msg;
+    };
+
+ public:
     MapLoader(const ECS::Entity& first_entity, const ECS::Entity& max_entity);
 
     void loadMap(ECS::Registry& reg, const std::string& path);

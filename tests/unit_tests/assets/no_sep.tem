@@ -1,0 +1,9 @@
+X,X,X,X
+X, , ,X
+X, , ,X
+XXXXXXX
+
+[ENTITIES]
+    [ENTITIES.DEFAULT]
+
+    [ENTITIES.X]
