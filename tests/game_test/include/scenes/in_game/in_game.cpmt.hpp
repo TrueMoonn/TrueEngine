@@ -9,6 +9,7 @@
 
     #include "components/window.hpp"
     #include "components/drawable.hpp"
+    #include "components/event.hpp"
     #include "components/position.hpp"
     #include "components/velocity.hpp"
     #include "components/sprite.hpp"
