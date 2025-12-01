@@ -6,6 +6,7 @@
 */
 
 #include <iostream>
+#include <toml++/toml.hpp>
 
 #include "Physic.hpp"
 #include "physic/factory.hpp"
@@ -13,18 +14,12 @@
 Physic::Physic(ECS::Registry& reg) : te::APlugin(reg) {
     reg.registerComponent<te::Hitbox>();
     _components["hitbox"] = [](ECS::Registry& reg, const ECS::Entity& e,
-        const te::json_like json) {
+        const toml::table& params) {
         try {
-            if (json.find("rect") != json.end()) {
-                sf::FloatRect rect =
-                    std::any_cast<sf::FloatRect>(json.at("rect"));
-                reg.addComponent(e, te::Hitbox(rect));
-                return;
-            }
-            float left = std::any_cast<float>(json.at("left"));
-            float top = std::any_cast<float>(json.at("top"));
-            float width = std::any_cast<float>(json.at("width"));
-            float height = std::any_cast<float>(json.at("height"));
+            float left = params["left"].value_or(0.f);
+            float top = params["top"].value_or(0.f);
+            float width = params["width"].value_or(0.f);
+            float height = params["height"].value_or(0.f);
             reg.addComponent(e, te::Hitbox(left, top, width, height));
         } catch (const std::bad_any_cast& e) {
             std::cerr << "error(Plugin-Hitbox): " <<
@@ -33,9 +28,9 @@ Physic::Physic(ECS::Registry& reg) : te::APlugin(reg) {
     };
     reg.registerComponent<te::Movable>();
     _components["movable"] = [](ECS::Registry& reg, const ECS::Entity& e,
-        const te::json_like json) {
+        const toml::table& params) {
         try {
-            (void)json;
+            (void)params;
             reg.addComponent(e, te::Movable());
         } catch (const std::bad_any_cast& e) {
             std::cerr << "error(Plugin-Movable): " <<

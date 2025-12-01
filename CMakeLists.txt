@@ -56,6 +56,9 @@ add_library( ${PROJECT_NAME} STATIC
     ${TE_SRC_DIR}/clock.cpp
     ${TE_SRC_DIR}/window.cpp
 
+    # CONFIG
+    ${TE_SRC_DIR}/config/map_loader.cpp
+
     # EVENTS
     ${TE_SRC_DIR}/event.cpp
 )

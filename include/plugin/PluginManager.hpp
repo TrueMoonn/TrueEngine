@@ -14,6 +14,7 @@
     #include <string>
     #include <unordered_map>
     #include <vector>
+    #include <toml++/toml.hpp>
 
     #include "plugin/DlManager.hpp"
     #include "plugin/APlugin.hpp"
@@ -44,6 +45,7 @@ class PluginManager {
                         _plugins[file.path().stem()] =
                             _manager.access<maker>(file.path().stem(),
                             ENDPOINT_NAME)(reg);
+                        setAccesser(file.path().stem());
                     } catch (const std::runtime_error& e) {
                         std::cerr << e.what() << std::endl;
                     }
@@ -65,22 +67,37 @@ class PluginManager {
         _plugins.clear();
     }
 
-    static void loadComponent(const std::string& plugin,
-        const std::string& name, const ECS::Entity& e,
-        const json_like& json = {}) {
-        if (_plugins.find(plugin) != _plugins.end()) {
-            _plugins.at(plugin)->createComponent(name, e, json);
+    static void loadComponent(const std::string& name,
+        const ECS::Entity& e, const toml::table& params = {}) {
+        if (_accesser.find(name) != _accesser.end()) {
+            _plugins.at(_accesser.at(name))->createComponent(name, e, params);
+        } else  {
+            std::cerr << "error(Plugin): not plugin " << \
+                "found linked to '" << name << "'" << std::endl;
         }
     }
 
-    static void loadSystem(const std::string& plugin,
-            const std::string& name) {
-        if (_plugins.find(plugin) != _plugins.end()) {
-            _plugins.at(plugin)->createSystem(name);
+    static void loadSystem(const std::string& name) {
+        if (_accesser.find(name) != _accesser.end()) {
+            _plugins.at(_accesser.at(name))->createSystem(name);
+        } else  {
+            std::cerr << "error(Plugin): not plugin " << \
+                "found linked to '" << name << "'" << std::endl;
         }
     }
 
  private:
+    static void setAccesser(const std::string& name) {
+        auto cmpts = _plugins.at(name)->getComponents();
+        auto syss = _plugins.at(name)->getSystems();
+
+        for (auto cmpt : cmpts)
+            _accesser.insert_or_assign(cmpt, name);
+        for (auto sys : syss)
+            _accesser.insert_or_assign(sys, name);
+    }
+    static inline std::unordered_map<std::string, std::string> _accesser;
+
     static inline DlManager _manager;
     static inline std::unordered_map<std::string,
         std::unique_ptr<APlugin>> _plugins;
