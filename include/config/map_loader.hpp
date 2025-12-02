@@ -34,11 +34,8 @@ namespace te {
  * It also use the ECS library to create entity directly to the Registry through
  * the PluginManager class
  * 
- * MAP - 
- * ENTITIES - 
- * 
  * Example file to parse:
- * ```text
+ * ```toml
  * X,X,X,X,X,X
  * X,G,G,G,G,X
  * X,G,G,G,G,X
@@ -51,7 +48,11 @@ namespace te {
  *     width = 50
  *     height = 50
  * [ENTITIES]
+ *     [ENTITIES.X]
+ *     [ENTITIES.G]
  * ```
+ * @param MAP default table used to get base info of the map
+ * @param ENTITIES default table for entities informations
  */
 class MapLoader {
     typedef std::string mentity_t;
