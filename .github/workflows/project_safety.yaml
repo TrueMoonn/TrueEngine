@@ -10,6 +10,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with: 
+          repository: TrueMoonn/TrueEngine
+          token: ${{ secrets.SUBMODULE_PRIVATE_TOKEN }}
+          submodules: true
 
       - name: Fetch Sub-Modules
         run: |
