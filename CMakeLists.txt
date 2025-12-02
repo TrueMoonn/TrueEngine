@@ -91,7 +91,7 @@ if (${SFML_GRAPHICS} STREQUAL "SFML_GRAPHICS-NOTFOUND" OR
             ECS
             Network
             SFML::Graphics
-            SFML::Systems
+            SFML::System
             SFML::Window
             SFML::Audio
     )
