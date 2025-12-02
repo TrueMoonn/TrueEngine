@@ -13,7 +13,7 @@ jobs:
 
       - name: Build Project
         run: |
-          ./exec.sh -b
+          cmake --build . -DENABLE_TE_TESTS=ON -DENABLE_TE_COVERAGE=ON
 
       - name: Run Tests
         working-directory: ./build/
