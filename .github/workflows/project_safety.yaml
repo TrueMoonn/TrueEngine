@@ -16,9 +16,13 @@ jobs:
           submodules: true
 
       - name: Install X11 Dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install libx11-dev
+        run: sudo apt-get update && sudo apt-get install -y \
+          libx11-dev \
+          libxrandr-dev \
+          libxi-dev \
+          libxcursor-dev \
+          libxinerama-dev \
+          libgl1-mesa-dev
 
       - name: Fetch Sub-Modules
         run: |
