@@ -85,12 +85,22 @@ then
     pip install cpplint
     cpplint --recursive .
     echo "------------END------------"
+
+elif [[ $1 == "--doxygen" || $1 == "-doc" ]]
+then
+    echo "------------DOXYGEN------------"
+    rm -rf doxygen/
+    doxygen
+    xdg-open doxygen/html/index.html
+    echo "------------END------------"
+
 elif [[ $1 == "--help" || $1 == "-h" ]]
 then
     echo "To use this executer you must use a flag:
     --build, -b             Build the program with CMake
     --style-check, -cs      Check for coding style using cpplint
     --help, -h              More information about this script
+    --doxygen, -doc   Create local documentation site using Doxygen
 
     << This section delete the old files created by the compilation >>
     --re-build, -rb         Build the program with CMake
@@ -105,6 +115,7 @@ To use this executer you must use a flag:
     --build, -b             Build the program with CMake
     --style-check, -cs      Check for coding style using cpplint
     --help, -h              More information about this script
+    --doxygen, -doc   Create local documentation site using Doxygen
 
     << This section delete the old files created by the compilation >>
     --re-build, -rb         Build the program with CMake
