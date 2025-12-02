@@ -11,6 +11,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name:: Fetch Sub-Modules
+        run: |
+          git submodule update
+
       - name: Build Project
         run: |
           mkdir build && cd build
