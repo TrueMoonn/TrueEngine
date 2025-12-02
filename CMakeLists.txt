@@ -7,6 +7,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 set(TE_SRC_DIR "${PROJECT_SOURCE_DIR}/src")
 set(TE_HDR_DIR "${PROJECT_SOURCE_DIR}/include")
+include(FetchContent)
 
 ########## HEADER UPDATE ##########
 message("\nUpdating project header from ECS and Network...")
@@ -68,6 +69,18 @@ target_include_directories(${PROJECT_NAME}
         ${TE_HDR_DIR}
 )
 
+########## TOML++ ##########
+FetchContent_Declare(
+    tomlplusplus
+    GIT_REPOSITORY https://github.com/marzer/tomlplusplus.git
+    GIT_TAG v3.4.0
+)
+FetchContent_MakeAvailable(tomlplusplus)
+target_link_libraries(${PROJECT_NAME}
+    PRIVATE
+        tomlplusplus::tomlplusplus
+)
+
 ########## SFML ##########
 find_library(SFML_GRAPHICS libsfml-graphics.so.3.0.2)
 find_library(SFML_SYSTEM libsfml-system.so.3.0.2)
@@ -78,7 +91,6 @@ if (${SFML_GRAPHICS} STREQUAL "SFML_GRAPHICS-NOTFOUND" OR
     ${SFML_SYSTEM} STREQUAL "SFML_SYSTEM-NOTFOUND" OR
     ${SFML_AUDIO} STREQUAL "SFML_AUDIO-NOTFOUND" OR
     ${SFML_WINDOW} STREQUAL "SFML_WINDOW-NOTFOUND")
-    include(FetchContent)
     FetchContent_Declare(SFML
         GIT_REPOSITORY https://github.com/SFML/SFML.git
         GIT_TAG 3.0.2
