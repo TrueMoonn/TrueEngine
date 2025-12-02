@@ -17,6 +17,7 @@ build/
 *.a
 *.so
 tests/game_test/GameTest
+doxygen/
 
 # Editor config
 .vscode

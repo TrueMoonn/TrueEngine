@@ -19,7 +19,7 @@ MapLoader::MapLoader(const ECS::Entity& first_entity,
     const ECS::Entity& max_entity) : _first(first_entity), _max(max_entity) {}
 
 
-void MapLoader::loadMap(ECS::Registry& reg, const std::string& path) {
+void MapLoader::loadMap(const std::string& path) {
     std::ifstream file(path);
     if (!file.is_open())
         return;

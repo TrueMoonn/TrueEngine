@@ -34,7 +34,7 @@ void InGame::setECS(void) {
 void InGame::setEntities(void) {
     te::MapLoader loader(MAP_ENTITY_BACKGROUND, MAP_MAX_ENTITY_BACKGROUND);
     _reg.addComponent(MAIN_WINDOW, te::Window());
-    loader.loadMap(_reg, MAPS_PATHS.at("test1"));
+    loader.loadMap(MAPS_PATHS.at("test1"));
 }
 
 void InGame::run(void) {
