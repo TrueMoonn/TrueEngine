@@ -13,6 +13,7 @@ jobs:
 
       - name: Build Project
         run: |
+          ls -l
           cmake . -DENABLE_TE_TESTS=ON -DENABLE_TE_COVERAGE=ON
           cmake --build .
 
