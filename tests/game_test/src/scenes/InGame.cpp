@@ -5,46 +5,36 @@
 ** InGame.cpp
 */
 
-#include "scenes/in_game/InGame.hpp"
+#include <plugin/PluginManager.hpp>
+#include <config/map_loader.hpp>
 
-#include "scenes/in_game/in_game.cpmt.hpp"
-#include "scenes/in_game/in_game.sys.hpp"
-#include "components/clock.hpp"
+#include "clock.hpp"
+#include "window.hpp"
+#include "event.hpp"
 
-InGame::InGame() {
+#include "scenes/InGame.hpp"
+
+InGame::InGame() : AScene() {
+    te::PluginManager::loadPlugins(_reg);
     setECS();
     setEntities();
 }
 
 void InGame::setECS(void) {
-    _reg.registerComponent<te::Drawable>();
-    _reg.registerComponent<te::Position2>();
-    _reg.registerComponent<te::Movable>();
-    _reg.registerComponent<te::Velocity2>();
-    _reg.registerComponent<te::Sprite>();
-    _reg.registerComponent<te::Health>();
-    _reg.registerComponent<te::Damage>();
     _reg.registerComponent<te::Window>();
-    _reg.registerComponent<te::Player>();
-    _reg.registerComponent<te::Hitbox>();
-    _reg.registerComponent<te::Interactive>();
-    _reg.registerComponent<te::Event>();
-    
-    _reg.addComponent(0, te::Event());
-    
-    _reg.addSystem(&te::movement2_sys);
-    _reg.addSystem(&te::deal_damage);
-    _reg.addSystem(&te::hitbox2_sys);
-    _reg.addSystem(&te::player_interaction_sys);
+
+    te::PluginManager::loadSystem("movement2");
+    te::PluginManager::loadSystem("bound_hitbox");
     _reg.addSystem(&te::manageEvent);
-    _reg.addSystem(&te::follow_player_sys);
-    _reg.addSystem(&te::draw_sys);
-    _reg.addSystem(&te::display_sys);
+    te::PluginManager::loadSystem("follow_player");
+    te::PluginManager::loadSystem("draw");
+    te::PluginManager::loadSystem("display");
 }
 
 void InGame::setEntities(void) {
+    te::MapLoader loader(MAP_ENTITY_BACKGROUND, MAP_MAX_ENTITY_BACKGROUND);
     _reg.addComponent(MAIN_WINDOW, te::Window());
-    load_map(_reg, MAPS_PATHS.at("test1"));
+    loader.loadMap(_reg, MAPS_PATHS.at("test1"));
 }
 
 void InGame::run(void) {
