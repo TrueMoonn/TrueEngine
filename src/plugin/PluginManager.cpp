@@ -5,12 +5,16 @@
 ** PluginManager.cpp
 */
 
+#include <vector>
+#include <iostream>
+#include <string>
+
 #include "plugin/PluginManager.hpp"
 
 namespace te {
 
 PluginManager::PluginManager() : _manager() {}
-   
+
 void PluginManager::loadPlugins(ECS::Registry& reg, const std::string& dir) {
     for (const auto &file : std::filesystem::directory_iterator(dir)) {
         if (!std::filesystem::path(file).extension().compare(".so")) {

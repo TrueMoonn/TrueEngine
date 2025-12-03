@@ -40,7 +40,7 @@ void MapLoader::loadMap(const std::string& path) {
 
 MapLoader::MapContent MapLoader::getContent(void) const {
     return _content;
-} 
+}
 
 void MapLoader::clearContent() {
     _content.clear();

@@ -89,9 +89,9 @@ class MapLoader {
      * 
      * @return MapContent - Structure that will be use to build map entities
      */
-    MapContent getContent(void) const; 
+    MapContent getContent(void) const;
 
-private:
+ private:
     /**
      * @brief Clear the Content object of the map
      */

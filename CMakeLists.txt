@@ -54,6 +54,9 @@ add_library( ${PROJECT_NAME} STATIC
 
     # CONFIG
     ${TE_SRC_DIR}/config/map_loader.cpp
+
+    # GAME TOOL
+    ${TE_SRC_DIR}/GameTool.hpp
 )
 
 target_include_directories(${PROJECT_NAME}

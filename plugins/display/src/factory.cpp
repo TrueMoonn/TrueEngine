@@ -44,7 +44,7 @@ Display::Display(ECS::Registry& reg) : te::APlugin(reg) {
     };
     _systems["events"] = [](ECS::Registry& reg) {
         reg.addSystem(&te::manageEvent);
-    }; 
+    };
     _systems["display"] = [](ECS::Registry& reg) {
         reg.addSystem(&te::display_sys);
     };
