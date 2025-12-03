@@ -27,6 +27,15 @@ TEST(DlManager, load) {
     EXPECT_THROW(manager.get_handlers().at("none"), std::out_of_range);
 }
 
+TEST(DlManager, loadDirectory) {
+    test_DlManager manager;
+
+    manager.loadDirectory("../../../tests/unit_tests/plugins");
+    EXPECT_EQ(manager.get_handlers().size(), 2);
+    EXPECT_NO_THROW(manager.get_handlers().at("movement"));
+    EXPECT_NO_THROW(manager.get_handlers().at("interaction"));
+}
+
 TEST(DlManager, wrong_load) {
     test_DlManager manager;
 
@@ -43,13 +52,12 @@ TEST(DlManager, wrong_extension_load) {
     EXPECT_EQ(manager.get_handlers().size(), 0);
 }
 
-TEST(DlManager, loadDirectory) {
+TEST(DlManager, wrong_symbol_access) {
     test_DlManager manager;
 
-    manager.loadDirectory("../../../tests/unit_tests/plugins");
-    EXPECT_EQ(manager.get_handlers().size(), 2);
-    EXPECT_NO_THROW(manager.get_handlers().at("movement"));
-    EXPECT_NO_THROW(manager.get_handlers().at("interaction"));
+    manager.load("../../../tests/unit_tests/plugins/movement.so");
+    EXPECT_THROW(manager.access<int(*)(void)>("movement", "wrong"),
+        std::runtime_error);
 }
 
 TEST(DlManager, close_handler) {

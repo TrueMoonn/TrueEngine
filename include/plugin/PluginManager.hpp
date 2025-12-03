@@ -29,9 +29,7 @@ class PluginManager {
 
  public:
     PluginManager() = delete;
-    ~PluginManager() {
-        clear();
-    }
+    ~PluginManager() = default;
 
     static void loadPlugins(ECS::Registry& reg,
         const std::string& directory = DEFAULT_PLUGIN_RPATH) {
@@ -55,7 +53,7 @@ class PluginManager {
     }
 
     static std::vector<std::string> getPlugins() {
-        std::vector<std::string> names(_plugins.size());
+        std::vector<std::string> names;
 
         for (auto& node : _plugins)
             names.push_back(node.first);
@@ -63,27 +61,31 @@ class PluginManager {
     }
 
     static void clear(void) {
-        _manager.closeHandlers();
         _plugins.clear();
+        _manager.closeHandlers();
     }
 
-    static void loadComponent(const std::string& name,
+    static bool loadComponent(const std::string& name,
         const ECS::Entity& e, const toml::table& params = {}) {
         if (_accesser.find(name) != _accesser.end()) {
             _plugins.at(_accesser.at(name))->createComponent(name, e, params);
         } else  {
             std::cerr << "error(Plugin): not plugin " << \
                 "found linked to '" << name << "'" << std::endl;
+            return false;
         }
+        return true;
     }
 
-    static void loadSystem(const std::string& name) {
+    static bool loadSystem(const std::string& name) {
         if (_accesser.find(name) != _accesser.end()) {
             _plugins.at(_accesser.at(name))->createSystem(name);
         } else  {
             std::cerr << "error(Plugin): not plugin " << \
                 "found linked to '" << name << "'" << std::endl;
+            return false;
         }
+        return true;
     }
 
  private:
