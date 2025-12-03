@@ -17,13 +17,13 @@
     #include "plugin/APlugin.hpp"
 
 
-class Display : public te::APlugin {
+class Sfml : public te::APlugin {
  public:
-    explicit Display(ECS::Registry& reg);
+    explicit Sfml(ECS::Registry& reg);
 };
 
 extern "C" {
-    std::unique_ptr<Display> get_pfactory(ECS::Registry& reg) {
-        return std::make_unique<Display>(reg);
+    std::unique_ptr<Sfml> get_pfactory(ECS::Registry& reg) {
+        return std::make_unique<Sfml>(reg);
     }
 }

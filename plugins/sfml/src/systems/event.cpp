@@ -11,17 +11,18 @@
 #include <SFML/Window/Event.hpp>
 
 #include <ECS/Zipper.hpp>
-#include "window.hpp"
+
+#include "sfml/components/window.hpp"
 #include "interaction/components/player.hpp"
 #include "movement/components/position.hpp"
 #include "movement/components/velocity.hpp"
-#include "display/components/sprite.hpp"
+#include "sfml/components/sprite.hpp"
 
-#include "event.hpp"
+#include "sfml/systems/event.hpp"
 
 #include "entity_spec/components/health.hpp"
 #include "physic/components/hitbox.hpp"
-#include "display/components/drawable.hpp"
+#include "sfml/components/drawable.hpp"
 
 namespace te {
 
@@ -47,52 +48,11 @@ void playerMovementEvent(ECS::Registry& reg) {
     }
 }
 
-// void create_projectile(ECS::Registry& reg, const Position2 &pos,
-                        // const Velocity2 &vel) {
-    // static int entity_id = PROJ_VAL;
-//
-    // if (entity_id > PROJ_MAX_VAL)
-        // entity_id = PROJ_VAL;
-    // reg.addComponent(entity_id, Drawable());qs
-    // reg.addComponent(entity_id, Sprite(sf::Texture(sf::Image(sf::Vector2u(
-        // PROJ_SIZE, PROJ_SIZE), sf::Color::Green)), sf::Vector2f(2, 2)));
-    // reg.addComponent(entity_id, Hitbox(0, 0, PROJ_SIZE, PROJ_SIZE));
-    // reg.addComponent(entity_id, Velocity2(vel));
-    // reg.addComponent(entity_id, Position2(pos));
-    // reg.addComponent(entity_id, Health(1));
-    // entity_id++;
-    //  }
-//
-// void shootProjectileEvent(ECS::Registry& reg) {
-    // auto& players = reg.getComponents<Player>();
-    // auto& position = reg.getComponents<Position2>();
-    // auto& event = reg.getComponents<Event>()[0];
-//
-    // for (auto &&[p, pos] : ECS::Zipper(players, position)) {
-        // if (event.value()._Keys[te::Up])
-            // create_projectile(reg, {pos.value().x + 15 - (PROJ_SIZE / 2),
-                // pos.value().y + 15 - (PROJ_SIZE / 2) - PROJ_VEL},
-                // {0, -PROJ_VEL});
-        // if (event.value()._Keys[te::Down])
-            // create_projectile(reg, {pos.value().x + 15 - (PROJ_SIZE / 2),
-                    // pos.value().y + 15 - (PROJ_SIZE / 2) + PROJ_VEL},
-                // {0, PROJ_VEL});
-        // if (event.value()._Keys[te::Left])
-            // create_projectile(reg, {pos.value().x + 15 - (PROJ_SIZE / 2)
-                // - PROJ_VEL, pos.value().y + 15 - (PROJ_SIZE / 2)},
-                // {-PROJ_VEL, 0});
-        // if (event.value()._Keys[te::Right])
-            // create_projectile(reg, {pos.value().x + 15 - (PROJ_SIZE / 2)
-                // + PROJ_VEL, pos.value().y + 15 - (PROJ_SIZE / 2)},
-                // {PROJ_VEL, 0});
-    // }
-// }
-
-void manageWindow(ECS::Registry& reg, std::reference_wrapper<Window> win) {
+void manageWindow(ECS::Registry& reg, Window& win) {
     auto& event = reg.getComponents<Event>()[0];
 
     if (event.value()._Keys[te::Escape]) {
-        win.get().close();
+        win.close();
     }
 }
 
@@ -143,20 +103,16 @@ void handleEvent(const sf::Event& event, auto &Event,
 }
 
 void manageEvent(ECS::Registry& reg) {
-    auto &Event = reg.getComponents<te::Event>()[0];
+    auto &events = reg.getComponents<te::Event>();
+    auto &windows = reg.getComponents<te::Window>();
 
-    std::optional<std::reference_wrapper<Window>> opt_win =
-        findActiveWindow(reg.getComponents<Window>());
-    if (!opt_win.has_value() || !Event.has_value() )
-        return;
-    std::reference_wrapper<Window> win = opt_win.value();
-
-    while (std::optional<sf::Event> event = win.get().pollEvent()) {
-        handleEvent(*event, Event, win);
+    for (auto&& [win, event] : ECS::Zipper(windows, events)) {
+        while (std::optional<sf::Event> pevent = win.value().pollEvent()) {
+            handleEvent(*pevent, event, win.value());
+        }
+        manageWindow(reg, win.value());
     }
     playerMovementEvent(reg);
-    // shootProjectileEvent(reg);
-    manageWindow(reg, win);
 }
 
 }  // namespace te

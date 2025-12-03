@@ -11,14 +11,23 @@
 #include <SFML/System/Exception.hpp>
 #include <toml++/toml.hpp>
 
-#include "Display.hpp"
-#include "display/factory.hpp"
+#include "Sfml.hpp"
+#include "sfml/factory.hpp"
 
-Display::Display(ECS::Registry& reg) : te::APlugin(reg) {
+Sfml::Sfml(ECS::Registry& reg) : te::APlugin(reg) {
+    reg.registerComponent<te::Event>();
+    _components["event_manager"] = [](ECS::Registry& reg, const ECS::Entity& e,
+        const toml::table& params) {
+        reg.addComponent(e, te::Event());
+    };
+    reg.registerComponent<te::Window>();
+    _components["window"] = [](ECS::Registry& reg, const ECS::Entity& e,
+        const toml::table&) {
+        reg.addComponent(e, te::Window());
+    };
     reg.registerComponent<te::Drawable>();
     _components["drawable"] = [](ECS::Registry& reg, const ECS::Entity& e,
-        const toml::table& params) {
-        (void)params;
+        const toml::table&) {
         reg.addComponent(e, te::Drawable());
     };
     reg.registerComponent<te::Sprite>();
@@ -37,6 +46,9 @@ Display::Display(ECS::Registry& reg) : te::APlugin(reg) {
         } catch (const sf::Exception& e) {
             std::cerr << e.what() << std::endl;
         }
+    };
+    _systems["events"] = [](ECS::Registry& reg) {
+        reg.addSystem(&te::manageEvent);
     };
     _systems["display"] = [](ECS::Registry& reg) {
         reg.addSystem(&te::display_sys);

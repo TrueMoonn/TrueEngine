@@ -7,7 +7,6 @@
 
 #pragma once
 
-class IScene {
- public:
-    virtual void run(void) = 0;
-};
+    #include "GameTool.hpp"
+
+class IScene : public te::GameTool {};

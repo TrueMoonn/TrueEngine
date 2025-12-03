@@ -9,7 +9,6 @@
 
     #include <unordered_map>
     #include <map>
-    #include <SFML/System/Vector2.hpp>
     #include <SFML/Window/Keyboard.hpp>
 
     #include <SFML/Graphics/Image.hpp>
