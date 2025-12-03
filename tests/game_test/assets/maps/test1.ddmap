@@ -48,7 +48,7 @@ g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,
         [ENTITIES.W.position2]
         x = 15.0
         y = 10.0
-        
+
         [ENTITIES.W.hitbox]
         left = 15.0
         top = 10.0
@@ -68,7 +68,7 @@ g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,
         top = 0.0
         width = 50.0
         height = 50.0
-    
+
     [ENTITIES.D]
     drawable = true
     position2 = true
@@ -88,6 +88,9 @@ g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,
     movable = true
     player = true
     position2 = true
+        [ENTITIES.P.health]
+        amount = 5
+
         [ENTITIES.P.sprite]
         path = "assets/test.png"
         width = 30.0

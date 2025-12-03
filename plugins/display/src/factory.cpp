@@ -15,6 +15,11 @@
 #include "display/factory.hpp"
 
 Display::Display(ECS::Registry& reg) : te::APlugin(reg) {
+    reg.registerComponent<te::Event>();
+    _components["event_manager"] = [](ECS::Registry& reg, const ECS::Entity& e,
+        const toml::table& params) {
+        reg.addComponent(e, te::Event());
+    };
     reg.registerComponent<te::Window>();
     _components["window"] = [](ECS::Registry& reg, const ECS::Entity& e,
         const toml::table&) {

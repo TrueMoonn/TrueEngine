@@ -22,6 +22,15 @@ execute_process(
     "
 )
 
+# WINDOW
+add_subdirectory(${PROJECT_SOURCE_DIR}/entity_specs)
+execute_process(
+    COMMAND bash -c "
+    rm -rf ../include/entity_spec ../include/EntitySpec.hpp
+    cp -R ../plugins/entity_specs/include/. ../include
+    "
+)
+
 # PHYSIC
 add_subdirectory(${PROJECT_SOURCE_DIR}/physic)
 execute_process(
