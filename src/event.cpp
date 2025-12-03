@@ -50,7 +50,7 @@ void playerMovementEvent(ECS::Registry& reg) {
 // void create_projectile(ECS::Registry& reg, const Position2 &pos,
                         // const Velocity2 &vel) {
     // static int entity_id = PROJ_VAL;
-// 
+//
     // if (entity_id > PROJ_MAX_VAL)
         // entity_id = PROJ_VAL;
     // reg.addComponent(entity_id, Drawable());qs
@@ -60,14 +60,14 @@ void playerMovementEvent(ECS::Registry& reg) {
     // reg.addComponent(entity_id, Velocity2(vel));
     // reg.addComponent(entity_id, Position2(pos));
     // reg.addComponent(entity_id, Health(1));
-    //entity_id++;
+    // entity_id++;
     //  }
-// 
+//
 // void shootProjectileEvent(ECS::Registry& reg) {
     // auto& players = reg.getComponents<Player>();
     // auto& position = reg.getComponents<Position2>();
     // auto& event = reg.getComponents<Event>()[0];
-// 
+//
     // for (auto &&[p, pos] : ECS::Zipper(players, position)) {
         // if (event.value()._Keys[te::Up])
             // create_projectile(reg, {pos.value().x + 15 - (PROJ_SIZE / 2),
@@ -155,7 +155,7 @@ void manageEvent(ECS::Registry& reg) {
         handleEvent(*event, Event, win);
     }
     playerMovementEvent(reg);
-    //shootProjectileEvent(reg);
+    // shootProjectileEvent(reg);
     manageWindow(reg, win);
 }
 
