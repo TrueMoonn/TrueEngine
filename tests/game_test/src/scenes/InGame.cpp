@@ -22,6 +22,7 @@ InGame::InGame() : AScene() {
 
 void InGame::setECS(void) {
     _reg.registerComponent<te::Window>();
+    _reg.registerComponent<te::Event>();
 
     te::PluginManager::loadSystem("movement2");
     te::PluginManager::loadSystem("bound_hitbox");
@@ -34,6 +35,7 @@ void InGame::setECS(void) {
 void InGame::setEntities(void) {
     te::MapLoader loader(MAP_ENTITY_BACKGROUND, MAP_MAX_ENTITY_BACKGROUND);
     _reg.addComponent(MAIN_WINDOW, te::Window());
+    _reg.addComponent(MAIN_WINDOW, te::Event());
     loader.loadMap(MAPS_PATHS.at("test1"));
 }
 
