@@ -47,16 +47,13 @@ add_library( ${PROJECT_NAME} STATIC
     #PLUGIN
     ${TE_SRC_DIR}/plugin/APlugin.cpp
     ${TE_SRC_DIR}/plugin/DlManager.cpp
+    ${TE_SRC_DIR}/plugin/PluginManager.cpp
 
     # SYSTEM OBJECTS
     ${TE_SRC_DIR}/clock.cpp
-    ${TE_SRC_DIR}/window.cpp
 
     # CONFIG
     ${TE_SRC_DIR}/config/map_loader.cpp
-
-    # EVENTS
-    ${TE_SRC_DIR}/event.cpp
 )
 
 target_include_directories(${PROJECT_NAME}

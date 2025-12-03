@@ -7,7 +7,7 @@
 
 #include <ECS/Zipper.hpp>
 
-#include "window.hpp"
+#include "display/components/window.hpp"
 
 #include "display/systems/display.hpp"
 

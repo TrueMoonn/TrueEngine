@@ -9,7 +9,6 @@
 
     #include <string>
     #include <SFML/Graphics/RenderWindow.hpp>
-    #include <ECS/SparseArray.hpp>
 
 namespace te {
 
@@ -21,10 +20,8 @@ struct Window : public sf::RenderWindow {
     Window();
     Window(const Window&);
     Window(Window&&);
+
     std::string name;
 };
-
-std::optional<std::reference_wrapper<Window>>
-findActiveWindow(ECS::SparseArray<Window>&);
 
 }  // namespace te

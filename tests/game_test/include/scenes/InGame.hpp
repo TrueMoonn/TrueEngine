@@ -56,8 +56,6 @@ class InGame : public AScene {
     InGame();
     ~InGame() = default;
 
-    void run(void) override;
-
  private:
     void setECS(void);
     void setEntities(void);

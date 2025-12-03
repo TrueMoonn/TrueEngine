@@ -20,7 +20,6 @@
     #include "plugin/APlugin.hpp"
 
     #define ENDPOINT_NAME "get_pfactory"
-    #define DEFAULT_PLUGIN_RPATH "./plugins/"
 
 namespace te {
 
@@ -28,6 +27,7 @@ class PluginManager {
     typedef std::unique_ptr<APlugin>(*maker)(ECS::Registry&);
 
  public:
+<<<<<<< Updated upstream
     PluginManager() = delete;
     ~PluginManager() {
         clear();
@@ -85,21 +85,24 @@ class PluginManager {
                 "found linked to '" << name << "'" << std::endl;
         }
     }
+=======
+    PluginManager();
+    ~PluginManager() = default;
+
+    void loadPlugins(ECS::Registry& reg, const std::string& dir);
+    std::vector<std::string> getPlugins() const;
+    void clear(void);
+    void loadComponent(const std::string& name,
+        const ECS::Entity& e, const toml::table& params);
+    void loadSystem(const std::string& name);
+>>>>>>> Stashed changes
 
  private:
-    static void setAccesser(const std::string& name) {
-        auto cmpts = _plugins.at(name)->getComponents();
-        auto syss = _plugins.at(name)->getSystems();
+    void setAccesser(const std::string& name);
+    std::unordered_map<std::string, std::string> _accesser;
 
-        for (auto cmpt : cmpts)
-            _accesser.insert_or_assign(cmpt, name);
-        for (auto sys : syss)
-            _accesser.insert_or_assign(sys, name);
-    }
-    static inline std::unordered_map<std::string, std::string> _accesser;
-
-    static inline DlManager _manager;
-    static inline std::unordered_map<std::string,
+    DlManager _manager;
+    std::unordered_map<std::string,
         std::unique_ptr<APlugin>> _plugins;
 };
 

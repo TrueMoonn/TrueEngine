@@ -7,6 +7,7 @@
 
 #include <string>
 #include <iostream>
+#include <vector>
 
 #include "plugin/DlManager.hpp"
 
@@ -39,6 +40,14 @@ void DlManager::setHandler(const std::filesystem::path& path) {
         return;
     }
     _handles[path.stem()] = handle;
+}
+
+std::vector<std::string> DlManager::getNames() const {
+    std::vector<std::string> names;
+
+    for (auto& [name, _] : _handles)
+        names.push_back(name);
+    return names;
 }
 
 void DlManager::closeHandlers(const std::string& id) {

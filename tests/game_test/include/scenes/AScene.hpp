@@ -7,14 +7,8 @@
 
 #pragma once
 
-    #include <ECS/Registry.hpp>
+    #include <GameTool.hpp>
 
     #include "scenes/IScene.hpp"
 
-class AScene : public IScene {
- public:
-    virtual void run(void) = 0;
-
- protected:
-    ECS::Registry _reg;
-};
+class AScene : public IScene {};
