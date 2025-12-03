@@ -27,12 +27,7 @@ namespace te {
 class PluginManager {
     typedef std::unique_ptr<APlugin>(*maker)(ECS::Registry&);
  public:
-    class NoPluginFound : public Exception {
-     public:
-        NoPluginFound(const std::string& msg) : Exception() {
-            _msg.append("PluginManager: " + msg);
-        }
-    };
+    TE_EXCEPTION("PluginManager", NoPluginFound)
 
  public:
     PluginManager();
