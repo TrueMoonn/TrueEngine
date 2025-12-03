@@ -25,10 +25,6 @@ namespace te {
     #define PROJ_VAL 20000
     #define PROJ_MAX_VAL 21000
 
-
-    const sf::Texture PROJ_TEXT(sf::Image(sf::Vector2u(PROJ_SIZE, PROJ_SIZE),
-        sf::Color::Green));
-
 enum player_movement_e {
     P_LEFT_MOV = static_cast<int>(sf::Keyboard::Key::Q),
     P_RIGHT_MOV = static_cast<int>(sf::Keyboard::Key::D),
