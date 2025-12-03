@@ -8,41 +8,27 @@
 #include <plugin/PluginManager.hpp>
 #include <config/map_loader.hpp>
 
-#include "clock.hpp"
-#include "window.hpp"
-#include "event.hpp"
-
 #include "scenes/InGame.hpp"
 
 InGame::InGame() : AScene() {
-    te::PluginManager::loadPlugins(_reg);
+    loadPlugins();
     setECS();
     setEntities();
 }
 
 void InGame::setECS(void) {
-    _reg.registerComponent<te::Window>();
-
-    te::PluginManager::loadSystem("movement2");
-    te::PluginManager::loadSystem("bound_hitbox");
-    _reg.addSystem(&te::manageEvent);
-    te::PluginManager::loadSystem("follow_player");
-    te::PluginManager::loadSystem("draw");
-    te::PluginManager::loadSystem("display");
+    createSystem("movement2");
+    createSystem("bound_hitbox");
+    createSystem("events");
+    createSystem("follow_player");
+    // createSystem("deal_damage");
+    createSystem("draw");
+    createSystem("display");
 }
 
 void InGame::setEntities(void) {
-    te::MapLoader loader(MAP_ENTITY_BACKGROUND, MAP_MAX_ENTITY_BACKGROUND);
-    _reg.addComponent(MAIN_WINDOW, te::Window());
-    loader.loadMap(MAPS_PATHS.at("test1"));
-}
-
-void InGame::run(void) {
-    struct te::Clock clock(CLOCK_RATE);
-
-    while (MAIN_WIN_EXIST && MAIN_WIN_ISOPEN) {
-        if (clock.checkCooldown()) {
-            _reg.runSystems();
-        }
-    }
+    createComponent("window", SYSTEM_ENTITY);
+    createComponent("event_manager", SYSTEM_ENTITY);
+    size_t map1_index = loadMapFile(MAPS_PATHS.at("test1"));
+    createMap(map1_index, MAP_ENTITY_BACKGROUND);
 }

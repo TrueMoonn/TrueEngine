@@ -13,6 +13,7 @@
     #include <iostream>
     #include <filesystem>
     #include <optional>
+    #include <vector>
 
 namespace te {
 
@@ -23,6 +24,7 @@ class DlManager {
 
     void load(const std::string& path);
     void loadDirectory(const std::string& path);
+    std::vector<std::string> getNames() const;
     void closeHandlers(const std::string& id = "");
 
     template <typename Symbol>

@@ -9,6 +9,8 @@
 #include <string>
 
 #include <gtest/gtest.h>
+#include <vector>
+#include <string>
 
 #include <ECS/Registry.hpp>
 #include <toml++/toml.hpp>
@@ -18,29 +20,32 @@
 
 TEST(PluginManager, load_plugins) {
     ECS::Registry reg;
-    te::PluginManager::loadPlugins(reg, "../../../tests/unit_tests/plugins");
-    std::vector<std::string> names = te::PluginManager::getPlugins();
+    te::PluginManager pmanager;
+    pmanager.loadPlugins(reg, "../../../tests/unit_tests/plugins");
+    std::vector<std::string> names = pmanager.getPlugins();
 
     EXPECT_EQ(names.size(), 2);
     EXPECT_TRUE(names[0].compare("movement"));
     EXPECT_TRUE(names[1].compare("interaction"));
 }
 
-// TEST(PluginManager, clear) {
-//     ECS::Registry reg;
-//     te::PluginManager::loadPlugins(reg, "../../../tests/unit_tests/plugins");
-//     te::PluginManager::clear();
-//     std::vector<std::string> names = te::PluginManager::getPlugins();
-//     EXPECT_EQ(names.size(), 0);
-// }
-
-TEST(PluginManager, component_loading) {
+TEST(PluginManager, clear) {
     ECS::Registry reg;
-    te::PluginManager::loadPlugins(reg, "../../../tests/unit_tests/plugins");
-
-    toml::table table =
-        toml::parse_file("../../../tests/unit_tests/configs/position.toml");
-    EXPECT_TRUE(te::PluginManager::loadComponent("position2", 0, table));
-    EXPECT_EQ(reg.getComponents<te::Position2>().size(), 1);
-    EXPECT_FALSE(te::PluginManager::loadComponent("wrong", 0));
+    te::PluginManager pmanager;
+    pmanager.loadPlugins(reg, "../../../tests/unit_tests/plugins");
+    pmanager.clear();
+    std::vector<std::string> names = pmanager.getPlugins();
+    EXPECT_EQ(names.size(), 0);
 }
+
+// TEST(PluginManager, component_loading) {
+//     ECS::Registry reg;
+//     te::PluginManager pmanager;
+//     pmanager.loadPlugins(reg, "../../../tests/unit_tests/plugins");
+
+//     toml::table table =
+//         toml::parse_file("../../../tests/unit_tests/configs/position.toml");
+//     EXPECT_TRUE(pmanager.loadComponent("position2", 0, table));
+//     EXPECT_EQ(reg.getComponents<te::Position2>().size(), 1);
+//     EXPECT_FALSE(pmanager.loadComponent("wrong", 0));
+// }

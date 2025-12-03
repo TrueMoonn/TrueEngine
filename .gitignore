@@ -3,14 +3,16 @@ include/ECS
 include/Network
 
 # Header from plugins
-include/Display.hpp
-include/display
+include/Sfml.hpp
+include/sfml
 include/Movement.hpp
 include/movement
 include/Physic.hpp
 include/physic
 include/Interaction.hpp
 include/interaction
+include/entity_spec
+include/EntitySpec.hpp
 
 # Local Files
 build/

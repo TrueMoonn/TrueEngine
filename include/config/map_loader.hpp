@@ -60,13 +60,21 @@ class MapLoader {
     typedef std::vector<std::vector<mtile_t>> map_t;
 
  public:
-    /**
-     * @brief Construct a new Map Loader object
-     * 
-     * @param first_entity Set the first entity used as index to start
-     * @param max_entity Set the number of entity used for a map
-     */
-    MapLoader(const ECS::Entity& first_entity, const ECS::Entity& max_entity);
+    struct MapContent {
+        map_t map;
+        std::unordered_map<std::string, toml::table> params;
+        std::size_t layer_max;
+
+        std::size_t tilex;
+        std::size_t tiley;
+
+        ECS::Entity size;
+
+        void clear(void);
+    };
+
+ public:
+    MapLoader() = default;
 
     /**
      * @brief Load a map from a config file
@@ -75,17 +83,19 @@ class MapLoader {
      * @param path The path to the config file
      */
     void loadMap(const std::string& path);
+
     /**
-     * @brief Clear the map based on entity index
+     * @brief Get the Content object of the map
      * 
-     * @param reg The ECS registry in wich we clear the entities
-     * @param begin The index of the first entity to clear
-     * @param size The number of entity to clear
+     * @return MapContent - Structure that will be use to build map entities
      */
-    void clearMap(ECS::Registry& reg,
-        ECS::Entity begin = 0, ECS::Entity size = 0);
+    MapContent getContent(void) const;
 
  private:
+    /**
+     * @brief Clear the Content object of the map
+     */
+    void clearContent(void);
     /**
      * @brief Read the map and parse it
      * 
@@ -98,36 +108,8 @@ class MapLoader {
      * @param raw The config part of the raw file
      */
     void readConfig(const std::string& raw);
-    /**
-     * @brief Create a Entity object
-     * 
-     * This function use the PluginManager static class to create the
-     * entity with the wanted parameters
-     * 
-     * @param e The entity to assign parameters
-     * @param x The X tile position in the map
-     * @param y The Y tile position in the map
-     * @param entity_info The parameters to create the entity as parsed toml
-     */
-    void createEntity(const ECS::Entity& e, std::size_t x, std::size_t y,
-        const toml::table& entity_info);
-    /**
-     * @brief Create a Map object
-     * 
-     * This function create the map based on what was parsed before
-     * 
-     */
-    void createMap(void);
 
-    map_t _map;
-    std::size_t _layer_max = 0;
-    std::unordered_map<mentity_t, toml::table> _entities;
-
-    std::size_t _tilex;
-    std::size_t _tiley;
-
-    ECS::Entity _first;
-    ECS::Entity _max;
+    MapContent _content;
 };
 
 }  // namespace te
