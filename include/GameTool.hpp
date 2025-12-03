@@ -51,7 +51,7 @@ class GameTool {
      * @brief Clear plugins loaded
      * 
      */
-    void clearPlugins();
+    void clearPlugins(void);
 
     /**
      * @brief Register a component type in ECS::Registry
@@ -109,8 +109,6 @@ class GameTool {
     /**
      * @brief Load a map file 
      * 
-     * @example tests/game_tests/assets/maps/test1.ddmap
-     * 
      * @param path Path to the file
      * @return The index at wich the MapContent has been stored
      */
@@ -124,6 +122,11 @@ class GameTool {
      */
     ECS::Entity createMap(std::size_t index, ECS::Entity fentity);
 
+    /**
+     * @brief Run the main loop
+     * 
+     * Launch systems in ECS::Registry
+     */
     void run(void);
 
  private:
