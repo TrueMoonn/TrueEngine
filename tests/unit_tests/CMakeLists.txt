@@ -18,6 +18,7 @@ add_executable(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME} 
     PRIVATE
         TrueEngine
+        tomlplusplus::tomlplusplus
         GTest::gtest_main
 )
 target_include_directories(${PROJECT_NAME}
@@ -28,3 +29,14 @@ target_include_directories(${PROJECT_NAME}
 ########## TESTS ##########
 include(GoogleTest)
 gtest_discover_tests(${PROJECT_NAME})
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_SOURCE_DIR}/tests/unit_tests/plugins
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${CMAKE_SOURCE_DIR}/plugins/movement.so
+        ${CMAKE_SOURCE_DIR}/tests/unit_tests/plugins/movement.so
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${CMAKE_SOURCE_DIR}/plugins/interaction.so
+        ${CMAKE_SOURCE_DIR}/tests/unit_tests/plugins/interaction.so
+    COMMAND ${CMAKE_COMMAND} -E echo "67" > ${CMAKE_SOURCE_DIR}/tests/unit_tests/plugins/wrong.so
+)
