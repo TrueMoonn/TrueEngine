@@ -12,17 +12,17 @@
 
 #include <ECS/Zipper.hpp>
 
-#include "display/components/window.hpp"
+#include "sfml/components/window.hpp"
 #include "interaction/components/player.hpp"
 #include "movement/components/position.hpp"
 #include "movement/components/velocity.hpp"
-#include "display/components/sprite.hpp"
+#include "sfml/components/sprite.hpp"
 
-#include "display/systems/event.hpp"
+#include "sfml/systems/event.hpp"
 
 #include "entity_spec/components/health.hpp"
 #include "physic/components/hitbox.hpp"
-#include "display/components/drawable.hpp"
+#include "sfml/components/drawable.hpp"
 
 namespace te {
 

@@ -7,7 +7,7 @@
 
 #include <utility>
 
-#include "display/components/window.hpp"
+#include "sfml/components/window.hpp"
 
 namespace te {
 
