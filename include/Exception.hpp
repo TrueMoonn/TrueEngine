@@ -15,6 +15,14 @@
     /**
      * @brief Create a simple Exception class
      * 
+     * Exemple bellow
+     * ```c++
+     * class MyClass {
+     *  public:
+     *      TE_EXCEPTION("MyClass", ErrorName)
+     * };
+     * ```
+     * 
      * @param cName The name in string format of the actual class
      * @param eName The error name used as class name for the exception
      */
