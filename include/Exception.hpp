@@ -12,6 +12,12 @@
 
     #define PRE_MESSAGE "error: "
 
+    /**
+     * @brief Create a simple Exception class
+     * 
+     * @param cName The name in string format of the actual class
+     * @param eName The error name used as class name for the exception
+     */
     #define TE_EXCEPTION(cName, eName) class eName : public Exception\
         {public: eName(const std::string& msg) : Exception(cName)\
         {_msg.append(msg);}};
