@@ -59,6 +59,7 @@ then
     rm -rf ./include/display ./include/Display.hpp
     rm -rf ./include/physic ./include/Physic.hpp
     rm -rf ./include/interaction ./include/Interaction.hpp
+    rm -rf ./include/entity_spec ./include/EntitySpec.hpp
     rm -rf ./build/ ./*.a ./plugins/*.so
     rm -rf include/ECS include/Network
     cd ./tests/game_test/
