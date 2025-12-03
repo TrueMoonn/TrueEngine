@@ -57,7 +57,6 @@ add_library( ${PROJECT_NAME} STATIC
 
     # EVENTS
     ${TE_SRC_DIR}/event.cpp
-
 )
 
 target_include_directories(${PROJECT_NAME}
