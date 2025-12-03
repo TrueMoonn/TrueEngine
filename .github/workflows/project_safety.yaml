@@ -10,10 +10,33 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with: 
+          repository: TrueMoonn/TrueEngine
+          token: ${{ secrets.SUBMODULE_PRIVATE_TOKEN }}
+          submodules: true
+
+      - name: Install X11 Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+          libx11-dev \
+          libxrandr-dev \
+          libxi-dev \
+          libxcursor-dev \
+          libxinerama-dev \
+          libgl1-mesa-dev \
+          libudev-dev \
+          libfreetype6-dev libopenal-dev libvorbis-dev libflac-dev
+
+      - name: Fetch Sub-Modules
+        run: |
+          git submodule update --init --recursive
 
       - name: Build Project
         run: |
-          ./exec.sh -b
+          mkdir build && cd build
+          cmake .. -DENABLE_TE_TESTS=ON -DENABLE_TE_COVERAGE=ON
+          cmake --build .
 
       - name: Run Tests
         working-directory: ./build/

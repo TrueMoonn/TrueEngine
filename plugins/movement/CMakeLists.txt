@@ -18,4 +18,9 @@ target_include_directories(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME}
     PUBLIC
         TrueEngine
+        tomlplusplus::tomlplusplus
 )
+
+if (ENABLE_TE_COVERAGE)
+    target_link_libraries(${PROJECT_NAME} PUBLIC gcov)
+endif ()
