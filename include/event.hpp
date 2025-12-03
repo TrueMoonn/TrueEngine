@@ -7,6 +7,7 @@
 
 #pragma once
 
+    #include <unordered_map>
     #include <map>
     #include <SFML/System/Vector2.hpp>
     #include <SFML/Window/Keyboard.hpp>
@@ -190,14 +191,12 @@ static const std::map<player_movement_e, float> P_MOVEMENT = {
     struct Event {
         explicit Event() {
             std::fill(std::begin(this->_Keys), std::end(this->_Keys), false);
-            std::fill(std::begin(this->_Systems), std::end(this->_Systems), false);
-        };
-
-        
+            std::fill(std::begin(this->_Systems),
+                std::end(this->_Systems), false);
+        }
         std::array<bool, Key::LIMITKEY> _Keys;
         std::array<bool, System::LIMITSYSTEM> _Systems;
         std::array<std::pair<bool, te::Position2>, LIMITBUTTON> _MouseButtons;
-
     };
 
 void manageEvent(ECS::Registry& reg);
