@@ -103,12 +103,12 @@ void handleEvent(const sf::Event& event, auto &Event,
 }
 
 void manageEvent(ECS::Registry& reg) {
-    auto &Event = reg.getComponents<te::Event>()[0];
+    auto &events = reg.getComponents<te::Event>();
     auto &windows = reg.getComponents<te::Window>();
 
-    for (auto&& [win] : ECS::Zipper(windows)) {
-        while (std::optional<sf::Event> event = win.value().pollEvent()) {
-            handleEvent(*event, Event, win.value());
+    for (auto&& [win, event] : ECS::Zipper(windows, events)) {
+        while (std::optional<sf::Event> pevent = win.value().pollEvent()) {
+            handleEvent(*pevent, event, win.value());
         }
         manageWindow(reg, win.value());
     }
