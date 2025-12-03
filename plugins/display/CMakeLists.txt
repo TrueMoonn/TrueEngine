@@ -25,3 +25,7 @@ target_link_libraries(${PROJECT_NAME}
         TrueEngine
         tomlplusplus::tomlplusplus
 )
+
+if (ENABLE_TE_COVERAGE)
+    target_link_libraries(${PROJECT_NAME} PUBLIC gcov)
+endif ()

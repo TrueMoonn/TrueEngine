@@ -24,25 +24,20 @@ message("Updating project header from ECS and Network... DONE\n")
 option(ENABLE_TE_TESTS "Build tests along with the library" OFF)
 option(ENABLE_TE_COVERAGE "Enable coverage reporting" OFF)
 
+########## COVERAGE ##########
+if (ENABLE_TE_COVERAGE)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage -fprofile-arcs -ftest-coverage -lgcov")
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --coverage")
+    endif()
+endif()
+
 ########## LIBS ##########
 add_subdirectory(ECS)
 add_subdirectory(Network)
 
 ########## PLUGINS ##########
 add_subdirectory(plugins)
-
-########## UNIT TESTS ##########
-if(ENABLE_TE_COVERAGE)
-    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage -fprofile-arcs -ftest-coverage")
-        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --coverage")
-    endif()
-endif()
-
-if (ENABLE_TE_TESTS)
-  enable_testing()
-  add_subdirectory(tests/unit_tests)
-endif ()
 
 ########## TRUE ENGINE ##########
 add_library( ${PROJECT_NAME} STATIC
@@ -117,4 +112,10 @@ else ()
             ${SFML_WINDOW}
             ${SFML_AUDIO}
     )
+endif ()
+
+########## TESTS ##########
+if (ENABLE_TE_TESTS)
+  enable_testing()
+  add_subdirectory(tests/unit_tests)
 endif ()
