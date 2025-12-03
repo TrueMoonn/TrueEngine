@@ -129,4 +129,5 @@ class MapLoader {
     ECS::Entity _first;
     ECS::Entity _max;
 };
+
 }  // namespace te

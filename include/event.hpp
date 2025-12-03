@@ -35,7 +35,6 @@ enum player_movement_e {
 
     #define P_MOV_FACTOR 3.0f
 
-
 static const std::map<player_movement_e, float> P_MOVEMENT = {
     {P_LEFT_MOV, -P_MOV_FACTOR},
     {P_RIGHT_MOV, P_MOV_FACTOR},
