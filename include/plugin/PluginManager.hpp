@@ -16,6 +16,7 @@
     #include <vector>
     #include <toml++/toml.hpp>
 
+    #include "Exception.hpp"
     #include "plugin/DlManager.hpp"
     #include "plugin/APlugin.hpp"
 
@@ -25,6 +26,8 @@ namespace te {
 
 class PluginManager {
     typedef std::unique_ptr<APlugin>(*maker)(ECS::Registry&);
+ public:
+    TE_EXCEPTION("PluginManager", NoPluginFound)
 
  public:
     PluginManager();

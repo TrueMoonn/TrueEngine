@@ -50,8 +50,8 @@ void PluginManager::loadComponent(const std::string& name,
     if (_accesser.find(name) != _accesser.end()) {
         _plugins.at(_accesser.at(name))->createComponent(name, e, params);
     } else  {
-        std::cerr << "error(Plugin): not plugin " << \
-            "found linked to '" << name << "'" << std::endl;
+        throw PluginManager::NoPluginFound(
+            "no plugin found linked to '" + name + "'");
     }
 }
 
@@ -59,8 +59,8 @@ void PluginManager::loadSystem(const std::string& name) {
     if (_accesser.find(name) != _accesser.end()) {
         _plugins.at(_accesser.at(name))->createSystem(name);
     } else  {
-        std::cerr << "error(Plugin): not plugin " << \
-            "found linked to '" << name << "'" << std::endl;
+        throw PluginManager::NoPluginFound(
+            "no plugin found linked to '" + name + "'");
     }
 }
 

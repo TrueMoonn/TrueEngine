@@ -6,6 +6,7 @@
 */
 
 #include <string>
+#include <iostream>
 
 #include "GameTool.hpp"
 
@@ -21,11 +22,19 @@ void GameTool::clearPlugins() {
 
 void GameTool::createComponent(const std::string& name, const ECS::Entity& e,
     const toml::table& params) {
-    _pmanager.loadComponent(name, e, params);
+    try {
+        _pmanager.loadComponent(name, e, params);
+    } catch (const PluginManager::NoPluginFound& e) {
+        std::cerr << e.what() << std::endl;
+    }
 }
 
 void GameTool::createSystem(const std::string& name) {
-    _pmanager.loadSystem(name);
+    try {
+        _pmanager.loadSystem(name);
+    } catch (const PluginManager::NoPluginFound& e) {
+        std::cerr << e.what() << std::endl;
+    }
 }
 
 void GameTool::createSystem(const te::sys_builder &f) {
