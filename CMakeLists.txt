@@ -7,6 +7,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 set(TE_SRC_DIR "${PROJECT_SOURCE_DIR}/src")
 set(TE_HDR_DIR "${PROJECT_SOURCE_DIR}/include")
+include(FetchContent)
 
 ########## HEADER UPDATE ##########
 message("\nUpdating project header from ECS and Network...")
@@ -23,25 +24,20 @@ message("Updating project header from ECS and Network... DONE\n")
 option(ENABLE_TE_TESTS "Build tests along with the library" OFF)
 option(ENABLE_TE_COVERAGE "Enable coverage reporting" OFF)
 
+########## COVERAGE ##########
+if (ENABLE_TE_COVERAGE)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage -fprofile-arcs -ftest-coverage -lgcov")
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --coverage")
+    endif()
+endif()
+
 ########## LIBS ##########
 add_subdirectory(ECS)
 add_subdirectory(Network)
 
 ########## PLUGINS ##########
 add_subdirectory(plugins)
-
-########## UNIT TESTS ##########
-if(ENABLE_TE_COVERAGE)
-    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage -fprofile-arcs -ftest-coverage")
-        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --coverage")
-    endif()
-endif()
-
-if (ENABLE_TE_TESTS)
-  enable_testing()
-  add_subdirectory(tests/unit_tests)
-endif ()
 
 ########## TRUE ENGINE ##########
 add_library( ${PROJECT_NAME} STATIC
@@ -51,21 +47,33 @@ add_library( ${PROJECT_NAME} STATIC
     #PLUGIN
     ${TE_SRC_DIR}/plugin/APlugin.cpp
     ${TE_SRC_DIR}/plugin/DlManager.cpp
+    ${TE_SRC_DIR}/plugin/PluginManager.cpp
 
     # SYSTEM OBJECTS
     ${TE_SRC_DIR}/clock.cpp
-    ${TE_SRC_DIR}/window.cpp
 
     # CONFIG
     ${TE_SRC_DIR}/config/map_loader.cpp
 
-    # EVENTS
-    ${TE_SRC_DIR}/event.cpp
+    # GAME TOOL
+    ${TE_SRC_DIR}/GameTool.cpp
 )
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC
         ${TE_HDR_DIR}
+)
+
+########## TOML++ ##########
+FetchContent_Declare(
+    tomlplusplus
+    GIT_REPOSITORY https://github.com/marzer/tomlplusplus.git
+    GIT_TAG v3.4.0
+)
+FetchContent_MakeAvailable(tomlplusplus)
+target_link_libraries(${PROJECT_NAME}
+    PRIVATE
+        tomlplusplus::tomlplusplus
 )
 
 ########## SFML ##########
@@ -78,7 +86,6 @@ if (${SFML_GRAPHICS} STREQUAL "SFML_GRAPHICS-NOTFOUND" OR
     ${SFML_SYSTEM} STREQUAL "SFML_SYSTEM-NOTFOUND" OR
     ${SFML_AUDIO} STREQUAL "SFML_AUDIO-NOTFOUND" OR
     ${SFML_WINDOW} STREQUAL "SFML_WINDOW-NOTFOUND")
-    include(FetchContent)
     FetchContent_Declare(SFML
         GIT_REPOSITORY https://github.com/SFML/SFML.git
         GIT_TAG 3.0.2
@@ -91,7 +98,7 @@ if (${SFML_GRAPHICS} STREQUAL "SFML_GRAPHICS-NOTFOUND" OR
             ECS
             Network
             SFML::Graphics
-            SFML::Systems
+            SFML::System
             SFML::Window
             SFML::Audio
     )
@@ -105,4 +112,10 @@ else ()
             ${SFML_WINDOW}
             ${SFML_AUDIO}
     )
+endif ()
+
+########## TESTS ##########
+if (ENABLE_TE_TESTS)
+  enable_testing()
+  add_subdirectory(tests/unit_tests)
 endif ()

@@ -1,4 +1,4 @@
-project(display)
+project(sfml)
 
 #/ Library \#
 add_library(${PROJECT_NAME} SHARED
@@ -6,13 +6,15 @@ add_library(${PROJECT_NAME} SHARED
 
     #COMPONENTS
     ${PROJECT_SOURCE_DIR}/src/components/sprite.cpp
+    ${PROJECT_SOURCE_DIR}/src/components/window.cpp
 
     #SYSTEMS
+    ${PROJECT_SOURCE_DIR}/src/systems/event.cpp
     ${PROJECT_SOURCE_DIR}/src/systems/display.cpp
     ${PROJECT_SOURCE_DIR}/src/systems/draw.cpp
     ${PROJECT_SOURCE_DIR}/src/systems/view_player.cpp
 )
-add_library(plugins::display ALIAS ${PROJECT_NAME})
+add_library(plugins::sfml ALIAS ${PROJECT_NAME})
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC
@@ -23,4 +25,9 @@ target_include_directories(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME}
     PUBLIC
         TrueEngine
+        tomlplusplus::tomlplusplus
 )
+
+if (ENABLE_TE_COVERAGE)
+    target_link_libraries(${PROJECT_NAME} PUBLIC gcov)
+endif ()

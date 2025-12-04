@@ -13,12 +13,21 @@ execute_process(
     "
 )
 
-# WINDOW
-add_subdirectory(${PROJECT_SOURCE_DIR}/display)
+# SFML
+add_subdirectory(${PROJECT_SOURCE_DIR}/sfml)
 execute_process(
     COMMAND bash -c "
-    rm -rf ../include/display ../include/Display.hpp
-    cp -R ../plugins/display/include/. ../include
+    rm -rf ../include/sfml ../include/Sfml.hpp
+    cp -R ../plugins/sfml/include/. ../include
+    "
+)
+
+# ENTITY SPEC
+add_subdirectory(${PROJECT_SOURCE_DIR}/entity_specs)
+execute_process(
+    COMMAND bash -c "
+    rm -rf ../include/entity_spec ../include/EntitySpec.hpp
+    cp -R ../plugins/entity_specs/include/. ../include
     "
 )
 

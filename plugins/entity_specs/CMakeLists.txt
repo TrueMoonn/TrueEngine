@@ -1,13 +1,13 @@
-project(movement)
+project(entity_spec)
 
-#/ Library \#
+########## LIBRARY ##########
 add_library(${PROJECT_NAME} SHARED
     ${PROJECT_SOURCE_DIR}/src/factory.cpp
-    ${PROJECT_SOURCE_DIR}/src/components/velocity.cpp
-    ${PROJECT_SOURCE_DIR}/src/components/position.cpp
-    ${PROJECT_SOURCE_DIR}/src/systems/movement.cpp
+    ${PROJECT_SOURCE_DIR}/src/components/damage.cpp
+    ${PROJECT_SOURCE_DIR}/src/components/health.cpp
+    ${PROJECT_SOURCE_DIR}/src/systems/deal_damage.cpp
 )
-add_library(plugins::movement ALIAS ${PROJECT_NAME})
+add_library(plugins::entity_spec ALIAS ${PROJECT_NAME})
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC
@@ -24,3 +24,4 @@ target_link_libraries(${PROJECT_NAME}
 if (ENABLE_TE_COVERAGE)
     target_link_libraries(${PROJECT_NAME} PUBLIC gcov)
 endif ()
+

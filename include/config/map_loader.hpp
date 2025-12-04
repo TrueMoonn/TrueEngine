@@ -27,63 +27,89 @@
 
 namespace te {
 
+/**
+ * @brief Map Loader implementation for the True Engine
+ * 
+ * This class use an external library called toml++ to parse configuration files
+ * It also use the ECS library to create entity directly to the Registry through
+ * the PluginManager class
+ * 
+ * Example file to parse:
+ * ```toml
+ * X,X,X,X,X,X
+ * X,G,G,G,G,X
+ * X,G,G,G,G,X
+ * X,G,G,G,G,X
+ * X,G,G,G,G,X
+ * X,X,X,X,X,X
+ * ---
+ * [MAP]
+ *     [MAP.TILES]
+ *     width = 50
+ *     height = 50
+ * [ENTITIES]
+ *     [ENTITIES.X]
+ *     [ENTITIES.G]
+ * ```
+ * @param MAP default table used to get base info of the map
+ * @param ENTITIES default table for entities informations
+ */
 class MapLoader {
     typedef std::string mentity_t;
     typedef std::vector<mentity_t> mtile_t;
     typedef std::vector<std::vector<mtile_t>> map_t;
 
  public:
-    class FileNotFound : public std::exception {
-     public:
-        FileNotFound(const std::string& path) {
-            _msg = "error: file not found ";
-            _msg += path;
-        }
-        const char* what() const noexcept {
-            return _msg.c_str();
-        }
+    struct MapContent {
+        map_t map;
+        std::unordered_map<std::string, toml::table> params;
+        std::size_t layer_max;
 
-     private:
-        std::string _msg;
-    };
+        std::size_t tilex;
+        std::size_t tiley;
 
-    class ParsingError : public std::exception {
-     public:
-        ParsingError(const std::string& message)
-            : _msg("error: parsing file: ") {
-            _msg += message;
-        }
-        const char* what() const noexcept {
-            return _msg.c_str();
-        }
+        ECS::Entity size;
 
-     private:
-        std::string _msg;
+        void clear(void);
     };
 
  public:
-    MapLoader(const ECS::Entity& first_entity, const ECS::Entity& max_entity);
+    MapLoader() = default;
 
-    void loadMap(ECS::Registry& reg, const std::string& path);
-    void clearMap(ECS::Registry& reg,
-        ECS::Entity begin = 0, ECS::Entity size = 0);
+    /**
+     * @brief Load a map from a config file
+     * 
+     * @param reg The ECS registry to load the entities to
+     * @param path The path to the config file
+     */
+    void loadMap(const std::string& path);
+
+    /**
+     * @brief Get the Content object of the map
+     * 
+     * @return MapContent - Structure that will be use to build map entities
+     */
+    MapContent getContent(void) const;
 
  private:
+    /**
+     * @brief Clear the Content object of the map
+     */
+    void clearContent(void);
+    /**
+     * @brief Read the map and parse it
+     * 
+     * @param raw The map part of the raw file
+     */
     void readMap(const std::string& raw);
+    /**
+     * @brief Read the conifg and parse it
+     * 
+     * @param raw The config part of the raw file
+     */
     void readConfig(const std::string& raw);
-    void createEntity(const ECS::Entity& e, std::size_t x, std::size_t y,
-        const toml::table& entity_info);
-    void createMap(void);
 
-    map_t _map;
-    std::size_t _layer_max = 0;
-    std::unordered_map<mentity_t, toml::table> _entities;
-
-    std::size_t _tilex;
-    std::size_t _tiley;
-
-    ECS::Entity _first;
-    ECS::Entity _max;
+    MapContent _content;
 };
 
 }  // namespace te

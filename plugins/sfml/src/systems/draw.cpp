@@ -7,12 +7,12 @@
 
 #include <ECS/Zipper.hpp>
 
-#include "window.hpp"
 #include "movement/components/position.hpp"
-#include "display/components/drawable.hpp"
-#include "display/components/sprite.hpp"
+#include "sfml/components/window.hpp"
+#include "sfml/components/drawable.hpp"
+#include "sfml/components/sprite.hpp"
 
-#include "display/systems/draw.hpp"
+#include "sfml/systems/draw.hpp"
 
 namespace te {
 

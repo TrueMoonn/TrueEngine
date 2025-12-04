@@ -7,7 +7,7 @@
 
 #include <utility>
 
-#include "display/components/sprite.hpp"
+#include "sfml/components/sprite.hpp"
 
 namespace te {
 
