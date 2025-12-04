@@ -13,7 +13,7 @@
     #include <toml++/toml.hpp>
 
     #include <ECS/Registry.hpp>
-    
+
     #include "Exception.hpp"
     #include "plugin/PluginManager.hpp"
 
