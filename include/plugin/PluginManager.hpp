@@ -30,7 +30,7 @@ class PluginManager {
     TE_EXCEPTION("PluginManager", NoPluginFound)
 
  public:
-    PluginManager();
+    PluginManager() = default;
     ~PluginManager() = default;
 
     void loadPlugins(ECS::Registry& reg, const std::string& dir);

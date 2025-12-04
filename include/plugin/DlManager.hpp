@@ -19,7 +19,7 @@ namespace te {
 
 class DlManager {
  public:
-    DlManager();
+    DlManager() = default;
     ~DlManager();
 
     void load(const std::string& path);
@@ -28,19 +28,15 @@ class DlManager {
     void closeHandlers(const std::string& id = "");
 
     template <typename Symbol>
-    Symbol access(const std::string& handle_name,
-            const std::string& symbol_name) {
-        for (auto& node : _handles) {
-            if (!node.first.compare(handle_name)) {
-                Symbol sym = (Symbol)dlsym(_handles.at(handle_name),
-                    symbol_name.c_str());
-                if (sym == nullptr) {
-                    throw std::runtime_error(dlerror());
-                }
-                return sym;
-            }
-        }
-        throw std::runtime_error("handler not found");
+    Symbol access(const std::string& handName, const std::string& syName) {
+        auto it = _handles.find(handName);
+        if (it == _handles.end())
+            throw std::runtime_error("handler not found");
+        dlerror();
+        void* sym = dlsym(it->second, syName.c_str());
+        if (sym == nullptr)
+            throw std::runtime_error(dlerror());
+        return reinterpret_cast<Symbol>(sym);
     }
 
  protected:

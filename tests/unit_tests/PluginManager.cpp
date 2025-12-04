@@ -10,13 +10,14 @@
 #include <string>
 
 #include <ECS/Registry.hpp>
+#include <toml++/toml.hpp>
 #include "plugin/PluginManager.hpp"
 
 #include "movement/components/position.hpp"
 
 TEST(PluginManager, load_plugins) {
-    ECS::Registry reg;
     te::PluginManager pmanager;
+    ECS::Registry reg;
     pmanager.loadPlugins(reg, "../../../tests/unit_tests/plugins");
     std::vector<std::string> names = pmanager.getPlugins();
 
@@ -26,22 +27,33 @@ TEST(PluginManager, load_plugins) {
 }
 
 TEST(PluginManager, clear) {
-    ECS::Registry reg;
     te::PluginManager pmanager;
+    ECS::Registry reg;
     pmanager.loadPlugins(reg, "../../../tests/unit_tests/plugins");
     pmanager.clear();
     std::vector<std::string> names = pmanager.getPlugins();
     EXPECT_EQ(names.size(), 0);
 }
 
-// TEST(PluginManager, component_loading) {
-//     ECS::Registry reg;
-//     te::PluginManager pmanager;
-//     pmanager.loadPlugins(reg, "../../../tests/unit_tests/plugins");
+TEST(PluginManager, component_loading) {
+    te::PluginManager pmanager;
+    ECS::Registry reg;
+    pmanager.loadPlugins(reg, "../../../tests/unit_tests/plugins");
 
-//     toml::table table =
-//         toml::parse_file("../../../tests/unit_tests/configs/position.toml");
-//     EXPECT_TRUE(pmanager.loadComponent("position2", 0, table));
-//     EXPECT_EQ(reg.getComponents<te::Position2>().size(), 1);
-//     EXPECT_FALSE(pmanager.loadComponent("wrong", 0));
-// }
+    toml::table table =
+        toml::parse_file("../../../tests/unit_tests/configs/position.toml");
+    EXPECT_NO_THROW(pmanager.loadComponent("position2", 0, table));
+    EXPECT_EQ(reg.getComponents<te::Position2>().size(), 1);
+    EXPECT_THROW(pmanager.loadComponent("wrong", 0, {}),
+        te::PluginManager::NoPluginFound);
+}
+
+TEST(PluginManager, system_loading) {
+    te::PluginManager pmanager;
+    ECS::Registry reg;
+    pmanager.loadPlugins(reg, "../../../tests/unit_tests/plugins");
+
+    EXPECT_NO_THROW(pmanager.loadSystem("movement2"));
+    EXPECT_THROW(pmanager.loadSystem("wrong"),
+        te::PluginManager::NoPluginFound);
+}
