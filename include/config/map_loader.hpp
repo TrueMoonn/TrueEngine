@@ -13,6 +13,8 @@
     #include <toml++/toml.hpp>
 
     #include <ECS/Registry.hpp>
+    
+    #include "Exception.hpp"
     #include "plugin/PluginManager.hpp"
 
     #define MAP_CONFIG_SPLIT_KEY "\n---\n"
@@ -72,6 +74,9 @@ class MapLoader {
 
         void clear(void);
     };
+
+ public:
+    TE_EXCEPTION("MapLoader", LoadError)
 
  public:
     MapLoader() = default;

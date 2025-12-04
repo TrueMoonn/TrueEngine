@@ -7,41 +7,40 @@
 
 #include <gtest/gtest.h>
 
-#include <ECS/Registry.hpp>
-#include "plugin/PluginManager.hpp"
-
 #include "config/map_loader.hpp"
 
-TEST(MapLoader, wrong_filepath) {
+TEST(MapLoader, load_map) {
+    te::PluginManager pmanager;
     ECS::Registry reg;
-    te::MapLoader loader(0, 16);
+    te::MapLoader loader;
 
-    EXPECT_THROW(loader.loadMap(reg, "this/lead/to/nowhere"),
-        te::MapLoader::FileNotFound);
+    EXPECT_NO_THROW(
+        loader.loadMap("../../../tests/unit_tests/configs/good.map"));
+    auto content = loader.getContent();
+    EXPECT_EQ(content.layer_max, 1);
+    EXPECT_EQ(content.tilex, 30);
+    EXPECT_EQ(content.tiley, 30);
+    EXPECT_EQ(content.size, 36);
+    int x = (*(content.params.at("G").as_table()))
+        ["position2"]["x"].value_or(0);
+    EXPECT_EQ(x, 1);
 }
 
-TEST(MapLoader, no_separator) {
+TEST(MapLoader, wrong_maps) {
+    te::PluginManager pmanager;
     ECS::Registry reg;
-    te::MapLoader loader(0, 16);
+    te::MapLoader loader;
 
-    EXPECT_THROW(loader.loadMap(reg, "../../../tests/unit_tests/assets/no_sep.tem"),
-        te::MapLoader::ParsingError);
-}
-
-TEST(MapLoader, no_entities) {
-    ECS::Registry reg;
-    te::MapLoader loader(0, 16);
-
+    pmanager.loadPlugins(reg, "../../../tests/unit_tests/plugins");
     EXPECT_THROW(
-        loader.loadMap(reg, "../../../tests/unit_tests/assets/no_entities.tem"),
-        te::MapLoader::ParsingError);
+        loader.loadMap("../../../tests/unit_tests/configs/wrong_toml.map"),
+        te::MapLoader::LoadError);
+    EXPECT_THROW(
+        loader.loadMap("../../../tests/unit_tests/configs/no_spliter.map"),
+        te::MapLoader::LoadError);
+    EXPECT_THROW(
+        loader.loadMap("../../../tests/unit_tests/configs/no_entities.map"),
+        te::MapLoader::LoadError);
+    EXPECT_THROW(loader.loadMap("wrong/path/none.map"),
+        te::MapLoader::LoadError);
 }
-
-TEST(MapLoader, good_file) {
-    ECS::Registry reg;
-    te::PluginManager::loadPlugins(reg, "../../../tests/unit_tests/plugins");
-    te::MapLoader loader(0, 16);
-
-    EXPECT_NO_THROW(loader.loadMap(reg, "../../../tests/unit_tests/assets/map.tem"));
-}
-
