@@ -1,16 +1,13 @@
-project(display)
+project(entity_spec)
 
-#/ Library \#
+########## LIBRARY ##########
 add_library(${PROJECT_NAME} SHARED
     ${PROJECT_SOURCE_DIR}/src/factory.cpp
-
-    #COMPONENTS
-    ${PROJECT_SOURCE_DIR}/src/components/animation.cpp
-
-    #SYSTEMS
-    ${PROJECT_SOURCE_DIR}/src/systems/animate.cpp
+    ${PROJECT_SOURCE_DIR}/src/components/damage.cpp
+    ${PROJECT_SOURCE_DIR}/src/components/health.cpp
+    ${PROJECT_SOURCE_DIR}/src/systems/deal_damage.cpp
 )
-add_library(plugins::display ALIAS ${PROJECT_NAME})
+add_library(plugins::entity_spec ALIAS ${PROJECT_NAME})
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC
@@ -27,3 +24,4 @@ target_link_libraries(${PROJECT_NAME}
 if (ENABLE_TE_COVERAGE)
     target_link_libraries(${PROJECT_NAME} PUBLIC gcov)
 endif ()
+

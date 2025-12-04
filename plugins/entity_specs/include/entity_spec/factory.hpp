@@ -13,13 +13,13 @@
     #include "plugin/APlugin.hpp"
 
 
-class Display : public te::APlugin {
+class EntitySpec : public te::APlugin {
  public:
-    explicit Display(ECS::Registry& reg);
+    explicit EntitySpec(ECS::Registry& reg);
 };
 
 extern "C" {
-    std::unique_ptr<Display> get_pfactory(ECS::Registry& reg) {
-        return std::make_unique<Display>(reg);
+    std::unique_ptr<EntitySpec> get_pfactory(ECS::Registry& reg) {
+        return std::make_unique<EntitySpec>(reg);
     }
 }

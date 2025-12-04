@@ -15,11 +15,17 @@
 
 namespace te {
 
-MapLoader::MapLoader(const ECS::Entity& first_entity,
-    const ECS::Entity& max_entity) : _first(first_entity), _max(max_entity) {}
-
+void MapLoader::MapContent::clear(void) {
+    map.clear();
+    params.clear();
+    layer_max = 0;
+    tilex = 0;
+    tiley = 0;
+    size = 0;
+}
 
 void MapLoader::loadMap(const std::string& path) {
+    clearContent();
     std::ifstream file(path);
     if (!file.is_open())
         return;
@@ -30,17 +36,14 @@ void MapLoader::loadMap(const std::string& path) {
     readConfig(map.substr(index_split +
         std::strlen(MAP_CONFIG_SPLIT_KEY), map.size()));
     readMap(map.substr(0, index_split));
-    createMap();
 }
 
-void MapLoader::clearMap(ECS::Registry& reg,
-    ECS::Entity begin, ECS::Entity size) {
-    if (size == 0) {
-        begin = _first;
-        size = _max;
-    }
-    for (ECS::Entity e = begin; e < size; ++e)
-        reg.killEntity(e);
+MapLoader::MapContent MapLoader::getContent(void) const {
+    return _content;
+}
+
+void MapLoader::clearContent() {
+    _content.clear();
 }
 
 void MapLoader::readMap(const std::string& raw) {
@@ -61,11 +64,11 @@ void MapLoader::readMap(const std::string& raw) {
                 else
                     tile.push_back(entity);
             }
-            if (tile.size() > _layer_max)
-                _layer_max = tile.size();
+            if (tile.size() > _content.layer_max)
+                _content.layer_max = tile.size();
             tiles.push_back(tile);
         }
-        _map.push_back(tiles);
+        _content.map.push_back(tiles);
     }
 }
 
@@ -83,52 +86,11 @@ void MapLoader::readConfig(const std::string& raw) {
         return;
     for (auto &&[ename, entity] : *entities) {
         if (entity.is_table()) {
-            _entities[ename.data()] = *entity.as_table();
+            _content.params[ename.data()] = *entity.as_table();
         }
     }
-    _tilex = config["MAP"]["TILES"]["width"].value_or(50);
-    _tiley = config["MAP"]["TILES"]["height"].value_or(50);
-}
-
-void MapLoader::createEntity(const ECS::Entity& e, std::size_t x,
-    std::size_t y, const toml::table& entity_info) {
-    toml::table pos;
-    pos.insert("x", static_cast<float>(x *_tilex));
-    pos.insert("y", static_cast<float>(y * _tiley));
-    for (auto &&[cname, component] : entity_info) {
-        if (!std::string(cname.data()).compare("position2")) {
-            if (component.is_table()) {
-                const toml::table& compTable = *component.as_table();
-                pos.insert_or_assign("x", pos["x"].value<float>().value() +
-                    compTable["x"].value<float>().value());
-                pos.insert_or_assign("y", pos["y"].value<float>().value() +
-                    compTable["y"].value<float>().value());
-            }
-            PluginManager::loadComponent(cname.data(), e, pos);
-            continue;
-        }
-        if (component.is_table()) {
-            const toml::table& compTable = *component.as_table();
-            PluginManager::loadComponent(cname.data(), e, compTable);
-        } else if (component.is_value()) {
-            PluginManager::loadComponent(cname.data(), e);
-        }
-    }
-}
-
-void MapLoader::createMap(void) {
-    ECS::Entity index_entity = _first;
-    for (std::size_t layer = 0; layer < _layer_max; ++layer) {
-        for (std::size_t y = 0; y < _map.size(); ++y) {
-            for (std::size_t x = 0; x < _map[y].size(); ++x) {
-                if (layer < _map[y][x].size()) {
-                    createEntity(index_entity, x, y,
-                        _entities.at(_map[y][x][layer]));
-                    index_entity += 1;
-                }
-            }
-        }
-    }
+    _content.tilex = config["MAP"]["TILES"]["width"].value_or(50);
+    _content.tiley = config["MAP"]["TILES"]["height"].value_or(50);
 }
 
 }  // namespace te

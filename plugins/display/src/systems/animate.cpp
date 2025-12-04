@@ -9,7 +9,7 @@
 
 #include "display/systems/animate.hpp"
 
-#include "display/components/sprite.hpp"
+#include "sfml/components/sprite.hpp"
 #include "display/components/animation.hpp"
 
 #define V(a) a.value()
@@ -21,6 +21,7 @@ void animate(ECS::Registry& reg) {
     auto& sprites = reg.getComponents<Sprite>();
     auto cur = std::clock();
 
+    // std::cout << cur << " - " << "anim" << std::endl;
     for (auto &&[an, sp] : ECS::Zipper(animations, sprites)) {
         if (cur - V(an).delta > V(an).getCurrentAnim().frameDELAY) {
             V(an).delta = cur;

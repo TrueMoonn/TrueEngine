@@ -88,6 +88,9 @@ g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,
     movable = true
     player = true
     position2 = true
+        [ENTITIES.P.health]
+        amount = 5
+
         [ENTITIES.P.sprite]
         path = "assets/test.png"
         width = 30.0
