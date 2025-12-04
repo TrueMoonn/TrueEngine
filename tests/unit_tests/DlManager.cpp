@@ -22,10 +22,10 @@ TEST(DlManager, load) {
     test_DlManager manager;
 
     manager.load("../../../tests/unit_tests/plugins/movement.so");
-    
+
     EXPECT_EQ(manager.get_handlers().size(), 1);
     EXPECT_NO_THROW(manager.get_handlers().at("movement"));
-    
+
     auto names = manager.getNames();
     EXPECT_EQ(names.size(), 1);
     EXPECT_EQ(names[0], "movement");

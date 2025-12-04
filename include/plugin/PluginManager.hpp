@@ -43,7 +43,7 @@ class PluginManager {
  private:
     void setAccesser(const std::string& name);
     std::unordered_map<std::string, std::string> _accesser;
-    
+
     DlManager _manager;
     std::unordered_map<std::string,
         std::unique_ptr<APlugin>> _plugins;
