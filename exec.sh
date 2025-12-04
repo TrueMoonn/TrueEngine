@@ -35,8 +35,8 @@ then
     cmake --build . -j
     ctest --output-on-failure
     gcovr --root .. \
-        --filter '../src/plugin/*' \
-        --filter '../include/plugin/*' \
+        --filter '../src/' \
+        --filter '../include/' \
         --html --html-details -o coverage.html
     xdg-open coverage.html
     cd ..

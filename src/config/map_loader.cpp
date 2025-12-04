@@ -28,11 +28,13 @@ void MapLoader::loadMap(const std::string& path) {
     clearContent();
     std::ifstream file(path);
     if (!file.is_open())
-        return;
+        throw MapLoader::LoadError("could not open map at '" + path + "'");
     std::stringstream buffer;
     buffer << file.rdbuf();
     std::string map(buffer.str());
     std::size_t index_split = map.find(MAP_CONFIG_SPLIT_KEY);
+    if (index_split == map.npos)
+        throw MapLoader::LoadError("could not find the split indicator");
     readConfig(map.substr(index_split +
         std::strlen(MAP_CONFIG_SPLIT_KEY), map.size()));
     readMap(map.substr(0, index_split));
@@ -49,6 +51,7 @@ void MapLoader::clearContent() {
 void MapLoader::readMap(const std::string& raw) {
     std::stringstream ss(raw);
     std::string raw_tiles;
+    std::size_t map_size = 0;
 
     while (std::getline(ss, raw_tiles, MAP_LINE_DELIMITER_KEY)) {
         std::stringstream sss(raw_tiles);
@@ -63,6 +66,7 @@ void MapLoader::readMap(const std::string& raw) {
                     tile.push_back(MAP_CONFIG_DEFAULT_ENTITY);
                 else
                     tile.push_back(entity);
+                ++map_size;
             }
             if (tile.size() > _content.layer_max)
                 _content.layer_max = tile.size();
@@ -70,6 +74,7 @@ void MapLoader::readMap(const std::string& raw) {
         }
         _content.map.push_back(tiles);
     }
+    _content.size = map_size;
 }
 
 void MapLoader::readConfig(const std::string& raw) {
@@ -77,13 +82,14 @@ void MapLoader::readConfig(const std::string& raw) {
     try {
         config = toml::parse(raw);
     } catch (const toml::parse_error& err) {
-        std::cerr << "Parsing failed:\n" << err << "\n";
-        return;
+        throw MapLoader::LoadError("toml::parse of config: " +
+            std::string(err.what()));
     }
     toml::table *entities =
         config[MAP_CONFIG_ENTITIES_TABLE_NAME].as_table();
     if (entities == nullptr)
-        return;
+        throw MapLoader::LoadError(
+            std::string(MAP_CONFIG_ENTITIES_TABLE_NAME) +"  table not found");
     for (auto &&[ename, entity] : *entities) {
         if (entity.is_table()) {
             _content.params[ename.data()] = *entity.as_table();
