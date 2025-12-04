@@ -12,7 +12,7 @@ namespace te {
 
 bool Timestamp::checkDelay(bool restart)
 {
-    if (this->active && std::clock() - (this->ref + this->delay) > 0) {
+    if (this->active && CAST_M(NOW, this->ref) > this->delay) {
         if (restart)
             this->restart();
         return true;
@@ -22,21 +22,21 @@ bool Timestamp::checkDelay(bool restart)
 
 void Timestamp::restart(void)
 {
-    this->ref = std::clock();
+    this->ref = NOW;
 }
 
 void Timestamp::pause(void)
 {
     if (active)
-        cur = std::clock();
+        cur = NOW;
     if (!active)
-        ref = std::clock() - (ref - cur);
+        ref = NOW - (ref - cur);
     active = !active;
 }
 
-double Timestamp::getElapsedTime(void)
+microsec Timestamp::getElapsedTime(void)
 {
-    return active ? std::clock() - this->ref : this->cur - this->ref;
+    return active ? CAST_M(NOW, this->ref) : CAST_M(this->cur, this->ref);
 }
 
 }  // namespace te

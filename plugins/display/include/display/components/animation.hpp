@@ -13,6 +13,8 @@
 
 #include <chrono>
 
+#include "clock.hpp"
+
 #define STM(sec) (sec * 1000000)
 
 namespace te
@@ -69,7 +71,7 @@ struct Animation {
     std::size_t curAnim;
     std::size_t curFrame;
 
-    std::clock_t delta;
+    delta_t delta;
 };
 
 } // namespace te
