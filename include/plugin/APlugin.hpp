@@ -67,6 +67,7 @@ class APlugin {
  protected:
     std::unordered_map<std::string, cmpt_builder> _components;
     std::unordered_map<std::string, sys_builder> _systems;
+
  private:
     std::reference_wrapper<ECS::Registry> _reg;
 };
