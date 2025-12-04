@@ -13,33 +13,31 @@
 
 namespace te {
 
-DlManager::DlManager() : _handles() {}
-
 DlManager::~DlManager() {
-    closeHandlers();
+    if (!_handles.empty())
+        closeHandlers();
 }
 
 void DlManager::load(const std::string& path) {
     std::filesystem::path file(path);
-    if (!std::filesystem::path(file).extension().compare(".so"))
+    if (file.extension() == ".so")
         setHandler(file);
 }
 
 void DlManager::loadDirectory(const std::string& path) {
     for (const auto &file : std::filesystem::directory_iterator(path)) {
-        if (!std::filesystem::path(file).extension().compare(".so"))
+        if (file.path().extension() == ".so")
             setHandler(file);
     }
 }
 
 void DlManager::setHandler(const std::filesystem::path& path) {
-    void *handle = NULL;
-    handle = dlopen(path.c_str(), RTLD_LAZY | RTLD_GLOBAL);
+    void *handle = dlopen(path.c_str(), RTLD_LAZY);
     if (handle == NULL) {
         std::cerr << dlerror() << std::endl;
         return;
     }
-    _handles[path.stem()] = handle;
+    _handles[path.stem().string()] = handle;
 }
 
 std::vector<std::string> DlManager::getNames() const {
@@ -58,8 +56,8 @@ void DlManager::closeHandlers(const std::string& id) {
         }
         return;
     }
-    for (auto& handle : _handles)
-        dlclose(handle.second);
+    for (auto& [_, handle] : _handles)
+        dlclose(handle);
     _handles.clear();
 }
 
