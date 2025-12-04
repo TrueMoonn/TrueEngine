@@ -27,6 +27,7 @@ void InGame::setECS(void) {
     te::PluginManager::loadSystem("bound_hitbox");
     _reg.addSystem(&te::manageEvent);
     te::PluginManager::loadSystem("follow_player");
+    te::PluginManager::loadSystem("animate");
     te::PluginManager::loadSystem("draw");
     te::PluginManager::loadSystem("display");
 }
@@ -38,10 +39,10 @@ void InGame::setEntities(void) {
 }
 
 void InGame::run(void) {
-    struct te::Clock clock(CLOCK_RATE);
+    struct te::Timestamp clock(SEC_TO_MICRO(1.0 / 60));
 
     while (MAIN_WIN_EXIST && MAIN_WIN_ISOPEN) {
-        if (clock.checkCooldown()) {
+        if (clock.checkDelay()) {
             _reg.runSystems();
         }
     }

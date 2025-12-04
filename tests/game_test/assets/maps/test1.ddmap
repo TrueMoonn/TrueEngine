@@ -48,7 +48,7 @@ g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,
         [ENTITIES.W.position2]
         x = 15.0
         y = 10.0
-        
+
         [ENTITIES.W.hitbox]
         left = 15.0
         top = 10.0
@@ -68,7 +68,7 @@ g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,
         top = 0.0
         width = 50.0
         height = 50.0
-    
+
     [ENTITIES.D]
     drawable = true
     position2 = true
@@ -102,3 +102,9 @@ g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,
         top = 0.0
         width = 30.0
         height = 30.0
+
+        [ENTITIES.P.animation]
+        frames = [
+            [[0, 0], 8, 0.1, true]
+        ]
+
