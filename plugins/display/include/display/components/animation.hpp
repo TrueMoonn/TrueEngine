@@ -10,15 +10,14 @@
 #include <vector>
 #include <cstddef>
 #include <array>
-
+#include <utility>
 #include <chrono>
 
 #include "clock.hpp"
 
 #define STM(sec) (sec * 1000000)
 
-namespace te
-{
+namespace te {
 
 typedef std::array<size_t, 2> pos;
 
@@ -49,7 +48,7 @@ struct Animation {
      *  FrameData vector containing each animation and its duration.
      *
      */
-    constexpr Animation(const std::vector<FrameData> &frameInfos)
+    explicit Animation(const std::vector<FrameData> &frameInfos)
         : frameInfos(std::move(frameInfos)), curAnim(0), curFrame(0) {}
 
     Animation(const Animation &other) : frameInfos(other.frameInfos),
@@ -74,5 +73,5 @@ struct Animation {
     delta_t delta;
 };
 
-} // namespace te
+}  // namespace te
 

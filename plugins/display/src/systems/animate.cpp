@@ -31,8 +31,6 @@ void animate(ECS::Registry& reg) {
             V(an).increment();
             rect.position.x = rect.size.x * V(an).curFrame;
             V(sp).setTextureRect(rect);
-            std::cout << "Currently at frame " << V(an).curFrame << " of anim "
-            << V(an).curAnim << std::endl;
         }
     }
 }

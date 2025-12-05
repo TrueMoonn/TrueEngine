@@ -9,9 +9,8 @@
 
 #include <ECS/Registry.hpp>
 
-namespace te
-{
+namespace te {
 
 void animate(ECS::Registry& reg);
 
-} // namespace te
+}  // namespace te

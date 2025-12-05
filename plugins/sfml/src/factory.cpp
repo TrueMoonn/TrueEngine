@@ -36,12 +36,13 @@ Sfml::Sfml(ECS::Registry& reg) : te::APlugin(reg) {
         try {
             sf::Texture texture(params["path"].value_or(""));
             const auto &t_size = params["size"].as_array();
-            sf::Vector2i size = t_size ? sf::Vector2i(t_size->at(0).value_or(1),
+            sf::Vector2i size = t_size ?
+                sf::Vector2i(t_size->at(0).value_or(1),
                 t_size->at(1).value_or(1)) : sf::Vector2i(texture.getSize());
             auto t_scale = params["scale"].as_array();
-            sf::Vector2f scale = t_scale ? sf::Vector2f{t_scale->at(0).value_or(1.0f) / size.x,
-                    t_scale->at(1).value_or(1.0f) / size.y} : sf::Vector2f{1, 1};
-            // reg.addComponent(e, te::Sprite(std::move(texture), scale));
+            sf::Vector2f scale = t_scale ?
+                sf::Vector2f{t_scale->at(0).value_or(1.0f) / size.x,
+                t_scale->at(1).value_or(1.0f) / size.y} : sf::Vector2f{1, 1};
             reg.addComponent(e, te::Sprite(std::move(texture), size, scale));
         } catch (const std::out_of_range&) {
             std::cerr << "error(Plugin-Sprite): key not found" << std::endl;
@@ -62,5 +63,4 @@ Sfml::Sfml(ECS::Registry& reg) : te::APlugin(reg) {
     _systems["follow_player"] = [](ECS::Registry& reg) {
         reg.addSystem(&te::follow_player_sys);
     };
-
 }
