@@ -35,12 +35,14 @@ Sfml::Sfml(ECS::Registry& reg) : te::APlugin(reg) {
         const toml::table& params) {
         try {
             sf::Texture texture(params["path"].value_or(""));
-            sf::Vector2f size(
-                params["width"].value_or(50.0),
-                params["height"].value_or(50.0));
-            sf::Vector2f scale(size.x / texture.getSize().x,
-                size.y / texture.getSize().y);
-            reg.addComponent(e, te::Sprite(std::move(texture), scale));
+            const auto &t_size = params["size"].as_array();
+            sf::Vector2i size = t_size ? sf::Vector2i(t_size->at(0).value_or(1),
+                t_size->at(1).value_or(1)) : sf::Vector2i(texture.getSize());
+            auto t_scale = params["scale"].as_array();
+            sf::Vector2f scale = t_scale ? sf::Vector2f{t_scale->at(0).value_or(1.0f) / size.x,
+                    t_scale->at(1).value_or(1.0f) / size.y} : sf::Vector2f{1, 1};
+            // reg.addComponent(e, te::Sprite(std::move(texture), scale));
+            reg.addComponent(e, te::Sprite(std::move(texture), size, scale));
         } catch (const std::out_of_range&) {
             std::cerr << "error(Plugin-Sprite): key not found" << std::endl;
         } catch (const sf::Exception& e) {
