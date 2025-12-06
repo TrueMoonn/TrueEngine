@@ -17,6 +17,7 @@ void PluginManager::loadPlugins(ECS::Registry& reg, const std::string& dir) {
     for (const auto &file : std::filesystem::directory_iterator(dir)) {
         if (file.path().extension() == ".so") {
             std::string pname = file.path().stem().string();
+            std::cout << pname << std::endl;
             _manager.load(file.path());
             try {
                 maker plugin = _manager.access<maker>(pname, ENDPOINT_NAME);
