@@ -72,11 +72,6 @@ g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,
     [ENTITIES.D]
     drawable = true
     position2 = true
-        [ENTITIES.D.sprite]
-        path = "assets/door.png"
-        width = 50.0
-        height = 50.0
-
         [ENTITIES.D.hitbox]
         left = 0.0
         top = 0.0

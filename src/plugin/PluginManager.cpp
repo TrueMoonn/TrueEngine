@@ -13,21 +13,17 @@
 
 namespace te {
 
-PluginManager::PluginManager() : _manager() {}
-
 void PluginManager::loadPlugins(ECS::Registry& reg, const std::string& dir) {
     for (const auto &file : std::filesystem::directory_iterator(dir)) {
-        if (!std::filesystem::path(file).extension().compare(".so")) {
+        if (file.path().extension() == ".so") {
+            std::string pname = file.path().stem().string();
             _manager.load(file.path());
-            if (_plugins.find(file.path().stem()) == _plugins.end()) {
-                try {
-                    _plugins[file.path().stem()] =
-                        _manager.access<maker>(file.path().stem(),
-                        ENDPOINT_NAME)(reg);
-                    setAccesser(file.path().stem());
-                } catch (const std::runtime_error& e) {
-                    std::cerr << e.what() << std::endl;
-                }
+            try {
+                maker plugin = _manager.access<maker>(pname, ENDPOINT_NAME);
+                _plugins[pname] = plugin(reg);
+                setAccesser(pname);
+            } catch (const std::runtime_error& e) {
+                std::cerr << e.what() << std::endl;
             }
         }
     }
@@ -42,6 +38,7 @@ std::vector<std::string> PluginManager::getPlugins() const {
 }
 
 void PluginManager::clear(void) {
+    _accesser.clear();
     _plugins.clear();
 }
 
@@ -50,8 +47,8 @@ void PluginManager::loadComponent(const std::string& name,
     if (_accesser.find(name) != _accesser.end()) {
         _plugins.at(_accesser.at(name))->createComponent(name, e, params);
     } else  {
-        std::cerr << "error(Plugin): not plugin " << \
-            "found linked to '" << name << "'" << std::endl;
+        throw PluginManager::NoPluginFound(
+            "no plugin found linked to '" + name + "'");
     }
 }
 
@@ -59,8 +56,8 @@ void PluginManager::loadSystem(const std::string& name) {
     if (_accesser.find(name) != _accesser.end()) {
         _plugins.at(_accesser.at(name))->createSystem(name);
     } else  {
-        std::cerr << "error(Plugin): not plugin " << \
-            "found linked to '" << name << "'" << std::endl;
+        throw PluginManager::NoPluginFound(
+            "no plugin found linked to '" + name + "'");
     }
 }
 
@@ -68,9 +65,9 @@ void PluginManager::setAccesser(const std::string& name) {
     auto cmpts = _plugins.at(name)->getComponents();
     auto syss = _plugins.at(name)->getSystems();
 
-    for (auto cmpt : cmpts)
+    for (const auto& cmpt : cmpts)
         _accesser.insert_or_assign(cmpt, name);
-    for (auto sys : syss)
+    for (const auto& sys : syss)
         _accesser.insert_or_assign(sys, name);
 }
 
