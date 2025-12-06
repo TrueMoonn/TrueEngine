@@ -10,16 +10,18 @@
     #include <memory>
 
     #include <ECS/Registry.hpp>
+    #include "EventManager.hpp"
     #include "plugin/APlugin.hpp"
 
 
 class Movement : public te::APlugin {
  public:
-    explicit Movement(ECS::Registry& reg);
+    explicit Movement(ECS::Registry& reg, te::EventManager& events);
 };
 
 extern "C" {
-    std::unique_ptr<Movement> get_pfactory(ECS::Registry& reg) {
-        return std::make_unique<Movement>(reg);
+    std::unique_ptr<Movement> get_pfactory(ECS::Registry& reg,
+        te::EventManager& events) {
+        return std::make_unique<Movement>(reg, events);
     }
 }

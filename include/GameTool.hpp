@@ -15,6 +15,7 @@
     #include <ECS/Entity.hpp>
     #include <ECS/Registry.hpp>
 
+    #include "EventManager.hpp"
     #include "config/map_loader.hpp"
     #include "plugin/PluginManager.hpp"
 
@@ -130,8 +131,8 @@ class GameTool {
     void run(void);
 
  private:
-    ECS::Registry _reg;
     PluginManager _pmanager;
+    ECS::Registry _reg;
 
     MapLoader _mloader;
     std::vector<MapLoader::MapContent> _maps;
@@ -139,6 +140,8 @@ class GameTool {
         const ECS::Entity& fentity);
     void createEntity(const ECS::Entity& e,
         toml::table& pos, const toml::table& entity_info);
+
+    EventManager _events;
 };
 
 }  // namespace te

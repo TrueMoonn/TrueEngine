@@ -11,7 +11,8 @@
 #include "Movement.hpp"
 #include "movement/factory.hpp"
 
-Movement::Movement(ECS::Registry& reg) : te::APlugin(reg) {
+Movement::Movement(ECS::Registry& reg, te::EventManager& events)
+    : te::APlugin(reg, events) {
     reg.registerComponent<te::Position2>();
     _components["position2"] = [](ECS::Registry& reg, const ECS::Entity& e,
         const toml::table& params) {

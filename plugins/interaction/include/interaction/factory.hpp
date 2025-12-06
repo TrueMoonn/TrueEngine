@@ -15,12 +15,13 @@
 
 class Interaction : public te::APlugin {
  public:
-    explicit Interaction(ECS::Registry& reg);
+    explicit Interaction(ECS::Registry& reg, te::EventManager& events);
 };
 
 extern "C" {
-    std::unique_ptr<Interaction> get_pfactory(ECS::Registry& reg) {
-        return std::make_unique<Interaction>(reg);
+    std::unique_ptr<Interaction> get_pfactory(ECS::Registry& reg,
+        te::EventManager& events) {
+        return std::make_unique<Interaction>(reg, events);
     }
 }
 

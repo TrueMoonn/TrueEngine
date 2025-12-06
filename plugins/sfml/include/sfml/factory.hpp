@@ -7,10 +7,6 @@
 
 #pragma once
 
-    #include <unordered_map>
-    #include <string>
-    #include <functional>
-    #include <any>
     #include <memory>
 
     #include <ECS/Registry.hpp>
@@ -19,11 +15,12 @@
 
 class Sfml : public te::APlugin {
  public:
-    explicit Sfml(ECS::Registry& reg);
+    explicit Sfml(ECS::Registry& reg, te::EventManager& events);
 };
 
 extern "C" {
-    std::unique_ptr<Sfml> get_pfactory(ECS::Registry& reg) {
-        return std::make_unique<Sfml>(reg);
+    std::unique_ptr<Sfml> get_pfactory(ECS::Registry& reg,
+        te::EventManager& events) {
+        return std::make_unique<Sfml>(reg, events);
     }
 }

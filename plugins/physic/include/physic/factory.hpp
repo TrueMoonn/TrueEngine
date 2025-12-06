@@ -15,11 +15,12 @@
 
 class Physic : public te::APlugin {
  public:
-    explicit Physic(ECS::Registry& reg);
+    explicit Physic(ECS::Registry& reg, te::EventManager& events);
 };
 
 extern "C" {
-    std::unique_ptr<Physic> get_pfactory(ECS::Registry& reg) {
-        return std::make_unique<Physic>(reg);
+    std::unique_ptr<Physic> get_pfactory(ECS::Registry& reg,
+        te::EventManager& events) {
+        return std::make_unique<Physic>(reg, events);
     }
 }
