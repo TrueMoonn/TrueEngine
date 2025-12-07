@@ -133,7 +133,7 @@ class GameTool {
  private:
     PluginManager _pmanager;
     ECS::Registry _reg;
- 
+
     MapLoader _mloader;
     std::vector<MapLoader::MapContent> _maps;
     ECS::Entity createEntitiesFromContent(MapLoader::MapContent& content,

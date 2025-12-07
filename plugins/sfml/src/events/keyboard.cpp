@@ -14,7 +14,8 @@ void getKeyboardEvent(std::optional<sf::Event> pevent, te::KeysEvent& keys) {
         keys.keys[te::Key(pevent->getIf<sf::Event::KeyPressed>()->code)] = true;
         keys.update = true;
     } else if (pevent->is<sf::Event::KeyReleased>()) {
-        keys.keys[te::Key(pevent->getIf<sf::Event::KeyReleased>()->code)] = false;
+        keys.keys[te::Key(
+            pevent->getIf<sf::Event::KeyReleased>()->code)] = false;
         keys.update = true;
     }
 }

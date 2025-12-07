@@ -10,6 +10,7 @@
     #include <unordered_map>
     #include <functional>
     #include <variant>
+    #include <vector>
 
     #include <ECS/Registry.hpp>
 
@@ -197,8 +198,8 @@ class EventManager {
     typedef std::function<void(ECS::Registry&, const eventContent&)> eventFunc;
 
  public:
-    EventManager() = default;
-    EventManager(pollFunc func) : _pollFunc(func) {}
+    explicit EventManager() = default;
+    explicit EventManager(pollFunc func) : _pollFunc(func) {}
     ~EventManager() = default;
 
     void setPollFunc(pollFunc func) {
@@ -212,7 +213,7 @@ class EventManager {
 
     void addSubscription(System sys, eventFunc func) {
         _subscription[sys].push_back(func);
-    };
+    }
 
     bool isEvent(System sys) {
         return _events.systems.at(sys);
@@ -230,7 +231,7 @@ class EventManager {
         //         }
         //     }
         // }
-    };
+    }
 
  private:
     pollFunc _pollFunc;
@@ -263,4 +264,4 @@ class EventManager {
     };
 };
 
-} // namespace te
+}  // namespace te

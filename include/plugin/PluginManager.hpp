@@ -15,7 +15,7 @@
     #include <unordered_map>
     #include <vector>
     #include <toml++/toml.hpp>
-    
+
     #include "Exception.hpp"
     #include "plugin/DlManager.hpp"
     #include "plugin/APlugin.hpp"
