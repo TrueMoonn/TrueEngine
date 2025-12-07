@@ -1,0 +1,77 @@
+#pragma once
+
+#include <memory>
+#include <functional>
+#include <vector>
+#include <string>
+#include <cstdint>
+
+#include <ECS/Registry.hpp>
+#include <Network/Client.hpp>
+#include <Network/Address.hpp>
+
+namespace te {
+namespace network {
+
+/**
+ * @brief Generic multiplayer client
+ * 
+ * Provides networking with callbacks for the game to handle
+ * packet logic, connection events, and disconnections.
+ */
+class GameClient {
+ public:
+    explicit GameClient(ECS::Registry& ecs, const std::string& protocol = "UDP");
+    ~GameClient();
+
+    bool connect(const std::string& server_ip, uint16_t port);
+    void disconnect();
+    void update(float delta_time);
+
+    // API for GAME LOGIC
+    /**
+     * @brief Send raw data to the server
+     */
+    bool send(const std::vector<uint8_t>& data);
+
+    /**
+     * @brief Callback type: called when data is received from the server
+     * 
+     * The game registers ONE callback that receives ALL data.
+     * It's up to the game to dispatch based on packet type.
+     */
+    using PacketCallback = std::function<void(const std::vector<uint8_t>& data)>;
+    void setPacketCallback(PacketCallback callback);
+
+    /**
+     * @brief Callback: called when connection is established
+     */
+    using ConnectCallback = std::function<void()>;
+    void setConnectCallback(ConnectCallback callback);
+
+    /**
+     * @brief Callback: called on disconnection
+     */
+    using DisconnectCallback = std::function<void()>;
+    void setDisconnectCallback(DisconnectCallback callback);
+
+    // Client Info
+    bool isConnected() const;
+    const Address& getServerAddress() const { return _server_address; }
+    ECS::Registry& getECS() { return _ecs; }
+
+ private:
+    ECS::Registry& _ecs;
+    std::unique_ptr<Client> _client;
+    SocketType _protocol_type;
+    Address _server_address;
+    bool _connected;
+
+    // Game callbacks
+    PacketCallback _on_packet_received;
+    ConnectCallback _on_connect;
+    DisconnectCallback _on_disconnect;
+};
+
+}  // namespace network
+}  // namespace te
