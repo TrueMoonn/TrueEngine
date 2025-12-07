@@ -123,7 +123,14 @@ enum Key {
     LIMITKEY,
 };
 
-typedef std::array<bool, Key::LIMITKEY> KeysEvent;
+struct KeysEvent {
+    bool update = false;
+    std::array<bool, Key::LIMITKEY> keys = {false};
+    void clear() {
+        update = false;
+        keys.fill(false);
+    }
+};
 
 /* MOUSE */
 enum MouseButton {
@@ -177,7 +184,7 @@ struct Events {
     SystemEvents systems;
 
     void clear() {
-        keys.fill(false);
+        keys.clear();
         mouses.fill(MouseInfo());
         systems.fill(false);
     }
@@ -204,26 +211,25 @@ class EventManager {
     }
 
     void addSubscription(System sys, eventFunc func) {
-        _subscription[sys].emplace_back(func);
+        _subscription[sys].push_back(func);
     };
 
     bool isEvent(System sys) {
         return _events.systems.at(sys);
     }
     void emit(ECS::Registry& reg) {
-        for (auto& [sys, vect] : _subscription) {
-            if (_events.systems[sys]) {
-                for (const auto &func : vect) {
-                    if (sys == System::KeyPressed) {
-                        func(reg, _events.keys);
-                    } else if (sys == System::MouseButtonPressed) {
-                        func(reg, _events.mouses);
-                    } else {
-                        func(reg, true);
-                    }
-                }
+        if (_events.keys.update) {
+            for (const auto &func : _subscription[System::KeyPressed]) {
+                func(reg, _events.keys);
             }
         }
+        // for (auto& [sys, vect] : _subscription) {
+        //     if (_events.systems[sys]) {
+        //         for (const auto &func : vect) {
+        //             func(reg, true);
+        //         }
+        //     }
+        // }
     };
 
  private:

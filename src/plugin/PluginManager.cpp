@@ -13,19 +13,15 @@
 
 namespace te {
 
-void PluginManager::loadPlugins(ECS::Registry& reg, const std::string& dir) {
+void PluginManager::loadPlugins(ECS::Registry& reg, EventManager& events,
+    const std::string& dir) {
     for (const auto &file : std::filesystem::directory_iterator(dir)) {
         if (file.path().extension() == ".so") {
             std::string pname = file.path().stem().string();
             _manager.load(file.path());
             try {
-                _pollEvent = _manager.access<EventManager::pollFunc>(
-                    pname, POLL_EVENT_ENDPOINT);
-                _isPollEvent = true;
-            } catch (const std::runtime_error&) {}
-            try {
                 maker plugin = _manager.access<maker>(pname, ENDPOINT_NAME);
-                _plugins[pname] = plugin(reg);
+                _plugins[pname] = plugin(reg, events);
                 setAccesser(pname);
             } catch (const std::runtime_error& e) {
                 std::cerr << e.what() << std::endl;
@@ -46,8 +42,6 @@ void PluginManager::clear(void) {
     _accesser.clear();
     _plugins.clear();
     _manager.closeHandlers();
-    _pollEvent = {};
-    _isPollEvent = false;
 }
 
 void PluginManager::loadComponent(const std::string& name,

@@ -11,7 +11,8 @@
 #include "Physic.hpp"
 #include "physic/factory.hpp"
 
-Physic::Physic(ECS::Registry& reg) : te::APlugin(reg) {
+Physic::Physic(ECS::Registry& reg, te::EventManager& events)
+    : te::APlugin(reg, events) {
     reg.registerComponent<te::Hitbox>();
     _components["hitbox"] = [](ECS::Registry& reg, const ECS::Entity& e,
         const toml::table& params) {

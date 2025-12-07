@@ -17,7 +17,6 @@
     #include <toml++/toml.hpp>
     
     #include "Exception.hpp"
-    #include "EventManager.hpp"
     #include "plugin/DlManager.hpp"
     #include "plugin/APlugin.hpp"
 
@@ -36,7 +35,7 @@ namespace te {
  * 
  */
 class PluginManager {
-    typedef std::unique_ptr<APlugin>(*maker)(ECS::Registry&);
+    typedef std::unique_ptr<APlugin>(*maker)(ECS::Registry&, EventManager&);
 
  public:
     TE_EXCEPTION("PluginManager", NoPluginFound)
@@ -54,7 +53,8 @@ class PluginManager {
      * @param reg The ECS::Registry to load to
      * @param dir The path to the plugins
      */
-    void loadPlugins(ECS::Registry& reg, const std::string& dir);
+    void loadPlugins(ECS::Registry& reg, EventManager& events,
+        const std::string& dir);
     /**
      * @brief Get the names of the plugins loaded
      * 
@@ -85,12 +85,6 @@ class PluginManager {
      */
     void loadSystem(const std::string& name);
 
-    std::optional<EventManager::pollFunc> getPollEventer(void) const {
-        if (!_isPollEvent)
-            return std::nullopt;
-        return _pollEvent;
-    }
-
  private:
     /**
      * @brief Set simpler access
@@ -106,9 +100,6 @@ class PluginManager {
     DlManager _manager;
     std::unordered_map<std::string,
         std::unique_ptr<APlugin>> _plugins;
-    
-    bool _isPollEvent = false;
-    EventManager::pollFunc _pollEvent;
 };
 
 }  // namespace te

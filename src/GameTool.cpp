@@ -13,12 +13,7 @@
 namespace te {
 
 void GameTool::loadPlugins(const std::string& dir) {
-    _pmanager.loadPlugins(_reg, dir);
-    auto poll = _pmanager.getPollEventer();
-    if (poll.has_value())
-        _events.setPollFunc(poll.value());
-    else
-        std::cerr << "no poll function found" << std::endl;
+    _pmanager.loadPlugins(_reg, _events, dir);
 }
 
 void GameTool::clearPlugins() {

@@ -14,6 +14,7 @@ add_library(${PROJECT_NAME} SHARED
     ${PROJECT_SOURCE_DIR}/src/systems/view_player.cpp
 
     #EVENTS
+    ${PROJECT_SOURCE_DIR}/src/events/pollEvent.cpp
     ${PROJECT_SOURCE_DIR}/src/events/keyboard.cpp
 )
 add_library(plugins::sfml ALIAS ${PROJECT_NAME})

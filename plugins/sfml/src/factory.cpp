@@ -12,9 +12,12 @@
 #include <toml++/toml.hpp>
 
 #include "Sfml.hpp"
+#include "sfml/events.hpp"
 #include "sfml/factory.hpp"
 
-Sfml::Sfml(ECS::Registry& reg) : te::APlugin(reg) {
+Sfml::Sfml(ECS::Registry& reg, te::EventManager& events)
+    : te::APlugin(reg, events) {
+    events.setPollFunc(&pollEvent);
     reg.registerComponent<te::Window>();
     _components["window"] = [](ECS::Registry& reg, const ECS::Entity& e,
         const toml::table&) {
