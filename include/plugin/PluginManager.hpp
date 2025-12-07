@@ -15,8 +15,9 @@
     #include <unordered_map>
     #include <vector>
     #include <toml++/toml.hpp>
-
+    
     #include "Exception.hpp"
+    #include "EventManager.hpp"
     #include "plugin/DlManager.hpp"
     #include "plugin/APlugin.hpp"
 
@@ -84,6 +85,12 @@ class PluginManager {
      */
     void loadSystem(const std::string& name);
 
+    std::optional<EventManager::pollFunc> getPollEventer(void) const {
+        if (!_isPollEvent)
+            return std::nullopt;
+        return _pollEvent;
+    }
+
  private:
     /**
      * @brief Set simpler access
@@ -99,6 +106,9 @@ class PluginManager {
     DlManager _manager;
     std::unordered_map<std::string,
         std::unique_ptr<APlugin>> _plugins;
+    
+    bool _isPollEvent = false;
+    EventManager::pollFunc _pollEvent;
 };
 
 }  // namespace te

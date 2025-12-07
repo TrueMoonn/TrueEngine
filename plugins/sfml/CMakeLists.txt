@@ -9,10 +9,12 @@ add_library(${PROJECT_NAME} SHARED
     ${PROJECT_SOURCE_DIR}/src/components/window.cpp
 
     #SYSTEMS
-    ${PROJECT_SOURCE_DIR}/src/systems/event.cpp
     ${PROJECT_SOURCE_DIR}/src/systems/display.cpp
     ${PROJECT_SOURCE_DIR}/src/systems/draw.cpp
     ${PROJECT_SOURCE_DIR}/src/systems/view_player.cpp
+
+    #EVENTS
+    ${PROJECT_SOURCE_DIR}/src/events/keyboard.cpp
 )
 add_library(plugins::sfml ALIAS ${PROJECT_NAME})
 

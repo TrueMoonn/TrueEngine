@@ -19,6 +19,11 @@ void PluginManager::loadPlugins(ECS::Registry& reg, const std::string& dir) {
             std::string pname = file.path().stem().string();
             _manager.load(file.path());
             try {
+                _pollEvent = _manager.access<EventManager::pollFunc>(
+                    pname, POLL_EVENT_ENDPOINT);
+                _isPollEvent = true;
+            } catch (const std::runtime_error&) {}
+            try {
                 maker plugin = _manager.access<maker>(pname, ENDPOINT_NAME);
                 _plugins[pname] = plugin(reg);
                 setAccesser(pname);
@@ -40,6 +45,9 @@ std::vector<std::string> PluginManager::getPlugins() const {
 void PluginManager::clear(void) {
     _accesser.clear();
     _plugins.clear();
+    _manager.closeHandlers();
+    _pollEvent = {};
+    _isPollEvent = false;
 }
 
 void PluginManager::loadComponent(const std::string& name,

@@ -7,10 +7,6 @@
 
 #pragma once
 
-    #include <unordered_map>
-    #include <string>
-    #include <functional>
-    #include <any>
     #include <memory>
 
     #include <ECS/Registry.hpp>
