@@ -1,0 +1,16 @@
+X,X,X,X
+X, , ,X
+X, , ,X
+XXXXXXX
+---
+[MAP]
+    [MAP.TILES]
+    width = 10
+    height = 10
+
+[ENTITIES]
+    [ENTITIES.DEFAULT]
+    position2 = true
+
+    [ENTITIES.X]
+    position2 = true

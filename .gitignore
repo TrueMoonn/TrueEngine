@@ -1,8 +1,25 @@
-#Headers from sub-libs
+# Headers from sub-libs
 include/ECS
 include/Network
 
-#Local Files
+# Header from plugins
+include/Sfml.hpp
+include/sfml
+include/Movement.hpp
+include/movement
+include/Physic.hpp
+include/physic
+include/Interaction.hpp
+include/interaction
+include/entity_spec
+include/EntitySpec.hpp
+
+# Local Files
 build/
 *.a
+*.so
 tests/game_test/GameTest
+doxygen/
+
+# Editor config
+.vscode

@@ -1,0 +1,11 @@
+X,X,X,X,X,X
+X,G,G,G,G,X
+X,G,G,G,G,X
+X,G,G,G,G,X
+X,G,G,G,G,X
+X,X,X,X,X,X
+---
+[MAP]
+    [MAP.TILES]
+    width = 50
+    height = 50
