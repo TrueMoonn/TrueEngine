@@ -34,8 +34,8 @@ gtest_discover_tests(${PROJECT_NAME})
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_SOURCE_DIR}/tests/unit_tests/plugins
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        ${CMAKE_SOURCE_DIR}/plugins/movement.so
-        ${CMAKE_SOURCE_DIR}/tests/unit_tests/plugins/movement.so
+        ${CMAKE_SOURCE_DIR}/plugins/physic.so
+        ${CMAKE_SOURCE_DIR}/tests/unit_tests/plugins/physic.so
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
         ${CMAKE_SOURCE_DIR}/plugins/interaction.so
         ${CMAKE_SOURCE_DIR}/tests/unit_tests/plugins/interaction.so

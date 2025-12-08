@@ -10,13 +10,14 @@
 #include <ECS/Registry.hpp>
 #include <ECS/Zipper.hpp>
 
-#include "movement/components/position.hpp"
-#include "movement/components/velocity.hpp"
+#include "maths/Rect.hpp"
 
+#include "physic/components/position.hpp"
+#include "physic/components/velocity.hpp"
 #include "physic/components/hitbox.hpp"
 #include "physic/hitbox_management.hpp"
 
-static bool square_hitbox(sf::FloatRect rect1, sf::FloatRect rect2) {
+static bool square_hitbox(te::mat::RectF rect1, te::mat::RectF rect2) {
     return (rect1.position.x < rect2.position.x + rect2.size.x &&
         rect1.position.x + rect1.size.x > rect2.position.x &&
         rect1.position.y < rect2.position.y + rect2.size.y &&
@@ -37,16 +38,16 @@ std::vector<ECS::Entity> entity_hit(ECS::Registry& reg,
         ECS::IndexedZipper(positions, hitboxs)) {
         if (e != entity) {
             if (square_hitbox(
-                sf::FloatRect(
-                    sf::Vector2f
+                te::mat::RectF(
+                    te::mat::Vector2f
                     (pos.x + hitbox.position.x, pos.y + hitbox.position.y),
-                    sf::Vector2f(
+                    te::mat::Vector2f(
                     hitbox.size.x, hitbox.size.y)),
-                sf::FloatRect(
-                    sf::Vector2f(
+                te::mat::RectF(
+                    te::mat::Vector2f(
                     obj_pos.value().x + obj_hitbox.value().position.x,
                     obj_pos.value().y + obj_hitbox.value().position.y),
-                    sf::Vector2f(
+                    te::mat::Vector2f(
                     obj_hitbox.value().size.x,
                     obj_hitbox.value().size.y)))) {
                 entities_hit.push_back(e);

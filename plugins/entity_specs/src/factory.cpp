@@ -17,7 +17,7 @@ EntitySpec::EntitySpec(ECS::Registry& reg) : te::APlugin(reg) {
         const toml::table& params) {
         try {
             float health = params["amount"].value_or(0.f);
-            reg.addComponent(e, te::Health(health));
+            reg.createComponent<te::Health>(e, health);
         } catch (const std::bad_any_cast& e) {
             std::cerr << "error(Plugin-health): " <<
                 e.what() << std::endl;
@@ -28,7 +28,7 @@ EntitySpec::EntitySpec(ECS::Registry& reg) : te::APlugin(reg) {
         const toml::table& params) {
         try {
             float damage = params["amount"].value_or(0.f);
-            reg.addComponent(e, te::Damage(damage));
+            reg.createComponent<te::Damage>(e, damage);
         } catch (const std::bad_any_cast& e) {
             std::cerr << "error(Plugin-damage): " <<
                 e.what() << std::endl;

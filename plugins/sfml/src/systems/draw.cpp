@@ -7,7 +7,7 @@
 
 #include <ECS/Zipper.hpp>
 
-#include "movement/components/position.hpp"
+#include "physic/components/position.hpp"
 #include "sfml/components/window.hpp"
 #include "sfml/components/drawable.hpp"
 #include "sfml/components/sprite.hpp"
@@ -25,7 +25,7 @@ void draw_sys(ECS::Registry& reg) {
     for (auto &&[win] : ECS::Zipper(windows)) {
         for (auto &&[sprite, pos, drawable] :
             ECS::Zipper(sprites, positions, drawables)) {
-            sprite.value().setPosition(pos.value());
+            sprite.value().setPosition({V(pos).x, V(pos).y});
             win.value().draw(sprite.value());
         }
     }

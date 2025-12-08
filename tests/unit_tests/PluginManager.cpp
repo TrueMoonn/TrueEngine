@@ -13,7 +13,7 @@
 #include <toml++/toml.hpp>
 #include "plugin/PluginManager.hpp"
 
-#include "movement/components/position.hpp"
+#include "physic/components/position.hpp"
 
 TEST(PluginManager, load_plugins) {
     te::PluginManager pmanager;
@@ -22,7 +22,7 @@ TEST(PluginManager, load_plugins) {
     std::vector<std::string> names = pmanager.getPlugins();
 
     EXPECT_EQ(names.size(), 2);
-    EXPECT_TRUE(names[0].compare("movement"));
+    EXPECT_TRUE(names[0].compare("physic"));
     EXPECT_TRUE(names[1].compare("interaction"));
 }
 
@@ -53,7 +53,7 @@ TEST(PluginManager, system_loading) {
     ECS::Registry reg;
     pmanager.loadPlugins(reg, "../../../tests/unit_tests/plugins");
 
-    EXPECT_NO_THROW(pmanager.loadSystem("movement2"));
+    EXPECT_NO_THROW(pmanager.loadSystem("physic"));
     EXPECT_THROW(pmanager.loadSystem("wrong"),
         te::PluginManager::NoPluginFound);
 }

@@ -15,20 +15,15 @@
 #include "sfml/factory.hpp"
 
 Sfml::Sfml(ECS::Registry& reg) : te::APlugin(reg) {
-    reg.registerComponent<te::Event>();
-    _components["event_manager"] = [](ECS::Registry& reg, const ECS::Entity& e,
-        const toml::table& params) {
-        reg.addComponent(e, te::Event());
-    };
     reg.registerComponent<te::Window>();
     _components["window"] = [](ECS::Registry& reg, const ECS::Entity& e,
         const toml::table&) {
-        reg.addComponent(e, te::Window());
+        reg.createComponent<te::Window>(e);
     };
     reg.registerComponent<te::Drawable>();
     _components["drawable"] = [](ECS::Registry& reg, const ECS::Entity& e,
         const toml::table&) {
-        reg.addComponent(e, te::Drawable());
+        reg.createComponent<te::Drawable>(e);
     };
     reg.registerComponent<te::Sprite>();
     _components["sprite"] = [](ECS::Registry& reg, const ECS::Entity& e,
@@ -40,15 +35,12 @@ Sfml::Sfml(ECS::Registry& reg) : te::APlugin(reg) {
                 params["height"].value_or(50.0));
             sf::Vector2f scale(size.x / texture.getSize().x,
                 size.y / texture.getSize().y);
-            reg.addComponent(e, te::Sprite(std::move(texture), scale));
+            reg.createComponent<te::Sprite>(e, std::move(texture), scale);
         } catch (const std::out_of_range&) {
             std::cerr << "error(Plugin-Sprite): key not found" << std::endl;
         } catch (const sf::Exception& e) {
             std::cerr << e.what() << std::endl;
         }
-    };
-    _systems["events"] = [](ECS::Registry& reg) {
-        reg.addSystem(&te::manageEvent);
     };
     _systems["display"] = [](ECS::Registry& reg) {
         reg.addSystem(&te::display_sys);
