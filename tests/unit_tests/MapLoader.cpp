@@ -29,9 +29,10 @@ TEST(MapLoader, load_map) {
 TEST(MapLoader, wrong_maps) {
     te::PluginManager pmanager;
     ECS::Registry reg;
+    te::EventManager ev;
     te::MapLoader loader;
 
-    pmanager.loadPlugins(reg, "../../../tests/unit_tests/plugins");
+    pmanager.loadPlugins(reg, ev, "../../../tests/unit_tests/plugins");
     EXPECT_THROW(
         loader.loadMap("../../../tests/unit_tests/configs/wrong_toml.map"),
         te::MapLoader::LoadError);

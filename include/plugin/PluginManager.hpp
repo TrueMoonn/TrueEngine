@@ -35,7 +35,7 @@ namespace te {
  * 
  */
 class PluginManager {
-    typedef std::unique_ptr<APlugin>(*maker)(ECS::Registry&);
+    typedef std::unique_ptr<APlugin>(*maker)(ECS::Registry&, EventManager&);
 
  public:
     TE_EXCEPTION("PluginManager", NoPluginFound)
@@ -53,7 +53,8 @@ class PluginManager {
      * @param reg The ECS::Registry to load to
      * @param dir The path to the plugins
      */
-    void loadPlugins(ECS::Registry& reg, const std::string& dir);
+    void loadPlugins(ECS::Registry& reg, EventManager& events,
+        const std::string& dir);
     /**
      * @brief Get the names of the plugins loaded
      * 
