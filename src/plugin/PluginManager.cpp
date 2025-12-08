@@ -41,7 +41,6 @@ std::vector<std::string> PluginManager::getPlugins() const {
 void PluginManager::clear(void) {
     _accesser.clear();
     _plugins.clear();
-    _manager.closeHandlers();
 }
 
 void PluginManager::loadComponent(const std::string& name,
