@@ -8,50 +8,87 @@
 #pragma once
 
     #include <iostream>
+    #include <utility>
+
+    #include "maths/numeric.hpp"
 
 namespace te {
 namespace mat {
 
-enum axe {
-    X,
-    Y,
-    Z
+enum axis {
+    X = 0,
+    Y
 };
 
-class Vector2f {
-    public:
-        Vector2f() = default;
-        Vector2f(float x, float y);
-        Vector2f(const Vector2f& vect);
-        Vector2f(Vector2f&& vect);
-        ~Vector2f() = default;
+template <typename Numeric>
+    requires arithmetic<Numeric>
+struct Vector2 {
+    Vector2() = default;
+    Vector2(Numeric x, Numeric y) {
+        this->x = x;
+        this->y = y;
+    }
+    Vector2(const Vector2& vect) : x(vect.x), y(vect.y) {}
+    Vector2(Vector2&& vect) : x(std::move(vect.x)), y(std::move(vect.y)) {}
+    ~Vector2() = default;
 
-        Vector2f operator+(const Vector2f &vect) const;
-        void operator+=(const Vector2f &vect);
-        Vector2f operator-(const Vector2f &vect) const;
-        void operator-=(const Vector2f &vect);
-        Vector2f operator*(const Vector2f &vect) const;
-        void operator*=(const Vector2f &vect);
-        Vector2f operator/(const Vector2f &vect) const;
-        void operator/=(const Vector2f &vect);
-        Vector2f operator+(float x) const;
-        void operator+=(float x);
-        Vector2f operator*(float x) const;
-        void operator*=(float x);
-        Vector2f operator/(float x) const;
-        void operator/=(float x);
+    Vector2 operator+(const Vector2 &vect) const {
+        return Vector2f(this->x + vect.x, this->y + vect.y);
+    }
+    void operator+=(const Vector2 &vect) {
+        this->x += vect.x;
+        this->y += vect.y;
+    }
+    Vector2 operator-(const Vector2 &vect) const {
+        return Vector2f(this->x - vect.x, this->y - vect.y);
+    }
+    void operator-=(const Vector2 &vect) {
+        this->x -= vect.x;
+        this->y -= vect.y;
+    }
+    Vector2 operator*(const Vector2 &vect) const {
+        return Vector2f(this->x * vect.x, this->y * vect.y);
+    }
+    void operator*=(const Vector2 &vect) {
+        this->x *= vect.x;
+        this->y *= vect.y;
+    }
+    Vector2 operator/(const Vector2 &vect) const {
+        return Vector2f(this->x / vect.x, this->y / vect.y);
+    }
+    void operator/=(const Vector2 &vect) {
+        this->x /= vect.x;
+        this->y /= vect.y;
+    }
+    Vector2 operator+(Numeric x) const {
+        return Vector2f(this->x + x, this->y + y);
+    }
+    void operator+=(Numeric x) {
+        this->x += x;
+        this->y += x;
+    }
+    Vector2 operator*(Numeric x) const {
+        return Vector2f(this->x * x, this->y * y);
+    }
+    void operator*=(Numeric x) {
+        this->x *= x;
+        this->y *= y;
+    }
+    Vector2 operator/(Numeric x) const {
+        return Vector2f(this->x / x, this->y / y);
+    }
+    void operator/=(Numeric x) {
+        this->x /= x;
+        this->y /= y;
+    }
 
-        float x = 0;
-        float y = 0;
-    private:
+    Numeric x = 0;
+    Numeric y = 0;
 };
 
-Vector2f operator-(const Vector2f&);
-
-static inline std::ostream& operator<<(std::ostream& os, const Vector2f& vector)
-{
-    return os << vector.x << " " << vector.y;
-}
+typedef Vector2<int> Vector2i;
+typedef Vector2<float> Vector2f;
+typedef Vector2<unsigned int> Vector2u;
 
 }  // namespace mat
 }  // namespace te

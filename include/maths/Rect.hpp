@@ -7,21 +7,34 @@
 
 #pragma once
 
+    #include <utility>
+
     #include "maths/Vector.hpp"
+    #include "maths/numeric.hpp"
 
 namespace te {
 namespace mat {
 
-struct RectF {
-    RectF(const Vector2f& position, const Vector2f& size);
-    RectF(float left, float top, float width, float height);
-    RectF(const RectF& other);
-    RectF(RectF&& other);
+template <typename Numeric>
+    requires arithmetic<Numeric>
+struct Rect {
+    Rect(const Vector2<Numeric>& position, const Vector2<Numeric>& size) :
+        position(position), size(size) {}
+    Rect(Numeric left, Numeric top, Numeric width, Numeric height) :
+        position(left, top), size(width, height) {}
 
-    Vector2f position;
-    Vector2f size;
+    Rect(const Rect& other) : position(other.position), size(other.size) {}
+    Rect(Rect&& other) :
+        position(std::move(other.position)), size(std::move(other.size)) {}
+
+    Vector2<Numeric> position;
+    Vector2<Numeric> size;
 };
 
-} // namespace mat
+typedef Rect<int> RectI;
+typedef Rect<float> RectF;
+typedef Rect<unsigned int> RectU;
+
+}  // namespace mat
 }  // namespace te
 

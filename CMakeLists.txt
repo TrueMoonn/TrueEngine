@@ -49,10 +49,6 @@ add_library( ${PROJECT_NAME} STATIC
     ${TE_SRC_DIR}/plugin/DlManager.cpp
     ${TE_SRC_DIR}/plugin/PluginManager.cpp
 
-    #MATHS
-    ${TE_SRC_DIR}/maths/Vector.cpp
-    ${TE_SRC_DIR}/maths/Rect.cpp
-
     # SYSTEM OBJECTS
     ${TE_SRC_DIR}/clock.cpp
 
