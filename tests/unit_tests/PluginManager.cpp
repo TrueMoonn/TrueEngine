@@ -13,7 +13,7 @@
 #include <toml++/toml.hpp>
 #include "plugin/PluginManager.hpp"
 
-#include "movement/components/position.hpp"
+#include "physic/components/position.hpp"
 
 TEST(PluginManager, load_plugins) {
     te::PluginManager pmanager;
@@ -23,7 +23,7 @@ TEST(PluginManager, load_plugins) {
     std::vector<std::string> names = pmanager.getPlugins();
 
     EXPECT_EQ(names.size(), 2);
-    EXPECT_TRUE(names[0].compare("movement"));
+    EXPECT_TRUE(names[0].compare("physic"));
     EXPECT_TRUE(names[1].compare("interaction"));
 }
 

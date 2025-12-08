@@ -55,7 +55,6 @@ then
 
 elif [[ $1 == "--clear" || $1 == "-c" ]]
 then
-    rm -rf ./include/movement ./include/Movement.hpp
     rm -rf ./include/sfml ./include/Sfml.hpp
     rm -rf ./include/physic ./include/Physic.hpp
     rm -rf ./include/interaction ./include/Interaction.hpp

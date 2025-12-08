@@ -21,12 +21,12 @@ Sfml::Sfml(ECS::Registry& reg, te::EventManager& events)
     reg.registerComponent<te::Window>();
     _components["window"] = [](ECS::Registry& reg, const ECS::Entity& e,
         const toml::table&) {
-        reg.addComponent(e, te::Window());
+        reg.createComponent<te::Window>(e);
     };
     reg.registerComponent<te::Drawable>();
     _components["drawable"] = [](ECS::Registry& reg, const ECS::Entity& e,
         const toml::table&) {
-        reg.addComponent(e, te::Drawable());
+        reg.createComponent<te::Drawable>(e);
     };
     reg.registerComponent<te::Sprite>();
     _components["sprite"] = [](ECS::Registry& reg, const ECS::Entity& e,

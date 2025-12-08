@@ -8,7 +8,7 @@
 #include <ECS/Zipper.hpp>
 
 #include "physic/components/hitbox.hpp"
-#include "movement/components/position.hpp"
+#include "physic/components/position.hpp"
 #include "entity_spec/components/health.hpp"
 #include "entity_spec/components/damage.hpp"
 

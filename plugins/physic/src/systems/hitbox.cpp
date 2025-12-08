@@ -7,9 +7,8 @@
 
 #include <ECS/Zipper.hpp>
 
-#include "movement/components/position.hpp"
-#include "movement/components/velocity.hpp"
-
+#include "physic/components/position.hpp"
+#include "physic/components/velocity.hpp"
 #include "physic/components/movable.hpp"
 #include "physic/components/hitbox.hpp"
 #include "physic/hitbox_management.hpp"
