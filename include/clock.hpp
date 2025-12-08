@@ -11,19 +11,34 @@
 
 namespace te {
 
-typedef std::chrono::high_resolution_clock hr_clock;
-typedef std::chrono::time_point<hr_clock> hr_time_point;
-typedef std::chrono::milliseconds ms;
+#define SEC_TO_MICRO(t) (t * 1000000)
 
-struct Clock {
-    explicit Clock(double cooldown_ms, bool active = true, size_t delta = 0);
+#define NOW std::chrono::steady_clock::now()
+#define CAST_M(a, b) \
+    std::chrono::duration_cast<std::chrono::microseconds>(a - b).count()
+
+typedef std::chrono::steady_clock::time_point delta_t;
+
+typedef int64_t microsec;
+
+struct Timestamp {
+ public:
+    explicit Timestamp(float delay, bool active = true)
+        : delay(size_t(SEC_TO_MICRO(delay)))
+        , ref(NOW), cur(ref), active(active) {}
+
+    microsec getElapsedTime(void);
+    bool checkDelay(bool restart = true);
+    void restart(void);
+    void pause(void);
+    bool isPaused(void) { return !active; }
+
+    microsec delay;
+
+ private:
     bool active;
-    size_t delta;
-    double cooldown_ms;
-    hr_time_point last_check;
-
-    double getTimeElapsed(void);
-    bool checkCooldown(void);
+    delta_t ref;
+    delta_t cur;
 };
 
 }  // namespace te
