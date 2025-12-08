@@ -179,6 +179,20 @@ enum System {
 
 typedef std::array<bool, System::LIMITSYSTEM> SystemEvents;
 
+/**
+ * @brief Event structure
+ * 
+ * Store every event possible. Currently checking mouse and key events
+ * ```
+ * * te::KeysEvent
+ * * te::MouseEvents
+ * 
+ * * te::SystemEvents
+ * ```
+ * 
+ * `std::array<bool, {nb_events}>` to check wich is active
+ * 
+ */
 struct Events {
     KeysEvent keys;
     MouseEvents mouses;
@@ -191,6 +205,12 @@ struct Events {
     }
 };
 
+/**
+ * @brief Event Manager class
+ * 
+ * This class manage events using an external poll function #_pollFunc
+ * 
+ */
 class EventManager {
  public:
     typedef void(*pollFunc)(Events&, ECS::Registry&);
