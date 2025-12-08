@@ -6,7 +6,6 @@
 */
 
 #include <memory>
-#include <SFML/Graphics/RenderWindow.hpp>
 
 #include "scenes/InGame.hpp"
 

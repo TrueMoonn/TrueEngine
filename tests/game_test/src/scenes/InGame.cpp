@@ -28,7 +28,6 @@ void InGame::setECS(void) {
 }
 
 void InGame::setEntities(void) {
-    // createComponent("caca", SYSTEM_ENTITY);
     createComponent("window", SYSTEM_ENTITY);
     createComponent("event_manager", SYSTEM_ENTITY);
     size_t map1_index = loadMapFile(MAPS_PATHS.at("test1"));
