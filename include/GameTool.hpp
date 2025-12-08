@@ -15,7 +15,7 @@
     #include <ECS/Entity.hpp>
     #include <ECS/Registry.hpp>
 
-    #include "EventManager.hpp"
+    #include "event/EventManager.hpp"
     #include "config/map_loader.hpp"
     #include "plugin/PluginManager.hpp"
 
@@ -141,7 +141,7 @@ class GameTool {
     void createEntity(const ECS::Entity& e,
         toml::table& pos, const toml::table& entity_info);
 
-    EventManager _events;
+    event::EventManager _events;
 };
 
 }  // namespace te

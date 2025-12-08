@@ -17,7 +17,7 @@ namespace intact {
 
 class Interaction : public te::plugin::APlugin {
  public:
-    explicit Interaction(ECS::Registry& reg, te::EventManager& events);
+    explicit Interaction(ECS::Registry& reg, te::event::EventManager& events);
 };
 
 }  // namespace intact
@@ -25,7 +25,7 @@ class Interaction : public te::plugin::APlugin {
 
 extern "C" {
     std::unique_ptr<addon::intact::Interaction> get_pfactory(
-        ECS::Registry& reg, te::EventManager& events) {
+        ECS::Registry& reg, te::event::EventManager& events) {
         return std::make_unique<addon::intact::Interaction>(reg, events);
     }
 }

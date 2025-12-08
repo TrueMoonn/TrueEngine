@@ -17,7 +17,7 @@ namespace physic {
 
 class Physic : public te::plugin::APlugin {
  public:
-    explicit Physic(ECS::Registry& reg, te::EventManager& events);
+    explicit Physic(ECS::Registry& reg, te::event::EventManager& events);
 };
 
 }  // namespace physic
@@ -25,7 +25,7 @@ class Physic : public te::plugin::APlugin {
 
 extern "C" {
     std::unique_ptr<addon::physic::Physic> get_pfactory(ECS::Registry& reg,
-        te::EventManager& events) {
+        te::event::EventManager& events) {
         return std::make_unique<addon::physic::Physic>(reg, events);
     }
 }

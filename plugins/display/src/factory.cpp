@@ -19,7 +19,7 @@
 namespace addon {
 namespace display {
 
-Display::Display(ECS::Registry& reg, te::EventManager& events)
+Display::Display(ECS::Registry& reg, te::event::EventManager& events)
     : te::plugin::APlugin(reg, events) {
     reg.registerComponent<Animation>();
     _components["animation"] = [](ECS::Registry& reg, const ECS::Entity& e,

@@ -58,7 +58,7 @@ ECS::Entity GameTool::createMap(std::size_t index, ECS::Entity fentity) {
 }
 
 void GameTool::run(void) {
-    while (!_events.isEvent(System::Closed)) {
+    while (!_events.isEvent(event::System::Closed)) {
         _events.pollEvents(_reg);
         _events.emit(_reg);
         _reg.runSystems();

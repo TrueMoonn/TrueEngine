@@ -29,7 +29,7 @@ TEST(MapLoader, load_map) {
 TEST(MapLoader, wrong_maps) {
     te::plugin::PluginManager pmanager;
     ECS::Registry reg;
-    te::EventManager ev;
+    te::event::EventManager ev;
     te::MapLoader loader;
 
     pmanager.loadPlugins(reg, ev, "../../../tests/unit_tests/plugins");

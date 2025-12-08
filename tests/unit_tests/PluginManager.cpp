@@ -18,7 +18,7 @@
 TEST(PluginManager, load_plugins) {
     te::plugin::PluginManager pmanager;
     ECS::Registry reg;
-    te::EventManager ev;
+    te::event::EventManager ev;
     pmanager.loadPlugins(reg, ev, "../../../tests/unit_tests/plugins");
     std::vector<std::string> names = pmanager.getPlugins();
 
@@ -30,7 +30,7 @@ TEST(PluginManager, load_plugins) {
 TEST(PluginManager, clear) {
     te::plugin::PluginManager pmanager;
     ECS::Registry reg;
-    te::EventManager ev;
+    te::event::EventManager ev;
     pmanager.loadPlugins(reg, ev, "../../../tests/unit_tests/plugins");
     pmanager.clear();
     std::vector<std::string> names = pmanager.getPlugins();
@@ -40,7 +40,7 @@ TEST(PluginManager, clear) {
 TEST(PluginManager, component_loading) {
     te::plugin::PluginManager pmanager;
     ECS::Registry reg;
-    te::EventManager ev;
+    te::event::EventManager ev;
     pmanager.loadPlugins(reg, ev, "../../../tests/unit_tests/plugins");
 
     toml::table table =
@@ -54,7 +54,7 @@ TEST(PluginManager, component_loading) {
 TEST(PluginManager, system_loading) {
     te::plugin::PluginManager pmanager;
     ECS::Registry reg;
-    te::EventManager ev;
+    te::event::EventManager ev;
     pmanager.loadPlugins(reg, ev, "../../../tests/unit_tests/plugins");
 
     EXPECT_NO_THROW(pmanager.loadSystem("movement2"));

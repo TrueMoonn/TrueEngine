@@ -18,7 +18,7 @@
 namespace addon {
 namespace sfml {
 
-Sfml::Sfml(ECS::Registry& reg, te::EventManager& events)
+Sfml::Sfml(ECS::Registry& reg, te::event::EventManager& events)
     : te::plugin::APlugin(reg, events) {
     events.setPollFunc(&pollEvent);
     reg.registerComponent<Window>();

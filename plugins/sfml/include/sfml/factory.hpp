@@ -17,7 +17,7 @@ namespace sfml {
 
 class Sfml : public te::plugin::APlugin {
  public:
-    explicit Sfml(ECS::Registry& reg, te::EventManager& events);
+    explicit Sfml(ECS::Registry& reg, te::event::EventManager& events);
 };
 
 }  // namespace sfml
@@ -25,7 +25,7 @@ class Sfml : public te::plugin::APlugin {
 
 extern "C" {
     std::unique_ptr<addon::sfml::Sfml> get_pfactory(ECS::Registry& reg,
-        te::EventManager& events) {
+        te::event::EventManager& events) {
         return std::make_unique<addon::sfml::Sfml>(reg, events);
     }
 }

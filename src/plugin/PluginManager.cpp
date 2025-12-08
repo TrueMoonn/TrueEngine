@@ -14,7 +14,7 @@
 namespace te {
 namespace plugin {
 
-void PluginManager::loadPlugins(ECS::Registry& reg, EventManager& events,
+void PluginManager::loadPlugins(ECS::Registry& reg,event::EventManager& events,
     const std::string& dir) {
     for (const auto &file : std::filesystem::directory_iterator(dir)) {
         if (file.path().extension() == ".so") {

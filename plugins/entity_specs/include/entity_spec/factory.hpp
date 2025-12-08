@@ -17,7 +17,7 @@ namespace eSpec {
 
 class EntitySpec : public te::plugin::APlugin {
  public:
-    explicit EntitySpec(ECS::Registry& reg, te::EventManager& events);
+    explicit EntitySpec(ECS::Registry& reg, te::event::EventManager& events);
 };
 
 }  // namespace eSpec
@@ -25,7 +25,7 @@ class EntitySpec : public te::plugin::APlugin {
 
 extern "C" {
     std::unique_ptr<addon::eSpec::EntitySpec> get_pfactory(
-        ECS::Registry& reg, te::EventManager& events) {
+        ECS::Registry& reg, te::event::EventManager& events) {
         return std::make_unique<addon::eSpec::EntitySpec>(reg, events);
     }
 }

@@ -14,7 +14,7 @@
 namespace addon {
 namespace physic {
 
-Physic::Physic(ECS::Registry& reg, te::EventManager& events)
+Physic::Physic(ECS::Registry& reg, te::event::EventManager& events)
     : te::plugin::APlugin(reg, events) {
     reg.registerComponent<Position2>();
     _components["position2"] = [](ECS::Registry& reg, const ECS::Entity& e,

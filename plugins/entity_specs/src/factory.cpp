@@ -14,7 +14,7 @@
 namespace addon {
 namespace eSpec {
 
-EntitySpec::EntitySpec(ECS::Registry& reg, te::EventManager& events)
+EntitySpec::EntitySpec(ECS::Registry& reg, te::event::EventManager& events)
     : te::plugin::APlugin(reg, events) {
     reg.registerComponent<Health>();
     _components["health"] = [](ECS::Registry& reg, const ECS::Entity& e,
