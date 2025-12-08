@@ -24,7 +24,7 @@ void GameTool::createComponent(const std::string& name, const ECS::Entity& e,
     const toml::table& params) {
     try {
         _pmanager.loadComponent(name, e, params);
-    } catch (const PluginManager::NoPluginFound& e) {
+    } catch (const plugin::PluginManager::NoPluginFound& e) {
         std::cerr << e.what() << std::endl;
     }
 }
@@ -32,12 +32,12 @@ void GameTool::createComponent(const std::string& name, const ECS::Entity& e,
 void GameTool::createSystem(const std::string& name) {
     try {
         _pmanager.loadSystem(name);
-    } catch (const PluginManager::NoPluginFound& e) {
+    } catch (const plugin::PluginManager::NoPluginFound& e) {
         std::cerr << e.what() << std::endl;
     }
 }
 
-void GameTool::createSystem(const te::sys_builder &f) {
+void GameTool::createSystem(const te::plugin::sys_builder &f) {
     _reg.addSystem(f);
 }
 
@@ -58,7 +58,7 @@ ECS::Entity GameTool::createMap(std::size_t index, ECS::Entity fentity) {
 }
 
 void GameTool::run(void) {
-    while (!_events.isEvent(System::Closed)) {
+    while (!_events.isEvent(event::System::Closed)) {
         _events.pollEvents(_reg);
         _events.emit(_reg);
         _reg.runSystems();

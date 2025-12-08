@@ -15,7 +15,8 @@
 
 #define isBetWeen(x, a, b) (x >= a && x <= b)
 
-namespace te {
+namespace addon {
+namespace physic {
 
 void hitbox2_sys(ECS::Registry& reg) {
     auto& positions = reg.getComponents<Position2>();
@@ -55,4 +56,5 @@ void hitbox2_sys(ECS::Registry& reg) {
     }
 }
 
-}  // namespace te
+}  // namespace physic
+}  // namespace addon

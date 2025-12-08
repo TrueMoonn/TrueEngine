@@ -11,7 +11,8 @@
 
 #include "sfml/systems/display.hpp"
 
-namespace te {
+namespace addon {
+namespace sfml {
 
 void display_sys(ECS::Registry& reg) {
     auto& windows = reg.getComponents<Window>();
@@ -22,4 +23,5 @@ void display_sys(ECS::Registry& reg) {
     }
 }
 
-}  // namespace te
+}  // namespace sfml
+}  // namespace addon

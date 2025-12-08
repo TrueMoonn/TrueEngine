@@ -7,7 +7,8 @@
 
 #include "entity_spec/components/health.hpp"
 
-namespace te {
+namespace addon {
+namespace eSpec {
 
 Health::Health(const std::int64_t &amount) :
 amount(amount)
@@ -17,4 +18,5 @@ void Health::reduceSafely(const std::int64_t &value) {
     amount -= value > amount ? amount : value;
 }
 
-}  // namespace te
+}  // namespace eSpec
+}  // namespace addon

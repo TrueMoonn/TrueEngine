@@ -12,7 +12,6 @@
     #include "maths/Vector.hpp"
     #include "maths/numeric.hpp"
 
-namespace te {
 namespace mat {
 
 template <typename Numeric>
@@ -36,5 +35,3 @@ typedef Rect<float> RectF;
 typedef Rect<unsigned int> RectU;
 
 }  // namespace mat
-}  // namespace te
-

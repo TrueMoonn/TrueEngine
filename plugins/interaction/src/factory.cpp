@@ -15,35 +15,39 @@
 #include "Interaction.hpp"
 #include "interaction/factory.hpp"
 
-Interaction::Interaction(ECS::Registry& reg, te::EventManager& events)
-    : te::APlugin(reg, events) {
-    reg.registerComponent<te::Player>();
+namespace addon {
+namespace intact {
+
+Interaction::Interaction(ECS::Registry& reg, te::event::EventManager& events)
+    : te::plugin::APlugin(reg, events) {
+    reg.registerComponent<Player>();
     _components["player"] = [](ECS::Registry& reg, const ECS::Entity& e,
         const toml::table& params) {
         try {
             (void)params;
-            reg.createComponent<te::Player>(e);
+            reg.createComponent<Player>(e);
         } catch (const std::bad_any_cast& e) {
             std::cerr << "error(Plugin-Player): " <<
                 e.what() << std::endl;
         }
     };
-    events.addSubscription(te::System::KeyPressed, [](ECS::Registry& reg,
-        const te::EventManager::eventContent& content){
-        auto& event = std::get<te::KeysEvent>(content);
-        auto& velocities = reg.getComponents<te::Velocity2>();
-        auto& player = reg.getComponents<te::Player>();
+    events.addSubscription(te::event::System::KeyPressed,
+        [](ECS::Registry& reg,
+        const te::event::EventManager::eventContent& content){
+        auto& event = std::get<te::event::KeysEvent>(content);
+        auto& velocities = reg.getComponents<physic::Velocity2>();
+        auto& player = reg.getComponents<Player>();
 
         for (auto&& [vel, play] : ECS::Zipper(velocities, player)) {
-            if (event.keys[te::Key::Z])
+            if (event.keys[te::event::Key::Z])
                 vel.value().y = -3.0;
-            else if (event.keys[te::Key::S])
+            else if (event.keys[te::event::Key::S])
                 vel.value().y = 3.0;
             else
                 vel.value().y = 0.0;
-            if (event.keys[te::Key::Q])
+            if (event.keys[te::event::Key::Q])
                 vel.value().x = -3.0;
-            else if (event.keys[te::Key::D])
+            else if (event.keys[te::event::Key::D])
                 vel.value().x = 3.0;
             else
                 vel.value().x = 0.0;
@@ -51,3 +55,5 @@ Interaction::Interaction(ECS::Registry& reg, te::EventManager& events)
     });
 }
 
+}  // namespace intact
+}  // namespace addon

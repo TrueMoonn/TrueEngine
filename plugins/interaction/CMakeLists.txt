@@ -4,7 +4,7 @@ project(interaction)
 add_library(${PROJECT_NAME} SHARED
     ${PROJECT_SOURCE_DIR}/src/factory.cpp
 )
-add_library(plugins::interaction ALIAS ${PROJECT_NAME})
+add_library(addon::interaction ALIAS ${PROJECT_NAME})
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC

@@ -7,13 +7,14 @@
 
 #include "display/components/animation.hpp"
 
-namespace te {
+namespace addon {
+namespace display {
 
-const FrameData &te::Animation::getCurrentAnim() {
+const FrameData &Animation::getCurrentAnim() {
     return frameInfos[curAnim];
 }
 
-bool te::Animation::changeAnimation(size_t index) {
+bool Animation::changeAnimation(size_t index) {
     if (index >= frameInfos.size())
         return false;
     curAnim = index;
@@ -21,7 +22,7 @@ bool te::Animation::changeAnimation(size_t index) {
     return true;
 }
 
-void te::Animation::increment() {
+void Animation::increment() {
     curFrame++;
     if (curFrame >= frameInfos[curAnim].frameMAX)
         curFrame = frameInfos[curAnim].loop ? 0 : curFrame - 1;
@@ -32,4 +33,5 @@ void Animation::decrement() {
         curFrame--;
 }
 
-}  // namespace te
+}  // namespace display
+}  // namespace addon

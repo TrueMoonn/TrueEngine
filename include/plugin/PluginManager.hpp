@@ -23,6 +23,7 @@
     #define ENDPOINT_NAME "get_pfactory"
 
 namespace te {
+namespace plugin {
 
 /**
  * @brief Plugin Manager class for TrueEngine
@@ -35,7 +36,8 @@ namespace te {
  * 
  */
 class PluginManager {
-    typedef std::unique_ptr<APlugin>(*maker)(ECS::Registry&, EventManager&);
+    typedef std::unique_ptr<APlugin>(*maker)(
+        ECS::Registry&, event::EventManager&);
 
  public:
     TE_EXCEPTION("PluginManager", NoPluginFound)
@@ -53,7 +55,7 @@ class PluginManager {
      * @param reg The ECS::Registry to load to
      * @param dir The path to the plugins
      */
-    void loadPlugins(ECS::Registry& reg, EventManager& events,
+    void loadPlugins(ECS::Registry& reg, event::EventManager& events,
         const std::string& dir);
     /**
      * @brief Get the names of the plugins loaded
@@ -102,4 +104,5 @@ class PluginManager {
         std::unique_ptr<APlugin>> _plugins;
 };
 
+}  // namespace plugin
 }  // namespace te

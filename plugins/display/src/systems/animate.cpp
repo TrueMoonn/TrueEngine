@@ -14,14 +14,14 @@
 #include "sfml/components/sprite.hpp"
 #include "display/components/animation.hpp"
 
-namespace te {
+namespace addon {
+namespace display {
 
 void animate(ECS::Registry& reg) {
     auto& animations = reg.getComponents<Animation>();
-    auto& sprites = reg.getComponents<Sprite>();
+    auto& sprites = reg.getComponents<sfml::Sprite>();
     auto cur = NOW;
 
-    // std::cout << cur << " - " << "anim" << std::endl;
     for (auto &&[an, sp] : ECS::Zipper(animations, sprites)) {
         if (CAST_M(cur, V(an).delta) > V(an).getCurrentAnim().frameDELAY) {
             auto rect = V(sp).getTextureRect();
@@ -33,4 +33,5 @@ void animate(ECS::Registry& reg) {
     }
 }
 
-}  // namespace te
+}  // namespace display
+}  // namespace addon

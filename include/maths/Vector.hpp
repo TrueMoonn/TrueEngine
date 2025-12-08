@@ -12,7 +12,6 @@
 
     #include "maths/numeric.hpp"
 
-namespace te {
 namespace mat {
 
 enum axis {
@@ -91,4 +90,3 @@ typedef Vector2<float> Vector2f;
 typedef Vector2<unsigned int> Vector2u;
 
 }  // namespace mat
-}  // namespace te

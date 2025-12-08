@@ -9,8 +9,10 @@
 
     #include <ECS/Registry.hpp>
 
-namespace te {
+namespace addon {
+namespace sfml {
 
 void display_sys(ECS::Registry&);
 
-}  // namespace te
+}  // namespace sfml
+}  // namespace addon

@@ -9,13 +9,21 @@
 
 #include "sfml/events.hpp"
 
-void getKeyboardEvent(std::optional<sf::Event> pevent, te::KeysEvent& keys) {
+namespace addon {
+namespace sfml {
+
+void getKeyboardEvent(std::optional<sf::Event> pevent,
+    te::event::KeysEvent& keys) {
     if (pevent->is<sf::Event::KeyPressed>()) {
-        keys.keys[te::Key(pevent->getIf<sf::Event::KeyPressed>()->code)] = true;
+        keys.keys[te::event::Key(
+            pevent->getIf<sf::Event::KeyPressed>()->code)] = true;
         keys.update = true;
     } else if (pevent->is<sf::Event::KeyReleased>()) {
-        keys.keys[te::Key(
+        keys.keys[te::event::Key(
             pevent->getIf<sf::Event::KeyReleased>()->code)] = false;
         keys.update = true;
     }
 }
+
+}  // namespace sfml
+}  // namespace addon

@@ -10,7 +10,9 @@
 
 #include "physic/systems/movement.hpp"
 
-namespace te {
+namespace addon {
+namespace physic {
+
 
 void movement2_sys(ECS::Registry& reg) {
     auto& positions = reg.getComponents<Position2>();
@@ -26,4 +28,5 @@ void movement2_sys(ECS::Registry& reg) {
     }
 }
 
-}  // namespace te
+}  // namespace physic
+}  // namespace addon

@@ -17,7 +17,8 @@
 
 #define STM(sec) (sec * 1000000)
 
-namespace te {
+namespace addon {
+namespace display {
 
 typedef std::array<size_t, 2> pos;
 
@@ -70,8 +71,8 @@ struct Animation {
     std::size_t curAnim;
     std::size_t curFrame;
 
-    delta_t delta;
+    te::delta_t delta;
 };
 
-}  // namespace te
-
+}  // namespace display
+}  // namespace addon

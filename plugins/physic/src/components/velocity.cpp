@@ -7,7 +7,8 @@
 
 #include "physic/components/velocity.hpp"
 
-namespace te {
+namespace addon {
+namespace physic {
 
 Velocity2::Velocity2(float value_x, float value_y) :
 mat::Vector2f(value_x, value_y)
@@ -23,4 +24,5 @@ Velocity2::Velocity2(const mat::Vector2f& vect) : mat::Vector2f(vect) {}
 // sf::Vector3f(vect)
 // {}
 
-}  // namespace te
+}  // namespace physic
+}  // namespace addon

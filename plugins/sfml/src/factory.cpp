@@ -15,20 +15,23 @@
 #include "sfml/events.hpp"
 #include "sfml/factory.hpp"
 
-Sfml::Sfml(ECS::Registry& reg, te::EventManager& events)
-    : te::APlugin(reg, events) {
+namespace addon {
+namespace sfml {
+
+Sfml::Sfml(ECS::Registry& reg, te::event::EventManager& events)
+    : te::plugin::APlugin(reg, events) {
     events.setPollFunc(&pollEvent);
-    reg.registerComponent<te::Window>();
+    reg.registerComponent<Window>();
     _components["window"] = [](ECS::Registry& reg, const ECS::Entity& e,
         const toml::table&) {
-        reg.createComponent<te::Window>(e);
+        reg.createComponent<Window>(e);
     };
-    reg.registerComponent<te::Drawable>();
+    reg.registerComponent<Drawable>();
     _components["drawable"] = [](ECS::Registry& reg, const ECS::Entity& e,
         const toml::table&) {
-        reg.createComponent<te::Drawable>(e);
+        reg.createComponent<Drawable>(e);
     };
-    reg.registerComponent<te::Sprite>();
+    reg.registerComponent<Sprite>();
     _components["sprite"] = [](ECS::Registry& reg, const ECS::Entity& e,
         const toml::table& params) {
         try {
@@ -41,7 +44,7 @@ Sfml::Sfml(ECS::Registry& reg, te::EventManager& events)
             sf::Vector2f scale = t_scale ?
                 sf::Vector2f{t_scale->at(0).value_or(1.0f) / size.x,
                 t_scale->at(1).value_or(1.0f) / size.y} : sf::Vector2f{1, 1};
-            reg.addComponent(e, te::Sprite(std::move(texture), size, scale));
+            reg.addComponent(e, Sprite(std::move(texture), size, scale));
         } catch (const std::out_of_range&) {
             std::cerr << "error(Plugin-Sprite): key not found" << std::endl;
         } catch (const sf::Exception& e) {
@@ -49,12 +52,15 @@ Sfml::Sfml(ECS::Registry& reg, te::EventManager& events)
         }
     };
     _systems["display"] = [](ECS::Registry& reg) {
-        reg.addSystem(&te::display_sys);
+        reg.addSystem(&display_sys);
     };
     _systems["draw"] = [](ECS::Registry& reg) {
-        reg.addSystem(&te::draw_sys);
+        reg.addSystem(&draw_sys);
     };
     _systems["follow_player"] = [](ECS::Registry& reg) {
-        reg.addSystem(&te::follow_player_sys);
+        reg.addSystem(&follow_player_sys);
     };
 }
+
+}  // namespace sfml
+}  // namespace addon

@@ -11,31 +11,37 @@
 #include "EntitySpec.hpp"
 #include "entity_spec/factory.hpp"
 
-EntitySpec::EntitySpec(ECS::Registry& reg, te::EventManager& events)
-    : te::APlugin(reg, events) {
-    reg.registerComponent<te::Health>();
+namespace addon {
+namespace eSpec {
+
+EntitySpec::EntitySpec(ECS::Registry& reg, te::event::EventManager& events)
+    : te::plugin::APlugin(reg, events) {
+    reg.registerComponent<Health>();
     _components["health"] = [](ECS::Registry& reg, const ECS::Entity& e,
         const toml::table& params) {
         try {
             float health = params["amount"].value_or(0.f);
-            reg.createComponent<te::Health>(e, health);
+            reg.createComponent<Health>(e, health);
         } catch (const std::bad_any_cast& e) {
             std::cerr << "error(Plugin-health): " <<
                 e.what() << std::endl;
         }
     };
-    reg.registerComponent<te::Damage>();
+    reg.registerComponent<Damage>();
     _components["damage"] = [](ECS::Registry& reg, const ECS::Entity& e,
         const toml::table& params) {
         try {
             float damage = params["amount"].value_or(0.f);
-            reg.createComponent<te::Damage>(e, damage);
+            reg.createComponent<Damage>(e, damage);
         } catch (const std::bad_any_cast& e) {
             std::cerr << "error(Plugin-damage): " <<
                 e.what() << std::endl;
         }
     };
     _systems["deal_damage"] = [](ECS::Registry& reg) {
-        reg.addSystem(&te::deal_damage);
+        reg.addSystem(&deal_damage);
     };
 }
+
+}  // namespace eSpec
+}  // namespace addon

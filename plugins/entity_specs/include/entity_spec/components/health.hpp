@@ -9,7 +9,8 @@
 
 #include <cstdint>
 
-namespace te {
+namespace addon {
+namespace eSpec {
 
 struct Health {
     explicit Health(const std::int64_t &);
@@ -18,4 +19,5 @@ struct Health {
     std::int64_t  amount;
 };
 
-}  // namespace te
+}  // namespace eSpec
+}  // namespace addon

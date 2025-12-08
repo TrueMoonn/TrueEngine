@@ -13,11 +13,12 @@
 
 #include "sfml/systems/view_player.hpp"
 
-namespace te {
+namespace addon {
+namespace sfml {
 
 void follow_player_sys(ECS::Registry& reg) {
-    auto& players = reg.getComponents<Player>();
-    auto& positions = reg.getComponents<Position2>();
+    auto& players = reg.getComponents<intact::Player>();
+    auto& positions = reg.getComponents<physic::Position2>();
     auto& windows = reg.getComponents<Window>();
 
     for (auto &&[win] : ECS::Zipper(windows)) {
@@ -28,4 +29,5 @@ void follow_player_sys(ECS::Registry& reg) {
     }
 }
 
-}  // namespace te
+}  // namespace sfml
+}  // namespace addon

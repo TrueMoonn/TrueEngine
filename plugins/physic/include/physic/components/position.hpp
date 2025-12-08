@@ -11,7 +11,8 @@
 
     #include "maths/Vector.hpp"
 
-namespace te {
+namespace addon {
+namespace physic {
 
 struct Position2 : public mat::Vector2f {
     Position2() = default;
@@ -19,4 +20,5 @@ struct Position2 : public mat::Vector2f {
     explicit Position2(const mat::Vector2f&);
 };
 
-}  // namespace te
+}  // namespace physic
+}  // namespace addon
