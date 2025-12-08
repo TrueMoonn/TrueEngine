@@ -53,7 +53,7 @@ TEST(PluginManager, system_loading) {
     ECS::Registry reg;
     pmanager.loadPlugins(reg, "../../../tests/unit_tests/plugins");
 
-    EXPECT_NO_THROW(pmanager.loadSystem("physic"));
+    EXPECT_NO_THROW(pmanager.loadSystem("movement2"));
     EXPECT_THROW(pmanager.loadSystem("wrong"),
         te::PluginManager::NoPluginFound);
 }

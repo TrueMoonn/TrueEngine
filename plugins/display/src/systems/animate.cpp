@@ -14,8 +14,6 @@
 #include "sfml/components/sprite.hpp"
 #include "display/components/animation.hpp"
 
-#define V(a) a.value()
-
 namespace te {
 
 void animate(ECS::Registry& reg) {
