@@ -13,14 +13,15 @@
 
 namespace te {
 
-void PluginManager::loadPlugins(ECS::Registry& reg, const std::string& dir) {
+void PluginManager::loadPlugins(ECS::Registry& reg, EventManager& events,
+    const std::string& dir) {
     for (const auto &file : std::filesystem::directory_iterator(dir)) {
         if (file.path().extension() == ".so") {
             std::string pname = file.path().stem().string();
             _manager.load(file.path());
             try {
                 maker plugin = _manager.access<maker>(pname, ENDPOINT_NAME);
-                _plugins[pname] = plugin(reg);
+                _plugins[pname] = plugin(reg, events);
                 setAccesser(pname);
             } catch (const std::runtime_error& e) {
                 std::cerr << e.what() << std::endl;

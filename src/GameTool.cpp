@@ -13,7 +13,7 @@
 namespace te {
 
 void GameTool::loadPlugins(const std::string& dir) {
-    _pmanager.loadPlugins(_reg, dir);
+    _pmanager.loadPlugins(_reg, _events, dir);
 }
 
 void GameTool::clearPlugins() {
@@ -58,7 +58,9 @@ ECS::Entity GameTool::createMap(std::size_t index, ECS::Entity fentity) {
 }
 
 void GameTool::run(void) {
-    while (1) {
+    while (!_events.isEvent(System::Closed)) {
+        _events.pollEvents(_reg);
+        _events.emit(_reg);
         _reg.runSystems();
     }
 }

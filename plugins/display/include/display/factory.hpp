@@ -15,11 +15,12 @@
 
 class Display : public te::APlugin {
  public:
-    explicit Display(ECS::Registry& reg);
+    explicit Display(ECS::Registry& reg, te::EventManager& events);
 };
 
 extern "C" {
-    std::unique_ptr<Display> get_pfactory(ECS::Registry& reg) {
-        return std::make_unique<Display>(reg);
+    std::unique_ptr<Display> get_pfactory(ECS::Registry& reg,
+        te::EventManager& events) {
+        return std::make_unique<Display>(reg, events);
     }
 }

@@ -12,14 +12,12 @@
 #include <toml++/toml.hpp>
 
 #include "Sfml.hpp"
+#include "sfml/events.hpp"
 #include "sfml/factory.hpp"
 
-Sfml::Sfml(ECS::Registry& reg) : te::APlugin(reg) {
-    reg.registerComponent<te::Event>();
-    _components["event_manager"] = [](ECS::Registry& reg, const ECS::Entity& e,
-        const toml::table& params) {
-        reg.addComponent(e, te::Event());
-    };
+Sfml::Sfml(ECS::Registry& reg, te::EventManager& events)
+    : te::APlugin(reg, events) {
+    events.setPollFunc(&pollEvent);
     reg.registerComponent<te::Window>();
     _components["window"] = [](ECS::Registry& reg, const ECS::Entity& e,
         const toml::table&) {
@@ -49,10 +47,6 @@ Sfml::Sfml(ECS::Registry& reg) : te::APlugin(reg) {
         } catch (const sf::Exception& e) {
             std::cerr << e.what() << std::endl;
         }
-    };
-
-    _systems["events"] = [](ECS::Registry& reg) {
-        reg.addSystem(&te::manageEvent);
     };
     _systems["display"] = [](ECS::Registry& reg) {
         reg.addSystem(&te::display_sys);

@@ -14,9 +14,6 @@
 #include "physic/components/hitbox.hpp"
 #include "physic/hitbox_management.hpp"
 
-
-#define V(a) a.value()
-
 #define isBetWeen(x, a, b) (x >= a && x <= b)
 
 namespace te {

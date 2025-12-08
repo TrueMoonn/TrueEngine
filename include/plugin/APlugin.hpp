@@ -16,6 +16,7 @@
     #include <toml++/toml.hpp>
 
     #include <ECS/Registry.hpp>
+    #include "EventManager.hpp"
 
 namespace te {
 
@@ -33,7 +34,7 @@ typedef std::function<void(ECS::Registry&)> sys_builder;
  */
 class APlugin {
  public:
-    explicit APlugin(ECS::Registry& reg);
+    APlugin(ECS::Registry&, EventManager&);
 
     /**
      * @brief Create a component directly to the ECS::Registry
@@ -69,6 +70,7 @@ class APlugin {
     std::unordered_map<std::string, sys_builder> _systems;
 
  private:
+    std::reference_wrapper<EventManager> _events;
     std::reference_wrapper<ECS::Registry> _reg;
 };
 

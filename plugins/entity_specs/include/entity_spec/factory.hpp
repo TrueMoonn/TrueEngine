@@ -15,11 +15,12 @@
 
 class EntitySpec : public te::APlugin {
  public:
-    explicit EntitySpec(ECS::Registry& reg);
+    explicit EntitySpec(ECS::Registry& reg, te::EventManager& events);
 };
 
 extern "C" {
-    std::unique_ptr<EntitySpec> get_pfactory(ECS::Registry& reg) {
-        return std::make_unique<EntitySpec>(reg);
+    std::unique_ptr<EntitySpec> get_pfactory(ECS::Registry& reg,
+        te::EventManager& events) {
+        return std::make_unique<EntitySpec>(reg, events);
     }
 }
