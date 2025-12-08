@@ -12,6 +12,7 @@
 #include "plugin/PluginManager.hpp"
 
 namespace te {
+namespace plugin {
 
 void PluginManager::loadPlugins(ECS::Registry& reg, EventManager& events,
     const std::string& dir) {
@@ -72,4 +73,5 @@ void PluginManager::setAccesser(const std::string& name) {
         _accesser.insert_or_assign(sys, name);
 }
 
+}  // namespace plugin
 }  // namespace te

@@ -13,7 +13,7 @@
     #include "plugin/APlugin.hpp"
 
 
-class Display : public te::APlugin {
+class Display : public te::plugin::APlugin {
  public:
     explicit Display(ECS::Registry& reg, te::EventManager& events);
 };

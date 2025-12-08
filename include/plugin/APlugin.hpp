@@ -19,6 +19,7 @@
     #include "EventManager.hpp"
 
 namespace te {
+namespace plugin {
 
 typedef std::function<void(
     ECS::Registry&, const ECS::Entity&, const toml::table&)> cmpt_builder;
@@ -74,4 +75,5 @@ class APlugin {
     std::reference_wrapper<ECS::Registry> _reg;
 };
 
+}  // namespace plugin
 }  // namespace te

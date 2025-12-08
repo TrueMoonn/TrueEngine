@@ -92,7 +92,7 @@ class GameTool {
      * 
      * @param f The function to add as system
      */
-    void createSystem(const te::sys_builder &f);
+    void createSystem(const te::plugin::sys_builder &f);
     /**
      * @brief Create a System through a plugin
      * 
@@ -131,7 +131,7 @@ class GameTool {
     void run(void);
 
  private:
-    PluginManager _pmanager;
+    plugin::PluginManager _pmanager;
     ECS::Registry _reg;
 
     MapLoader _mloader;

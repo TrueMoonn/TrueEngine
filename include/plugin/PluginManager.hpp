@@ -23,6 +23,7 @@
     #define ENDPOINT_NAME "get_pfactory"
 
 namespace te {
+namespace plugin {
 
 /**
  * @brief Plugin Manager class for TrueEngine
@@ -102,4 +103,5 @@ class PluginManager {
         std::unique_ptr<APlugin>> _plugins;
 };
 
+}  // namespace plugin
 }  // namespace te

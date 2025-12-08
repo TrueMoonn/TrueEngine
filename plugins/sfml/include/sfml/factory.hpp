@@ -13,7 +13,7 @@
     #include "plugin/APlugin.hpp"
 
 
-class Sfml : public te::APlugin {
+class Sfml : public te::plugin::APlugin {
  public:
     explicit Sfml(ECS::Registry& reg, te::EventManager& events);
 };

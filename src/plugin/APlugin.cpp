@@ -13,6 +13,7 @@
 #include "plugin/APlugin.hpp"
 
 namespace te {
+namespace plugin {
 
 APlugin::APlugin(ECS::Registry& reg, te::EventManager& events) :
     _reg(reg), _events(events), _components(), _systems() {}
@@ -46,5 +47,6 @@ std::vector<std::string> APlugin::getSystems(void) const {
     return names;
 }
 
+}  // namespace plugin
 }  // namespace te
 

@@ -16,6 +16,7 @@
     #include <vector>
 
 namespace te {
+namespace plugin {
 
 class DlManager {
  public:
@@ -45,4 +46,5 @@ class DlManager {
     std::unordered_map<std::string, void *> _handles;
 };
 
+}  // namspace plugin
 }  // namespace te

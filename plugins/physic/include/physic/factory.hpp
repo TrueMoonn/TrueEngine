@@ -13,7 +13,7 @@
     #include "plugin/APlugin.hpp"
 
 
-class Physic : public te::APlugin {
+class Physic : public te::plugin::APlugin {
  public:
     explicit Physic(ECS::Registry& reg, te::EventManager& events);
 };

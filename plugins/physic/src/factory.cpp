@@ -12,7 +12,7 @@
 #include "physic/factory.hpp"
 
 Physic::Physic(ECS::Registry& reg, te::EventManager& events)
-    : te::APlugin(reg, events) {
+    : te::plugin::APlugin(reg, events) {
     reg.registerComponent<te::Position2>();
     _components["position2"] = [](ECS::Registry& reg, const ECS::Entity& e,
         const toml::table& params) {

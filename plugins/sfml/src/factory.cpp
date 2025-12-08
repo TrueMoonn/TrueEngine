@@ -16,7 +16,7 @@
 #include "sfml/factory.hpp"
 
 Sfml::Sfml(ECS::Registry& reg, te::EventManager& events)
-    : te::APlugin(reg, events) {
+    : te::plugin::APlugin(reg, events) {
     events.setPollFunc(&pollEvent);
     reg.registerComponent<te::Window>();
     _components["window"] = [](ECS::Registry& reg, const ECS::Entity& e,

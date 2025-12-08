@@ -13,7 +13,7 @@
     #include "plugin/APlugin.hpp"
 
 
-class EntitySpec : public te::APlugin {
+class EntitySpec : public te::plugin::APlugin {
  public:
     explicit EntitySpec(ECS::Registry& reg, te::EventManager& events);
 };

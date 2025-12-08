@@ -17,7 +17,7 @@
 #include "display/factory.hpp"
 
 Display::Display(ECS::Registry& reg, te::EventManager& events)
-    : te::APlugin(reg, events) {
+    : te::plugin::APlugin(reg, events) {
     reg.registerComponent<te::Animation>();
     _components["animation"] = [](ECS::Registry& reg, const ECS::Entity& e,
         const toml::table& params) {

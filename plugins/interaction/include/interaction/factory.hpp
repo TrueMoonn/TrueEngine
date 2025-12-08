@@ -13,7 +13,7 @@
     #include "plugin/APlugin.hpp"
 
 
-class Interaction : public te::APlugin {
+class Interaction : public te::plugin::APlugin {
  public:
     explicit Interaction(ECS::Registry& reg, te::EventManager& events);
 };

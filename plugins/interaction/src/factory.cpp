@@ -16,7 +16,7 @@
 #include "interaction/factory.hpp"
 
 Interaction::Interaction(ECS::Registry& reg, te::EventManager& events)
-    : te::APlugin(reg, events) {
+    : te::plugin::APlugin(reg, events) {
     reg.registerComponent<te::Player>();
     _components["player"] = [](ECS::Registry& reg, const ECS::Entity& e,
         const toml::table& params) {
