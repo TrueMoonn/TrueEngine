@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include <cstdint>
+#include <unordered_map>
 
 #include <ECS/Registry.hpp>
 #include <Network/Client.hpp>
@@ -37,11 +38,22 @@ class GameClient {
     /**
      * @brief Callback type: called when data is received from the server
      * 
-     * The game registers ONE callback that receives ALL data.
-     * It's up to the game to dispatch based on packet type.
+     * The game registers callbacks for each type of packet.
      */
     using PacketCallback = std::function<void(const std::vector<uint8_t>& data)>;
-    void setPacketCallback(PacketCallback callback);
+
+    /**
+     * @brief Register a callback for a specific packet type
+     * @param key The packet type identifier
+     * @param callback Function to call when this packet type is received
+     */
+    void registerPacketHandler(const uint32_t& key, PacketCallback callback);
+
+    /**
+     * @brief Unregister a callback for a specific packet type
+     * @param key The packet type identifier
+     */
+    void unregisterPacketHandler(const uint32_t& key);
 
     /**
      * @brief Callback: called when connection is established
@@ -68,7 +80,7 @@ class GameClient {
     bool _connected;
 
     // Game callbacks
-    PacketCallback _on_packet_received;
+    std::unordered_map<uint32_t, PacketCallback> _on_packet_received_map;
     ConnectCallback _on_connect;
     DisconnectCallback _on_disconnect;
 };

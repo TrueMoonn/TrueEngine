@@ -92,6 +92,14 @@ void GameServer::setPacketCallback(PacketCallback callback) {
     _on_packet_received = callback;
 }
 
+void GameServer::registerPacketHandler(const uint32_t& key, PacketCallback callback) {
+    _on_packet_received_map[key] = callback;
+}
+
+void GameServer::unregisterPacketHandler(const uint32_t& key) {
+    _on_packet_received_map.erase(key);
+}
+
 void GameServer::setClientConnectCallback(ClientConnectCallback callback) {
     _on_client_connect = callback;
 }

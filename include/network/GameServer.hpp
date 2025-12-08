@@ -50,6 +50,19 @@ class GameServer {
     void setPacketCallback(PacketCallback callback);
 
     /**
+     * @brief Register a callback for a specific packet type
+     * @param key The packet type identifier
+     * @param callback Function to call when this packet type is received
+     */
+    void registerPacketHandler(const uint32_t& key, PacketCallback callback);
+
+    /**
+     * @brief Unregister a callback for a specific packet type
+     * @param key The packet type identifier
+     */
+    void unregisterPacketHandler(const uint32_t& key);
+
+    /**
      * @brief Callback: called when a client connects
      */
     using ClientConnectCallback = std::function<void(const Address& client)>;
@@ -84,6 +97,7 @@ class GameServer {
 
     // Game callbacks
     PacketCallback _on_packet_received;
+    std::unordered_map<uint32_t, PacketCallback> _on_packet_received_map;
     ClientConnectCallback _on_client_connect;
     ClientDisconnectCallback _on_client_disconnect;
 
