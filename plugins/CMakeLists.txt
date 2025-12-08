@@ -22,6 +22,15 @@ execute_process(
     "
 )
 
+# DISPLAY
+add_subdirectory(${PROJECT_SOURCE_DIR}/display)
+execute_process(
+    COMMAND bash -c "
+    rm -rf ../include/display ../include/Display.hpp
+    cp -R ../plugins/display/include/. ../include
+    "
+)
+
 # ENTITY SPEC
 add_subdirectory(${PROJECT_SOURCE_DIR}/entity_specs)
 execute_process(
