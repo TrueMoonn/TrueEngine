@@ -31,7 +31,8 @@ Interaction::Interaction(ECS::Registry& reg, te::event::EventManager& events)
                 e.what() << std::endl;
         }
     };
-    events.addSubscription(te::event::System::KeyPressed,[](ECS::Registry& reg,
+    events.addSubscription(te::event::System::KeyPressed,
+        [](ECS::Registry& reg,
         const te::event::EventManager::eventContent& content){
         auto& event = std::get<te::event::KeysEvent>(content);
         auto& velocities = reg.getComponents<physic::Velocity2>();

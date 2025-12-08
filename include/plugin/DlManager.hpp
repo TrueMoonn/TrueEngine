@@ -46,5 +46,5 @@ class DlManager {
     std::unordered_map<std::string, void *> _handles;
 };
 
-}  // namspace plugin
+}  // namespace plugin
 }  // namespace te

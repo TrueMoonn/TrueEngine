@@ -185,5 +185,5 @@ struct Events {
     }
 };
 
-} // namespace event
+}  // namespace event
 }  // namespace te

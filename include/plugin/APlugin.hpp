@@ -35,7 +35,7 @@ typedef std::function<void(ECS::Registry&)> sys_builder;
  */
 class APlugin {
  public:
-    APlugin(ECS::Registry&,event::EventManager&);
+    APlugin(ECS::Registry&, event::EventManager&);
 
     /**
      * @brief Create a component directly to the ECS::Registry
