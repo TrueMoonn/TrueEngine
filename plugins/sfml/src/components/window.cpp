@@ -9,7 +9,8 @@
 
 #include "sfml/components/window.hpp"
 
-namespace te {
+namespace addon {
+namespace sfml {
 
 Window::Window() : sf::RenderWindow(DEFAULT_VIDEO_MODE, DEFAULT_WIN_NAME) {
     setFramerateLimit(DEFAULT_FRAME_LIMIT);
@@ -27,4 +28,5 @@ Window::Window(Window&& win) : sf::RenderWindow(std::move(win)),
     setFramerateLimit(DEFAULT_FRAME_LIMIT);
 }
 
-}  // namespace te
+}  // namespace sfml
+}  // namespace addon

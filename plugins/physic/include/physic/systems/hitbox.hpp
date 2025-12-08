@@ -9,8 +9,10 @@
 
     #include <ECS/Registry.hpp>
 
-namespace te {
+namespace addon {
+namespace physic {
 
 void hitbox2_sys(ECS::Registry& reg);
 
-}  // namespace te
+}  // namespace physic
+}  // namespace addon

@@ -9,6 +9,9 @@
 
 #include "sfml/events.hpp"
 
+namespace addon {
+namespace sfml {
+
 void getKeyboardEvent(std::optional<sf::Event> pevent, te::KeysEvent& keys) {
     if (pevent->is<sf::Event::KeyPressed>()) {
         keys.keys[te::Key(pevent->getIf<sf::Event::KeyPressed>()->code)] = true;
@@ -19,3 +22,6 @@ void getKeyboardEvent(std::optional<sf::Event> pevent, te::KeysEvent& keys) {
         keys.update = true;
     }
 }
+
+}  // namespace sfml
+}  // namespace addon

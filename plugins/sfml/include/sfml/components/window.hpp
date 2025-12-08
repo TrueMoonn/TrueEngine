@@ -10,7 +10,8 @@
     #include <string>
     #include <SFML/Graphics/RenderWindow.hpp>
 
-namespace te {
+namespace addon {
+namespace sfml {
 
 #define DEFAULT_FRAME_LIMIT 60
 #define DEFAULT_WIN_NAME "Deepest Dungeon"
@@ -24,4 +25,5 @@ struct Window : public sf::RenderWindow {
     std::string name;
 };
 
-}  // namespace te
+}  // namespace sfml
+}  // namespace addon

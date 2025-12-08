@@ -10,7 +10,8 @@
     #include <SFML/Graphics/Sprite.hpp>
     #include <SFML/Graphics/Texture.hpp>
 
-namespace te {
+namespace addon {
+namespace sfml {
 
 struct Sprite : public sf::Sprite {
     explicit Sprite(sf::Texture&& text,
@@ -22,4 +23,5 @@ struct Sprite : public sf::Sprite {
     const sf::Texture texture;
 };
 
-}  // namespace te
+}  // namespace sfml
+}  // namespace addon

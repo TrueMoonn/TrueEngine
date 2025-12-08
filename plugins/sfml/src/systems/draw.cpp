@@ -14,12 +14,13 @@
 
 #include "sfml/systems/draw.hpp"
 
-namespace te {
+namespace addon {
+namespace sfml {
 
 void draw_sys(ECS::Registry& reg) {
     auto& sprites = reg.getComponents<Sprite>();
     auto& drawables = reg.getComponents<Drawable>();
-    auto& positions = reg.getComponents<Position2>();
+    auto& positions = reg.getComponents<physic::Position2>();
     auto& windows = reg.getComponents<Window>();
 
     for (auto &&[win] : ECS::Zipper(windows)) {
@@ -31,4 +32,5 @@ void draw_sys(ECS::Registry& reg) {
     }
 }
 
-}  // namespace te
+}  // namespace sfml
+}  // namespace addon

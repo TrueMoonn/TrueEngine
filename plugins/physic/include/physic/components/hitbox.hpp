@@ -9,7 +9,8 @@
 
     #include "maths/Vector.hpp"
 
-namespace te {
+namespace addon {
+namespace physic {
 
 struct Hitbox {
     Hitbox(const mat::Vector2f& position, const mat::Vector2f& size);
@@ -19,4 +20,5 @@ struct Hitbox {
     mat::Vector2f size;
 };
 
-}  // namespace te
+}  // namespace physic
+}  // namespace addon

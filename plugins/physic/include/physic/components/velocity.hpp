@@ -9,7 +9,8 @@
 
     #include "maths/Vector.hpp"
 
-namespace te {
+namespace addon {
+namespace physic {
 
 struct Velocity2 : public mat::Vector2f {
     Velocity2() = default;
@@ -17,4 +18,5 @@ struct Velocity2 : public mat::Vector2f {
     explicit Velocity2(const mat::Vector2f&);
 };
 
-}  // namespace te
+}  // namespace physic
+}  // namespace addon

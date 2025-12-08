@@ -11,7 +11,7 @@
 
 #include "plugin/DlManager.hpp"
 
-class test_DlManager : public te::DlManager {
+class test_DlManager : public te::plugin::DlManager {
  public:
     std::unordered_map<std::string, void *> get_handlers() {
         return _handles;

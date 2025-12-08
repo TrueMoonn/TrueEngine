@@ -10,8 +10,11 @@
 
 #include "sfml/events.hpp"
 
+namespace addon {
+namespace sfml {
+
 void pollEvent(te::Events& events, ECS::Registry& reg) {
-    auto& windows = reg.getComponents<te::Window>();
+    auto& windows = reg.getComponents<Window>();
 
     for (auto&& [win] : ECS::Zipper(windows)) {
         while (std::optional<sf::Event> pevent = win.value().pollEvent()) {
@@ -21,3 +24,6 @@ void pollEvent(te::Events& events, ECS::Registry& reg) {
         }
     }
 }
+
+}  // namespace sfml
+}  // namespace addon

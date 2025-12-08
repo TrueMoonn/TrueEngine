@@ -15,7 +15,7 @@ add_library(${PROJECT_NAME} SHARED
 
     ${PROJECT_SOURCE_DIR}/src/hitbox_management.cpp
 )
-add_library(plugins::physic ALIAS ${PROJECT_NAME})
+add_library(addon::physic ALIAS ${PROJECT_NAME})
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC

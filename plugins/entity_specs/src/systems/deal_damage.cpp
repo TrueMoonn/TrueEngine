@@ -14,16 +14,17 @@
 
 #include "physic/hitbox_management.hpp"
 
-namespace te {
+namespace addon {
+namespace eSpec {
 
 void deal_damage(ECS::Registry& reg) {
-    auto &hb = reg.getComponents<Hitbox>();
-    auto &ps = reg.getComponents<Position2>();
+    auto &hb = reg.getComponents<physic::Hitbox>();
+    auto &ps = reg.getComponents<physic::Position2>();
     auto &health = reg.getComponents<Health>();
     auto &damage = reg.getComponents<Damage>();
 
     for (auto &&[id, h, p, hp] : ECS::IndexedZipper(hb, ps, health)) {
-        for (auto &hit : entity_hit(reg, id)) {
+        for (auto &hit : physic::entity_hit(reg, id)) {
             if (!damage[hit])
                 continue;
             hp.value().reduceSafely(damage[hit].value().amount);
@@ -35,4 +36,5 @@ void deal_damage(ECS::Registry& reg) {
     }
 }
 
-}  // namespace te
+}  // namespace eSpec
+}  // namespace addon

@@ -16,7 +16,7 @@
 #include "physic/components/position.hpp"
 
 TEST(PluginManager, load_plugins) {
-    te::PluginManager pmanager;
+    te::plugin::PluginManager pmanager;
     ECS::Registry reg;
     te::EventManager ev;
     pmanager.loadPlugins(reg, ev, "../../../tests/unit_tests/plugins");
@@ -28,7 +28,7 @@ TEST(PluginManager, load_plugins) {
 }
 
 TEST(PluginManager, clear) {
-    te::PluginManager pmanager;
+    te::plugin::PluginManager pmanager;
     ECS::Registry reg;
     te::EventManager ev;
     pmanager.loadPlugins(reg, ev, "../../../tests/unit_tests/plugins");
@@ -38,7 +38,7 @@ TEST(PluginManager, clear) {
 }
 
 TEST(PluginManager, component_loading) {
-    te::PluginManager pmanager;
+    te::plugin::PluginManager pmanager;
     ECS::Registry reg;
     te::EventManager ev;
     pmanager.loadPlugins(reg, ev, "../../../tests/unit_tests/plugins");
@@ -46,18 +46,18 @@ TEST(PluginManager, component_loading) {
     toml::table table =
         toml::parse_file("../../../tests/unit_tests/configs/position.toml");
     EXPECT_NO_THROW(pmanager.loadComponent("position2", 0, table));
-    EXPECT_EQ(reg.getComponents<te::Position2>().size(), 1);
+    EXPECT_EQ(reg.getComponents<addon::physic::Position2>().size(), 1);
     EXPECT_THROW(pmanager.loadComponent("wrong", 0, {}),
-        te::PluginManager::NoPluginFound);
+        te::plugin::PluginManager::NoPluginFound);
 }
 
 TEST(PluginManager, system_loading) {
-    te::PluginManager pmanager;
+    te::plugin::PluginManager pmanager;
     ECS::Registry reg;
     te::EventManager ev;
     pmanager.loadPlugins(reg, ev, "../../../tests/unit_tests/plugins");
 
     EXPECT_NO_THROW(pmanager.loadSystem("movement2"));
     EXPECT_THROW(pmanager.loadSystem("wrong"),
-        te::PluginManager::NoPluginFound);
+        te::plugin::PluginManager::NoPluginFound);
 }

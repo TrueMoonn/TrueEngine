@@ -7,10 +7,12 @@
 
 #include "entity_spec/components/damage.hpp"
 
-namespace te {
+namespace addon {
+namespace eSpec {
 
 Damage::Damage(const std::int64_t &amount) :
 amount(amount)
 {}
 
-}  // namespace te
+}  // namespace eSpec
+}  // namespace addon

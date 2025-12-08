@@ -7,7 +7,8 @@
 
 #include "physic/components/position.hpp"
 
-namespace te {
+namespace addon {
+namespace physic {
 
 Position2::Position2(float value_x, float value_y) :
     mat::Vector2f(value_x, value_y) {}
@@ -22,4 +23,5 @@ Position2::Position2(const mat::Vector2f& vect) : mat::Vector2f(vect) {}
 // sf::Vector3f(vect)
 // {}
 
-}  // namespace te
+}  // namespace physic
+}  // namespace addon

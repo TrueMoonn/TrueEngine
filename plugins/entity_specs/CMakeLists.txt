@@ -7,7 +7,7 @@ add_library(${PROJECT_NAME} SHARED
     ${PROJECT_SOURCE_DIR}/src/components/health.cpp
     ${PROJECT_SOURCE_DIR}/src/systems/deal_damage.cpp
 )
-add_library(plugins::entity_spec ALIAS ${PROJECT_NAME})
+add_library(addon::entity_spec ALIAS ${PROJECT_NAME})
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC

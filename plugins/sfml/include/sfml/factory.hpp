@@ -12,15 +12,20 @@
     #include <ECS/Registry.hpp>
     #include "plugin/APlugin.hpp"
 
+namespace addon {
+namespace sfml {
 
 class Sfml : public te::plugin::APlugin {
  public:
     explicit Sfml(ECS::Registry& reg, te::EventManager& events);
 };
 
+}  // namespace sfml
+}  // namespace addon
+
 extern "C" {
-    std::unique_ptr<Sfml> get_pfactory(ECS::Registry& reg,
+    std::unique_ptr<addon::sfml::Sfml> get_pfactory(ECS::Registry& reg,
         te::EventManager& events) {
-        return std::make_unique<Sfml>(reg, events);
+        return std::make_unique<addon::sfml::Sfml>(reg, events);
     }
 }
