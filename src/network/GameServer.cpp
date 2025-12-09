@@ -82,11 +82,12 @@ bool GameServer::sendTo(const net::Address& client, const std::vector<uint8_t>& 
     }
 }
 
-void GameServer::broadcastToAll(const std::vector<uint8_t>& data, const net::Address* exclude) {
+void GameServer::broadcastToAll(const std::vector<uint8_t>& data, const std::optional<net::Address>& exclude) {
     if (!_running || data.empty()) return;
 
     for (const auto& [addr, info] : _clients) {
-        if (exclude && addr == *exclude) continue;
+        if (exclude.has_value() && addr == exclude.value())
+            continue;
         sendTo(addr, data);
     }
 }
@@ -208,18 +209,20 @@ void GameServer::updateTCP(float delta_time) {
         std::vector<int> ready_fds = _server->tcpReceive(0);
         for (int fd : ready_fds) {
             // Find the address for this fd
-            net::Address* addr_ptr = nullptr;
+            std::optional<net::Address> client_addr_opt;
             for (const auto& [addr, client_fd] : _address_to_fd) {
                 if (client_fd == fd) {
-                    addr_ptr = const_cast<net::Address*>(&addr);
+                    client_addr_opt = addr;
                     break;
                 }
             }
-            if (!addr_ptr)
+            if (!client_addr_opt.has_value())
                 continue;
-            auto packets = _server->unpack(*addr_ptr, -1);
+
+            const net::Address& client_address = client_addr_opt.value();
+            auto packets = _server->unpack(client_address, -1);
             if (!packets.empty()) {
-                auto it = _clients.find(*addr_ptr);
+                auto it = _clients.find(client_address);
                 if (it != _clients.end()) {
                     it->second.last_packet_time = current_time;
                 }
@@ -230,11 +233,11 @@ void GameServer::updateTCP(float delta_time) {
                     std::vector<uint8_t> payload(packet_data.begin() + 1, packet_data.end());
                     auto handler_it = _on_packet_received_map.find(packet_code);
                     if (handler_it != _on_packet_received_map.end()) {
-                        handler_it->second(payload, *addr_ptr);
+                        handler_it->second(payload, client_address);
                     } else {
                         std::cerr << "[GameServer] No handler registered for packet code: "
                                   << static_cast<int>(packet_code) << " from "
-                                  << addr_ptr->getIP() << ":" << addr_ptr->getPort() << std::endl;
+                                  << client_address.getIP() << ":" << client_address.getPort() << std::endl;
                     }
                 }
             }

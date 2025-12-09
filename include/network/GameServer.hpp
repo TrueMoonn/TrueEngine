@@ -38,7 +38,7 @@ class GameServer {
     /**
      * @brief Broadcast raw data to all clients (optionally exclude one)
      */
-    void broadcastToAll(const std::vector<uint8_t>& data, const net::Address* exclude = nullptr);
+    void broadcastToAll(const std::vector<uint8_t>& data, const std::optional<net::Address>& exclude = std::nullopt);
 
     /**
      * @brief Receive data from clients (calls udpReceive or tcpReceive based on protocol)
