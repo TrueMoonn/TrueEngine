@@ -13,9 +13,9 @@ include(FetchContent)
 message("\nUpdating project header from ECS and Network...")
 execute_process (
     COMMAND bash -c "
-        rm -rf ../include/ECS && rm -rf ../include/Network
-        cp -R ../ECS/include/. ../include/
-        cp -R ../Network/include/. ../include/
+        rm -rf ${PROJECT_SOURCE_DIR}/include/ECS && rm -rf ${PROJECT_SOURCE_DIR}/include/Network
+        cp -R ${PROJECT_SOURCE_DIR}/ECS/include/. ${PROJECT_SOURCE_DIR}/include/
+        cp -R ${PROJECT_SOURCE_DIR}/Network/include/. ${PROJECT_SOURCE_DIR}/include/
     "
 )
 message("Updating project header from ECS and Network... DONE\n")
