@@ -16,7 +16,7 @@
     #include <ECS/Registry.hpp>
 
     #include "event/EventManager.hpp"
-    #include "config/map_loader.hpp"
+    #include "config/ConfigParser.hpp"
     #include "plugin/PluginManager.hpp"
 
     #define DEFAULT_PLUGIN_RPATH "./plugins/"
@@ -113,7 +113,8 @@ class GameTool {
      * @param path Path to the file
      * @return The index at wich the MapContent has been stored
      */
-    std::size_t loadMapFile(const std::string& path);
+    std::size_t loadFile(ConfigParser::ContentType type,
+            const std::string& path);
     /**
      * @brief Create entities based on MapContent loaded
      * 
@@ -134,8 +135,7 @@ class GameTool {
     plugin::PluginManager _pmanager;
     ECS::Registry _reg;
 
-    MapLoader _mloader;
-    std::vector<MapLoader::MapContent> _maps;
+    ConfigParser _configs;
     ECS::Entity createEntitiesFromContent(MapLoader::MapContent& content,
         const ECS::Entity& fentity);
     void createEntity(const ECS::Entity& e,

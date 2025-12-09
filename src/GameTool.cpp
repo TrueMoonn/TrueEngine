@@ -45,16 +45,15 @@ void GameTool::removeEntity(const ECS::Entity& e) {
     _reg.killEntity(e);
 }
 
-std::size_t GameTool::loadMapFile(const std::string& path) {
-    _mloader.loadMap(path);
-    _maps.push_back(_mloader.getContent());
-    return _maps.size() - 1;
+std::size_t GameTool::loadFile(ConfigParser::ContentType type,
+    const std::string& path) {
+    return _configs.parseFile(type, path);
 }
 
-ECS::Entity GameTool::createMap(std::size_t index, ECS::Entity fentity) {
-    if (index >= _maps.size())
-        return 0;
-    return createEntitiesFromContent(_maps[index], fentity);
+ECS::Entity GameTool::createMap(ECS::Entity fentity, std::size_t config,
+    std::size_t map) {
+    return createEntitiesFromContent(fentity, _configs.getMap(map),
+        _configs.getConfig(config));
 }
 
 void GameTool::run(void) {
@@ -65,18 +64,18 @@ void GameTool::run(void) {
     }
 }
 
-ECS::Entity GameTool::createEntitiesFromContent(MapLoader::MapContent& content,
-    const ECS::Entity& fentity) {
+ECS::Entity GameTool::createEntitiesFromContent(const ECS::Entity& fentity,
+    ConfigParser::MapContent& map) {
     ECS::Entity ientity = 0;
-    for (std::size_t layer = 0; layer < content.layer_max; ++layer) {
-        for (std::size_t y = 0; y < content.map.size(); ++y) {
-            for (std::size_t x = 0; x < content.map[y].size(); ++x) {
-                if (layer < content.map[y][x].size()) {
+    for (std::size_t layer = 0; layer < map.layer_max; ++layer) {
+        for (std::size_t y = 0; y < map.map.size(); ++y) {
+            for (std::size_t x = 0; x < map.map[y].size(); ++x) {
+                if (layer < map.map[y][x].size()) {
                     toml::table pos;
-                    pos.insert("x", static_cast<float>(x * content.tilex));
-                    pos.insert("y", static_cast<float>(y * content.tiley));
+                    pos.insert("x", static_cast<float>(x * map.tilex));
+                    pos.insert("y", static_cast<float>(y * map.tiley));
                     createEntity(fentity + ientity, pos,
-                        content.params.at(content.map[y][x][layer]));
+                        map.params.at(map.map[y][x][layer]));
                     ientity += 1;
                 }
             }
