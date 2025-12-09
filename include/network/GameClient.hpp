@@ -36,6 +36,13 @@ class GameClient {
     bool send(const std::vector<uint8_t>& data);
 
     /**
+     * @brief Receive data from server (calls udpReceive or tcpReceive based on protocol)
+     * @param timeout Timeout in milliseconds (0 for non-blocking)
+     * @param maxInputs Maximum number of packets to receive (UDP only)
+     */
+    void receive(int timeout = 0, int maxInputs = 10);
+
+    /**
      * @brief Callback type: called when data is received from the server
      * 
      * The game registers callbacks for each type of packet.
@@ -69,14 +76,14 @@ class GameClient {
 
     // Client Info
     bool isConnected() const;
-    const Address& getServerAddress() const { return _server_address; }
+    const net::Address& getServerAddress() const { return _server_address; }
     ECS::Registry& getECS() { return _ecs; }
 
  private:
     ECS::Registry& _ecs;
-    std::unique_ptr<Client> _client;
-    SocketType _protocol_type;
-    Address _server_address;
+    std::unique_ptr<net::Client> _client;
+    net::SocketType _protocol_type;
+    net::Address _server_address;
     bool _connected;
 
     // Game callbacks

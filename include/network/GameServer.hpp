@@ -33,12 +33,20 @@ class GameServer {
     /**
      * @brief Send raw data to a specific client
      */
-    bool sendTo(const Address& client, const std::vector<uint8_t>& data);
+    bool sendTo(const net::Address& client, const std::vector<uint8_t>& data);
 
     /**
      * @brief Broadcast raw data to all clients (optionally exclude one)
      */
-    void broadcastToAll(const std::vector<uint8_t>& data, const Address* exclude = nullptr);
+    void broadcastToAll(const std::vector<uint8_t>& data, const net::Address* exclude = nullptr);
+
+    /**
+     * @brief Receive data from clients (calls udpReceive or tcpReceive based on protocol)
+     * This is a convenience wrapper that handles protocol-specific receive logic
+     * @param timeout Timeout in milliseconds (0 for non-blocking)
+     * @param maxInputs Maximum number of packets to receive (UDP only)
+     */
+    void receive(int timeout = 0, int maxInputs = 100);
 
     /**
      * @brief Callback type: called when data is received from a client
@@ -46,7 +54,7 @@ class GameServer {
      * The game registers ONE callback that receives ALL data.
      * It's up to the game to dispatch based on packet type.
      */
-    using PacketCallback = std::function<void(const std::vector<uint8_t>& data, const Address& sender)>;
+    using PacketCallback = std::function<void(const std::vector<uint8_t>& data, const net::Address& sender)>;
     void setPacketCallback(PacketCallback callback);
 
     /**
@@ -65,35 +73,35 @@ class GameServer {
     /**
      * @brief Callback: called when a client connects
      */
-    using ClientConnectCallback = std::function<void(const Address& client)>;
+    using ClientConnectCallback = std::function<void(const net::Address& client)>;
     void setClientConnectCallback(ClientConnectCallback callback);
 
     /**
      * @brief Callback: called when a client disconnects or times out
      */
-    using ClientDisconnectCallback = std::function<void(const Address& client)>;
+    using ClientDisconnectCallback = std::function<void(const net::Address& client)>;
     void setClientDisconnectCallback(ClientDisconnectCallback callback);
 
     // Server Info
     bool isRunning() const;
     size_t getClientCount() const;
-    std::vector<Address> getConnectedClients() const;
+    std::vector<net::Address> getConnectedClients() const;
     ECS::Registry& getECS() { return _ecs; }
 
  private:
     ECS::Registry& _ecs;
-    std::unique_ptr<Server> _server;
-    SocketType _protocol_type;
+    std::unique_ptr<net::Server> _server;
+    net::SocketType _protocol_type;
     uint16_t _port;
     bool _running;
 
     // Client tracking
     struct ClientInfo {
-        Address address;
+        net::Address address;
         uint32_t last_packet_time;
     };
-    std::unordered_map<Address, ClientInfo> _clients;
-    std::unordered_map<Address, int> _address_to_fd;  // For TCP
+    std::unordered_map<net::Address, ClientInfo> _clients;
+    std::unordered_map<net::Address, int> _address_to_fd;  // For TCP
 
     // Game callbacks
     PacketCallback _on_packet_received;

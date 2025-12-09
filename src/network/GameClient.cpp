@@ -13,9 +13,9 @@ namespace network {
 
 GameClient::GameClient(ECS::Registry& ecs, const std::string& protocol)
     : _ecs(ecs)
-    , _protocol_type(protocol == "TCP" ? SocketType::TCP : SocketType::UDP)
+    , _protocol_type(protocol == "TCP" ? net::SocketType::TCP : net::SocketType::UDP)
     , _connected(false) {
-    _client = std::make_unique<Client>(protocol);
+    _client = std::make_unique<net::Client>(protocol);
 }
 
 GameClient::~GameClient() {
@@ -25,7 +25,7 @@ GameClient::~GameClient() {
 }
 
 bool GameClient::connect(const std::string& server_ip, uint16_t port) {
-    _server_address = Address(server_ip, port);
+    _server_address = net::Address(server_ip, port);
     try {
         if (_client->connect(server_ip, port)) {
             _client->setNonBlocking(true);
@@ -62,7 +62,11 @@ void GameClient::update(float delta_time) {
     if (!_connected)
         return;
     try {
-        auto packets = _client->receiveAll();
+        // Receive data from server
+        receive(0, 10);
+
+        // Extract and process packets from buffer
+        auto packets = _client->extractPacketsFromBuffer();
         for (const auto& packet_data : packets) {
             if (packet_data.empty())
                 continue;
@@ -86,8 +90,19 @@ bool GameClient::send(const std::vector<uint8_t>& data) {
     }
 }
 
-void GameClient::setPacketCallback(PacketCallback callback) {
-    _on_packet_received = callback;
+void GameClient::receive(int timeout, int maxInputs) {
+    if (!_connected)
+        return;
+
+    try {
+        if (_protocol_type == net::SocketType::UDP) {
+            _client->udpReceive(timeout, maxInputs);
+        } else {
+            _client->tcpReceive(timeout);
+        }
+    } catch (const std::exception& e) {
+        std::cerr << "[GameClient] Receive failed: " << e.what() << std::endl;
+    }
 }
 
 void GameClient::registerPacketHandler(const uint32_t& key, PacketCallback callback) {
