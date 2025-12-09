@@ -22,7 +22,8 @@ namespace network {
  */
 class GameClient {
  public:
-    explicit GameClient(ECS::Registry& ecs, const std::string& protocol = "UDP");
+    explicit GameClient(ECS::Registry& ecs,
+         const std::string& protocol = "UDP");
     ~GameClient();
 
     bool connect(const std::string& server_ip, uint16_t port);
@@ -47,7 +48,8 @@ class GameClient {
      * 
      * The game registers callbacks for each type of packet.
      */
-    using PacketCallback = std::function<void(const std::vector<uint8_t>& data)>;
+    using PacketCallback =
+      std::function<void(const std::vector<uint8_t>& data)>;
 
     /**
      * @brief Register a callback for a specific packet type

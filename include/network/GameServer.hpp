@@ -22,7 +22,8 @@ namespace network {
  */
 class GameServer {
  public:
-    GameServer(ECS::Registry& ecs, uint16_t port, const std::string& protocol = "UDP");
+    GameServer(ECS::Registry& ecs, uint16_t port,
+        const std::string& protocol = "UDP");
     ~GameServer();
 
     bool start();
@@ -38,7 +39,8 @@ class GameServer {
     /**
      * @brief Broadcast raw data to all clients (optionally exclude one)
      */
-    void broadcastToAll(const std::vector<uint8_t>& data, const std::optional<net::Address>& exclude = std::nullopt);
+    void broadcastToAll(const std::vector<uint8_t>& data,
+        const std::optional<net::Address>& exclude = std::nullopt);
 
     /**
      * @brief Receive data from clients (calls udpReceive or tcpReceive based on protocol)
@@ -54,7 +56,8 @@ class GameServer {
      * The game registers ONE callback that receives ALL data.
      * It's up to the game to dispatch based on packet type.
      */
-    using PacketCallback = std::function<void(const std::vector<uint8_t>& data, const net::Address& sender)>;
+    using PacketCallback = std::function<void(const std::vector<uint8_t>& data,
+        const net::Address& sender)>;
 
     /**
      * @brief Register a callback for a specific packet type
@@ -72,13 +75,15 @@ class GameServer {
     /**
      * @brief Callback: called when a client connects
      */
-    using ClientConnectCallback = std::function<void(const net::Address& client)>;
+    using ClientConnectCallback =
+        std::function<void(const net::Address& client)>;
     void setClientConnectCallback(ClientConnectCallback callback);
 
     /**
      * @brief Callback: called when a client disconnects or times out
      */
-    using ClientDisconnectCallback = std::function<void(const net::Address& client)>;
+    using ClientDisconnectCallback =
+        std::function<void(const net::Address& client)>;
     void setClientDisconnectCallback(ClientDisconnectCallback callback);
 
     // Server Info

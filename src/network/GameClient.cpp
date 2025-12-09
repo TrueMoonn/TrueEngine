@@ -1,19 +1,17 @@
-/*
-** EPITECH PROJECT, 2025
-** TrueEngine
-** File description:
-** GameClient.cpp - Generic game client implementation
-*/
-
-#include "network/GameClient.hpp"
 #include <iostream>
+#include <memory>
+#include <string>
+#include <vector>
+#include "network/GameClient.hpp"
+
 
 namespace te {
 namespace network {
 
 GameClient::GameClient(ECS::Registry& ecs, const std::string& protocol)
     : _ecs(ecs)
-    , _protocol_type(protocol == "TCP" ? net::SocketType::TCP : net::SocketType::UDP)
+    , _protocol_type(protocol == "TCP" ?
+        net::SocketType::TCP : net::SocketType::UDP)
     , _connected(false) {
     _client = std::make_unique<net::Client>(protocol);
 }
@@ -30,7 +28,8 @@ bool GameClient::connect(const std::string& server_ip, uint16_t port) {
         if (_client->connect(server_ip, port)) {
             _client->setNonBlocking(true);
             _connected = true;
-            std::cout << "[GameClient] Connected to " << server_ip << ":" << port << std::endl;
+            std::cout << "[GameClient] Connected to " <<
+                server_ip << ":" << port << std::endl;
 
             if (_on_connect) {
                 _on_connect();
@@ -39,7 +38,9 @@ bool GameClient::connect(const std::string& server_ip, uint16_t port) {
             return true;
         }
     } catch (const std::exception& e) {
-        std::cerr << "[GameClient] Connection failed: " << e.what() << std::endl;
+        std::cerr <<
+            "[GameClient] Connection failed: "
+            << e.what() << std::endl;
     }
     return false;
 }
@@ -71,13 +72,16 @@ void GameClient::update(float delta_time) {
             if (packet_data.empty())
                 continue;
             uint8_t packet_code = packet_data[0];
-            std::vector<uint8_t> payload(packet_data.begin() + 1, packet_data.end());
+            std::vector<uint8_t> payload(packet_data.begin() + 1,
+                packet_data.end());
             auto it = _on_packet_received_map.find(packet_code);
             if (it != _on_packet_received_map.end()) {
                 it->second(payload);
             } else {
-                std::cerr << "[GameClient] No handler registered for packet code: "
-                          << static_cast<int>(packet_code) << std::endl;
+                std::cerr <<
+                    "[GameClient] No handler registered for packet code: "
+                    << static_cast<int>(packet_code)
+                    << std::endl;
             }
         }
     } catch (const std::exception& e) {

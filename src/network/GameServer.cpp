@@ -10,9 +10,11 @@
 namespace te {
 namespace network {
 
-GameServer::GameServer(ECS::Registry& ecs, uint16_t port, const std::string& protocol)
+GameServer::GameServer(ECS::Registry& ecs, uint16_t port,
+    const std::string& protocol)
     : _ecs(ecs)
-    , _protocol_type(protocol == "TCP" ? net::SocketType::TCP : net::SocketType::UDP)
+    , _protocol_type(protocol == "TCP" ?
+        net::SocketType::TCP : net::SocketType::UDP)
     , _port(port)
     , _running(false) {
     net::ProtocolManager proto;  // config/protocol.json
@@ -59,7 +61,8 @@ void GameServer::update(float delta_time) {
     checkClientTimeouts();
 }
 
-bool GameServer::sendTo(const net::Address& client, const std::vector<uint8_t>& data) {
+bool GameServer::sendTo(const net::Address& client,
+    const std::vector<uint8_t>& data) {
     if (!_running || data.empty())
         return false;
 
@@ -82,7 +85,8 @@ bool GameServer::sendTo(const net::Address& client, const std::vector<uint8_t>& 
     }
 }
 
-void GameServer::broadcastToAll(const std::vector<uint8_t>& data, const std::optional<net::Address>& exclude) {
+void GameServer::broadcastToAll(const std::vector<uint8_t>& data,
+    const std::optional<net::Address>& exclude) {
     if (!_running || data.empty()) return;
 
     for (const auto& [addr, info] : _clients) {
@@ -119,7 +123,8 @@ void GameServer::setClientConnectCallback(ClientConnectCallback callback) {
     _on_client_connect = callback;
 }
 
-void GameServer::setClientDisconnectCallback(ClientDisconnectCallback callback) {
+void GameServer::setClientDisconnectCallback(
+    ClientDisconnectCallback callback) {
     _on_client_disconnect = callback;
 }
 
@@ -169,14 +174,17 @@ void GameServer::updateUDP(float delta_time) {
                 if (packet_data.empty())
                     continue;
                 uint8_t packet_code = packet_data[0];
-                std::vector<uint8_t> payload(packet_data.begin() + 1, packet_data.end());
+                std::vector<uint8_t> payload(packet_data.begin() + 1,
+                    packet_data.end());
                 auto handler_it = _on_packet_received_map.find(packet_code);
                 if (handler_it != _on_packet_received_map.end()) {
                     handler_it->second(payload, sender);
                 } else {
-                    std::cerr << "[GameServer] No handler registered for packet code: "
+                    std::cerr << "[GameServer] No handler registered for "
+                              << "packet code: "
                               << static_cast<int>(packet_code) << " from "
-                              << sender.getIP() << ":" << sender.getPort() << std::endl;
+                              << sender.getIP() << ":"
+                              << sender.getPort() << std::endl;
                 }
             }
         }
@@ -230,14 +238,18 @@ void GameServer::updateTCP(float delta_time) {
                     if (packet_data.empty())
                         continue;
                     uint8_t packet_code = packet_data[0];
-                    std::vector<uint8_t> payload(packet_data.begin() + 1, packet_data.end());
-                    auto handler_it = _on_packet_received_map.find(packet_code);
+                    std::vector<uint8_t> payload(packet_data.begin() + 1,
+                        packet_data.end());
+                    auto handler_it =
+                        _on_packet_received_map.find(packet_code);
                     if (handler_it != _on_packet_received_map.end()) {
                         handler_it->second(payload, client_address);
                     } else {
-                        std::cerr << "[GameServer] No handler registered for packet code: "
+                        std::cerr << "[GameServer] No handler registered for "
+                                  << "packet code: "
                                   << static_cast<int>(packet_code) << " from "
-                                  << client_address.getIP() << ":" << client_address.getPort() << std::endl;
+                                  << client_address.getIP() << ":"
+                                  << client_address.getPort() << std::endl;
                     }
                 }
             }
@@ -273,7 +285,8 @@ void GameServer::checkClientTimeouts() {
 
 uint32_t GameServer::getCurrentTimeMs() const {
     auto now = std::chrono::steady_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch());
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(
+        now.time_since_epoch());
     return static_cast<uint32_t>(duration.count());
 }
 
