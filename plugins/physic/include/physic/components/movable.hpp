@@ -7,10 +7,12 @@
 
 #pragma once
 
-namespace te {
+namespace addon {
+namespace physic {
 
 struct Movable {
     unsigned movable = 1;
 };
 
-}  // namespace te
+}  // namespace physic
+}  // namespace addon

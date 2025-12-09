@@ -7,10 +7,12 @@
 
 #pragma once
 
-namespace te {
+namespace addon {
+namespace intact {
 
 struct Player {
     unsigned player = 1;
 };
 
-}  // namespace te
+}  // namespace intact
+}  // namespace addon

@@ -7,14 +7,18 @@
 
 #pragma once
 
-    #include <SFML/Graphics/Rect.hpp>
+    #include "maths/Vector.hpp"
 
-namespace te {
+namespace addon {
+namespace physic {
 
-struct Hitbox : public sf::FloatRect {
-    explicit Hitbox(const sf::FloatRect&);
-    Hitbox(const sf::Vector2f&, const sf::Vector2f&);
+struct Hitbox {
+    Hitbox(const mat::Vector2f& position, const mat::Vector2f& size);
     Hitbox(float left, float top, float width, float height);
+
+    mat::Vector2f position;
+    mat::Vector2f size;
 };
 
-}  // namespace te
+}  // namespace physic
+}  // namespace addon

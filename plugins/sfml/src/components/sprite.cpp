@@ -9,11 +9,18 @@
 
 #include "sfml/components/sprite.hpp"
 
-namespace te {
+namespace addon {
+namespace sfml {
 
 Sprite::Sprite(sf::Texture&& text, const sf::Vector2f& scale) :
     texture(std::move(text)), sf::Sprite(texture) {
     setTextureRect(sf::IntRect({0, 0}, sf::Vector2i(texture.getSize())));
+    setScale(scale);
+}
+
+Sprite::Sprite(sf::Texture &&text, const sf::Vector2i &size,
+    const sf::Vector2f &scale) : texture(std::move(text)), sf::Sprite(texture) {
+    setTextureRect(sf::IntRect({0, 0}, size));
     setScale(scale);
 }
 
@@ -26,4 +33,5 @@ Sprite::Sprite(Sprite&& other) noexcept :
     setScale(other.getScale());
 }
 
-}  // namespace te
+}  // namespace sfml
+}  // namespace addon

@@ -12,6 +12,7 @@
 #include "plugin/DlManager.hpp"
 
 namespace te {
+namespace plugin {
 
 DlManager::~DlManager() {
     if (!_handles.empty())
@@ -61,4 +62,5 @@ void DlManager::closeHandlers(const std::string& id) {
     _handles.clear();
 }
 
+}  // namespace plugin
 }  // namespace te

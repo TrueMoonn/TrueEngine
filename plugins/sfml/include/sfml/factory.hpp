@@ -7,23 +7,25 @@
 
 #pragma once
 
-    #include <unordered_map>
-    #include <string>
-    #include <functional>
-    #include <any>
     #include <memory>
 
     #include <ECS/Registry.hpp>
     #include "plugin/APlugin.hpp"
 
+namespace addon {
+namespace sfml {
 
-class Sfml : public te::APlugin {
+class Sfml : public te::plugin::APlugin {
  public:
-    explicit Sfml(ECS::Registry& reg);
+    explicit Sfml(ECS::Registry& reg, te::event::EventManager& events);
 };
 
+}  // namespace sfml
+}  // namespace addon
+
 extern "C" {
-    std::unique_ptr<Sfml> get_pfactory(ECS::Registry& reg) {
-        return std::make_unique<Sfml>(reg);
+    std::unique_ptr<addon::sfml::Sfml> get_pfactory(ECS::Registry& reg,
+        te::event::EventManager& events) {
+        return std::make_unique<addon::sfml::Sfml>(reg, events);
     }
 }

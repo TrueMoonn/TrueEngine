@@ -9,8 +9,10 @@
 
     #include <ECS/Registry.hpp>
 
-namespace te {
+namespace addon {
+namespace eSpec {
 
 void deal_damage(ECS::Registry& reg);
 
-}  // namespace te
+}  // namespace eSpec
+}  // namespace addon

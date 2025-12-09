@@ -11,7 +11,7 @@
 
 #include "plugin/DlManager.hpp"
 
-class test_DlManager : public te::DlManager {
+class test_DlManager : public te::plugin::DlManager {
  public:
     std::unordered_map<std::string, void *> get_handlers() {
         return _handles;
@@ -21,14 +21,14 @@ class test_DlManager : public te::DlManager {
 TEST(DlManager, load) {
     test_DlManager manager;
 
-    manager.load("../../../tests/unit_tests/plugins/movement.so");
+    manager.load("../../../tests/unit_tests/plugins/physic.so");
 
     EXPECT_EQ(manager.get_handlers().size(), 1);
-    EXPECT_NO_THROW(manager.get_handlers().at("movement"));
+    EXPECT_NO_THROW(manager.get_handlers().at("physic"));
 
     auto names = manager.getNames();
     EXPECT_EQ(names.size(), 1);
-    EXPECT_EQ(names[0], "movement");
+    EXPECT_EQ(names[0], "physic");
 
     EXPECT_THROW(manager.get_handlers().at("none"), std::out_of_range);
 }
@@ -38,7 +38,7 @@ TEST(DlManager, loadDirectory) {
 
     manager.loadDirectory("../../../tests/unit_tests/plugins");
     EXPECT_EQ(manager.get_handlers().size(), 2);
-    EXPECT_NO_THROW(manager.get_handlers().at("movement"));
+    EXPECT_NO_THROW(manager.get_handlers().at("physic"));
     EXPECT_NO_THROW(manager.get_handlers().at("interaction"));
 }
 
@@ -53,24 +53,24 @@ TEST(DlManager, wrong_load) {
 TEST(DlManager, wrong_extension_load) {
     test_DlManager manager;
 
-    manager.load("../../../tests/unit_tests/plugins/movement.png");
-    EXPECT_THROW(manager.get_handlers().at("movement"), std::out_of_range);
+    manager.load("../../../tests/unit_tests/plugins/physic.png");
+    EXPECT_THROW(manager.get_handlers().at("physic"), std::out_of_range);
     EXPECT_EQ(manager.get_handlers().size(), 0);
 }
 
 TEST(DlManager, wrong_symbol_access) {
     test_DlManager manager;
 
-    manager.load("../../../tests/unit_tests/plugins/movement.so");
-    EXPECT_THROW(manager.access<int(*)(void)>("movement", "wrong"),
+    manager.load("../../../tests/unit_tests/plugins/physic.so");
+    EXPECT_THROW(manager.access<int(*)(void)>("physic", "wrong"),
         std::runtime_error);
 }
 
 TEST(DlManager, close_handler) {
     test_DlManager manager;
 
-    manager.load("../../../tests/unit_tests/plugins/movement.so");
-    manager.closeHandlers("movement");
-    EXPECT_THROW(manager.get_handlers().at("movement"), std::out_of_range);
+    manager.load("../../../tests/unit_tests/plugins/physic.so");
+    manager.closeHandlers("physic");
+    EXPECT_THROW(manager.get_handlers().at("physic"), std::out_of_range);
     EXPECT_EQ(manager.get_handlers().size(), 0);
 }

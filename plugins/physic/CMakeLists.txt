@@ -3,11 +3,19 @@ project(physic)
 ########## LIBRARY ##########
 add_library(${PROJECT_NAME} SHARED
     ${PROJECT_SOURCE_DIR}/src/factory.cpp
+
+    #COMPONENTS
     ${PROJECT_SOURCE_DIR}/src/components/hitbox.cpp
+    ${PROJECT_SOURCE_DIR}/src/components/position.cpp
+    ${PROJECT_SOURCE_DIR}/src/components/velocity.cpp
+
+    #SYSTEMS
     ${PROJECT_SOURCE_DIR}/src/systems/hitbox.cpp
+    ${PROJECT_SOURCE_DIR}/src/systems/movement.cpp
+
     ${PROJECT_SOURCE_DIR}/src/hitbox_management.cpp
 )
-add_library(plugins::physic ALIAS ${PROJECT_NAME})
+add_library(addon::physic ALIAS ${PROJECT_NAME})
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC

@@ -10,7 +10,7 @@
 #include "config/map_loader.hpp"
 
 TEST(MapLoader, load_map) {
-    te::PluginManager pmanager;
+    te::plugin::PluginManager pmanager;
     ECS::Registry reg;
     te::MapLoader loader;
 
@@ -27,11 +27,12 @@ TEST(MapLoader, load_map) {
 }
 
 TEST(MapLoader, wrong_maps) {
-    te::PluginManager pmanager;
+    te::plugin::PluginManager pmanager;
     ECS::Registry reg;
+    te::event::EventManager ev;
     te::MapLoader loader;
 
-    pmanager.loadPlugins(reg, "../../../tests/unit_tests/plugins");
+    pmanager.loadPlugins(reg, ev, "../../../tests/unit_tests/plugins");
     EXPECT_THROW(
         loader.loadMap("../../../tests/unit_tests/configs/wrong_toml.map"),
         te::MapLoader::LoadError);

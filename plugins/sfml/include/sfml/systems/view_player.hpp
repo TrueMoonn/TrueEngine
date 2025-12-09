@@ -9,8 +9,10 @@
 
     #include <ECS/Registry.hpp>
 
-namespace te {
+namespace addon {
+namespace sfml {
 
 void follow_player_sys(ECS::Registry& reg);
 
-}  // namespace te
+}  // namespace sfml
+}  // namespace addon

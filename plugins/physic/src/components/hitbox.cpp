@@ -7,16 +7,10 @@
 
 #include "physic/components/hitbox.hpp"
 
-namespace te {
+namespace addon {
+namespace physic {
 
-Hitbox::Hitbox(const sf::FloatRect& rect) {
-    this->size.y = rect.size.y;
-    this->size.x = rect.size.x;
-    this->position.y = rect.position.y;
-    this->position.x = rect.position.x;
-}
-
-Hitbox::Hitbox(const sf::Vector2f& pos, const sf::Vector2f& size) {
+Hitbox::Hitbox(const mat::Vector2f& pos, const mat::Vector2f& size) {
     this->size.y = size.y;
     this->size.x = size.x;
     this->position.y = pos.y;
@@ -30,4 +24,5 @@ Hitbox::Hitbox(float left, float top, float width, float height) {
     this->position.x = left;
 }
 
-}  // namespace te
+}  // namespace physic
+}  // namespace addon

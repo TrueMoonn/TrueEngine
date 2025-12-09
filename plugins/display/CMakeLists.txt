@@ -1,13 +1,16 @@
-project(movement)
+project(display)
 
 #/ Library \#
 add_library(${PROJECT_NAME} SHARED
     ${PROJECT_SOURCE_DIR}/src/factory.cpp
-    ${PROJECT_SOURCE_DIR}/src/components/velocity.cpp
-    ${PROJECT_SOURCE_DIR}/src/components/position.cpp
-    ${PROJECT_SOURCE_DIR}/src/systems/movement.cpp
+
+    #COMPONENTS
+    ${PROJECT_SOURCE_DIR}/src/components/animation.cpp
+
+    #SYSTEMS
+    ${PROJECT_SOURCE_DIR}/src/systems/animate.cpp
 )
-add_library(plugins::movement ALIAS ${PROJECT_NAME})
+add_library(addon::display ALIAS ${PROJECT_NAME})
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC

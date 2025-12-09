@@ -12,14 +12,20 @@
     #include <ECS/Registry.hpp>
     #include "plugin/APlugin.hpp"
 
+namespace addon {
+namespace physic {
 
-class Physic : public te::APlugin {
+class Physic : public te::plugin::APlugin {
  public:
-    explicit Physic(ECS::Registry& reg);
+    explicit Physic(ECS::Registry& reg, te::event::EventManager& events);
 };
 
+}  // namespace physic
+}  // namespace addon
+
 extern "C" {
-    std::unique_ptr<Physic> get_pfactory(ECS::Registry& reg) {
-        return std::make_unique<Physic>(reg);
+    std::unique_ptr<addon::physic::Physic> get_pfactory(ECS::Registry& reg,
+        te::event::EventManager& events) {
+        return std::make_unique<addon::physic::Physic>(reg, events);
     }
 }
