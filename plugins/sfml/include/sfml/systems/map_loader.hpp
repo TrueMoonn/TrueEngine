@@ -9,9 +9,11 @@
 
     #include <ECS/Registry.hpp>
 
-namespace te {
+namespace addon {
+namespace sfml {
 
 void map_loader(ECS::Registry& reg);
 
-}  // namespace te
+}  // namespace sfml
+}  // namespace addon
 

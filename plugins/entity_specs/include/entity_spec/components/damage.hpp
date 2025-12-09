@@ -9,7 +9,8 @@
 
 #include <cstdint>
 
-namespace te {
+namespace addon {
+namespace eSpec {
 
 struct Damage {
     explicit Damage(const std::int64_t &);
@@ -17,4 +18,5 @@ struct Damage {
     std::int64_t amount;
 };
 
-}  // namespace te
+}  // namespace eSpec
+}  // namespace addon

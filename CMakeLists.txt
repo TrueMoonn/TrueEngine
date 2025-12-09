@@ -4,7 +4,7 @@ project(TrueEngine)
 ########## SETUP ##########
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR})
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -O3")
 set(TE_SRC_DIR "${PROJECT_SOURCE_DIR}/src")
 set(TE_HDR_DIR "${PROJECT_SOURCE_DIR}/include")
 include(FetchContent)

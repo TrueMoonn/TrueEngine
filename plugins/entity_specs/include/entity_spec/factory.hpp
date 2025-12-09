@@ -12,14 +12,20 @@
     #include <ECS/Registry.hpp>
     #include "plugin/APlugin.hpp"
 
+namespace addon {
+namespace eSpec {
 
-class EntitySpec : public te::APlugin {
+class EntitySpec : public te::plugin::APlugin {
  public:
-    explicit EntitySpec(ECS::Registry& reg);
+    explicit EntitySpec(ECS::Registry& reg, te::event::EventManager& events);
 };
 
+}  // namespace eSpec
+}  // namespace addon
+
 extern "C" {
-    std::unique_ptr<EntitySpec> get_pfactory(ECS::Registry& reg) {
-        return std::make_unique<EntitySpec>(reg);
+    std::unique_ptr<addon::eSpec::EntitySpec> get_pfactory(
+        ECS::Registry& reg, te::event::EventManager& events) {
+        return std::make_unique<addon::eSpec::EntitySpec>(reg, events);
     }
 }

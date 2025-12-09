@@ -7,10 +7,12 @@
 
 #pragma once
 
-namespace te {
+namespace addon {
+namespace sfml {
 
 struct Drawable {
     unsigned drawable = 1;
 };
 
-}  // namespace te
+}  // namespace sfml
+}  // namespace addon

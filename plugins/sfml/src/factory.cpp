@@ -12,51 +12,55 @@
 #include <toml++/toml.hpp>
 
 #include "Sfml.hpp"
+#include "sfml/events.hpp"
 #include "sfml/factory.hpp"
 
-Sfml::Sfml(ECS::Registry& reg) : te::APlugin(reg) {
-    reg.registerComponent<te::Event>();
-    _components["event_manager"] = [](ECS::Registry& reg, const ECS::Entity& e,
-        const toml::table& params) {
-        reg.addComponent(e, te::Event());
-    };
-    reg.registerComponent<te::Window>();
+namespace addon {
+namespace sfml {
+
+Sfml::Sfml(ECS::Registry& reg, te::event::EventManager& events)
+    : te::plugin::APlugin(reg, events) {
+    events.setPollFunc(&pollEvent);
+    reg.registerComponent<Window>();
     _components["window"] = [](ECS::Registry& reg, const ECS::Entity& e,
         const toml::table&) {
-        reg.addComponent(e, te::Window());
+        reg.createComponent<Window>(e);
     };
-    reg.registerComponent<te::Drawable>();
+    reg.registerComponent<Drawable>();
     _components["drawable"] = [](ECS::Registry& reg, const ECS::Entity& e,
         const toml::table&) {
-        reg.addComponent(e, te::Drawable());
+        reg.createComponent<Drawable>(e);
     };
-    reg.registerComponent<te::Sprite>();
+    reg.registerComponent<Sprite>();
     _components["sprite"] = [](ECS::Registry& reg, const ECS::Entity& e,
         const toml::table& params) {
         try {
             sf::Texture texture(params["path"].value_or(""));
-            sf::Vector2f size(
-                params["width"].value_or(50.0),
-                params["height"].value_or(50.0));
-            sf::Vector2f scale(size.x / texture.getSize().x,
-                size.y / texture.getSize().y);
-            reg.addComponent(e, te::Sprite(std::move(texture), scale));
+            const auto &t_size = params["size"].as_array();
+            sf::Vector2i size = t_size ?
+                sf::Vector2i(t_size->at(0).value_or(1),
+                t_size->at(1).value_or(1)) : sf::Vector2i(texture.getSize());
+            auto t_scale = params["scale"].as_array();
+            sf::Vector2f scale = t_scale ?
+                sf::Vector2f{t_scale->at(0).value_or(1.0f) / size.x,
+                t_scale->at(1).value_or(1.0f) / size.y} : sf::Vector2f{1, 1};
+            reg.addComponent(e, Sprite(std::move(texture), size, scale));
         } catch (const std::out_of_range&) {
             std::cerr << "error(Plugin-Sprite): key not found" << std::endl;
         } catch (const sf::Exception& e) {
             std::cerr << e.what() << std::endl;
         }
     };
-    _systems["events"] = [](ECS::Registry& reg) {
-        reg.addSystem(&te::manageEvent);
-    };
     _systems["display"] = [](ECS::Registry& reg) {
-        reg.addSystem(&te::display_sys);
+        reg.addSystem(&display_sys);
     };
     _systems["draw"] = [](ECS::Registry& reg) {
-        reg.addSystem(&te::draw_sys);
+        reg.addSystem(&draw_sys);
     };
     _systems["follow_player"] = [](ECS::Registry& reg) {
-        reg.addSystem(&te::follow_player_sys);
+        reg.addSystem(&follow_player_sys);
     };
 }
+
+}  // namespace sfml
+}  // namespace addon

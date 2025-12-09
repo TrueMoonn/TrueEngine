@@ -5,10 +5,10 @@ include/Network
 # Header from plugins
 include/Sfml.hpp
 include/sfml
-include/Movement.hpp
-include/movement
 include/Physic.hpp
 include/physic
+include/Display.hpp
+include/display
 include/Interaction.hpp
 include/interaction
 include/entity_spec
