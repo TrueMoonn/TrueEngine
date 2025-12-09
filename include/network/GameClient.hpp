@@ -51,16 +51,16 @@ class GameClient {
 
     /**
      * @brief Register a callback for a specific packet type
-     * @param key The packet type identifier
+     * @param key The packet type identifier (uint8_t code)
      * @param callback Function to call when this packet type is received
      */
-    void registerPacketHandler(const uint32_t& key, PacketCallback callback);
+    void registerPacketHandler(uint8_t key, PacketCallback callback);
 
     /**
      * @brief Unregister a callback for a specific packet type
-     * @param key The packet type identifier
+     * @param key The packet type identifier (uint8_t code)
      */
-    void unregisterPacketHandler(const uint32_t& key);
+    void unregisterPacketHandler(uint8_t key);
 
     /**
      * @brief Callback: called when connection is established
@@ -87,7 +87,7 @@ class GameClient {
     bool _connected;
 
     // Game callbacks
-    std::unordered_map<uint32_t, PacketCallback> _on_packet_received_map;
+    std::unordered_map<uint8_t, PacketCallback> _on_packet_received_map;
     ConnectCallback _on_connect;
     DisconnectCallback _on_disconnect;
 };

@@ -106,11 +106,11 @@ void GameServer::receive(int timeout, int maxInputs) {
     }
 }
 
-void GameServer::registerPacketHandler(const uint32_t& key, PacketCallback callback) {
+void GameServer::registerPacketHandler(uint8_t key, PacketCallback callback) {
     _on_packet_received_map[key] = callback;
 }
 
-void GameServer::unregisterPacketHandler(const uint32_t& key) {
+void GameServer::unregisterPacketHandler(uint8_t key) {
     _on_packet_received_map.erase(key);
 }
 
@@ -164,12 +164,18 @@ void GameServer::updateUDP(float delta_time) {
                 it->second.last_packet_time = getCurrentTimeMs();
             }
 
-            // Forward packets to game callback
             for (const auto& packet_data : packets) {
                 if (packet_data.empty())
                     continue;
-                if (_on_packet_received) {
-                    _on_packet_received(packet_data, sender);
+                uint8_t packet_code = packet_data[0];
+                std::vector<uint8_t> payload(packet_data.begin() + 1, packet_data.end());
+                auto handler_it = _on_packet_received_map.find(packet_code);
+                if (handler_it != _on_packet_received_map.end()) {
+                    handler_it->second(payload, sender);
+                } else {
+                    std::cerr << "[GameServer] No handler registered for packet code: "
+                              << static_cast<int>(packet_code) << " from "
+                              << sender.getIP() << ":" << sender.getPort() << std::endl;
                 }
             }
         }
@@ -220,8 +226,15 @@ void GameServer::updateTCP(float delta_time) {
                 for (const auto& packet_data : packets) {
                     if (packet_data.empty())
                         continue;
-                    if (_on_packet_received) {
-                        _on_packet_received(packet_data, *addr_ptr);
+                    uint8_t packet_code = packet_data[0];
+                    std::vector<uint8_t> payload(packet_data.begin() + 1, packet_data.end());
+                    auto handler_it = _on_packet_received_map.find(packet_code);
+                    if (handler_it != _on_packet_received_map.end()) {
+                        handler_it->second(payload, *addr_ptr);
+                    } else {
+                        std::cerr << "[GameServer] No handler registered for packet code: "
+                                  << static_cast<int>(packet_code) << " from "
+                                  << addr_ptr->getIP() << ":" << addr_ptr->getPort() << std::endl;
                     }
                 }
             }

@@ -57,6 +57,10 @@ add_library( ${PROJECT_NAME} STATIC
 
     # GAME TOOL
     ${TE_SRC_DIR}/GameTool.cpp
+
+    # NETWORK INTEGRATION
+    ${TE_SRC_DIR}/network/GameClient.cpp
+    ${TE_SRC_DIR}/network/GameServer.cpp
 )
 
 target_include_directories(${PROJECT_NAME}

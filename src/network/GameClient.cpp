@@ -70,8 +70,14 @@ void GameClient::update(float delta_time) {
         for (const auto& packet_data : packets) {
             if (packet_data.empty())
                 continue;
-            if (_on_packet_received) {
-                _on_packet_received(packet_data);
+            uint8_t packet_code = packet_data[0];
+            std::vector<uint8_t> payload(packet_data.begin() + 1, packet_data.end());
+            auto it = _on_packet_received_map.find(packet_code);
+            if (it != _on_packet_received_map.end()) {
+                it->second(payload);
+            } else {
+                std::cerr << "[GameClient] No handler registered for packet code: "
+                          << static_cast<int>(packet_code) << std::endl;
             }
         }
     } catch (const std::exception& e) {
@@ -105,11 +111,11 @@ void GameClient::receive(int timeout, int maxInputs) {
     }
 }
 
-void GameClient::registerPacketHandler(const uint32_t& key, PacketCallback callback) {
+void GameClient::registerPacketHandler(uint8_t key, PacketCallback callback) {
     _on_packet_received_map[key] = callback;
 }
 
-void GameClient::unregisterPacketHandler(const uint32_t& key) {
+void GameClient::unregisterPacketHandler(uint8_t key) {
     _on_packet_received_map.erase(key);
 }
 
