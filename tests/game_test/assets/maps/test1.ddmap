@@ -80,6 +80,7 @@ g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,
         amount = 1
 
         [ENTITIES.X.health]
+        delay = 0.2
         amount = 5
 
         [ENTITIES.X.team]

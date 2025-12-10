@@ -67,9 +67,17 @@ void deal_damage(ECS::Registry& reg) {
     auto &team = reg.getComponents<Team>();
 
     for (auto &&[id, _, _, hp, tm] : ECS::IndexedZipper(hit, pos, health, team)) {
+        if (!V(hp).delay.isPaused()) {
+            if (V(hp).delay.checkDelay())
+                V(hp).delay.toggle();
+            else
+                continue;
+        }
         for (auto &hit : entity_hit_team(reg, id)) {
             std::cout << "Team " << V(tm).name << " and " << V(team[hit]).name << " collided !" << std::endl;
             hp.value().reduceSafely(V(damage[hit]).amount);
+            V(hp).delay.toggle();
+            break;
         }
     }
 }

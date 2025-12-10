@@ -21,10 +21,10 @@ EntitySpec::EntitySpec(ECS::Registry& reg, te::event::EventManager& events)
         const toml::table& params) {
         try {
             float health = params["amount"].value_or(0.f);
-            reg.createComponent<Health>(e, health);
+            float delay = params["delay"].value_or(0.f);
+            reg.createComponent<Health>(e, health, delay);
         } catch (const std::bad_any_cast& e) {
-            std::cerr << "error(Plugin-health): " <<
-                e.what() << std::endl;
+            std::cerr << "error(Plugin-health): " << e.what() << std::endl;
         }
     };
     reg.registerComponent<Team>();
@@ -34,8 +34,7 @@ EntitySpec::EntitySpec(ECS::Registry& reg, te::event::EventManager& events)
             std::string name(params["name"].value_or(""));
             reg.createComponent<Team>(e, name);
         } catch (const std::bad_any_cast& e) {
-            std::cerr << "error(Plugin-team): " <<
-                e.what() << std::endl;
+            std::cerr << "error(Plugin-team): " << e.what() << std::endl;
         }
     };
     reg.registerComponent<Damage>();
