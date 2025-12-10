@@ -32,8 +32,8 @@ Display::Display(ECS::Registry& reg, te::event::EventManager& events)
             for (size_t i = 0; i < toml_frames->size(); i++) {
                 const auto &cur = toml_frames->at(i).as_array();
                 mat::Vector2<size_t> pos = {
-                    cur->at(0).as_array()->at(0).value_or(0),
-                    cur->at(0).as_array()->at(1).value_or(0)
+                    cur->at(0).as_array()->at(0).value_or<size_t>(0),
+                    cur->at(0).as_array()->at(1).value_or<size_t>(0)
                 };
                 size_t max = cur->at(1).value_or(0);
                 float delta = cur->at(2).value_or(0.1f);
