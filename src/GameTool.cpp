@@ -7,8 +7,12 @@
 
 #include <string>
 #include <iostream>
+#include <toml++/toml.hpp>
 
 #include "GameTool.hpp"
+#include "ConfigReader.hpp"
+#include "ECS/Entity.hpp"
+#include "maths/Vector.hpp"
 
 namespace te {
 
@@ -45,15 +49,39 @@ void GameTool::removeEntity(const ECS::Entity& e) {
     _reg.killEntity(e);
 }
 
-std::size_t GameTool::loadFile(ConfigParser::ContentType type,
-    const std::string& path) {
-    return _configs.parseFile(type, path);
+std::size_t GameTool::addMap(const std::string& path) {
+    return _configs.addMap(path);
 }
 
-ECS::Entity GameTool::createMap(ECS::Entity fentity, std::size_t config,
-    std::size_t map) {
-    return createEntitiesFromContent(fentity, _configs.getMap(map),
-        _configs.getConfig(config));
+void GameTool::addConfig(const std::string& path) {
+    _configs.addConfig(path);
+}
+
+void GameTool::createEntity(ECS::Entity e, const std::string& name,
+    const mat::Vector2f& pos) {
+    toml::table entityConfig = _configs.getEntityConfig(name);
+    createEntityComponents(e, entityConfig, pos);
+}
+
+ECS::Entity GameTool::createMap(ECS::Entity fentity, std::size_t mapIndex) {
+    ECS::Entity ientity = 0;
+    const ConfigParser::MapContent map = _configs.getMap(mapIndex);
+    mat::Vector2f tileSize = getMapTileSize(
+        _configs.getEntityConfig(CONFIG_MAP_TABLE_NAME).as_table());
+    for (std::size_t layer = 0; layer < map.layer_max; ++layer) {
+        for (std::size_t y = 0; y < map.map.size(); ++y) {
+            for (std::size_t x = 0; x < map.map[y].size(); ++x) {
+                if (layer < map.map[y][x].size()) {
+                    createEntityComponents(fentity + ientity,
+                        _configs.getEntityConfig(map.map[y][x][layer]),
+                        mat::Vector2f{tileSize.x * x, tileSize.y * y}
+                    );
+                    ientity += 1;
+                }
+            }
+        }
+    }
+    return ientity + fentity;
 }
 
 void GameTool::run(void) {
@@ -64,40 +92,31 @@ void GameTool::run(void) {
     }
 }
 
-ECS::Entity GameTool::createEntitiesFromContent(const ECS::Entity& fentity,
-    ConfigParser::MapContent& map) {
-    ECS::Entity ientity = 0;
-    for (std::size_t layer = 0; layer < map.layer_max; ++layer) {
-        for (std::size_t y = 0; y < map.map.size(); ++y) {
-            for (std::size_t x = 0; x < map.map[y].size(); ++x) {
-                if (layer < map.map[y][x].size()) {
-                    toml::table pos;
-                    pos.insert("x", static_cast<float>(x * map.tilex));
-                    pos.insert("y", static_cast<float>(y * map.tiley));
-                    createEntity(fentity + ientity, pos,
-                        map.params.at(map.map[y][x][layer]));
-                    ientity += 1;
-                }
-            }
-        }
+mat::Vector2f GameTool::getMapTileSize(const toml::table *table) {
+    mat::Vector2f tileSize(CONFIG_MAP_TILE_DEFAULT_SIZE,
+        CONFIG_MAP_TILE_DEFAULT_SIZE);
+    if (table != nullptr) {
+        tileSize.x = (*table)["x"].value_or(CONFIG_MAP_TILE_DEFAULT_SIZE);
+        tileSize.y = (*table)["y"].value_or(CONFIG_MAP_TILE_DEFAULT_SIZE);
     }
-    return ientity;
+    return tileSize;
 }
 
-void GameTool::createEntity(const ECS::Entity& e,
-    toml::table& pos, const toml::table& entity_info) {
-    for (auto &&[cname, component] : entity_info) {
-        if (!std::string(cname.data()).compare("position2")) {
-            if (component.is_table()) {
-                const toml::table& compTable = *component.as_table();
-                pos.insert_or_assign("x", pos["x"].value<float>().value() +
-                    compTable["x"].value<float>().value());
-                pos.insert_or_assign("y", pos["y"].value<float>().value() +
-                    compTable["y"].value<float>().value());
-            }
-            _pmanager.loadComponent(cname.data(), e, pos);
-            continue;
-        }
+void GameTool::createEntityComponents(const ECS::Entity& e,
+    toml::table conf, const mat::Vector2f& pos) {
+    if (conf["position2"].is_table()) {
+        toml::table nPos;
+        const toml::table* position = conf["position2"].as_table();
+        nPos.insert_or_assign("x", (*position)["x"].value_or(0.f) + pos.x);
+        nPos.insert_or_assign("y", (*position)["y"].value_or(0.f) + pos.y);
+        conf.insert_or_assign("position2", nPos);
+    } else if (conf["position2"].is_value()) {
+        toml::table nPos;
+        nPos.insert_or_assign("x", pos.x);
+        nPos.insert_or_assign("y", pos.y);
+        conf.insert_or_assign("position2", nPos);
+    }
+    for (auto &&[cname, component] : conf) {
         if (component.is_table()) {
             const toml::table& compTable = *component.as_table();
             _pmanager.loadComponent(cname.data(), e, compTable);
@@ -108,4 +127,3 @@ void GameTool::createEntity(const ECS::Entity& e,
 }
 
 }  // namespace te
-

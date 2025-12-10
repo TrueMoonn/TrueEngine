@@ -13,10 +13,9 @@ FetchContent_MakeAvailable(googletest)
 add_executable(${PROJECT_NAME}
     DlManager.cpp
     PluginManager.cpp
-    MapLoader.cpp
 )
 
-target_link_libraries(${PROJECT_NAME} 
+target_link_libraries(${PROJECT_NAME}
     PRIVATE
         TrueEngine
         tomlplusplus::tomlplusplus

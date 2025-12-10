@@ -6,7 +6,6 @@
 */
 
 #include <plugin/PluginManager.hpp>
-#include <config/map_loader.hpp>
 
 #include "scenes/InGame.hpp"
 
@@ -21,13 +20,18 @@ void InGame::setECS(void) {
     createSystem("bound_hitbox");
     createSystem("follow_player");
     createSystem("animate");
-    // createSystem("deal_damage");
     createSystem("draw");
     createSystem("display");
 }
 
 void InGame::setEntities(void) {
     createComponent("window", SYSTEM_ENTITY);
-    size_t map1_index = loadMapFile(MAPS_PATHS.at("test1"));
-    createMap(map1_index, MAP_ENTITY_BACKGROUND);
+
+    addConfig("assets/configs/base.toml");
+    addConfig("assets/configs/enemy.toml");
+
+    size_t map1 = addMap("assets/maps/test1.ddmap");
+    ECS::Entity endMap = createMap(MAP_ENTITY_BACKGROUND, map1);
+
+    createEntity(endMap + 1, "enemy", {500.f, 500.f});
 }

@@ -8,15 +8,16 @@
 #pragma once
 
     #include <string>
-    #include <vector>
 
+    #include <toml++/toml.hpp>
     #include <toml++/toml.hpp>
 
     #include <ECS/Entity.hpp>
     #include <ECS/Registry.hpp>
 
+    #include "maths/Vector.hpp"
     #include "event/EventManager.hpp"
-    #include "config/ConfigParser.hpp"
+    #include "ConfigReader.hpp"
     #include "plugin/PluginManager.hpp"
 
     #define DEFAULT_PLUGIN_RPATH "./plugins/"
@@ -26,37 +27,37 @@ namespace te {
 
 /**
  * @brief GameTool class for the TrueEngine
- * 
+ *
  * This class is a user friendly tool that regroup everything you need to create
  * a game with the TrueEngine.
- * 
+ *
  * ```
  * In it you have an instance of:
  *  - ECS::Registry
  *  - te::PluginManager
  *  - te::MapLoader
  * ```
- * 
+ *
  */
 class GameTool {
  public:
     GameTool() = default;
 
     /**
-     * @brief Load the plugins from the folder given 
-     * 
+     * @brief Load the plugins from the folder given
+     *
      * @param dir Path to the directory to load plugins
      */
     void loadPlugins(const std::string& dir = DEFAULT_PLUGIN_RPATH);
     /**
      * @brief Clear plugins loaded
-     * 
+     *
      */
     void clearPlugins(void);
 
     /**
      * @brief Register a component type in ECS::Registry
-     * 
+     *
      * @tparam Component The type of the component to register
      */
     template <typename Component>
@@ -67,7 +68,7 @@ class GameTool {
     /**
      * @brief Create a component object for the ECS::Entity wanted
      * directly to the registry
-     * 
+     *
      * @tparam Component The type of the component we register
      * @param e ECS::Entity index to create the component at
      * @param c The rvalued object to register
@@ -79,7 +80,7 @@ class GameTool {
     /**
      * @brief Create a component object for the ECS::Entity wanted
      * through a plugin using the toml++ library for parameters
-     * 
+     *
      * @param name Name of the component
      * @param e ECS::Entity index to create the component at
      * @param params toml::table with parameters wanted
@@ -89,45 +90,65 @@ class GameTool {
 
     /**
      * @brief Create a System directly to the ECS::Regitstry
-     * 
+     *
      * @param f The function to add as system
      */
     void createSystem(const te::plugin::sys_builder &f);
     /**
      * @brief Create a System through a plugin
-     * 
+     *
      * @param name Name of the system
      */
     void createSystem(const std::string& name);
 
     /**
      * @brief Remove an ECS::Entity from the ECS::Registry
-     * 
+     *
      * @param e The ECS::Entity to remove
      */
     void removeEntity(const ECS::Entity& e);
 
     /**
-     * @brief Load a map file 
-     * 
-     * @param path Path to the file
-     * @return The index at wich the MapContent has been stored
+     * @brief Load a map into the ConfigParser
+     *
+     * @param path Filepath to the map to load
+     * @return `std::size_t` The index in wich the map is stored
      */
-    std::size_t loadFile(ConfigParser::ContentType type,
-            const std::string& path);
+    std::size_t addMap(const std::string& path);
+
     /**
-     * @brief Create entities based on MapContent loaded
-     * 
-     * @param index Witch map to load
-     * @param fentity At witch ECS::Entity to start create the map
-     * @return Return the last entity used for the map
+     * @brief Load a configuration file into the ConfigParser
+     *
+     * @param path Filepath to the configuration file
+     */
+    void addConfig(const std::string& path);
+
+    /**
+     * @brief Create an Entity into the ECS::Registry based on the
+     * configurations loaded before into the ConfigParser
+     *
+     * @param e ECS::Entity to load the components to
+     * @param name Name of the entity in the configuration
+     * @param pos Position to gave to the entity - Default {0, 0}
+     */
+    void createEntity(ECS::Entity e, const std::string& name,
+        const mat::Vector2f& pos = {0, 0});
+
+    /**
+     * @brief Create every ECS::Entity based on the map at the index given
+     * and the configurations given for every entities
+     *
+     * @param index Index of the map stored in ConfigParser
+     * @param fentity Index of where to start the map loading in the
+     * ECS::Registry
+     * @return `ECS::Entity` The last entity used for the map
      */
     ECS::Entity createMap(std::size_t index, ECS::Entity fentity);
 
     /**
      * @brief Run the main loop
-     * 
-     * Launch systems in ECS::Registry
+     *
+     * Launch systems in ECS::Registry and manage events
      */
     void run(void);
 
@@ -136,10 +157,9 @@ class GameTool {
     ECS::Registry _reg;
 
     ConfigParser _configs;
-    ECS::Entity createEntitiesFromContent(MapLoader::MapContent& content,
-        const ECS::Entity& fentity);
-    void createEntity(const ECS::Entity& e,
-        toml::table& pos, const toml::table& entity_info);
+    mat::Vector2f getMapTileSize(const toml::table *table);
+    void createEntityComponents(const ECS::Entity& e, toml::table conf,
+        const mat::Vector2f& pos);
 
     event::EventManager _events;
 };
