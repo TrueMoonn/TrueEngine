@@ -44,8 +44,6 @@ g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,
         [ENTITIES.W.sprite]
         path = "assets/wall.png"
         scale = [20, 20]
-#        width = 20.0
-#        height = 20.0
 
         [ENTITIES.W.position2]
         x = 15.0
@@ -63,14 +61,21 @@ g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,
         [ENTITIES.X.sprite]
         path = "assets/wall.png"
         scale = [50, 50]
-#        width = 50.0
-#        height = 50.0
 
         [ENTITIES.X.hitbox]
         left = 0.0
         top = 0.0
         width = 50.0
         height = 50.0
+
+        [ENTITIES.X.damage]
+        amount = 1
+
+        [ENTITIES.X.health]
+        amount = 5
+
+        [ENTITIES.X.team]
+        team = 2
 
     [ENTITIES.D]
     drawable = true
@@ -89,11 +94,18 @@ g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,
 
     [ENTITIES.P]
     drawable = true
-    movable = true
+    # movable = true
     player = true
     position2 = true
+
         [ENTITIES.P.health]
         amount = 5
+
+        [ENTITIES.P.damage]
+        amount = 1
+
+        [ENTITIES.P.team]
+        team = 1
 
         [ENTITIES.P.sprite]
         path = "assets/projectile.png"
