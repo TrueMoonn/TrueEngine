@@ -49,7 +49,7 @@ std::vector<ECS::Entity> entity_hit_team(ECS::Registry& reg,
 
     for (auto &&[e, pos, hit, tm, _]
         : ECS::IndexedZipper(positions, hitboxs, teams, damage)) {
-        if (V(tm).team == e_team.team)
+        if (V(tm).name == e_team.name)
             continue;
         if (square_hitbox(e_hit, true_hitbox(V(pos), V(hit)))) {
             std::cout << "yeah" << std::endl;
@@ -68,7 +68,7 @@ void deal_damage(ECS::Registry& reg) {
 
     for (auto &&[id, _, _, hp, tm] : ECS::IndexedZipper(hit, pos, health, team)) {
         for (auto &hit : entity_hit_team(reg, id)) {
-            std::cout << "Team " << (int)V(tm).team << " and " << (int)V(team[hit]).team << " collided !" << std::endl;
+            std::cout << "Team " << V(tm).name << " and " << V(team[hit]).name << " collided !" << std::endl;
             hp.value().reduceSafely(V(damage[hit]).amount);
         }
     }

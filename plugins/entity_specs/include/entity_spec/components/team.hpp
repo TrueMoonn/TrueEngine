@@ -7,15 +7,15 @@
 
 #pragma once
 
-#include <cstdint>
+#include <string>
 
 namespace addon {
 namespace eSpec {
 
 struct Team {
-    explicit Team(const std::int64_t &);
+    explicit Team(const std::string &teamName);
 
-    std::int64_t team;
+    std::string name;
 };
 
 }  // namespace eSpec

@@ -10,8 +10,8 @@
 namespace addon {
 namespace eSpec {
 
-Team::Team(const std::int64_t &team) :
-team(team)
+Team::Team(const std::string &name) :
+name(name)
 {}
 
 }  // namespace eSpec

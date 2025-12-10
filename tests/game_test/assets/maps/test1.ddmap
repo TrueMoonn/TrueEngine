@@ -58,9 +58,17 @@ g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,
     [ENTITIES.X]
     drawable = true
     position2 = true
+
         [ENTITIES.X.sprite]
-        path = "assets/wall.png"
+        path = "assets/projectile.png"
+        # path = "assets/wall.png"
+        size = [10, 10]
         scale = [50, 50]
+
+        [ENTITIES.X.animation]
+        frames = [
+            [[0, 0], 8, 0.1, true]
+        ]
 
         [ENTITIES.X.hitbox]
         left = 0.0
@@ -75,11 +83,12 @@ g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,
         amount = 5
 
         [ENTITIES.X.team]
-        team = 2
+        name = "enemy"
 
     [ENTITIES.D]
     drawable = true
     position2 = true
+
         [ENTITIES.D.sprite]
         path = "assets/door.png"
         scale = [50, 50]
@@ -106,7 +115,7 @@ g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,
         amount = 1
 
         [ENTITIES.P.team]
-        team = 1
+        name = "friendly"
 
         [ENTITIES.P.sprite]
         path = "assets/projectile.png"
@@ -115,7 +124,7 @@ g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,
         # width = 10
         # height = 10
         # scale_x = 30
-        # scale_y = 30
+        # scale_y =<std::string> 30
 
         [ENTITIES.P.velocity2]
         x = 0.0

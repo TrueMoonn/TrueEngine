@@ -31,8 +31,8 @@ EntitySpec::EntitySpec(ECS::Registry& reg, te::event::EventManager& events)
     _components["team"] = [](ECS::Registry& reg, const ECS::Entity& e,
         const toml::table& params) {
         try {
-            size_t damage = params["team"].value_or(0);
-            reg.createComponent<Team>(e, damage);
+            std::string name(params["name"].value_or(""));
+            reg.createComponent<Team>(e, name);
         } catch (const std::bad_any_cast& e) {
             std::cerr << "error(Plugin-team): " <<
                 e.what() << std::endl;
