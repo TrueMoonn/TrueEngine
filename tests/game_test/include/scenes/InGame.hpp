@@ -25,6 +25,8 @@ class InGame : public AScene {
     InGame();
     ~InGame() = default;
 
+    void run() override;
+
  private:
     void setECS(void);
     void setEntities(void);

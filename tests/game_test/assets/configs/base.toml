@@ -52,31 +52,3 @@
         top = 0.0
         width = 50.0
         height = 50.0
-
-    [ENTITIES.P]
-    drawable = true
-    movable = true
-    player = true
-    position2 = true
-        [ENTITIES.P.health]
-        amount = 5
-
-        [ENTITIES.P.sprite]
-        path = "assets/projectile.png"
-        size = [10, 10]
-        scale = [30, 30]
-
-        [ENTITIES.P.velocity2]
-        x = 0.0
-        y = 0.0
-
-        [ENTITIES.P.hitbox]
-        left = 0.0
-        top = 0.0
-        width = 30.0
-        height = 30.0
-
-        [ENTITIES.P.animation]
-        frames = [
-            [[0, 0], 8, 0.1, true]
-        ]
