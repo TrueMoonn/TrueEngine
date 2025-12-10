@@ -57,12 +57,25 @@ ECS::Entity GameTool::createMap(std::size_t index, ECS::Entity fentity) {
     return createEntitiesFromContent(_maps[index], fentity);
 }
 
-void GameTool::run(void) {
-    while (!_events.isEvent(event::System::Closed)) {
-        _events.pollEvents(_reg);
-        _events.emit(_reg);
-        _reg.runSystems();
-    }
+void GameTool::pollEvent() {
+    _events.pollEvents(_reg);
+}
+
+
+void GameTool::emit() {
+    _events.emit(_reg);
+}
+
+void GameTool::runSystems() {
+    _reg.runSystems();
+}
+
+bool GameTool::isEvent(te::event::System e) {
+    return _events.isEvent(e);
+}
+
+event::EventManager::eventContent GameTool::getEvent(event::System system) {
+    return _events.getEvent(system);
 }
 
 ECS::Entity GameTool::createEntitiesFromContent(MapLoader::MapContent& content,
