@@ -22,8 +22,7 @@ namespace network {
  */
 class GameServer {
  public:
-    GameServer(ECS::Registry& ecs, uint16_t port,
-        const std::string& protocol = "UDP");
+    explicit GameServer(uint16_t port, const std::string& protocol = "UDP");
     ~GameServer();
 
     bool start();
@@ -90,10 +89,8 @@ class GameServer {
     bool isRunning() const;
     size_t getClientCount() const;
     std::vector<net::Address> getConnectedClients() const;
-    ECS::Registry& getECS() { return _ecs; }
 
  private:
-    ECS::Registry& _ecs;
     std::unique_ptr<net::Server> _server;
     net::SocketType _protocol_type;
     uint16_t _port;
