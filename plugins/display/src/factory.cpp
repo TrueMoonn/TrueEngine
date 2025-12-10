@@ -51,14 +51,13 @@ Display::Display(ECS::Registry& reg, te::event::EventManager& events)
         [](ECS::Registry& reg,
         const te::event::EventManager::eventContent& content) {
         auto& event = std::get<te::event::KeysEvent>(content);
-        static te::Timestamp ts (0.1f);
 
         auto& animations = reg.getComponents<Animation>();
 
         for (auto&& [an] : ECS::Zipper(animations)) {
-            if (ts.checkDelay() && event.keys[te::event::Key::LeftControl])
+            if (event.keys[te::event::Key::LeftControl])
                 V(an).pause();
-            if (ts.checkDelay() && event.keys[te::event::Key::Space])
+            if (event.keys[te::event::Key::Space])
                 V(an).unpause();
         }
     });
