@@ -133,14 +133,40 @@ class GameTool {
      */
     ECS::Entity createMap(std::size_t index, ECS::Entity fentity);
 
+    /**
+     * @brief Poll events done by the user
+     * 
+     */
     void pollEvent();
 
+    /**
+     * @brief Run all systems registered in the registry
+     * 
+     */
     void runSystems();
 
+    /**
+     * @brief Execute functions subscribed to the events that were triggered as active
+     * 
+     * @see event::EventManager
+     */
     void emit();
 
-    bool isEvent(event::System event);
+    /**
+     * @brief Check if there is an event for the system
+     *  
+     * @param system systtem that you want to check
+     * @return true There's an event
+     * @return false There isn't an event
+     */
+    bool isEvent(event::System system);
 
+    /**
+     * @brief Get the eventContent link to the system activated by the user.
+     * 
+     * @param system System that you want to check
+     * @return event::EventManager::eventContent The Event corresponding
+     */
     event::EventManager::eventContent getEvent(event::System system);
 
  private:
