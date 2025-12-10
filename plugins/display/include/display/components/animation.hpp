@@ -14,23 +14,21 @@
 #include <chrono>
 
 #include "clock.hpp"
-
-#define STM(sec) (sec * 1000000)
+#include "maths/Vector.hpp"
 
 namespace addon {
 namespace display {
-
-typedef std::array<size_t, 2> pos;
 
 /**
  * @brief Animation frame data (duration and delay)
  */
 struct FrameData {
-    FrameData(const pos &position, size_t max, float delay, bool loop = true)
+    FrameData(const mat::Vector2<size_t> &position, size_t max,
+            float delay, bool loop = true)
         : frameBEG(position), frameMAX(max)
-        , frameDELAY(STM(delay)), loop(loop) {}
+        , frameDELAY(SEC_TO_MICRO(delay)), loop(loop) {}
 
-    pos frameBEG;
+    mat::Vector2<size_t> frameBEG;
     size_t frameMAX;
     size_t frameDELAY;
     bool loop;
@@ -50,15 +48,16 @@ struct Animation {
      *
      */
     explicit Animation(const std::vector<FrameData> &frameInfos)
-        : frameInfos(std::move(frameInfos)), curAnim(0), curFrame(0) {}
+        : frameInfos(std::move(frameInfos)), curAnim(0), curFrame(0)
+        , timestamp(frameInfos.at(0).frameDELAY) {}
 
-    Animation(const Animation &other) : frameInfos(other.frameInfos),
-        curAnim(other.curAnim), curFrame(other.curFrame), delta(other.delta) {}
+    Animation(const Animation &other) : frameInfos(other.frameInfos)
+        , curAnim(other.curAnim), curFrame(other.curFrame)
+        , timestamp(other.timestamp) {}
 
     Animation(Animation &&other) : frameInfos(std::move(other.frameInfos)),
         curAnim(std::move(other.curAnim)), curFrame(std::move(other.curFrame)),
-        delta(std::move(other.delta))
-        {}
+        timestamp(std::move(other.timestamp)) {}
 
     ~Animation() = default;
 
@@ -66,12 +65,15 @@ struct Animation {
     bool changeAnimation(size_t index);
     void increment();
     void decrement();
+    void pause() { if (!timestamp.isPaused()) timestamp.toggle(); }
+    void unpause() { if (timestamp.isPaused()) timestamp.toggle(); }
+    void toggle() { this->timestamp.toggle(); }
 
     const std::vector<FrameData> frameInfos;
     std::size_t curAnim;
     std::size_t curFrame;
 
-    te::delta_t delta;
+    te::Timestamp timestamp;
 };
 
 }  // namespace display

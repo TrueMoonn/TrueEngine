@@ -9,14 +9,18 @@
 
 #include <cstdint>
 
+#include "clock.hpp"
+
 namespace addon {
 namespace eSpec {
 
 struct Health {
-    explicit Health(const std::int64_t &);
+    explicit Health(const std::int64_t &amount, float delay);
+    explicit Health(const std::int64_t &amount, size_t delay);
     void reduceSafely(const std::int64_t &);
 
-    std::int64_t  amount;
+    std::int64_t amount;
+    te::Timestamp delay;
 };
 
 }  // namespace eSpec

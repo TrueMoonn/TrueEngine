@@ -6,7 +6,6 @@
 */
 
 #include <plugin/PluginManager.hpp>
-#include <config/map_loader.hpp>
 
 #include "scenes/InGame.hpp"
 
@@ -21,13 +20,33 @@ void InGame::setECS(void) {
     createSystem("bound_hitbox");
     createSystem("follow_player");
     createSystem("animate");
-    // createSystem("deal_damage");
+    createSystem("deal_damage");
+    createSystem("kill_entity");
     createSystem("draw");
     createSystem("display");
 }
 
 void InGame::setEntities(void) {
     createComponent("window", SYSTEM_ENTITY);
-    size_t map1_index = loadMapFile(MAPS_PATHS.at("test1"));
-    createMap(map1_index, MAP_ENTITY_BACKGROUND);
+
+    addConfig("assets/configs/base.toml");
+    addConfig("assets/configs/enemy.toml");
+    addConfig("assets/configs/player.toml");
+
+    size_t map1 = addMap("assets/maps/test1.ddmap");
+    ECS::Entity endMap = createMap(MAP_ENTITY_BACKGROUND, map1);
+
+    createEntity(endMap + 1, "player", {1920.f / 2, 1080.f / 2});
+    createEntity(endMap + 2, "enemy", {500.f, 500.f});
+    createEntity(endMap + 3, "enemy", {1000.f, 500.f});
+    createEntity(endMap + 4, "enemy", {500.f, 1000.f});
+    createEntity(endMap + 5, "enemy", {600.f, 600.f});
+}
+
+void InGame::run(void) {
+    while (!isEvent(te::event::System::Closed)) {
+        pollEvent();
+        emit();
+        runSystems();
+    }
 }

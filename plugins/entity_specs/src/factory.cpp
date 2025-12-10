@@ -6,6 +6,7 @@
 */
 
 #include <iostream>
+#include <string>
 #include <toml++/toml.hpp>
 
 #include "EntitySpec.hpp"
@@ -21,10 +22,20 @@ EntitySpec::EntitySpec(ECS::Registry& reg, te::event::EventManager& events)
         const toml::table& params) {
         try {
             float health = params["amount"].value_or(0.f);
-            reg.createComponent<Health>(e, health);
+            float delay = params["delay"].value_or(0.f);
+            reg.createComponent<Health>(e, health, delay);
         } catch (const std::bad_any_cast& e) {
-            std::cerr << "error(Plugin-health): " <<
-                e.what() << std::endl;
+            std::cerr << "error(Plugin-health): " << e.what() << std::endl;
+        }
+    };
+    reg.registerComponent<Team>();
+    _components["team"] = [](ECS::Registry& reg, const ECS::Entity& e,
+        const toml::table& params) {
+        try {
+            std::string name(params["name"].value_or(""));
+            reg.createComponent<Team>(e, name);
+        } catch (const std::bad_any_cast& e) {
+            std::cerr << "error(Plugin-team): " << e.what() << std::endl;
         }
     };
     reg.registerComponent<Damage>();
@@ -40,6 +51,9 @@ EntitySpec::EntitySpec(ECS::Registry& reg, te::event::EventManager& events)
     };
     _systems["deal_damage"] = [](ECS::Registry& reg) {
         reg.addSystem(&deal_damage);
+    };
+    _systems["kill_entity"] = [](ECS::Registry& reg) {
+        reg.addSystem(&kill_entity);
     };
 }
 
