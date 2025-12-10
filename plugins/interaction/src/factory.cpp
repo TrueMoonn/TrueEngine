@@ -40,17 +40,17 @@ Interaction::Interaction(ECS::Registry& reg, te::event::EventManager& events)
 
         for (auto&& [vel, play] : ECS::Zipper(velocities, player)) {
             if (event.keys[te::event::Key::Z])
-                vel.value().y = -3.0;
+                vel.y = -3.0;
             else if (event.keys[te::event::Key::S])
-                vel.value().y = 3.0;
+                vel.y = 3.0;
             else
-                vel.value().y = 0.0;
+                vel.y = 0.0;
             if (event.keys[te::event::Key::Q])
-                vel.value().x = -3.0;
+                vel.x = -3.0;
             else if (event.keys[te::event::Key::D])
-                vel.value().x = 3.0;
+                vel.x = 3.0;
             else
-                vel.value().x = 0.0;
+                vel.x = 0.0;
         }
     });
 }

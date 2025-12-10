@@ -59,12 +59,12 @@ Display::Display(ECS::Registry& reg, te::event::EventManager& events)
 
         for (auto&& [an] : ECS::Zipper(animations)) {
             if (event.keys[te::event::Key::LeftControl])
-                V(an).pause();
+                an.pause();
             if (event.keys[te::event::Key::Space])
-                V(an).unpause();
+                an.unpause();
             if (event.keys[te::event::Key::A]) {
                 anim = anim ? 0 : 1;
-                V(an).changeAnimation(anim);
+                an.changeAnimation(anim);
             }
         }
     });

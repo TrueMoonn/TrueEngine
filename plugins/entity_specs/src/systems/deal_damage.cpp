@@ -44,14 +44,15 @@ std::vector<ECS::Entity> entity_hit_team(ECS::Registry& reg
     auto& teams = reg.getComponents<Team>();
     auto& damage = reg.getComponents<Damage>();
 
-    auto e_hit = true_hitbox(V(positions[entity]), V(hitboxs[entity]));
-    auto& e_team = V(teams[entity]);
+    auto e_hit = true_hitbox(positions[entity].value(),
+        hitboxs[entity].value());
+    auto& e_team = teams[entity].value();
 
     for (auto &&[e, pos, hit, tm, _]
         : ECS::IndexedZipper(positions, hitboxs, teams, damage)) {
-        if (V(tm).name == e_team.name)
+        if (tm.name == e_team.name)
             continue;
-        if (square_hitbox(e_hit, true_hitbox(V(pos), V(hit)))) {
+        if (square_hitbox(e_hit, true_hitbox(pos, hit))) {
             entities_hit.push_back(e);
         }
     }
@@ -67,15 +68,15 @@ void deal_damage(ECS::Registry& reg) {
 
     for (auto &&[id, _, _, hp, tm]
             : ECS::IndexedZipper(hit, pos, health, team)) {
-        if (!V(hp).delay.isPaused()) {
-            if (V(hp).delay.checkDelay())
-                V(hp).delay.toggle();
+        if (!hp.delay.isPaused()) {
+            if (hp.delay.checkDelay())
+                hp.delay.toggle();
             else
                 continue;
         }
         for (auto &hit : entity_hit_team(reg, id)) {
-            hp.value().reduceSafely(V(damage[hit]).amount);
-            V(hp).delay.toggle();
+            hp.reduceSafely(damage[hit].value().amount);
+            hp.delay.toggle();
             break;
         }
     }

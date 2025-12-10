@@ -18,7 +18,7 @@ void kill_entity(ECS::Registry& reg) {
     auto &health = reg.getComponents<Health>();
 
     for (auto &&[id, hp] : ECS::IndexedZipper(health))
-        if (hp.value().amount == 0)
+        if (hp.amount == 0)
             reg.killEntity(id);
 }
 
