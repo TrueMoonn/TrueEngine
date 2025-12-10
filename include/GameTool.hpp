@@ -88,6 +88,16 @@ class GameTool {
         const toml::table& params = {});
 
     /**
+     * @brief Get a component type in ECS::Registry
+     * 
+     * @tparam Component The type of the component to get
+     */
+    template <typename Component>
+    void getComponent(void) {
+        _reg.getComponent<Component>();
+    }
+
+    /**
      * @brief Create a System directly to the ECS::Regitstry
      * 
      * @param f The function to add as system
