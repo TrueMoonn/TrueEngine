@@ -79,10 +79,8 @@ class GameClient {
     // Client Info
     bool isConnected() const;
     const net::Address& getServerAddress() const { return _server_address; }
-    ECS::Registry& getECS() { return _ecs; }
 
  private:
-    ECS::Registry& _ecs;
     std::unique_ptr<net::Client> _client;
     net::SocketType _protocol_type;
     net::Address _server_address;
