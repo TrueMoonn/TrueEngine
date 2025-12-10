@@ -7,7 +7,6 @@
 #include <string>
 #include <cstdint>
 
-#include <ECS/Registry.hpp>
 #include <Network/Server.hpp>
 #include <Network/Address.hpp>
 
