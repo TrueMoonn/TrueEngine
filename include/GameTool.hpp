@@ -14,6 +14,7 @@
 
     #include <ECS/Entity.hpp>
     #include <ECS/Registry.hpp>
+    #include <ECS/SparseArray.hpp>
 
     #include "event/EventManager.hpp"
     #include "config/map_loader.hpp"
@@ -93,8 +94,8 @@ class GameTool {
      * @tparam Component The type of the component to get
      */
     template <typename Component>
-    void getComponent(void) {
-        _reg.getComponents<Component>();
+    ECS::SparseArray<Component>& getComponent(void) {
+        return _reg.getComponents<Component>();
     }
 
     /**
