@@ -94,7 +94,7 @@ class GameTool {
      */
     template <typename Component>
     void getComponent(void) {
-        _reg.getComponent<Component>();
+        _reg.getComponents<Component>();
     }
 
     /**
@@ -133,12 +133,15 @@ class GameTool {
      */
     ECS::Entity createMap(std::size_t index, ECS::Entity fentity);
 
-    /**
-     * @brief Run the main loop
-     * 
-     * Launch systems in ECS::Registry
-     */
-    void run(void);
+    void pollEvent();
+
+    void runSystems();
+
+    void emit();
+
+    bool isEvent(event::System event);
+
+    event::EventManager::eventContent getEvent(event::System system);
 
  private:
     plugin::PluginManager _pmanager;
