@@ -53,7 +53,7 @@ add_library( ${PROJECT_NAME} STATIC
     ${TE_SRC_DIR}/clock.cpp
 
     # CONFIG
-    ${TE_SRC_DIR}/config/map_loader.cpp
+    ${TE_SRC_DIR}/ConfigReader.cpp
 
     # GAME TOOL
     ${TE_SRC_DIR}/GameTool.cpp
@@ -120,6 +120,6 @@ endif ()
 
 ########## TESTS ##########
 if (ENABLE_TE_TESTS)
-  enable_testing()
-  add_subdirectory(tests/unit_tests)
+    enable_testing()
+    add_subdirectory(tests/unit_tests)
 endif ()

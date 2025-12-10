@@ -7,9 +7,6 @@
 
 #pragma once
 
-    #include <map>
-    #include <vector>
-
     #include "scenes/AScene.hpp"
     #include "map_management.hpp"
 
@@ -22,34 +19,6 @@ enum IG_entities_e : ECS::Entity {
     MIN_BG = MAP_ENTITY_BACKGROUND,
     MAX_BG = MAP_MAX_ENTITY_BACKGROUND,
 };
-
-    /**
-     * @brief Check if the MAIN_WINDOW entity exist
-     *
-     * Search in the local registry if the SparceArray of Window component has the
-     * MAIN_WINDOW entity inside
-     * @param MAIN_WINDOW is Entity index for the main window
-     * @param Window is SFML like type RenderWindow component
-     * @param _reg The local registry of the class
-     * @return TRUE if the window exist, FALSE if not
-     */
-    #define MAIN_WIN_EXIST \
-        (this->_reg.getComponents<te::Window>().size() > MAIN_WINDOW \
-        && this->_reg.getComponents<te::Window>()[MAIN_WINDOW].has_value())
-
-    /**
-     * @brief Check if the MAIN_WINDOW entity is open
-     *
-     * Search in the local registry inside the Window component SparseArray at the
-     * MAIN_WINDOW index if the window is open using SFML RenderWindow.isOpen()
-     * method
-     * @param MAIN_WINDOW is Entity index for the main window
-     * @param Window is SFML like type RenderWindow component
-     * @param _reg The local registry of the class
-     * @return TRUE if the window is open, FALSE if not
-     */
-    #define MAIN_WIN_ISOPEN \
-        (this->_reg.getComponents<te::Window>()[MAIN_WINDOW].value().isOpen())
 
 class InGame : public AScene {
  public:
