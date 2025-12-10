@@ -10,9 +10,11 @@
 namespace addon {
 namespace eSpec {
 
-Health::Health(const std::int64_t &amount) :
-amount(amount)
-{}
+Health::Health(const std::int64_t &amount, float delay)
+    : amount(amount), delay(delay, false) {}
+
+Health::Health(const std::int64_t &amount, size_t delay)
+    : amount(amount), delay(delay, false) {}
 
 void Health::reduceSafely(const std::int64_t &value) {
     amount -= value > amount ? amount : value;

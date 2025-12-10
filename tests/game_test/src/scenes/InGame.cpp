@@ -20,6 +20,8 @@ void InGame::setECS(void) {
     createSystem("bound_hitbox");
     createSystem("follow_player");
     createSystem("animate");
+    createSystem("deal_damage");
+    createSystem("kill_entity");
     createSystem("draw");
     createSystem("display");
 }
