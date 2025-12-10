@@ -129,6 +129,7 @@ g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,
 
         [ENTITIES.P.animation]
         frames = [
-            [[0, 0], 8, 0.1, true]
+            [[0, 0], 8, 0.1, true],
+            [[0, 1], 8, 0.1, true]
         ]
 

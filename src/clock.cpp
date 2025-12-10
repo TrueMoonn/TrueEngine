@@ -11,7 +11,6 @@
 namespace te {
 
 bool Timestamp::checkDelay(bool restart) {
-    std::cout << "delay now at " << this->delay << std::endl;
     if (this->active && CAST_M(NOW, this->ref) > this->delay) {
         if (restart)
             this->restart();

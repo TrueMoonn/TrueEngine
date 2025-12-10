@@ -14,21 +14,20 @@
 #include <chrono>
 
 #include "clock.hpp"
+#include "maths/Vector.hpp"
 
 namespace addon {
 namespace display {
-
-typedef std::array<size_t, 2> pos;
 
 /**
  * @brief Animation frame data (duration and delay)
  */
 struct FrameData {
-    FrameData(const pos &position, size_t max, float delay, bool loop = true)
+    FrameData(const mat::Vector2<size_t> &position, size_t max, float delay, bool loop = true)
         : frameBEG(position), frameMAX(max)
         , frameDELAY(SEC_TO_MICRO(delay)), loop(loop) {}
 
-    pos frameBEG;
+    mat::Vector2<size_t> frameBEG;
     size_t frameMAX;
     size_t frameDELAY;
     bool loop;

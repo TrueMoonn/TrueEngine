@@ -30,12 +30,12 @@ Display::Display(ECS::Registry& reg, te::event::EventManager& events)
             std::vector<FrameData> frames;
             const auto &toml_frames = params["frames"].as_array();
             for (size_t i = 0; i < toml_frames->size(); i++) {
-                const auto &cur = toml_frames->at(0).as_array();
-                pos pos = {cur->at(0).as_array()->at(0).value_or<size_t>(0),
-                    cur->at(0).as_array()->at(0).value_or<size_t>(0)};
+                const auto &cur = toml_frames->at(i).as_array();
+                mat::Vector2<size_t> pos = {cur->at(0).as_array()->at(0).value_or<size_t>(0),
+                    cur->at(0).as_array()->at(1).value_or<size_t>(0)};
                 size_t max = cur->at(1).value_or(0);
                 float delta = cur->at(2).value_or(0.1f);
-                bool loop = cur->at(3).value_or<float>(true);
+                bool loop = cur->at(3).value_or(true);
                 frames.push_back(FrameData{pos, max, delta, loop});
             }
             reg.addComponent(e, Animation(frames));
@@ -50,6 +50,7 @@ Display::Display(ECS::Registry& reg, te::event::EventManager& events)
     events.addSubscription(te::event::System::KeyPressed,
         [](ECS::Registry& reg,
         const te::event::EventManager::eventContent& content) {
+        static bool anim = 0;
         auto& event = std::get<te::event::KeysEvent>(content);
 
         auto& animations = reg.getComponents<Animation>();
@@ -59,6 +60,10 @@ Display::Display(ECS::Registry& reg, te::event::EventManager& events)
                 V(an).pause();
             if (event.keys[te::event::Key::Space])
                 V(an).unpause();
+            if (event.keys[te::event::Key::A]) {
+                anim = anim ? 0 : 1;
+                V(an).changeAnimation(anim);
+            }
         }
     });
     _systems["animate"] = [](ECS::Registry& reg) {
