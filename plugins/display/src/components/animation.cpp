@@ -19,6 +19,8 @@ bool Animation::changeAnimation(size_t index) {
         return false;
     curAnim = index;
     curFrame = 0;
+    timestamp.delay = frameInfos[curAnim].frameDELAY;
+    timestamp.restart();
     return true;
 }
 
@@ -33,5 +35,17 @@ void Animation::decrement() {
         curFrame--;
 }
 
-}  // namespace display
+void Animation::pause()
+{
+    if (!timestamp.isPaused())
+        timestamp.toggle();
+}
+
+void Animation::unpause()
+{
+    if (timestamp.isPaused())
+        timestamp.toggle();
+}
+
+} // namespace display
 }  // namespace addon

@@ -100,6 +100,7 @@ g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,
 
         [ENTITIES.P.health]
         amount = 5
+        delay = 1
 
         [ENTITIES.P.damage]
         amount = 1

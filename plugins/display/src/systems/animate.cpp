@@ -23,9 +23,10 @@ void animate(ECS::Registry& reg) {
     auto cur = NOW;
 
     for (auto &&[an, sp] : ECS::Zipper(animations, sprites)) {
-        if (CAST_M(cur, V(an).delta) > V(an).getCurrentAnim().frameDELAY) {
+        std::cout << V(an).timestamp.getElapsedTime() << std::endl;
+        std::cout << V(an).timestamp.delay << std::endl;
+        if (V(an).timestamp.checkDelay(true)) {
             auto rect = V(sp).getTextureRect();
-            V(an).delta = cur;
             V(an).increment();
             rect.position.x = rect.size.x * V(an).curFrame;
             V(sp).setTextureRect(rect);

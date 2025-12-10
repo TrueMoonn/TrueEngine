@@ -8,6 +8,7 @@
 #pragma once
 
 #include <chrono>
+#include <iostream>
 
 namespace te {
 
@@ -21,16 +22,42 @@ typedef std::chrono::steady_clock::time_point delta_t;
 
 typedef int64_t microsec;
 
-struct Timestamp {
+/**
+ * @brief Timestamp class for delta time handling in microseconds
+ */
+class Timestamp {
  public:
+
+    /**
+     * @param delay The delay in microseconds until the next trigger is reached
+     * @param active Weither the clock should start right away or not
+     */
+    explicit Timestamp(size_t delay, bool active = true)
+        : delay(delay) , ref(NOW), cur(ref), active(active) {}
+
+
+    /**
+     * @param delay The delay in seconds until the next trigger is reached
+     * @param active Weither the clock should start right away or not
+     */
     explicit Timestamp(float delay, bool active = true)
         : delay(size_t(SEC_TO_MICRO(delay)))
         , ref(NOW), cur(ref), active(active) {}
 
+
+    Timestamp(const Timestamp &other)
+        : delay(size_t(other.delay))
+        , ref(other.ref), cur(other.cur), active(other.active) {}
+
+    Timestamp(const Timestamp &&other)
+        : delay(std::move(size_t(other.delay)))
+        , ref(std::move(other.ref)), cur(std::move(other.cur))
+        , active(std::move(other.active)) {}
+
     microsec getElapsedTime(void);
     bool checkDelay(bool restart = true);
     void restart(void);
-    void pause(void);
+    void toggle(void);
     bool isPaused(void) { return !active; }
 
     microsec delay;
