@@ -8,8 +8,8 @@ set(CMAKE_SHARED_LIBRARY_PREFIX "")
 add_subdirectory(${PROJECT_SOURCE_DIR}/sfml)
 execute_process(
     COMMAND bash -c "
-    rm -rf ../include/sfml ../include/Sfml.hpp
-    cp -R ../plugins/sfml/include/. ../include
+    rm -rf ${PROJECT_SOURCE_DIR}/../include/sfml ${PROJECT_SOURCE_DIR}/../include/Sfml.hpp
+    cp -R ${PROJECT_SOURCE_DIR}/sfml/include/. ${PROJECT_SOURCE_DIR}/../include
     "
 )
 
@@ -17,8 +17,8 @@ execute_process(
 add_subdirectory(${PROJECT_SOURCE_DIR}/display)
 execute_process(
     COMMAND bash -c "
-    rm -rf ../include/display ../include/Display.hpp
-    cp -R ../plugins/display/include/. ../include
+    rm -rf ${PROJECT_SOURCE_DIR}/../include/display ${PROJECT_SOURCE_DIR}/../include/Display.hpp
+    cp -R ${PROJECT_SOURCE_DIR}/display/include/. ${PROJECT_SOURCE_DIR}/../include
     "
 )
 
@@ -26,8 +26,8 @@ execute_process(
 add_subdirectory(${PROJECT_SOURCE_DIR}/entity_specs)
 execute_process(
     COMMAND bash -c "
-    rm -rf ../include/entity_spec ../include/EntitySpec.hpp
-    cp -R ../plugins/entity_specs/include/. ../include
+    rm -rf ${PROJECT_SOURCE_DIR}/../include/entity_spec ${PROJECT_SOURCE_DIR}/../include/EntitySpec.hpp
+    cp -R ${PROJECT_SOURCE_DIR}/entity_specs/include/. ${PROJECT_SOURCE_DIR}/../include
     "
 )
 
@@ -35,8 +35,8 @@ execute_process(
 add_subdirectory(${PROJECT_SOURCE_DIR}/physic)
 execute_process(
     COMMAND bash -c "
-    rm -rf ../include/physic ../include/Physic.hpp
-    cp -R ../plugins/physic/include/. ../include
+    rm -rf ${PROJECT_SOURCE_DIR}/../include/physic ${PROJECT_SOURCE_DIR}/../include/Physic.hpp
+    cp -R ${PROJECT_SOURCE_DIR}/physic/include/. ${PROJECT_SOURCE_DIR}/../include
     "
 )
 
@@ -44,7 +44,7 @@ execute_process(
 add_subdirectory(${PROJECT_SOURCE_DIR}/interaction)
 execute_process(
     COMMAND bash -c "
-    rm -rf ../include/interaction ../include/Interaction.hpp
-    cp -R ../plugins/interaction/include/. ../include
+    rm -rf ${PROJECT_SOURCE_DIR}/../include/interaction ${PROJECT_SOURCE_DIR}/../include/Interaction.hpp
+    cp -R ${PROJECT_SOURCE_DIR}/interaction/include/. ${PROJECT_SOURCE_DIR}/../include
     "
 )
