@@ -5,6 +5,7 @@
 ** deal_damage
 */
 
+#include <vector>
 #include <ECS/Zipper.hpp>
 
 #include "physic/components/hitbox.hpp"
@@ -27,16 +28,15 @@ static bool square_hitbox(mat::RectF rect1, mat::RectF rect2) {
         rect1.position.y + rect1.size.y > rect2.position.y);
 }
 
-static mat::RectF true_hitbox(const physic::Position2 &pos, const physic::Hitbox &hit)
-{
+static mat::RectF true_hitbox(const physic::Position2 &pos
+        , const physic::Hitbox &hit) {
     return mat::RectF(
         mat::Vector2f(pos.x + hit.position.x, pos.y + hit.position.y),
-        mat::Vector2f(hit.size.x, hit.size.y)
-    );
+        mat::Vector2f(hit.size.x, hit.size.y));
 }
 
-std::vector<ECS::Entity> entity_hit_team(ECS::Registry& reg,
-    const ECS::Entity& entity) {
+std::vector<ECS::Entity> entity_hit_team(ECS::Registry& reg
+        , const ECS::Entity& entity) {
     std::vector<ECS::Entity> entities_hit;
 
     auto& positions = reg.getComponents<physic::Position2>();
@@ -52,7 +52,6 @@ std::vector<ECS::Entity> entity_hit_team(ECS::Registry& reg,
         if (V(tm).name == e_team.name)
             continue;
         if (square_hitbox(e_hit, true_hitbox(V(pos), V(hit)))) {
-            std::cout << "yeah" << std::endl;
             entities_hit.push_back(e);
         }
     }
@@ -66,7 +65,8 @@ void deal_damage(ECS::Registry& reg) {
     auto &damage = reg.getComponents<Damage>();
     auto &team = reg.getComponents<Team>();
 
-    for (auto &&[id, _, _, hp, tm] : ECS::IndexedZipper(hit, pos, health, team)) {
+    for (auto &&[id, _, _, hp, tm]
+            : ECS::IndexedZipper(hit, pos, health, team)) {
         if (!V(hp).delay.isPaused()) {
             if (V(hp).delay.checkDelay())
                 V(hp).delay.toggle();
@@ -74,7 +74,6 @@ void deal_damage(ECS::Registry& reg) {
                 continue;
         }
         for (auto &hit : entity_hit_team(reg, id)) {
-            std::cout << "Team " << V(tm).name << " and " << V(team[hit]).name << " collided !" << std::endl;
             hp.value().reduceSafely(V(damage[hit]).amount);
             V(hp).delay.toggle();
             break;

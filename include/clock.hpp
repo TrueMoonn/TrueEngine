@@ -8,6 +8,7 @@
 #pragma once
 
 #include <chrono>
+#include <utility>
 
 namespace te {
 
@@ -26,7 +27,6 @@ typedef int64_t microsec;
  */
 class Timestamp {
  public:
-
     /**
      * @param delay The delay in microseconds until the next trigger is reached
      * @param active Weither the clock should start right away or not

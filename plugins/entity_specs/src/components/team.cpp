@@ -5,6 +5,8 @@
 ** team
 */
 
+#include <string>
+
 #include "entity_spec/components/team.hpp"
 
 namespace addon {

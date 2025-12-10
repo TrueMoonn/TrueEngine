@@ -6,6 +6,7 @@
 */
 
 #include <iostream>
+#include <string>
 #include <toml++/toml.hpp>
 
 #include "EntitySpec.hpp"

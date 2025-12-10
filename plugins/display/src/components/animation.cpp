@@ -35,5 +35,5 @@ void Animation::decrement() {
         curFrame--;
 }
 
-} // namespace display
+}  // namespace display
 }  // namespace addon

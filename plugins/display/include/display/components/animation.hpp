@@ -23,7 +23,8 @@ namespace display {
  * @brief Animation frame data (duration and delay)
  */
 struct FrameData {
-    FrameData(const mat::Vector2<size_t> &position, size_t max, float delay, bool loop = true)
+    FrameData(const mat::Vector2<size_t> &position, size_t max,
+            float delay, bool loop = true)
         : frameBEG(position), frameMAX(max)
         , frameDELAY(SEC_TO_MICRO(delay)), loop(loop) {}
 
@@ -50,13 +51,13 @@ struct Animation {
         : frameInfos(std::move(frameInfos)), curAnim(0), curFrame(0)
         , timestamp(frameInfos.at(0).frameDELAY) {}
 
-    Animation(const Animation &other) : frameInfos(other.frameInfos),
-        curAnim(other.curAnim), curFrame(other.curFrame), timestamp(other.timestamp) {}
+    Animation(const Animation &other) : frameInfos(other.frameInfos)
+        , curAnim(other.curAnim), curFrame(other.curFrame)
+        , timestamp(other.timestamp) {}
 
     Animation(Animation &&other) : frameInfos(std::move(other.frameInfos)),
         curAnim(std::move(other.curAnim)), curFrame(std::move(other.curFrame)),
-        timestamp(std::move(other.timestamp))
-        {}
+        timestamp(std::move(other.timestamp)) {}
 
     ~Animation() = default;
 
