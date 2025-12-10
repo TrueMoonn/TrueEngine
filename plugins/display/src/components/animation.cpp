@@ -35,17 +35,5 @@ void Animation::decrement() {
         curFrame--;
 }
 
-void Animation::pause()
-{
-    if (!timestamp.isPaused())
-        timestamp.toggle();
-}
-
-void Animation::unpause()
-{
-    if (timestamp.isPaused())
-        timestamp.toggle();
-}
-
 } // namespace display
 }  // namespace addon

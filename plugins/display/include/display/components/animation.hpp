@@ -65,8 +65,9 @@ struct Animation {
     bool changeAnimation(size_t index);
     void increment();
     void decrement();
-    void pause();
-    void unpause();
+    void pause() { if (!timestamp.isPaused()) timestamp.toggle(); }
+    void unpause() { if (timestamp.isPaused()) timestamp.toggle(); }
+    void toggle() { this->timestamp.toggle(); }
 
     const std::vector<FrameData> frameInfos;
     std::size_t curAnim;

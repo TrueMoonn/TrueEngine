@@ -16,6 +16,8 @@
 #include "Display.hpp"
 #include "display/factory.hpp"
 
+#include <ECS/Zipper.hpp>
+
 namespace addon {
 namespace display {
 
@@ -45,6 +47,21 @@ Display::Display(ECS::Registry& reg, te::event::EventManager& events)
             std::cerr << e.what() << std::endl;
         }
     };
+    events.addSubscription(te::event::System::KeyPressed,
+        [](ECS::Registry& reg,
+        const te::event::EventManager::eventContent& content) {
+        auto& event = std::get<te::event::KeysEvent>(content);
+        static te::Timestamp ts (0.1f);
+
+        auto& animations = reg.getComponents<Animation>();
+
+        for (auto&& [an] : ECS::Zipper(animations)) {
+            if (ts.checkDelay() && event.keys[te::event::Key::LeftControl])
+                V(an).pause();
+            if (ts.checkDelay() && event.keys[te::event::Key::Space])
+                V(an).unpause();
+        }
+    });
     _systems["animate"] = [](ECS::Registry& reg) {
         reg.addSystem(&animate);
     };
