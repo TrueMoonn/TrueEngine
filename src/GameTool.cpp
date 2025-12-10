@@ -74,8 +74,7 @@ ECS::Entity GameTool::createMap(ECS::Entity fentity, std::size_t mapIndex) {
                 if (layer < map.map[y][x].size()) {
                     createEntityComponents(fentity + ientity,
                         _configs.getEntityConfig(map.map[y][x][layer]),
-                        mat::Vector2f{tileSize.x * x, tileSize.y * y}
-                    );
+                        mat::Vector2f{tileSize.x * x, tileSize.y * y});
                     ientity += 1;
                 }
             }

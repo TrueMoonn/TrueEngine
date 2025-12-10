@@ -8,8 +8,6 @@
 #pragma once
 
     #include <string>
-
-    #include <toml++/toml.hpp>
     #include <toml++/toml.hpp>
 
     #include <ECS/Entity.hpp>
