@@ -1,6 +1,22 @@
- # Short Examples
+# TrueEngine
 
- ## Main with GameTool
+TrueEngine is a user friendly game engine using ECS as base implementation.
+
+This engine offer you a fast learning experience in creating offline game
+as well as online game giving you easy access to Network and Plugin
+management.
+
+## Short usage examples
+
+Here you can follow a quick exemples of TrueEngine usage. Feel free to
+follow each steps to create your own game.
+
+For this exemple we will need some extra configuration:
+* Graphic Lib Plugin - to use as a window manager
+* Toml - file used as a configuration file
+* Map - as a txt file to create a simple map
+
+### Main with GameTool
 
 ```c++
 #include <event/events.hpp>
@@ -43,7 +59,7 @@ int main(void) {
 
 ```
 
-## Main without GameTool
+### Main without GameTool
 
 ```c++
 #include <iostream>
