@@ -8,9 +8,8 @@
 namespace te {
 namespace network {
 
-GameClient::GameClient(ECS::Registry& ecs, const std::string& protocol)
-    : _ecs(ecs)
-    , _protocol_type(protocol == "TCP" ?
+GameClient::GameClient(const std::string& protocol)
+    : _protocol_type(protocol == "TCP" ?
         net::SocketType::TCP : net::SocketType::UDP)
     , _connected(false) {
     _client = std::make_unique<net::Client>(protocol);

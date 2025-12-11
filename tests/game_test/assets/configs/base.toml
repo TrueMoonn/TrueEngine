@@ -1,0 +1,54 @@
+[ENTITIES]
+    [ENTITIES.DEFAULT]
+
+    [ENTITIES.g]
+    drawable = true
+    position2 = true
+        [ENTITIES.g.sprite]
+        path = "assets/ground.png"
+        scale = [50, 50]
+
+    [ENTITIES.W]
+    drawable = true
+    movable = true
+        [ENTITIES.W.sprite]
+        path = "assets/wall.png"
+        scale = [20, 20]
+
+        [ENTITIES.W.position2]
+        x = 15.0
+        y = 10.0
+
+        [ENTITIES.W.hitbox]
+        left = 15.0
+        top = 10.0
+        width = 20.0
+        height = 20.0
+
+    [ENTITIES.X]
+    drawable = true
+    position2 = true
+        [ENTITIES.X.sprite]
+        path = "assets/wall.png"
+        scale = [50, 50]
+
+        [ENTITIES.X.hitbox]
+        left = 0.0
+        top = 0.0
+        width = 50.0
+        height = 50.0
+
+    [ENTITIES.D]
+    drawable = true
+    position2 = true
+        [ENTITIES.D.sprite]
+        path = "assets/door.png"
+        scale = [50, 50]
+        # width = 50.0
+        # height = 50.0
+
+        [ENTITIES.D.hitbox]
+        left = 0.0
+        top = 0.0
+        width = 50.0
+        height = 50.0

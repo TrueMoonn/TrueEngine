@@ -23,12 +23,13 @@ void animate(ECS::Registry& reg) {
     auto cur = NOW;
 
     for (auto &&[an, sp] : ECS::Zipper(animations, sprites)) {
-        if (CAST_M(cur, V(an).delta) > V(an).getCurrentAnim().frameDELAY) {
-            auto rect = V(sp).getTextureRect();
-            V(an).delta = cur;
-            V(an).increment();
-            rect.position.x = rect.size.x * V(an).curFrame;
-            V(sp).setTextureRect(rect);
+        if (an.timestamp.checkDelay(true)) {
+            an.increment();
+            auto rect = sp.getTextureRect();
+            rect.position.y = rect.size.y * an.getCurrentAnim().frameBEG.y;
+            rect.position.x = (rect.size.x * an.getCurrentAnim().frameBEG.x)
+                + (rect.size.x * an.curFrame);
+            sp.setTextureRect(rect);
         }
     }
 }

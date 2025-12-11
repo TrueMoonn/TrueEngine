@@ -48,11 +48,11 @@ std::vector<ECS::Entity> entity_hit(ECS::Registry& reg,
                     hitbox.size.x, hitbox.size.y)),
                 mat::RectF(
                     mat::Vector2f(
-                    obj_pos.value().x + obj_hitbox.value().position.x,
-                    obj_pos.value().y + obj_hitbox.value().position.y),
+                    obj_pos.x + obj_hitbox.position.x,
+                    obj_pos.y + obj_hitbox.position.y),
                     mat::Vector2f(
-                    obj_hitbox.value().size.x,
-                    obj_hitbox.value().size.y)))) {
+                    obj_hitbox.size.x,
+                    obj_hitbox.size.y)))) {
                 entities_hit.push_back(e);
             }
         }

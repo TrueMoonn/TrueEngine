@@ -7,7 +7,6 @@
 #include <cstdint>
 #include <unordered_map>
 
-#include <ECS/Registry.hpp>
 #include <Network/Client.hpp>
 #include <Network/Address.hpp>
 
@@ -22,8 +21,7 @@ namespace network {
  */
 class GameClient {
  public:
-    explicit GameClient(ECS::Registry& ecs,
-         const std::string& protocol = "UDP");
+    explicit GameClient(const std::string& protocol = "UDP");
     ~GameClient();
 
     bool connect(const std::string& server_ip, uint16_t port);
@@ -79,10 +77,8 @@ class GameClient {
     // Client Info
     bool isConnected() const;
     const net::Address& getServerAddress() const { return _server_address; }
-    ECS::Registry& getECS() { return _ecs; }
 
  private:
-    ECS::Registry& _ecs;
     std::unique_ptr<net::Client> _client;
     net::SocketType _protocol_type;
     net::Address _server_address;

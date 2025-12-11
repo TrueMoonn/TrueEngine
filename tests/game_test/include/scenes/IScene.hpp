@@ -9,4 +9,7 @@
 
     #include "GameTool.hpp"
 
-class IScene : public te::GameTool {};
+class IScene : public te::GameTool {
+ public:
+ virtual void run() = 0;
+};

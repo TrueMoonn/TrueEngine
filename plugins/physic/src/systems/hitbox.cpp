@@ -26,31 +26,31 @@ void hitbox2_sys(ECS::Registry& reg) {
 
     for (auto &&[id, pos, vel, hit, mov]
         : ECS::IndexedZipper(positions, velocities, hitboxs, movable)) {
-        float centerX = V(pos).x + V(hit).size.x / 2;
-        float centerY = V(pos).y + V(hit).size.y / 2;
+        float centerX = pos.x + hit.size.x / 2;
+        float centerY = pos.y + hit.size.y / 2;
 
         for (ECS::Entity cmp : entity_hit(reg, id)) {
-            auto other_pos = reg.getComponents<Position2>()[cmp];
-            auto other_hit = reg.getComponents<Hitbox>()[cmp];
+            auto other_pos = reg.getComponents<Position2>()[cmp].value();
+            auto other_hit = reg.getComponents<Hitbox>()[cmp].value();
 
-            if (isBetWeen(centerY, V(other_pos).y,
-                V(other_pos).y + V(other_hit).size.y) &&
-                isBetWeen(centerY, V(other_pos).x,
-                V(other_pos).x + V(other_hit).size.x))
-                V(pos).x += 15;
-            if (isBetWeen(centerY, V(other_pos).y,
-                V(other_pos).y + V(other_hit).size.y)) {
-                if (V(other_pos).x < V(pos).x)
-                    V(pos).x = V(other_pos).x + V(other_hit).size.x;
-                if (V(other_pos).x > V(pos).x)
-                    V(pos).x = V(other_pos).x - V(hit).size.x;
+            if (isBetWeen(centerY, other_pos.y,
+                other_pos.y + other_hit.size.y) &&
+                isBetWeen(centerY, other_pos.x,
+                other_pos.x + other_hit.size.x))
+                pos.x += 15;
+            if (isBetWeen(centerY, other_pos.y,
+                other_pos.y + other_hit.size.y)) {
+                if (other_pos.x < pos.x)
+                    pos.x = other_pos.x + other_hit.size.x;
+                if (other_pos.x > pos.x)
+                    pos.x = other_pos.x - hit.size.x;
             }
-            if (isBetWeen(centerY, V(other_pos).x,
-                V(other_pos).x + V(other_hit).size.x)) {
-                if (V(other_pos).y < V(pos).y)
-                    V(pos).y = V(other_pos).y + V(other_hit).size.y;
-                if (V(other_pos).y > V(pos).y)
-                    V(pos).y = V(other_pos).y - V(hit).size.y;
+            if (isBetWeen(centerY, other_pos.x,
+                other_pos.x + other_hit.size.x)) {
+                if (other_pos.y < pos.y)
+                    pos.y = other_pos.y + other_hit.size.y;
+                if (other_pos.y > pos.y)
+                    pos.y = other_pos.y - hit.size.y;
             }
         }
     }

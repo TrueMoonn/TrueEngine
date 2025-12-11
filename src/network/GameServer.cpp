@@ -10,10 +10,9 @@
 namespace te {
 namespace network {
 
-GameServer::GameServer(ECS::Registry& ecs, uint16_t port,
+GameServer::GameServer(uint16_t port,
     const std::string& protocol)
-    : _ecs(ecs)
-    , _protocol_type(protocol == "TCP" ?
+    : _protocol_type(protocol == "TCP" ?
         net::SocketType::TCP : net::SocketType::UDP)
     , _port(port)
     , _running(false) {
