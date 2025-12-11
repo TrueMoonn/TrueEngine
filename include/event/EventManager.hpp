@@ -29,55 +29,17 @@ class EventManager {
 
  public:
     explicit EventManager() = default;
-    explicit EventManager(pollFunc func) : _pollFunc(func) {}
+    explicit EventManager(pollFunc func);
     ~EventManager() = default;
 
-    void setPollFunc(pollFunc func) {
-        _pollFunc = func;
-    }
-    void pollEvents(ECS::Registry& reg) {
-        if (_pollFunc) {
-            _pollFunc(_events, reg);
-        }
-    }
+    void setPollFunc(pollFunc func);
+    void pollEvents(ECS::Registry& reg);
 
-    void addSubscription(System sys, eventFunc func) {
-        _subscription[sys].push_back(func);
-    }
+    bool isEvent(System sys);
+    eventContent getEvent(System system) const;
 
-    bool isEvent(System sys) {
-        return _events.systems.at(sys);
-    }
-
-    eventContent getEvent(System system) {
-        if (system == System::KeyPressed || system == System::KeyReleased)
-            return _events.keys;
-        else if (system == System::MouseMoved
-                || system == System::MouseWheelMoved
-                || system == System::MouseWheelScrolled
-                || system == System::MouseButtonPressed
-                || system == System::MouseButtonReleased
-                || system == System::MouseEntered
-                || system == System::MouseQuit)
-            return _events.mouses;
-        else
-            return _events.systems.at(system);
-    }
-
-    void emit(ECS::Registry& reg) {
-        if (_events.keys.update) {
-            for (const auto &func : _subscription[System::KeyPressed]) {
-                func(reg, _events.keys);
-            }
-        }
-        // for (auto& [sys, vect] : _subscription) {
-        //     if (_events.systems[sys]) {
-        //         for (const auto &func : vect) {
-        //             func(reg, true);
-        //         }
-        //     }
-        // }
-    }
+    void addSubscription(System sys, eventFunc func);
+    void emit(ECS::Registry& reg);
 
  private:
     pollFunc _pollFunc;
