@@ -11,4 +11,7 @@
 
     #include "scenes/IScene.hpp"
 
-class AScene : public IScene {};
+class AScene : public IScene {
+ public:
+    virtual void run() = 0;
+};

@@ -17,7 +17,7 @@ void pollEvent(te::event::Events& events, ECS::Registry& reg) {
     auto& windows = reg.getComponents<Window>();
 
     for (auto&& [win] : ECS::Zipper(windows)) {
-        while (std::optional<sf::Event> pevent = win.value().pollEvent()) {
+        while (std::optional<sf::Event> pevent = win.pollEvent()) {
             getKeyboardEvent(pevent, events.keys);
             if (pevent->is<sf::Event::Closed>())
                 events.systems.at(te::event::System::Closed) = true;

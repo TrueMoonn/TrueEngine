@@ -1,0 +1,32 @@
+[ENTITIES]
+    [ENTITIES.enemy]
+    drawable = true
+    position2 = true
+        [ENTITIES.enemy.health]
+        amount = 2
+
+        [ENTITIES.enemy.damage]
+        amount = 2
+
+        [ENTITIES.enemy.team]
+        name = "bad_guy"
+
+        [ENTITIES.enemy.sprite]
+        path = "assets/bat.png"
+        size = [32, 32]
+        scale = [30, 30]
+
+        [ENTITIES.enemy.velocity2]
+        x = 0.0
+        y = 0.0
+
+        [ENTITIES.enemy.hitbox]
+        left = 0.0
+        top = 0.0
+        width = 30.0
+        height = 30.0
+
+        [ENTITIES.enemy.animation]
+        frames = [
+            [[0, 0], 4, 0.08, true]
+        ]

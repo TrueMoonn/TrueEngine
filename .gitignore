@@ -23,3 +23,5 @@ doxygen/
 
 # Editor config
 .vscode
+compile_flags.txt
+.cache/

@@ -23,8 +23,8 @@ void follow_player_sys(ECS::Registry& reg) {
 
     for (auto &&[win] : ECS::Zipper(windows)) {
         for (auto &&[pos, player] : ECS::Zipper(positions, players)) {
-            win.value().setView(sf::View({V(pos).x, V(pos).y},
-                static_cast<sf::Vector2f>(win.value().getSize())));
+            win.setView(sf::View({pos.x, pos.y},
+                static_cast<sf::Vector2f>(win.getSize())));
         }
     }
 }
