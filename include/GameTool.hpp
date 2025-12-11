@@ -48,6 +48,8 @@ class GameTool {
      * @param dir Path to the directory to load plugins
      */
     void loadPlugins(const std::string& dir = DEFAULT_PLUGIN_RPATH);
+    void loadPlugins(std::vector<std::string> &pluginToLoad,
+        const std::string& dir = DEFAULT_PLUGIN_RPATH);
     /**
      * @brief Clear plugins loaded
      * 
@@ -129,6 +131,10 @@ class GameTool {
      * Launch systems in ECS::Registry
      */
     void run(void);
+
+    ECS::Registry getRegistry() {
+        return this->_reg;
+    }
 
  private:
     plugin::PluginManager _pmanager;
