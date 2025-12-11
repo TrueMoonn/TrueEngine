@@ -11,6 +11,7 @@
     #include <functional>
     #include <variant>
     #include <vector>
+    #include <optional>
 
     #include <ECS/Registry.hpp>
 
@@ -25,10 +26,10 @@ class EventManager {
  public:
     typedef void(*pollFunc)(Events&, ECS::Registry&);
     typedef std::variant<KeysEvent, MouseEvents, bool> eventContent;
-    typedef std::function<void(ECS::Registry&, const eventContent&)> eventFunc;
+    typedef std::function<void(ECS::Registry&, const eventContent&, std::optional<ECS::Entity>)> eventFunc;
 
  public:
-    explicit EventManager() = default;
+    EventManager() : _pollFunc(nullptr) {}
     explicit EventManager(pollFunc func) : _pollFunc(func) {}
     ~EventManager() = default;
 
@@ -46,6 +47,8 @@ class EventManager {
     }
 
     bool isEvent(System sys) {
+        if (sys == System::KeyPressed && _events.keys.update)
+            return true;
         return _events.systems.at(sys);
     }
 
@@ -64,10 +67,10 @@ class EventManager {
             return _events.systems.at(system);
     }
 
-    void emit(ECS::Registry& reg) {
+    void emit(ECS::Registry& reg, std::optional<ECS::Entity> target_entity = std::nullopt) {
         if (_events.keys.update) {
             for (const auto &func : _subscription[System::KeyPressed]) {
-                func(reg, _events.keys);
+                func(reg, _events.keys, target_entity);
             }
         }
         // for (auto& [sys, vect] : _subscription) {
@@ -77,6 +80,14 @@ class EventManager {
         //         }
         //     }
         // }
+    }
+
+    Events getEvents() {
+        return _events;
+    }
+
+    void setEvents(Events events) {
+        _events = events;
     }
 
  private:
