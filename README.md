@@ -1,6 +1,6 @@
  # Short Examples
 
- ## Main
+ ## Main with GameTool
 
 ```c++
 #include <event/events.hpp>
@@ -38,6 +38,34 @@ int main(void) {
         // Run systems loaded
         gtool.runSystems();
     }
+    return 0;
+}
+
+```
+
+## Main without GameTool
+
+```c++
+#include <iostream>
+
+#include "event/EventManager.hpp"
+#include <ECS/Registry.hpp>
+#include <plugin/PluginManager.hpp>
+
+int main(void) {
+    te::plugin::PluginManager pmanager;
+    te::event::EventManager emanager;
+    ECS::Registry reg;
+
+    pmanager.loadPlugins(reg, emanager, "./plugins/");
+    try {
+        pmanager.loadSystem("draw");
+        pmanager.loadSystem("display");
+    } catch (const te::plugin::PluginManager::NoPluginFound& e) {
+        std::cerr << e.what() << '\n';
+    }
+
+
     return 0;
 }
 
