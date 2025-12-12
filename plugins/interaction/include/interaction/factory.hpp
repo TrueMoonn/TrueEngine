@@ -11,6 +11,7 @@
 
     #include <ECS/Registry.hpp>
     #include "plugin/APlugin.hpp"
+    #include "physic/components/velocity.hpp"
 
 namespace addon {
 namespace intact {
@@ -18,6 +19,9 @@ namespace intact {
 class Interaction : public te::plugin::APlugin {
  public:
     explicit Interaction(ECS::Registry& reg, te::event::EventManager& events);
+
+ private:
+    static void updateVel(const te::event::KeysEvent &event, addon::physic::Velocity2 &vel);
 };
 
 }  // namespace intact
