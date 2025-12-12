@@ -66,7 +66,7 @@ void deal_damage(ECS::Registry& reg) {
     auto &damage = reg.getComponents<Damage>();
     auto &team = reg.getComponents<Team>();
 
-    for (auto &&[id, _, _, hp, tm]
+    for (auto &&[id, _, __, hp, tm]
             : ECS::IndexedZipper(hit, pos, health, team)) {
         if (!hp.delay.isPaused()) {
             if (hp.delay.checkDelay())
