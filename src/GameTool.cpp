@@ -96,8 +96,8 @@ void GameTool::setEvent(event::System sys) {
     std::cout <<  _events.getEvent().systems.at(sys) << true << std::endl;
 }
 
-void GameTool::emit() {
-    _events.emit(_reg);
+void GameTool::emit(std::optional<ECS::Entity> entity) {
+    _events.emit(_reg, entity);
 }
 
 void GameTool::runSystems() {

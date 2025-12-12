@@ -171,9 +171,10 @@ class GameTool {
     /**
      * @brief Execute functions subscribed to the events that were triggered as active
      * 
+     * @param entity Optional entity ID to target specific entity. nullopt means all entities
      * @see event::EventManager
      */
-    void emit();
+    void emit(std::optional<ECS::Entity> entity = std::nullopt);
 
     /**
      * @brief Check if there is an event for the system
@@ -195,6 +196,24 @@ class GameTool {
 
     ECS::Registry getRegistry() {
         return this->_reg;
+    }
+
+    /**
+     * @brief Set the Events object of the event::EventManager
+     * 
+     * @param events The Events that you want to set in the Events of EventManager
+     */
+    void setEvents(event::Events events) {
+        _events.setEvents(events);
+    }
+
+    /**
+     * @brief Get the Events object of the event::EventManager
+     * 
+     * @return event::Events The Events EventManager's member
+     */
+    event::Events getEvents() {
+        return _events.getEvents();
     }
 
  private:
