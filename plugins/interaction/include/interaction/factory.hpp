@@ -21,7 +21,8 @@ class Interaction : public te::plugin::APlugin {
     explicit Interaction(ECS::Registry& reg, te::event::EventManager& events);
 
  private:
-    static void updateVel(const te::event::KeysEvent &event, addon::physic::Velocity2 &vel);
+    static void updateVel(const te::event::KeysEvent &event,
+        addon::physic::Velocity2 &vel);
 };
 
 }  // namespace intact

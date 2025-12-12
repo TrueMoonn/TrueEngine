@@ -26,7 +26,8 @@ class EventManager {
  public:
     typedef void(*pollFunc)(Events&, ECS::Registry&);
     typedef std::variant<KeysEvent, MouseEvents, bool> eventContent;
-    typedef std::function<void(ECS::Registry&, const eventContent&, std::optional<ECS::Entity>)> eventFunc;
+    typedef std::function<void(ECS::Registry&, const eventContent&,
+        std::optional<ECS::Entity>)> eventFunc;
 
  public:
     EventManager() : _pollFunc(nullptr) {}
@@ -67,7 +68,8 @@ class EventManager {
             return _events.systems.at(system);
     }
 
-    void emit(ECS::Registry& reg, std::optional<ECS::Entity> target_entity = std::nullopt) {
+    void emit(ECS::Registry& reg,
+        std::optional<ECS::Entity> target_entity = std::nullopt) {
         if (_events.keys.update) {
             for (const auto &func : _subscription[System::KeyPressed]) {
                 func(reg, _events.keys, target_entity);
