@@ -49,8 +49,22 @@ EntitySpec::EntitySpec(ECS::Registry& reg, te::event::EventManager& events)
                 e.what() << std::endl;
         }
     };
+    reg.registerComponent<Pattern>();
+    _components["pattern"] = [](ECS::Registry& reg, const ECS::Entity& e,
+        const toml::table& params) {
+        try {
+            size_t type = params["type"].value_or<size_t>(1);
+            reg.createComponent<Pattern>(e, type);
+        } catch (const std::bad_any_cast& e) {
+            std::cerr << "error(Plugin-pattern): " <<
+                e.what() << std::endl;
+        }
+    };
     _systems["deal_damage"] = [](ECS::Registry& reg) {
         reg.addSystem(&deal_damage);
+    };
+    _systems["apply_pattern"] = [](ECS::Registry& reg) {
+        reg.addSystem(&apply_pattern);
     };
     _systems["kill_entity"] = [](ECS::Registry& reg) {
         reg.addSystem(&kill_entity);

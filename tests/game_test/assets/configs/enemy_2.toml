@@ -1,0 +1,32 @@
+[ENTITIES]
+    [ENTITIES.enemy_2]
+    drawable = true
+    # movable = true
+    position2 = true
+
+        # [ENTITIES.enemy_2.health]
+        # amount = 5
+        # delay = 0.5
+
+        # [ENTITIES.enemy_2.damage]
+        # amount = 1
+
+        # [ENTITIES.enemy_2.team]
+        # name = "bad_guy"
+
+        [ENTITIES.enemy_2.sprite]
+        path = "assets/projectile.png"
+        size = [10, 10]
+        scale = [30, 30]
+
+        [ENTITIES.enemy_2.velocity2]
+        x = 0.0
+        y = 0.0
+
+        [ENTITIES.enemy_2.pattern]
+        type = 1
+
+        [ENTITIES.enemy_2.animation]
+        frames = [
+            [[0, 1], 8, 0.1, true]
+        ]
