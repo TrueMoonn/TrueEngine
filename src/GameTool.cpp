@@ -91,6 +91,10 @@ void GameTool::pollEvent() {
     _events.pollEvents(_reg);
 }
 
+void GameTool::setEvent(event::System sys) {
+    _events.setEvent(sys);
+    std::cout <<  _events.getEvent().systems.at(sys) << true << std::endl;
+}
 
 void GameTool::emit() {
     _events.emit(_reg);

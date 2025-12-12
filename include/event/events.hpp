@@ -128,6 +128,7 @@ struct KeysEvent {
 };
 
 /* MOUSE */
+
 enum MouseButton {
     MouseLeft = 0,
     MouseRight,
@@ -139,6 +140,15 @@ struct MouseInfo {
     bool active = false;
     float x;
     float y;
+};
+
+struct MouseEvent {
+    bool update = false;
+    std::array<MouseInfo, MouseButton::LIMITBUTTON> _MouseKey = {false};
+    void clear() {
+        update = false;
+        _MouseKey.fill({false, 0, 0});
+    }
 };
 
 typedef std::array<MouseInfo, MouseButton::LIMITBUTTON> MouseEvents;
@@ -168,6 +178,7 @@ enum System {
     TouchMoved,
     TouchEnded,
     SensorChanged,
+    ChangeScene,
     LIMITSYSTEM,
 };
 
@@ -175,12 +186,12 @@ typedef std::array<bool, System::LIMITSYSTEM> SystemEvents;
 
 struct Events {
     KeysEvent keys;
-    MouseEvents mouses;
+    MouseEvent mouses;
     SystemEvents systems;
 
     void clear() {
         keys.clear();
-        mouses.fill(MouseInfo());
+        mouses.clear();
         systems.fill(false);
     }
 };

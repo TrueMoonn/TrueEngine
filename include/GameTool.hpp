@@ -191,6 +191,7 @@ class GameTool {
      * @return event::EventManager::eventContent The Event corresponding
      */
     event::EventManager::eventContent getEvent(event::System system);
+    void setEvent(event::System system);
 
     ECS::Registry getRegistry() {
         return this->_reg;

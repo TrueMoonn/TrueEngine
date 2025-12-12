@@ -22,6 +22,8 @@ struct Window : public sf::RenderWindow {
     Window(const Window&);
     Window(Window&&);
 
+    
+
     std::string name;
 };
 

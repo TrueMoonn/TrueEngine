@@ -52,12 +52,15 @@ Display::Display(ECS::Registry& reg, te::event::EventManager& events)
     events.addSubscription(te::event::System::KeyPressed,
         [](ECS::Registry& reg,
         const te::event::EventManager::eventContent& content) {
+        std::cout << "hihi\n";
         static bool anim = 0;
         auto& event = std::get<te::event::KeysEvent>(content);
+        std::cout << "passage1\n";
 
         auto& animations = reg.getComponents<Animation>();
-
+        std::cout << animations.size() << "\n";
         for (auto&& [an] : ECS::Zipper(animations)) {
+            std::cout << "test\n";
             if (event.keys[te::event::Key::LeftControl])
                 an.pause();
             if (event.keys[te::event::Key::Space])
@@ -67,6 +70,7 @@ Display::Display(ECS::Registry& reg, te::event::EventManager& events)
                 an.changeAnimation(anim);
             }
         }
+        std::cout << "fin\n";
     });
     _systems["animate"] = [](ECS::Registry& reg) {
         reg.addSystem(&animate);

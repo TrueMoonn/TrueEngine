@@ -1,0 +1,121 @@
+g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X
+g:X,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g:X,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g:X
+g:X,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g:X
+g:X,g: ,g: ,g: ,g: ,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X
+g:X,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g:X,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g:X,g:X
+g:X,g:X,g:X,g: ,g: ,g: ,g: ,g: ,g: ,g:X,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g:X
+g:X,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g:X,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g:X,g:X,g:X,g: ,g: ,g:X,g:X,g:X,g:X
+g:X,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g:W,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g:X
+g:X,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g:X,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g:X
+g:X,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g:X
+g:X,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g:X
+g:X,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g:W,g:W,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g:D
+g:X,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g:X
+g:X,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g:P,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g:X
+g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g:X
+g:X,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g:X
+g:X,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g:X
+g:X,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g:X
+g:X,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g:X,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g:X
+g:X,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g:X,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g:X
+g:X,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g:X,g: ,g: ,g: ,g: ,g: ,g: ,g: ,g:X
+g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X,g:X
+---
+[MAP]
+    [MAP.TILES]
+    width = 50.0
+    height = 50.0
+
+[ENTITIES]
+    [ENTITIES.DEFAULT]
+
+    [ENTITIES.g]
+    drawable = true
+    position2 = true
+        [ENTITIES.g.sprite]
+        path = "assets/ground.png"
+        scale = [50, 50]
+#        width = 50.0
+#        hight = 50.0
+
+    [ENTITIES.W]
+    drawable = true
+    movable = true
+        [ENTITIES.W.sprite]
+        path = "assets/wall.png"
+        scale = [20, 20]
+#        width = 20.0
+#        height = 20.0
+
+        [ENTITIES.W.position2]
+        x = 15.0
+        y = 10.0
+
+        [ENTITIES.W.hitbox]
+        left = 15.0
+        top = 10.0
+        width = 20.0
+        height = 20.0
+
+    [ENTITIES.X]
+    drawable = true
+    position2 = true
+        [ENTITIES.X.sprite]
+        path = "assets/wall.png"
+        scale = [50, 50]
+#        width = 50.0
+#        height = 50.0
+
+        [ENTITIES.X.hitbox]
+        left = 0.0
+        top = 0.0
+        width = 50.0
+        height = 50.0
+
+    [ENTITIES.D]
+    drawable = true
+    position2 = true
+        [ENTITIES.D.sprite]
+        path = "assets/door.png"
+        scale = [50, 50]
+        # width = 50.0
+        # height = 50.0
+
+        [ENTITIES.D.hitbox]
+        left = 0.0
+        top = 0.0
+        width = 50.0
+        height = 50.0
+
+    [ENTITIES.P]
+    drawable = true
+    movable = true
+    player = true
+    position2 = true
+        [ENTITIES.P.health]
+        amount = 5
+
+        [ENTITIES.P.sprite]
+        path = "assets/projectile.png"
+        size = [10, 10]
+        scale = [30, 30]
+        # width = 10
+        # height = 10
+        # scale_x = 30
+        # scale_y = 30
+
+        [ENTITIES.P.velocity2]
+        x = 0.0
+        y = 0.0
+
+        [ENTITIES.P.hitbox]
+        left = 0.0
+        top = 0.0
+        width = 30.0
+        height = 30.0
+
+        [ENTITIES.P.animation]
+        frames = [
+            [[0, 0], 8, 0.1, true]
+        ]
+
