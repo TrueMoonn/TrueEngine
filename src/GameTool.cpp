@@ -88,8 +88,8 @@ void GameTool::pollEvent() {
 }
 
 
-void GameTool::emit() {
-    _events.emit(_reg);
+void GameTool::emit(std::optional<ECS::Entity> entity) {
+    _events.emit(_reg, entity);
 }
 
 void GameTool::runSystems() {
