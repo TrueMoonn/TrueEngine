@@ -48,6 +48,8 @@ class GameTool {
      * @param dir Path to the directory to load plugins
      */
     void loadPlugins(const std::string& dir = DEFAULT_PLUGIN_RPATH);
+    void loadPlugins(std::vector<std::string> &pluginToLoad,
+        const std::string& dir = DEFAULT_PLUGIN_RPATH);
     /**
      * @brief Clear plugins loaded
      *
@@ -190,6 +192,11 @@ class GameTool {
      * @return event::EventManager::eventContent The Event corresponding
      */
     event::EventManager::eventContent getEvent(event::System system);
+    void setEvent(event::System system);
+
+    ECS::Registry getRegistry() {
+        return this->_reg;
+    }
 
     /**
      * @brief Set the Events object of the event::EventManager

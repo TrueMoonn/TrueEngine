@@ -6,11 +6,13 @@
 */
 
 #include <memory>
+#include <array>
 
 #include "scenes/InGame.hpp"
+#include "scenes/Menu.hpp"
 
-int main(int, const char **) {
-    std::unique_ptr<IScene> scene = std::make_unique<InGame>();
+int main(int, const char * const *) {
+    std::unique_ptr<IScene> scene = std::make_unique<Menu>();
 
     scene->run();
     return EXIT_SUCCESS;

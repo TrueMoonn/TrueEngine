@@ -20,6 +20,11 @@ void GameTool::loadPlugins(const std::string& dir) {
     _pmanager.loadPlugins(_reg, _events, dir);
 }
 
+void GameTool::loadPlugins(std::vector<std::string> &pluginToLoad,
+    const std::string& dir) {
+    _pmanager.loadPlugins(_reg, _events, dir, pluginToLoad);
+}
+
 void GameTool::clearPlugins() {
     _pmanager.clear();
 }
@@ -87,6 +92,10 @@ void GameTool::pollEvent() {
     _events.pollEvents(_reg);
 }
 
+void GameTool::setEvent(event::System sys) {
+    _events.setEvent(sys);
+    std::cout <<  _events.getEvent().systems.at(sys) << true << std::endl;
+}
 
 void GameTool::emit(std::optional<ECS::Entity> entity) {
     _events.emit(_reg, entity);
