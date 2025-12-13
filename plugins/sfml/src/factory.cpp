@@ -44,7 +44,8 @@ Sfml::Sfml(ECS::Registry& reg, te::event::EventManager& events)
     };
     events.addSubscription(te::event::System::MouseButtonPressed,
         [&events](ECS::Registry& reg,
-        const te::event::EventManager::eventContent& content){
+        const te::event::EventManager::eventContent& content,
+        std::optional<ECS::Entity> e){
         auto &window = reg.getComponents<Window>();
         auto &sprite = reg.getComponents<Sprite>();
         auto& event = std::get<te::event::MouseEvent>(content);

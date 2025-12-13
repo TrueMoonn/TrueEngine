@@ -143,7 +143,7 @@ class GameTool {
      * @param pos Position to gave to the entity - Default {0, 0}
      */
     void createEntity(ECS::Entity e, const std::string& name,
-        const mat::Vector2f& pos = {0, 0});
+        const mat::Vector2f& pos = {0, 0}); 
 
     /**
      * @brief Create every ECS::Entity based on the map at the index given
