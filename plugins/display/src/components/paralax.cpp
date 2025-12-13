@@ -5,6 +5,7 @@
 ** paralax.cpp
 */
 
+#include <utility>
 #include <cstddef>
 #include "display/components/paralax.hpp"
 
