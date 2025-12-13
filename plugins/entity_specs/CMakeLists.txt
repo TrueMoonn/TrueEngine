@@ -6,8 +6,10 @@ add_library(${PROJECT_NAME} SHARED
     ${PROJECT_SOURCE_DIR}/src/components/damage.cpp
     ${PROJECT_SOURCE_DIR}/src/components/health.cpp
     ${PROJECT_SOURCE_DIR}/src/components/team.cpp
+    ${PROJECT_SOURCE_DIR}/src/components/pattern.cpp
 
     ${PROJECT_SOURCE_DIR}/src/systems/deal_damage.cpp
+    ${PROJECT_SOURCE_DIR}/src/systems/apply_pattern.cpp
     ${PROJECT_SOURCE_DIR}/src/systems/kill_entity.cpp
 )
 add_library(addon::entity_spec ALIAS ${PROJECT_NAME})
