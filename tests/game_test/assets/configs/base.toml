@@ -52,3 +52,21 @@
         top = 0.0
         width = 50.0
         height = 50.0
+
+    [ENTITIES.background]
+    drawable = true
+        [ENTITIES.background.position2]
+        x = 0
+        y = -40
+        [ENTITIES.background.paralax]
+        iteration = 15
+        reset = [0, 0]
+
+        [ENTITIES.background.velocity2]
+        x = -1.5
+        y = 0
+
+        [ENTITIES.background.sprite]
+        path = "assets/door.png"
+        scale = [256, 256]
+        size = [256, 256]
