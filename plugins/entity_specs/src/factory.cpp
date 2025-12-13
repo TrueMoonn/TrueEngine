@@ -54,7 +54,9 @@ EntitySpec::EntitySpec(ECS::Registry& reg, te::event::EventManager& events)
         const toml::table& params) {
         try {
             size_t type = params["type"].value_or<size_t>(1);
-            reg.createComponent<Pattern>(e, type);
+            float amp = params["amplitude"].value_or<float>(1.f);
+            float freq = params["frequency"].value_or<float>(1.f);
+            reg.createComponent<Pattern>(e, type, amp, freq);
         } catch (const std::bad_any_cast& e) {
             std::cerr << "error(Plugin-pattern): " <<
                 e.what() << std::endl;

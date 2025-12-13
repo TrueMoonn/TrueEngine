@@ -24,9 +24,68 @@
         y = 0.0
 
         [ENTITIES.enemy_2.pattern]
-        type = 1
+        type = 2
+        amplitude = 3
+        frequency = 1
 
         [ENTITIES.enemy_2.animation]
         frames = [
             [[0, 1], 8, 0.1, true]
+        ]
+
+    [ENTITIES.enemy_3]
+    drawable = true
+    # movable = true
+    position2 = true
+
+        # [ENTITIES.enemy_3.health]
+        # amount = 5
+        # delay = 0.5
+
+        # [ENTITIES.enemy_3.damage]
+        # amount = 1
+
+        # [ENTITIES.enemy_3.team]
+        # name = "bad_guy"
+
+        [ENTITIES.enemy_3.sprite]
+        path = "assets/projectile.png"
+        size = [10, 10]
+        scale = [30, 30]
+
+        [ENTITIES.enemy_3.velocity2]
+        x = 0.0
+        y = 0.0
+
+        [ENTITIES.enemy_3.pattern]
+        type = 1
+        amplitude = 3
+        frequency = 1
+
+        [ENTITIES.enemy_3.animation]
+        frames = [
+            [[0, 1], 8, 0.1, true]
+        ]
+
+    [ENTITIES.enemy_4]
+    drawable = true
+    position2 = true
+
+        [ENTITIES.enemy_4.sprite]
+        path = "assets/projectile.png"
+        size = [10, 10]
+        scale = [30, 30]
+
+        [ENTITIES.enemy_4.velocity2]
+        x = 0.0
+        y = 0.0
+
+        [ENTITIES.enemy_4.pattern]
+        type = 3
+        amplitude = 3
+        frequency = 1
+
+        [ENTITIES.enemy_4.animation]
+        frames = [
+            [[0, 0], 8, 0.1, true]
         ]

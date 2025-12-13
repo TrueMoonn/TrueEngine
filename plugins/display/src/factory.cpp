@@ -51,7 +51,8 @@ Display::Display(ECS::Registry& reg, te::event::EventManager& events)
     };
     events.addSubscription(te::event::System::KeyPressed,
         [](ECS::Registry& reg,
-        const te::event::EventManager::eventContent& content) {
+        const te::event::EventManager::eventContent& content,
+        std::optional<ECS::Entity> e) {
         static bool anim = 0;
         auto& event = std::get<te::event::KeysEvent>(content);
 
