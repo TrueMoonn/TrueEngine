@@ -32,6 +32,9 @@
         path = "assets/wall.png"
         scale = [50, 50]
 
+        [ENTITIES.X.robust]
+        priority = 10
+
         [ENTITIES.X.hitbox]
         left = 0.0
         top = 0.0
