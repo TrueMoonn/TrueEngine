@@ -8,6 +8,7 @@
 #include <plugin/PluginManager.hpp>
 
 #include "scenes/InGame.hpp"
+#include "map_management.hpp"
 
 InGame::InGame() : AScene() {
     loadPlugins();
@@ -22,6 +23,7 @@ void InGame::setECS(void) {
     createSystem("animate");
     createSystem("deal_damage");
     createSystem("kill_entity");
+    createSystem("paralax_sys");
     createSystem("draw");
     createSystem("display");
 }
@@ -41,6 +43,7 @@ void InGame::setEntities(void) {
     createEntity(endMap + 3, "enemy", {1000.f, 500.f});
     createEntity(endMap + 4, "enemy", {500.f, 1000.f});
     createEntity(endMap + 5, "enemy", {600.f, 600.f});
+    createEntity(800, "background");
 }
 
 void InGame::run(void) {
