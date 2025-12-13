@@ -22,6 +22,5 @@ struct Sprite : public sf::Sprite {
     Sprite(Sprite&& other) noexcept;
     const sf::Texture texture;
 };
-
 }  // namespace sfml
 }  // namespace addon

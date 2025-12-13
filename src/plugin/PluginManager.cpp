@@ -42,7 +42,8 @@ void PluginManager::loadPlugins(ECS::Registry& reg,
                     std::cout << plugin << std::endl;
                     _manager.load(file.path());
                     try {
-                        maker plugin = _manager.access<maker>(pname, ENDPOINT_NAME);
+                        maker plugin = _manager.access<maker>(pname,
+                            ENDPOINT_NAME);
                         _plugins[pname] = plugin(reg, events);
                         setAccesser(pname);
                     } catch (const std::runtime_error& e) {

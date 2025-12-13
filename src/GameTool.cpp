@@ -20,7 +20,8 @@ void GameTool::loadPlugins(const std::string& dir) {
     _pmanager.loadPlugins(_reg, _events, dir);
 }
 
-void GameTool::loadPlugins(std::vector<std::string> &pluginToLoad, const std::string& dir) {
+void GameTool::loadPlugins(std::vector<std::string> &pluginToLoad,
+    const std::string& dir) {
     _pmanager.loadPlugins(_reg, _events, dir, pluginToLoad);
 }
 

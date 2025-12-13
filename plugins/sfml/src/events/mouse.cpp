@@ -5,6 +5,8 @@
 ** keyboard.cpp
 */
 
+#include <unordered_map>
+
 #include <SFML/Window/Event.hpp>
 
 #include "sfml/events.hpp"
@@ -12,7 +14,8 @@
 namespace addon {
 namespace sfml {
 
-static const std::unordered_map<sf::Mouse::Button, te::event::MouseButton> _Mouse = {{
+static const std::unordered_map<sf::Mouse::Button, te::event::MouseButton>
+    _Mouse = {{
     {sf::Mouse::Button::Left, te::event::MouseButton::MouseLeft},
     {sf::Mouse::Button::Right, te::event::MouseButton::MouseRight},
     {sf::Mouse::Button::Middle, te::event::MouseButton::MouseMiddle},

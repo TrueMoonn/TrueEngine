@@ -39,14 +39,12 @@ void Menu::setECS(int scene) {
 }
 
 void Menu::setEntities(int scene) {
-    
     if (scene == MENU_ID) {
         addConfig("assets/configs/menu.toml");
         addConfig("assets/configs/buttonstart.toml");
         createComponent("window", SYSTEM_ENTITY);
-
         createEntity(ID_MENU_BACKGROUND + 1, "buttonstart", {800.f, 500.f});
-        createEntity(ID_MENU_BACKGROUND, "menu",{0.f, 0.f});
+        createEntity(ID_MENU_BACKGROUND, "menu", {0.f, 0.f});
     }
     if (scene == INGAME_ID) {
         addConfig("assets/configs/base.toml");
@@ -70,7 +68,8 @@ void Menu::run(void) {
         emit();
         runSystems();
         if (isEvent(te::event::System::ChangeScene)) {
-            for (int i = (int)ID_MENU_BACKGROUND; i <= (int)ID_MENU_BUTTON_START; i++)
+            for (int i = static_cast<int>(ID_MENU_BACKGROUND);
+            i <= static_cast<int>(ID_MENU_BUTTON_START); i++)
                 removeEntity(i);
             setECS(INGAME_ID);
             setEntities(INGAME_ID);

@@ -53,7 +53,8 @@ Sfml::Sfml(ECS::Registry& reg, te::event::EventManager& events)
 
         for (auto && [win] : ECS::Zipper(window)) {
             for (auto&& [spr] : ECS::Zipper(sprite)) {
-                if (event._MouseKey.at(te::event::MouseButton::MouseLeft).active) {
+                if (event._MouseKey.at(te::event::MouseButton::MouseLeft)
+                .active) {
                     const auto &pos = sf::Mouse::getPosition(win);
                     const auto &translated = win.mapPixelToCoords(pos);
 
