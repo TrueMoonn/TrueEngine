@@ -5,13 +5,18 @@
 ** factory.cpp
 */
 
+#include <SFML/Graphics/Texture.hpp>
+#include <memory>
 #include <string>
+#include <unordered_map>
 #include <utility>
 #include <iostream>
 #include <SFML/System/Exception.hpp>
 #include <toml++/toml.hpp>
 
 #include "Sfml.hpp"
+#include "maths/Vector.hpp"
+#include "sfml/components/window.hpp"
 #include "sfml/events.hpp"
 #include "sfml/factory.hpp"
 
@@ -23,8 +28,19 @@ Sfml::Sfml(ECS::Registry& reg, te::event::EventManager& events)
     events.setPollFunc(&pollEvent);
     reg.registerComponent<Window>();
     _components["window"] = [](ECS::Registry& reg, const ECS::Entity& e,
-        const toml::table&) {
-        reg.createComponent<Window>(e);
+        const toml::table& params) {
+        if (!params.empty()) {
+            const auto& wName = params["name"].value_or(DEFAULT_WIN_NAME);
+            const auto& size = params["size"].as_array();
+            mat::Vector2u sizeVect;
+            sizeVect.x = size->at(0).value_or(1280);
+            sizeVect.y = size->at(1).value_or(720);
+            const auto& fps =
+                params["framelimit"].value_or(DEFAULT_FRAME_LIMIT);
+            reg.createComponent<Window>(e, wName, sizeVect, fps);
+        } else  {
+            reg.createComponent<Window>(e);
+        }
     };
     reg.registerComponent<Drawable>();
     _components["drawable"] = [](ECS::Registry& reg, const ECS::Entity& e,
@@ -34,8 +50,14 @@ Sfml::Sfml(ECS::Registry& reg, te::event::EventManager& events)
     reg.registerComponent<Sprite>();
     _components["sprite"] = [](ECS::Registry& reg, const ECS::Entity& e,
         const toml::table& params) {
+        static std::unordered_map<std::string, sf::Texture> textures;
         try {
-            sf::Texture texture(params["path"].value_or(""));
+            const auto& path = params["path"].value_or("");
+            auto [it, inserted] = textures.try_emplace(path);
+            if (inserted)
+                it->second.loadFromFile(path);
+            auto& texture = it->second;
+            const auto &layer = params["layer"].value_or(0);
             const auto &t_size = params["size"].as_array();
             sf::Vector2i size = t_size ?
                 sf::Vector2i(t_size->at(0).value_or(1),
@@ -44,7 +66,8 @@ Sfml::Sfml(ECS::Registry& reg, te::event::EventManager& events)
             sf::Vector2f scale = t_scale ?
                 sf::Vector2f{t_scale->at(0).value_or(1.0f) / size.x,
                 t_scale->at(1).value_or(1.0f) / size.y} : sf::Vector2f{1, 1};
-            reg.addComponent(e, Sprite(std::move(texture), size, scale));
+            reg.createComponent<Sprite>(e, texture,
+                layer, size, scale);
         } catch (const std::out_of_range&) {
             std::cerr << "error(Plugin-Sprite): key not found" << std::endl;
         } catch (const sf::Exception& e) {

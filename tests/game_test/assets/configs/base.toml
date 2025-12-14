@@ -7,6 +7,7 @@
         [ENTITIES.g.sprite]
         path = "assets/ground.png"
         scale = [50, 50]
+        layer = 1
 
     [ENTITIES.W]
     drawable = true
@@ -14,6 +15,7 @@
         [ENTITIES.W.sprite]
         path = "assets/wall.png"
         scale = [20, 20]
+        layer = 2
 
         [ENTITIES.W.position2]
         x = 15.0
@@ -31,6 +33,7 @@
         [ENTITIES.X.sprite]
         path = "assets/wall.png"
         scale = [50, 50]
+        layer = 2
 
         [ENTITIES.X.hitbox]
         left = 0.0
@@ -44,8 +47,7 @@
         [ENTITIES.D.sprite]
         path = "assets/door.png"
         scale = [50, 50]
-        # width = 50.0
-        # height = 50.0
+        layer = 2
 
         [ENTITIES.D.hitbox]
         left = 0.0
@@ -70,3 +72,4 @@
         path = "assets/door.png"
         scale = [256, 256]
         size = [256, 256]
+        layer = 0

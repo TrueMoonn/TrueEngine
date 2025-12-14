@@ -26,8 +26,8 @@ void draw_sys(ECS::Registry& reg) {
     for (auto &&[win] : ECS::Zipper(windows)) {
         for (auto &&[sprite, pos, drawable] :
             ECS::Zipper(sprites, positions, drawables)) {
-            sprite.setPosition({pos.x, pos.y});
-            win.draw(sprite);
+            sprite.sp.setPosition({pos.x, pos.y});
+            win.push_back(sprite);
         }
     }
 }
