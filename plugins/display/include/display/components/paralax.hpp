@@ -14,13 +14,11 @@ namespace addon {
 namespace display {
 
 struct Paralax {
-    Paralax(std::size_t nb_iterations, std::size_t layer,
-        const mat::Vector2i& reset);
-    explicit Paralax(const Paralax&);
-    explicit Paralax(Paralax&&);
+    Paralax(std::size_t nb_iterations, const mat::Vector2i& reset);
+    Paralax(const Paralax&) = default;
+    Paralax(Paralax&&) = default;
 
     std::size_t iterations;
-    std::size_t layer;
     mat::Vector2i reset;
 };
 

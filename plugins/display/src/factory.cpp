@@ -30,14 +30,13 @@ Display::Display(ECS::Registry& reg, te::event::EventManager& events)
     _components["paralax"] = [](ECS::Registry& reg, const ECS::Entity& e,
         const toml::table& params) {
         try {
-            std::size_t layer = params["layer"].value_or(0);
             const auto &reset = params["reset"].as_array();
             mat::Vector2i resetPos = {
                 reset->at(0).value_or(0),
                 reset->at(1).value_or(0)
             };
-            reg.createComponent<Paralax>(e, params["iteration"].value_or(1),
-                layer, resetPos);
+            reg.createComponent<Paralax>(
+                e, params["iteration"].value_or(1), resetPos);
         } catch (const std::bad_any_cast& e) {
             std::cerr << "error(Plugin-Paralax): " <<
                 e.what() << std::endl;
