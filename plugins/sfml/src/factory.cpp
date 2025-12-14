@@ -5,17 +5,14 @@
 ** factory.cpp
 */
 
-#include <SFML/Graphics/Texture.hpp>
-#include <memory>
-#include <string>
 #include <unordered_map>
-#include <utility>
+#include <string>
 #include <iostream>
+#include <SFML/Graphics/Texture.hpp>
 #include <SFML/System/Exception.hpp>
 #include <toml++/toml.hpp>
 
 #include "Sfml.hpp"
-#include "maths/Vector.hpp"
 #include "sfml/components/window.hpp"
 #include "sfml/events.hpp"
 #include "sfml/factory.hpp"
@@ -55,7 +52,7 @@ Sfml::Sfml(ECS::Registry& reg, te::event::EventManager& events)
             const auto& path = params["path"].value_or("");
             auto [it, inserted] = textures.try_emplace(path);
             if (inserted)
-                it->second.loadFromFile(path);
+                (void)it->second.loadFromFile(path);
             auto& texture = it->second;
             const auto &layer = params["layer"].value_or(0);
             const auto &t_size = params["size"].as_array();

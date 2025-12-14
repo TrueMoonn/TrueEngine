@@ -5,10 +5,11 @@
 ** window.cpp
 */
 
+#include <utility>
+#include <string>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/VideoMode.hpp>
-#include <utility>
 
 #include "maths/Vector.hpp"
 #include "sfml/components/window.hpp"
