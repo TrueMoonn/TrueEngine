@@ -6,7 +6,7 @@ add_library(${PROJECT_NAME} SHARED
 
     #COMPONENTS
     ${PROJECT_SOURCE_DIR}/src/components/animation.cpp
-    ${PROJECT_SOURCE_DIR}/src/components/paralax.cpp
+    ${PROJECT_SOURCE_DIR}/src/components/parallax.cpp
 
     #SYSTEMS
     ${PROJECT_SOURCE_DIR}/src/systems/animate.cpp

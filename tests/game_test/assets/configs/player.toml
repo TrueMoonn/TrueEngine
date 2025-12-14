@@ -16,6 +16,7 @@
         path = "assets/projectile.png"
         size = [10, 10]
         scale = [30, 30]
+        layer = 3
 
         [ENTITIES.player.velocity2]
         x = 0.0

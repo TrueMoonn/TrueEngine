@@ -5,32 +5,24 @@
 ** sprite.cpp
 */
 
-#include <utility>
+#include <SFML/Graphics/Texture.hpp>
 
 #include "sfml/components/sprite.hpp"
 
 namespace addon {
 namespace sfml {
 
-Sprite::Sprite(sf::Texture&& text, const sf::Vector2f& scale) :
-    texture(std::move(text)), sf::Sprite(texture) {
-    setTextureRect(sf::IntRect({0, 0}, sf::Vector2i(texture.getSize())));
-    setScale(scale);
+Sprite::Sprite(sf::Texture& texture, std::size_t layer,
+    const sf::Vector2f& scale) : layer(layer), sp(texture) {
+    sp.setTextureRect(sf::IntRect({0, 0}, sf::Vector2i(texture.getSize())));
+    sp.setScale(scale);
 }
 
-Sprite::Sprite(sf::Texture &&text, const sf::Vector2i &size,
-    const sf::Vector2f &scale) : texture(std::move(text)), sf::Sprite(texture) {
-    setTextureRect(sf::IntRect({0, 0}, size));
-    setScale(scale);
-}
-
-Sprite::Sprite(const Sprite& other) :
-    texture(other.texture), sf::Sprite(texture) {}
-
-Sprite::Sprite(Sprite&& other) noexcept :
-    texture(std::move(other.texture)), sf::Sprite(texture) {
-    setTextureRect(other.getTextureRect());
-    setScale(other.getScale());
+Sprite::Sprite(sf::Texture& texture, std::size_t layer,
+    const sf::Vector2i &size, const sf::Vector2f &scale) :
+    layer(layer), sp(texture) {
+    sp.setTextureRect(sf::IntRect({0, 0}, size));
+    sp.setScale(scale);
 }
 
 }  // namespace sfml

@@ -14,4 +14,4 @@
 #include "sfml/systems/display.hpp"
 #include "sfml/systems/draw.hpp"
 #include "sfml/systems/view_player.hpp"
-#include "sfml/systems/paralax.hpp"
+#include "sfml/systems/parallax.hpp"

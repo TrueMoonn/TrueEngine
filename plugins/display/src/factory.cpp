@@ -13,22 +13,21 @@
 #include <SFML/System/Exception.hpp>
 #include <toml++/toml.hpp>
 
-#include "Display.hpp"
-#include "ECS/Entity.hpp"
-#include "ECS/Registry.hpp"
-#include "display/components/paralax.hpp"
-#include "maths/Vector.hpp"
-#include "display/factory.hpp"
-
+#include <ECS/Entity.hpp>
+#include <ECS/Registry.hpp>
 #include <ECS/Zipper.hpp>
+#include "maths/Vector.hpp"
+
+#include "Display.hpp"
+#include "display/factory.hpp"
 
 namespace addon {
 namespace display {
 
 Display::Display(ECS::Registry& reg, te::event::EventManager& events)
     : te::plugin::APlugin(reg, events) {
-    reg.registerComponent<Paralax>();
-    _components["paralax"] = [](ECS::Registry& reg, const ECS::Entity& e,
+    reg.registerComponent<Parallax>();
+    _components["parallax"] = [](ECS::Registry& reg, const ECS::Entity& e,
         const toml::table& params) {
         try {
             const auto &reset = params["reset"].as_array();
@@ -36,10 +35,10 @@ Display::Display(ECS::Registry& reg, te::event::EventManager& events)
                 reset->at(0).value_or(0),
                 reset->at(1).value_or(0)
             };
-            reg.createComponent<Paralax>(e, params["iteration"].value_or(1),
-                resetPos);
-        }catch (const std::bad_any_cast& e) {
-            std::cerr << "error(Plugin-Paralax): " <<
+            reg.createComponent<Parallax>(
+                e, params["iteration"].value_or(1), resetPos);
+        } catch (const std::bad_any_cast& e) {
+            std::cerr << "error(Plugin-Parallax): " <<
                 e.what() << std::endl;
         }
     };

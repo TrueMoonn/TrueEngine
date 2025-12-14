@@ -36,7 +36,6 @@ class ConfigParser {
     struct MapContent {
         map_t map;
         std::size_t size;
-        std::size_t layer_max;
     };
 
  public:
