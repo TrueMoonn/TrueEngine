@@ -15,6 +15,7 @@
         path = "assets/bat.png"
         size = [32, 32]
         scale = [30, 30]
+        layer = 3
 
         [ENTITIES.enemy.velocity2]
         x = 0.0

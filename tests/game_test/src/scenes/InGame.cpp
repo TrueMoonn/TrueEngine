@@ -23,7 +23,7 @@ void InGame::setECS(void) {
     createSystem("animate");
     createSystem("deal_damage");
     createSystem("kill_entity");
-    createSystem("paralax_sys");
+    createSystem("parallax_sys");
     createSystem("draw");
     createSystem("display");
 }
