@@ -26,8 +26,8 @@ namespace display {
 
 Display::Display(ECS::Registry& reg, te::event::EventManager& events)
     : te::plugin::APlugin(reg, events) {
-    reg.registerComponent<Paralax>();
-    _components["paralax"] = [](ECS::Registry& reg, const ECS::Entity& e,
+    reg.registerComponent<Parallax>();
+    _components["parallax"] = [](ECS::Registry& reg, const ECS::Entity& e,
         const toml::table& params) {
         try {
             const auto &reset = params["reset"].as_array();
@@ -35,10 +35,10 @@ Display::Display(ECS::Registry& reg, te::event::EventManager& events)
                 reset->at(0).value_or(0),
                 reset->at(1).value_or(0)
             };
-            reg.createComponent<Paralax>(
+            reg.createComponent<Parallax>(
                 e, params["iteration"].value_or(1), resetPos);
         } catch (const std::bad_any_cast& e) {
-            std::cerr << "error(Plugin-Paralax): " <<
+            std::cerr << "error(Plugin-Parallax): " <<
                 e.what() << std::endl;
         }
     };

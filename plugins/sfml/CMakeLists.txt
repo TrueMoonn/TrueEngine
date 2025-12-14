@@ -12,7 +12,7 @@ add_library(${PROJECT_NAME} SHARED
     ${PROJECT_SOURCE_DIR}/src/systems/display.cpp
     ${PROJECT_SOURCE_DIR}/src/systems/draw.cpp
     ${PROJECT_SOURCE_DIR}/src/systems/view_player.cpp
-    ${PROJECT_SOURCE_DIR}/src/systems/paralax.cpp
+    ${PROJECT_SOURCE_DIR}/src/systems/parallax.cpp
 
     #EVENTS
     ${PROJECT_SOURCE_DIR}/src/events/pollEvent.cpp

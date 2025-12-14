@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2025
 ** TrueEngine
 ** File description:
-** paralax.hpp
+** parallax.hpp
 */
 
 #pragma once
@@ -13,10 +13,10 @@
 namespace addon {
 namespace display {
 
-struct Paralax {
-    Paralax(std::size_t nb_iterations, const mat::Vector2i& reset);
-    Paralax(const Paralax&) = default;
-    Paralax(Paralax&&) = default;
+struct Parallax {
+    Parallax(std::size_t nb_iterations, const mat::Vector2i& reset);
+    Parallax(const Parallax&) = default;
+    Parallax(Parallax&&) = default;
 
     std::size_t iterations;
     mat::Vector2i reset;

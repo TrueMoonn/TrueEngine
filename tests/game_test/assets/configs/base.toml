@@ -60,7 +60,7 @@
         [ENTITIES.background.position2]
         x = 0
         y = -40
-        [ENTITIES.background.paralax]
+        [ENTITIES.background.parallax]
         iteration = 15
         reset = [0, 0]
 

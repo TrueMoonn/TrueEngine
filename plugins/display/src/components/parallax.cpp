@@ -2,16 +2,16 @@
 ** EPITECH PROJECT, 2025
 ** TrueEngine
 ** File description:
-** paralax.cpp
+** parallax.cpp
 */
 
 #include <cstddef>
-#include "display/components/paralax.hpp"
+#include "display/components/parallax.hpp"
 
 namespace addon {
 namespace display {
 
-Paralax::Paralax(std::size_t nb_iterations, const mat::Vector2i& reset) :
+Parallax::Parallax(std::size_t nb_iterations, const mat::Vector2i& reset) :
     iterations(nb_iterations), reset(reset) {}
 
 }  // namespace display

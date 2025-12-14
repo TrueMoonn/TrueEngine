@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2025
 ** TrueEngine
 ** File description:
-** paralax.hpp
+** parallax.hpp
 */
 
 #pragma once
@@ -12,7 +12,7 @@
 namespace addon {
 namespace sfml {
 
-void paralax_sys(ECS::Registry& reg);
+void parallax_sys(ECS::Registry& reg);
 
 }  // namespace sfml
 }  // namespace addon

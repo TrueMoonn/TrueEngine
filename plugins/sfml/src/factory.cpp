@@ -80,8 +80,8 @@ Sfml::Sfml(ECS::Registry& reg, te::event::EventManager& events)
     _systems["follow_player"] = [](ECS::Registry& reg) {
         reg.addSystem(&follow_player_sys);
     };
-    _systems["paralax_sys"] = [](ECS::Registry& reg) {
-        reg.addSystem(&paralax_sys);
+    _systems["parallax_sys"] = [](ECS::Registry& reg) {
+        reg.addSystem(&parallax_sys);
     };
 }
 
