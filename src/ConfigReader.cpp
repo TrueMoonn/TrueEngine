@@ -56,7 +56,12 @@ void ConfigParser::readEntities(toml::table& table) {
         return;
     for (auto &&[name, entity] : *entities) {
         if (entity.is_table()) {
-            _eConfig.insert_or_assign(name.data(), *entity.as_table());
+            if (_eConfig.find(name.data()) != _eConfig.end()) {
+                for (auto &&[cname, content] : *entity.as_table()) {
+                    _eConfig[name.data()].insert_or_assign(cname, content);
+                }
+            } else
+                _eConfig.insert_or_assign(name.data(), *entity.as_table());
         }
     }
 }
