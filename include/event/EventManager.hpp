@@ -25,7 +25,7 @@ namespace event {
 class EventManager {
  public:
     typedef void(*pollFunc)(Events&, ECS::Registry&);
-    typedef std::variant<KeysEvent, MouseEvent, bool> eventContent;
+    typedef std::variant<KeysEvent, MouseEvents, bool> eventContent;
     typedef std::function<void(ECS::Registry&, const eventContent&,
         std::optional<ECS::Entity>)> eventFunc;
 
@@ -72,10 +72,6 @@ class EventManager {
         _events.systems.at(System::ChangeScene) = true;
     }
 
-    Events getEvent(void) {
-        return _events;
-    }
-
     void setEvent(System sys) {
         _events.systems.at(sys) = false;
     }
@@ -85,12 +81,6 @@ class EventManager {
         if (_events.keys.update) {
             for (const auto &func : _subscription[System::KeyPressed]) {
                 func(reg, _events.keys, target_entity);
-            }
-        }
-        if (_events.mouses.update) {
-            for (const auto &func : _subscription[System::MouseButtonPressed]) {
-                func(reg, _events.mouses, target_entity);
-                _events.mouses.clear();
             }
         }
         // for (auto& [sys, vect] : _subscription) {
@@ -137,7 +127,6 @@ class EventManager {
         {System::TouchMoved, {}},
         {System::TouchEnded, {}},
         {System::SensorChanged, {}},
-        {System::ChangeScene, {}},
         {System::LIMITSYSTEM, {}}
     };
 };

@@ -1,9 +1,0 @@
-[ENTITIES]
-    [ENTITIES.menu]
-    drawable = true
-    position2 = true
-
-        [ENTITIES.menu.sprite]
-        path = "assets/background.png"
-        size = [2376, 1440]
-        scale = [1920, 1080]

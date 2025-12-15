@@ -8,8 +8,6 @@
 #pragma once
 
 #include "sfml/components/drawable.hpp"
-#include "sfml/components/clickable.hpp"
-#include "sfml/components/hoverable.hpp"
 #include "sfml/components/sprite.hpp"
 #include "sfml/components/window.hpp"
 
