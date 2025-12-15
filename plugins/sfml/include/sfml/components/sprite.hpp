@@ -24,6 +24,5 @@ struct Sprite {
     sf::Sprite sp;
     std::size_t layer;
 };
-
 }  // namespace sfml
 }  // namespace addon
