@@ -57,8 +57,6 @@ void Menu::setECS(int scene) {
         createSystem("apply_fragile");
         createSystem("kill_entity");
         createSystem("parallax_sys");
-        createSystem("draw");
-        createSystem("display");
     }
 }
 
@@ -100,7 +98,7 @@ void Menu::run(void) {
         if (isEvent(te::event::System::ChangeScene)) {
             for (int i = static_cast<int>(ID_MENU_BACKGROUND);
             i <= static_cast<int>(ID_MENU_BUTTON_START); i++)
-            removeEntity(i);
+                removeEntity(i);
             setECS(INGAME_ID);
             setEntities(INGAME_ID);
             setEvent(te::event::System::ChangeScene);
