@@ -7,7 +7,6 @@
 
 #include <iostream>
 #include <toml++/toml.hpp>
-#include <ECS/Registry.hpp>
 
 #include "Physic.hpp"
 #include "physic/factory.hpp"

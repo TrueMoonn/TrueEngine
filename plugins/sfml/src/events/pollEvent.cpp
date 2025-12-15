@@ -19,7 +19,6 @@ void pollEvent(te::event::Events& events, ECS::Registry& reg) {
     for (auto&& [win] : ECS::Zipper(windows)) {
         while (std::optional<sf::Event> pevent = win.pollEvent()) {
             getKeyboardEvent(pevent, events.keys);
-            getMouseEvent(pevent, events.mouses);
             if (pevent->is<sf::Event::Closed>())
                 events.systems.at(te::event::System::Closed) = true;
         }
