@@ -78,7 +78,6 @@ void InGame::setEntities(void) {
     createEntity(++endMap, "enemy_3", {1050.0f, 500.0f});
     createEntity(++endMap, "enemy_4", {1100.0f, 500.0f});
     createEntity(800, "background");
-
 }
 
 void InGame::run(void) {

@@ -59,6 +59,9 @@ EntitySpec::EntitySpec(ECS::Registry& reg, te::event::EventManager& events)
             reg.createComponent<Pattern>(e, type, amp, freq);
         } catch (const std::bad_any_cast& e) {
             std::cerr << "error(Plugin-pattern): " <<
+                e.what() << std::endl;
+        }
+    };
     reg.registerComponent<Fragile>();
     _components["fragile"] = [](ECS::Registry& reg, const ECS::Entity& e,
         const toml::table& params) {
