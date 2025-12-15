@@ -121,7 +121,6 @@ enum Key {
 
 struct KeysEvent {
     bool update = false;
-    // std::array<bool, Key::LIMITKEY> keys = {false};
     std::array<bool, Key::LIMITKEY> UniversalKey;
     std::map<Key, Key> Corelation = {{A, A},
     {B, B},
@@ -230,7 +229,6 @@ struct KeysEvent {
         for (int i = 0; i != Key::LIMITKEY; i++) {
             UniversalKey[static_cast<Key>(i)] = false;
         }
-        // keys.fill(false);
     }
 };
 

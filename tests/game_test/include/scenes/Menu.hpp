@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2025
 ** ECS
 ** File description:
-** InGame.hpp
+** Menu.hpp
 */
 
 #pragma once
@@ -27,14 +27,6 @@
     #define ID_MENU_BUTTON_START 2001
     #define ID_MENU_BUTTON_SETTINGS 2002
     #define ID_MENU_BUTTON_QUIT 2003
-
-
-// enum M_entities_e : ECS::Entity {
-//     MAIN_WINDOW = 0,
-//     PLAYER = MAP_ENTITY_PLAYER,
-//     MIN_BG = MAP_ENTITY_BACKGROUND,
-//     MAX_BG = MAP_MAX_ENTITY_BACKGROUND,
-// };
 
 class Menu : public AScene {
  public:

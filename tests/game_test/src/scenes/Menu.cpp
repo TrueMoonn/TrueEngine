@@ -19,10 +19,6 @@ Menu::Menu(void) : AScene() {
 
 void Menu::setECS(int scene) {
     if (scene == MENU_ID) {
-        // createSystem("movement2");
-        // createSystem("bound_hitbox");
-        // createSystem("follow_player");
-        // createSystem("animate");
         createSystem("draw");
         createSystem("display");
     }

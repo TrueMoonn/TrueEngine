@@ -13,14 +13,16 @@
 namespace addon {
 namespace sfml {
 
-struct Sprite : public sf::Sprite {
-    explicit Sprite(sf::Texture&& text,
+struct Sprite {
+    Sprite(sf::Texture& texture, std::size_t layer,
         const sf::Vector2f& scale = {1.f, 1.f});
-    Sprite(sf::Texture&& text, const sf::Vector2i& size,
-        const sf::Vector2f& scale = {1.f, 1.f});
-    Sprite(const Sprite& other);
-    Sprite(Sprite&& other) noexcept;
-    const sf::Texture texture;
+    Sprite(sf::Texture& texture, std::size_t layer,
+        const sf::Vector2i& size, const sf::Vector2f& scale = {1.f, 1.f});
+    Sprite(const Sprite&) = default;
+    Sprite(Sprite&&) noexcept = default;
+
+    sf::Sprite sp;
+    std::size_t layer;
 };
 }  // namespace sfml
 }  // namespace addon
