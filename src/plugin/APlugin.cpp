@@ -49,4 +49,3 @@ std::vector<std::string> APlugin::getSystems(void) const {
 
 }  // namespace plugin
 }  // namespace te
-

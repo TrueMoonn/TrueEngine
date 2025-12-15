@@ -13,6 +13,9 @@
     #define PLAYER_SPRITE_PATH "assets/test.png"
     #define CLOCK_RATE 1000 / DEFAULT_FRAME_LIMIT
 
+    #define PROJ_E 30000
+    #define MAX_PROJ_E 31000
+
 enum IG_entities_e : ECS::Entity {
     MAIN_WINDOW = 0,
     PLAYER = MAP_ENTITY_PLAYER,
@@ -26,6 +29,8 @@ class InGame : public AScene {
     ~InGame() = default;
 
     void run() override;
+
+    void shootProjectile();
 
  private:
     void setECS(void);

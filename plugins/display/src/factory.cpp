@@ -13,16 +13,35 @@
 #include <SFML/System/Exception.hpp>
 #include <toml++/toml.hpp>
 
+#include <ECS/Entity.hpp>
+#include <ECS/Registry.hpp>
+#include <ECS/Zipper.hpp>
+#include "maths/Vector.hpp"
+
 #include "Display.hpp"
 #include "display/factory.hpp"
-
-#include <ECS/Zipper.hpp>
 
 namespace addon {
 namespace display {
 
 Display::Display(ECS::Registry& reg, te::event::EventManager& events)
     : te::plugin::APlugin(reg, events) {
+    reg.registerComponent<Parallax>();
+    _components["parallax"] = [](ECS::Registry& reg, const ECS::Entity& e,
+        const toml::table& params) {
+        try {
+            const auto &reset = params["reset"].as_array();
+            mat::Vector2i resetPos = {
+                reset->at(0).value_or(0),
+                reset->at(1).value_or(0)
+            };
+            reg.createComponent<Parallax>(
+                e, params["iteration"].value_or(1), resetPos);
+        } catch (const std::bad_any_cast& e) {
+            std::cerr << "error(Plugin-Parallax): " <<
+                e.what() << std::endl;
+        }
+    };
     reg.registerComponent<Animation>();
     _components["animation"] = [](ECS::Registry& reg, const ECS::Entity& e,
         const toml::table& params) {

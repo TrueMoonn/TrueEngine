@@ -5,14 +5,43 @@
 ** InGame.cpp
 */
 
+#include <ECS/Zipper.hpp>
 #include <plugin/PluginManager.hpp>
 
 #include "scenes/InGame.hpp"
+#include "map_management.hpp"
+
+#include "clock.hpp"
+
+#include "interaction/components/player.hpp"
+#include "physic/components/position.hpp"
 
 InGame::InGame() : AScene() {
     loadPlugins();
     setECS();
     setEntities();
+}
+
+void InGame::shootProjectile() {
+    static te::Timestamp delay(0.2f);
+    static std::size_t entity_proj = PROJ_E;
+
+    if (!isEvent(te::event::KeyPressed) ||
+        !getEvents().keys.keys[/*event map*/te::event::Space] ||
+        !delay.checkDelay())
+        return;
+
+    const auto &player = getComponent<addon::intact::Player>();
+    const auto &position = getComponent<addon::physic::Position2>();
+
+    if (entity_proj > MAX_PROJ_E)
+        entity_proj = PROJ_E;
+    for (ECS::Entity e = 0; e < player.size() && e < position.size(); ++e) {
+        if (player[e].has_value() && position[e].has_value()) {
+            createEntity(entity_proj++, "projectile",
+                {position[e].value().x + 10, position[e].value().y});
+        }
+    }
 }
 
 void InGame::setECS(void) {
@@ -22,7 +51,9 @@ void InGame::setECS(void) {
     createSystem("follow_player");
     createSystem("animate");
     createSystem("deal_damage");
+    createSystem("apply_fragile");
     createSystem("kill_entity");
+    createSystem("parallax_sys");
     createSystem("draw");
     createSystem("display");
 }
@@ -46,11 +77,14 @@ void InGame::setEntities(void) {
     createEntity(++endMap, "enemy_2", {1000.0f, 500.0f});
     createEntity(++endMap, "enemy_3", {1050.0f, 500.0f});
     createEntity(++endMap, "enemy_4", {1100.0f, 500.0f});
+    createEntity(800, "background");
+
 }
 
 void InGame::run(void) {
     while (!isEvent(te::event::System::Closed)) {
         pollEvent();
+        shootProjectile();
         emit();
         runSystems();
     }

@@ -8,5 +8,6 @@
 #pragma once
 
 #include "display/components/animation.hpp"
+#include "display/components/parallax.hpp"
 
 #include "display/systems/animate.hpp"

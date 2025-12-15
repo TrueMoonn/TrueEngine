@@ -68,15 +68,13 @@ ECS::Entity GameTool::createMap(ECS::Entity fentity, std::size_t mapIndex) {
     const ConfigParser::MapContent map = _configs.getMap(mapIndex);
     mat::Vector2f tileSize = getMapTileSize(
         _configs.getEntityConfig(CONFIG_MAP_TABLE_NAME).as_table());
-    for (std::size_t layer = 0; layer < map.layer_max; ++layer) {
-        for (std::size_t y = 0; y < map.map.size(); ++y) {
-            for (std::size_t x = 0; x < map.map[y].size(); ++x) {
-                if (layer < map.map[y][x].size()) {
-                    createEntityComponents(fentity + ientity,
-                        _configs.getEntityConfig(map.map[y][x][layer]),
-                        mat::Vector2f{tileSize.x * x, tileSize.y * y});
-                    ientity += 1;
-                }
+    for (std::size_t y = 0; y < map.map.size(); ++y) {
+        for (std::size_t x = 0; x < map.map[y].size(); ++x) {
+            for (std::size_t e = 0; e < map.map[y][x].size(); ++e) {
+                createEntityComponents(fentity + ientity,
+                    _configs.getEntityConfig(map.map[y][x][e]),
+                    mat::Vector2f{tileSize.x * x, tileSize.y * y});
+                ientity += 1;
             }
         }
     }
