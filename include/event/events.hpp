@@ -8,6 +8,7 @@
 #pragma once
 
     #include <array>
+    #include <map>
 
 namespace te {
 namespace event {
@@ -120,9 +121,6 @@ enum Key {
 
 struct KeysEvent {
     bool update = false;
-<<<<<<< Updated upstream
-    std::array<bool, Key::LIMITKEY> keys = {false};
-=======
     std::array<bool, Key::LIMITKEY> UniversalKey;
 //     std::map<Key, Key> Corelation = {{A, A},
 //     {B, B},
@@ -226,14 +224,16 @@ struct KeysEvent {
 //     {F15, F15},
 //     {Pause, Pause}
 // };
->>>>>>> Stashed changes
     void clear() {
         update = false;
-        keys.fill(false);
+        for (int i = 0; i != Key::LIMITKEY; i++) {
+            UniversalKey[static_cast<Key>(i)] = false;
+        }
     }
 };
 
 /* MOUSE */
+
 enum MouseButton {
     MouseLeft = 0,
     MouseRight,
@@ -245,6 +245,15 @@ struct MouseInfo {
     bool active = false;
     float x;
     float y;
+};
+
+struct MouseEvent {
+    bool update = false;
+    std::array<MouseInfo, MouseButton::LIMITBUTTON> _MouseKey = {false};
+    void clear() {
+        update = false;
+        _MouseKey.fill({false, 0, 0});
+    }
 };
 
 typedef std::array<MouseInfo, MouseButton::LIMITBUTTON> MouseEvents;
@@ -274,6 +283,7 @@ enum System {
     TouchMoved,
     TouchEnded,
     SensorChanged,
+    ChangeScene,
     LIMITSYSTEM,
 };
 
@@ -281,12 +291,12 @@ typedef std::array<bool, System::LIMITSYSTEM> SystemEvents;
 
 struct Events {
     KeysEvent keys;
-    MouseEvents mouses;
+    MouseEvent mouses;
     SystemEvents systems;
 
     void clear() {
         keys.clear();
-        mouses.fill(MouseInfo());
+        mouses.clear();
         systems.fill(false);
     }
 };
