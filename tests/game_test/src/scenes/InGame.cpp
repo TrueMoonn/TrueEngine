@@ -27,7 +27,7 @@ void InGame::shootProjectile() {
     static std::size_t entity_proj = PROJ_E;
 
     if (!isEvent(te::event::KeyPressed) ||
-        !getEvents().keys.UniversalKey[/*event map*/te::event::Space] ||
+        !getEvents().keys.keys[/*event map*/te::event::Space] ||
         !delay.checkDelay())
         return;
 
