@@ -35,6 +35,9 @@
         scale = [50, 50]
         layer = 2
 
+        [ENTITIES.X.robust]
+        priority = 10
+
         [ENTITIES.X.hitbox]
         left = 0.0
         top = 0.0
