@@ -40,7 +40,7 @@ void hitbox2_sys(ECS::Registry& reg) {
 
             if (px < py)
                 pos.x += (dx < 0 ? -px : px);
-            else
+            else if (px > py)
                 pos.y += (dy < 0 ? -py : py);
         }
     }
