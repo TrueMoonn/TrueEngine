@@ -15,7 +15,7 @@ namespace addon {
 namespace sfml {
 
 void click_sys(ECS::Registry& reg) {
-    //TODO FOR CLICK DONT ASK FOR CHANGES
+    // TODO(ethanou-sama): Stuff
 }
 
 }  // namespace sfml
