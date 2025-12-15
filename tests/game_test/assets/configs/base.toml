@@ -65,11 +65,11 @@
         reset = [0, 0]
 
         [ENTITIES.background.velocity2]
-        x = -1.5
-        y = 0
+        x = 2
+        y = -2
 
         [ENTITIES.background.sprite]
         path = "assets/door.png"
         scale = [256, 256]
         size = [256, 256]
-        layer = 0
+        layer = 4

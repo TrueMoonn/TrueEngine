@@ -32,11 +32,13 @@ void parallax_sys(ECS::Registry &reg) {
             auto size = sp.sp.getTextureRect().size;
             size.x *= sp.sp.getScale().x;
             size.y *= sp.sp.getScale().y;
-            if (para.reset.x > pos.x + size.x) {
+            if (para.reset.x > pos.x + size.x ||
+                para.reset.y > pos.y + size.y) {
                 pos.x = para.reset.x;
+                pos.y = para.reset.y;
             }
             for (std::size_t i = 0; i < para.iterations; ++i) {
-                sp.sp.setPosition({pos.x + size.x * i, pos.y});
+                sp.sp.setPosition({pos.x + size.x * i, pos.y + size.y * i});
                 win.push_back(sp);
             }
         }
