@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <toml++/toml.hpp>
+#include <ECS/Registry.hpp>
 
 #include "Physic.hpp"
 #include "physic/factory.hpp"
@@ -56,14 +57,13 @@ Physic::Physic(ECS::Registry& reg, te::event::EventManager& events)
     };
     reg.registerComponent<Movable>();
     _components["movable"] = [](ECS::Registry& reg, const ECS::Entity& e,
-        const toml::table& params) {
-        try {
-            (void)params;
-            reg.createComponent<Movable>(e);
-        } catch (const std::bad_any_cast& e) {
-            std::cerr << "error(Plugin-Movable): " <<
-                e.what() << std::endl;
-        }
+            const toml::table&) {
+        reg.createComponent<Movable>(e);
+    };
+    reg.registerComponent<Stationary>();
+    _components["stationary"] = [](ECS::Registry& reg, const ECS::Entity& e,
+            const toml::table&) {
+        reg.createComponent<Stationary>(e);
     };
     _systems["movement2"] = [](ECS::Registry& reg) {
         reg.addSystem(&movement2_sys);
