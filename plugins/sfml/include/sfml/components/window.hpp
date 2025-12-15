@@ -19,8 +19,7 @@ namespace addon {
 namespace sfml {
 
 #define DEFAULT_FRAME_LIMIT 60
-#define DEFAULT_WIN_NAME "Deepest Dungeon"
-#define DEFAULT_VIDEO_MODE sf::VideoMode({1920, 1080})
+#define DEFAULT_WIN_NAME "TE-game"
 #define DEFAULT_WIN_SIZE {1280, 720}
 
 struct Window : public sf::RenderWindow {

@@ -15,12 +15,12 @@ namespace addon {
 namespace sfml {
 
 void click_sys(ECS::Registry& reg) {
-    auto& windows = reg.getComponents<Window>();
+    // auto& windows = reg.getComponents<Window>();
 
-    for (auto &&[win] : ECS::Zipper(windows)) {
-        win.display();
-        win.clear();
-    }
+    // for (auto &&[win] : ECS::Zipper(windows)) {
+    //     win.display();
+    //     win.clear();
+    // } TODO FOR CLICK DONT ASK FOR CHANGES
 }
 
 }  // namespace sfml
