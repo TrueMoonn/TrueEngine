@@ -8,7 +8,6 @@
 #include <memory>
 #include <array>
 
-#include "scenes/InGame.hpp"
 #include "scenes/Menu.hpp"
 
 int main(int, const char * const *) {
