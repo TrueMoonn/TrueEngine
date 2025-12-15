@@ -68,6 +68,18 @@ class EventManager {
             return _events.systems.at(system);
     }
 
+    void updateScene(int scene) {
+        _events.systems.at(System::ChangeScene) = true;
+    }
+
+    Events getEvent(void) {
+        return _events;
+    }
+
+    void setEvent(System sys) {
+        _events.systems.at(sys) = false;
+    }
+
     void emit(ECS::Registry& reg,
         std::optional<ECS::Entity> target_entity = std::nullopt) {
         if (_events.keys.update) {

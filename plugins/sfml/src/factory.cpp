@@ -9,8 +9,10 @@
 #include <string>
 #include <iostream>
 #include <SFML/Graphics/Texture.hpp>
+#include <SFML/Graphics/Sprite.hpp>
 #include <SFML/System/Exception.hpp>
 #include <ECS/Zipper.hpp>
+#include <ECS/Registry.hpp>
 #include <toml++/toml.hpp>
 
 #include "Sfml.hpp"
@@ -71,7 +73,7 @@ Sfml::Sfml(ECS::Registry& reg, te::event::EventManager& events)
                     const auto &pos = sf::Mouse::getPosition(win);
                     const auto &translated = win.mapPixelToCoords(pos);
 
-                    if (spr.getGlobalBounds().contains(translated)) {
+                    if (spr.sp.getGlobalBounds().contains(translated)) {
                         if (i == 1)
                             events.updateScene(9);
                         i++;

@@ -20,6 +20,9 @@
     #define CONTROLS_SPRITE_PATH "assets/Controls.png"
     #define CLOCK_RATE 1000 / DEFAULT_FRAME_LIMIT
 
+    #define PROJ_E 30000
+    #define MAX_PROJ_E 31000
+
     #define MENU_ID 0
     #define INGAME_ID 1
 
@@ -35,6 +38,7 @@ class Menu : public AScene {
 
     void run() override;
  private:
+    void shootProjectile(void);
     void setECS(int scene);
     void setEntities(int scene);
 };

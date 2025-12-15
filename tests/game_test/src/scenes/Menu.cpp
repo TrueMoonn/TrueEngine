@@ -8,13 +8,39 @@
 #include <plugin/PluginManager.hpp>
 
 #include "scenes/Menu.hpp"
+#include "map_management.hpp"
 
-#include "sfml/components/sprite.hpp"
+#include "clock.hpp"
+
+#include "interaction/components/player.hpp"
+#include "physic/components/position.hpp"
 
 Menu::Menu(void) : AScene() {
     loadPlugins();
     setECS(MENU_ID);
     setEntities(MENU_ID);
+}
+
+void Menu::shootProjectile() {
+    static te::Timestamp delay(0.2f);
+    static std::size_t entity_proj = PROJ_E;
+
+    if (!isEvent(te::event::KeyPressed) ||
+        !getEvents().keys.UniversalKey[/*event map*/te::event::Space] ||
+        !delay.checkDelay())
+        return;
+
+    const auto &player = getComponent<addon::intact::Player>();
+    const auto &position = getComponent<addon::physic::Position2>();
+
+    if (entity_proj > MAX_PROJ_E)
+        entity_proj = PROJ_E;
+    for (ECS::Entity e = 0; e < player.size() && e < position.size(); ++e) {
+        if (player[e].has_value() && position[e].has_value()) {
+            createEntity(entity_proj++, "projectile",
+                {position[e].value().x + 10, position[e].value().y});
+        }
+    }
 }
 
 void Menu::setECS(int scene) {
@@ -28,7 +54,9 @@ void Menu::setECS(int scene) {
         createSystem("follow_player");
         createSystem("animate");
         createSystem("deal_damage");
+        createSystem("apply_fragile");
         createSystem("kill_entity");
+        createSystem("parallax_sys");
         createSystem("draw");
         createSystem("display");
     }
@@ -39,7 +67,7 @@ void Menu::setEntities(int scene) {
         addConfig("assets/configs/menu.toml");
         addConfig("assets/configs/buttonstart.toml");
         createComponent("window", SYSTEM_ENTITY);
-        createEntity(ID_MENU_BACKGROUND + 1, "buttonstart", {800.f, 500.f});
+        createEntity(ID_MENU_BACKGROUND + 1, "buttonstart", {500.f, 250.f});
         createEntity(ID_MENU_BACKGROUND, "menu", {0.f, 0.f});
     }
     if (scene == INGAME_ID) {
@@ -55,6 +83,7 @@ void Menu::setEntities(int scene) {
         createEntity(endMap + 3, "enemy", {1000.f, 500.f});
         createEntity(endMap + 4, "enemy", {500.f, 1000.f});
         createEntity(endMap + 5, "enemy", {600.f, 600.f});
+        createEntity(800, "background");
     }
 }
 
@@ -62,11 +91,12 @@ void Menu::run(void) {
     while (!isEvent(te::event::System::Closed)) {
         pollEvent();
         emit();
+        shootProjectile();
         runSystems();
         if (isEvent(te::event::System::ChangeScene)) {
             for (int i = static_cast<int>(ID_MENU_BACKGROUND);
             i <= static_cast<int>(ID_MENU_BUTTON_START); i++)
-                removeEntity(i);
+            removeEntity(i);
             setECS(INGAME_ID);
             setEntities(INGAME_ID);
             setEvent(te::event::System::ChangeScene);
