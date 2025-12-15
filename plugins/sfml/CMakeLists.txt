@@ -16,6 +16,7 @@ add_library(${PROJECT_NAME} SHARED
 
     #EVENTS
     ${PROJECT_SOURCE_DIR}/src/events/pollEvent.cpp
+    ${PROJECT_SOURCE_DIR}/src/events/mouse.cpp
     ${PROJECT_SOURCE_DIR}/src/events/keyboard.cpp
 )
 add_library(addon::sfml ALIAS ${PROJECT_NAME})
