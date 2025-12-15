@@ -76,13 +76,12 @@ Display::Display(ECS::Registry& reg, te::event::EventManager& events)
         auto& event = std::get<te::event::KeysEvent>(content);
 
         auto& animations = reg.getComponents<Animation>();
-
         for (auto&& [an] : ECS::Zipper(animations)) {
-            if (event.keys[te::event::Key::LeftControl])
+            if (event.UniversalKey[te::event::Key::LeftControl])
                 an.pause();
-            if (event.keys[te::event::Key::Space])
+            if (event.UniversalKey[te::event::Key::Space])
                 an.unpause();
-            if (event.keys[te::event::Key::A]) {
+            if (event.UniversalKey[te::event::Key::A]) {
                 anim = anim ? 0 : 1;
                 an.changeAnimation(anim);
             }
