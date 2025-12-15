@@ -57,6 +57,8 @@ class PluginManager {
      */
     void loadPlugins(ECS::Registry& reg, event::EventManager& events,
         const std::string& dir);
+    void loadPlugins(ECS::Registry& reg, event::EventManager& events,
+        const std::string& dir, std::vector<std::string> &pluginToLoad);
     /**
      * @brief Get the names of the plugins loaded
      * 
