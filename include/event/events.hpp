@@ -290,13 +290,18 @@ enum System {
 typedef std::array<bool, System::LIMITSYSTEM> SystemEvents;
 
 struct Events {
+    Events() {
+        keys.UniversalKey.fill(false);
+        mouses._MouseKey.fill(MouseInfo());
+        systems.fill(false);
+    }
     KeysEvent keys;
     MouseEvent mouses;
     SystemEvents systems;
 
     void clear() {
-        keys.clear();
-        mouses.clear();
+        keys.UniversalKey.fill(false);
+        mouses._MouseKey.fill(MouseInfo());
         systems.fill(false);
     }
 };
