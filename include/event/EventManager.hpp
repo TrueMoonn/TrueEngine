@@ -72,10 +72,6 @@ class EventManager {
         _events.systems.at(System::ChangeScene) = true;
     }
 
-    Events getEvent(void) {
-        return _events;
-    }
-
     void setEvent(System sys) {
         _events.systems.at(sys) = false;
     }
