@@ -1,4 +1,3 @@
-[ENTITIES]
     [ENTITIES.player]
     drawable = true
     player = true
