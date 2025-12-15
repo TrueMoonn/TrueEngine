@@ -1,7 +1,9 @@
+[ENTITIES]
     [ENTITIES.player]
     drawable = true
     player = true
     position2 = true
+    movable = true
 
         [ENTITIES.player.health]
         amount = 5
@@ -50,6 +52,7 @@
         path = "assets/shoot.png"
         size = [19, 6]
         scale = [20, 10]
+        layer = 2
 
         [ENTITIES.projectile.velocity2]
         x = 5.0
