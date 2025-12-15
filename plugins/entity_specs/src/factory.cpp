@@ -49,11 +49,36 @@ EntitySpec::EntitySpec(ECS::Registry& reg, te::event::EventManager& events)
                 e.what() << std::endl;
         }
     };
+    reg.registerComponent<Fragile>();
+    _components["fragile"] = [](ECS::Registry& reg, const ECS::Entity& e,
+        const toml::table& params) {
+        try {
+            std::size_t priority = params["priority"].value_or(1);
+            reg.createComponent<Fragile>(e, priority);
+        } catch (const std::bad_any_cast& e) {
+            std::cerr << "error(Plugin-fragile): " <<
+                e.what() << std::endl;
+        }
+    };
+    reg.registerComponent<Robust>();
+    _components["robust"] = [](ECS::Registry& reg, const ECS::Entity& e,
+        const toml::table& params) {
+        try {
+            std::size_t priority = params["priority"].value_or(1);
+            reg.createComponent<Robust>(e, priority);
+        } catch (const std::bad_any_cast& e) {
+            std::cerr << "error(Plugin-robust): " <<
+                e.what() << std::endl;
+        }
+    };
     _systems["deal_damage"] = [](ECS::Registry& reg) {
         reg.addSystem(&deal_damage);
     };
     _systems["kill_entity"] = [](ECS::Registry& reg) {
         reg.addSystem(&kill_entity);
+    };
+    _systems["apply_fragile"] = [](ECS::Registry& reg) {
+        reg.addSystem(&apply_fragile);
     };
 }
 

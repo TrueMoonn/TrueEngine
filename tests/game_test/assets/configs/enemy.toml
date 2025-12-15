@@ -17,6 +17,9 @@
         scale = [30, 30]
         layer = 3
 
+        [ENTITIES.enemy.robust]
+        priority = 2
+
         [ENTITIES.enemy.velocity2]
         x = 0.0
         y = 0.0
