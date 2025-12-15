@@ -30,6 +30,7 @@
     [ENTITIES.X]
     drawable = true
     position2 = true
+    stationary = true
         [ENTITIES.X.sprite]
         path = "assets/wall.png"
         scale = [50, 50]

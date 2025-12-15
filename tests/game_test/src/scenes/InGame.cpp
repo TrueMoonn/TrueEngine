@@ -45,6 +45,7 @@ void InGame::shootProjectile() {
 }
 
 void InGame::setECS(void) {
+    createSystem("apply_pattern");
     createSystem("movement2");
     createSystem("bound_hitbox");
     createSystem("follow_player");
@@ -62,16 +63,20 @@ void InGame::setEntities(void) {
 
     addConfig("assets/configs/base.toml");
     addConfig("assets/configs/enemy.toml");
+    addConfig("assets/configs/enemy_2.toml");
     addConfig("assets/configs/player.toml");
 
     size_t map1 = addMap("assets/maps/test1.ddmap");
     ECS::Entity endMap = createMap(MAP_ENTITY_BACKGROUND, map1);
 
-    createEntity(endMap + 1, "player", {1920.f / 2, 1080.f / 2});
-    createEntity(endMap + 2, "enemy", {500.f, 500.f});
-    createEntity(endMap + 3, "enemy", {1000.f, 500.f});
-    createEntity(endMap + 4, "enemy", {500.f, 1000.f});
-    createEntity(endMap + 5, "enemy", {600.f, 600.f});
+    createEntity(++endMap, "player", {1920.f / 2, 1080.f / 2});
+    createEntity(++endMap, "enemy", {500.f, 500.f});
+    createEntity(++endMap, "enemy", {1000.f, 500.f});
+    createEntity(++endMap, "enemy", {500.f, 1000.f});
+    createEntity(++endMap, "enemy", {600.f, 600.f});
+    createEntity(++endMap, "enemy_2", {1000.0f, 500.0f});
+    createEntity(++endMap, "enemy_3", {1050.0f, 500.0f});
+    createEntity(++endMap, "enemy_4", {1100.0f, 500.0f});
     createEntity(800, "background");
 }
 
