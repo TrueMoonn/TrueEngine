@@ -157,7 +157,8 @@ class GameServer {
      * @param client Target client address
      * @param data Packet data to send
      */
-    void queuePacket(const net::Address& client, const std::vector<uint8_t>& data);
+    void queuePacket(const net::Address& client,
+        const std::vector<uint8_t>& data);
 
     /**
      * @brief Queues a broadcast packet (thread-safe)

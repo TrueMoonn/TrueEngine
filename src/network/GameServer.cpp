@@ -170,7 +170,8 @@ std::vector<net::Address> GameServer::getConnectedClients() const {
     return clients;
 }
 
-void GameServer::handleNewClient(const net::Address& addr, uint32_t current_time) {
+void GameServer::handleNewClient(const net::Address& addr,
+    uint32_t current_time) {
     ClientInfo info;
     info.address = addr;
     info.last_packet_time = current_time;
@@ -184,7 +185,8 @@ void GameServer::handleNewClient(const net::Address& addr, uint32_t current_time
     }
 }
 
-void GameServer::queueIncomingPackets(const std::vector<std::vector<uint8_t>>& packets,
+void GameServer::queueIncomingPackets(
+    const std::vector<std::vector<uint8_t>>& packets,
     const net::Address& sender) {
     std::lock_guard<std::mutex> lock(_incoming_mutex);
     for (const auto& packet_data : packets) {
@@ -305,7 +307,8 @@ uint32_t GameServer::getCurrentTimeMs() const {
 
 void GameServer::startNetworkThread() {
     if (_network_running) {
-        std::cerr << "[GameServer] Network thread already running!" << std::endl;
+        std::cerr
+            << "[GameServer] Network thread already running!" << std::endl;
         return;
     }
 
@@ -359,7 +362,8 @@ void GameServer::networkThreadLoop() {
 
             checkClientTimeouts();
         } catch (const std::exception& e) {
-            std::cerr << "[GameServer] Network error: " << e.what() << std::endl;
+            std::cerr
+                << "[GameServer] Network error: " << e.what() << std::endl;
         }
 
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
