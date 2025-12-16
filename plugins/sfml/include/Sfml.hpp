@@ -12,8 +12,11 @@
 #include "sfml/components/hoverable.hpp"
 #include "sfml/components/sprite.hpp"
 #include "sfml/components/window.hpp"
+#include "sfml/components/sound.hpp"
+#include "sfml/components/text.hpp"
 
 #include "sfml/systems/display.hpp"
 #include "sfml/systems/draw.hpp"
 #include "sfml/systems/view_player.hpp"
 #include "sfml/systems/parallax.hpp"
+#include "sfml/systems/playsound.hpp"

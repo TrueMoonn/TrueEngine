@@ -47,6 +47,7 @@ void Menu::setECS(int scene) {
     if (scene == MENU_ID) {
         createSystem("draw");
         createSystem("display");
+        // createSystem("playsound");
     }
     if (scene == INGAME_ID) {
         createSystem("movement2");
@@ -65,8 +66,10 @@ void Menu::setEntities(int scene) {
         addConfig("assets/configs/menu.toml");
         addConfig("assets/configs/buttonstart.toml");
         addConfig("assets/configs/buttonquit.toml");
+        addConfig("assets/configs/audio.toml");
         createComponent("window", SYSTEM_ENTITY);
         createEntity(ID_MENU_BUTTON_QUIT, "buttonquit", {500.f, 400.f});
+        createEntity(19, "audio");
         createEntity(ID_MENU_BUTTON_START, "buttonstart", {500.f, 250.f});
         createEntity(ID_MENU_BACKGROUND, "menu", {0.f, 0.f});
     }

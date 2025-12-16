@@ -1,0 +1,5 @@
+[ENTITIES]
+    [ENTITIES.audio]
+        [ENTITIES.audio.sound]
+        path = "assets/audio.wav"
+    

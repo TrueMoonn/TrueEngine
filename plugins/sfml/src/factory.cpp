@@ -11,6 +11,10 @@
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/System/Exception.hpp>
+#include <SFML/Audio/Sound.hpp>
+#include <SFML/Audio/SoundBuffer.hpp>
+#include <SFML/Graphics/Text.hpp>
+#include <SFML/Graphics/Color.hpp>
 #include <ECS/Zipper.hpp>
 #include <ECS/Registry.hpp>
 #include <toml++/toml.hpp>
@@ -53,11 +57,36 @@ Sfml::Sfml(ECS::Registry& reg, te::event::EventManager& events)
         const toml::table&) {
         reg.createComponent<Clickable>(e);
     };
+
+    reg.registerComponent<Sound>();
+    _components["sound"] = [](ECS::Registry& reg, const ECS::Entity& e,
+        const toml::table& params) {
+        // static std::unordered_map<std::string, sf::Sound> sounds;
+        if (!params.empty()) {
+            const auto& path = params["path"].value_or("");
+            sf::SoundBuffer buffer;
+            buffer.loadFromFile(path);
+            reg.createComponent<Sound>(e, buffer);
+        }
+    };
+    reg.registerComponent<Text>();
+    _components["text"] = [](ECS::Registry& reg, const ECS::Entity& e,
+        const toml::table& params) {
+            if (!params.empty()) {
+                const auto& str = params["value"].value_or("");
+                const auto& font = params["font"].value_or("");
+                const auto& size = params["size"].value_or("");
+                sf::Font font_(font);
+                reg.createComponent<Text>(e, str, font_, sf::Text::Bold, sf::Color::White, size);
+            }
+        };
+
     reg.registerComponent<Hoverable>();
     _components["hoverable"] = [](ECS::Registry& reg, const ECS::Entity& e,
         const toml::table&) {
         reg.createComponent<Hoverable>(e);
     };
+
     events.addSubscription(te::event::System::MouseButtonPressed,
         [&events](ECS::Registry& reg,
         const te::event::EventManager::eventContent& content,
@@ -128,6 +157,9 @@ Sfml::Sfml(ECS::Registry& reg, te::event::EventManager& events)
     _systems["parallax_sys"] = [](ECS::Registry& reg) {
         reg.addSystem(&parallax_sys);
     };
+    // _systems["playsound"] = [](ECS::Registry& reg) {
+    //     reg.addSystem(&playsound_sys);
+    // };
 }
 
 }  // namespace sfml
