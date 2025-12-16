@@ -21,21 +21,47 @@ namespace network {
  */
 class GameServer {
  public:
+    /**
+     * @brief Constructs a GameServer with the specified port and protocol
+     * @param port Port number on which the server will listen
+     * @param protocol Network protocol to use ("UDP" or "TCP"). Defaults to "UDP"
+     */
     explicit GameServer(uint16_t port, const std::string& protocol = "UDP");
+
+    /**
+     * @brief Destructor that ensures proper cleanup and shutdown
+     */
     ~GameServer();
 
+    /**
+     * @brief Starts the server and begins listening for connections
+     * @return true if server started successfully, false otherwise
+     */
     bool start();
+
+    /**
+     * @brief Stops the server and disconnects all clients
+     */
     void stop();
+
+    /**
+     * @brief Updates the server state and processes network events
+     * @param delta_time Time elapsed since last update in seconds
+     */
     void update(float delta_time);
 
-    // API for GAME LOGIC
     /**
      * @brief Send raw data to a specific client
+     * @param client Address of the target client
+     * @param data Vector of bytes to send
+     * @return true if data was sent successfully, false otherwise
      */
     bool sendTo(const net::Address& client, const std::vector<uint8_t>& data);
 
     /**
      * @brief Broadcast raw data to all clients (optionally exclude one)
+     * @param data Vector of bytes to broadcast
+     * @param exclude Optional client address to exclude from broadcast
      */
     void broadcastToAll(const std::vector<uint8_t>& data,
         const std::optional<net::Address>& exclude = std::nullopt);
@@ -71,22 +97,45 @@ class GameServer {
     void unregisterPacketHandler(uint8_t key);
 
     /**
-     * @brief Callback: called when a client connects
+     * @brief Callback type: called when a client connects
      */
     using ClientConnectCallback =
         std::function<void(const net::Address& client)>;
+
+    /**
+     * @brief Sets the callback to be invoked when a client connects
+     * @param callback Function to call when a new client connects
+     */
     void setClientConnectCallback(ClientConnectCallback callback);
 
     /**
-     * @brief Callback: called when a client disconnects or times out
+     * @brief Callback type: called when a client disconnects or times out
      */
     using ClientDisconnectCallback =
         std::function<void(const net::Address& client)>;
+
+    /**
+     * @brief Sets the callback to be invoked when a client disconnects
+     * @param callback Function to call when a client disconnects or times out
+     */
     void setClientDisconnectCallback(ClientDisconnectCallback callback);
 
-    // Server Info
+    /**
+     * @brief Checks if the server is currently running
+     * @return true if server is running, false otherwise
+     */
     bool isRunning() const;
+
+    /**
+     * @brief Gets the number of currently connected clients
+     * @return Number of active client connections
+     */
     size_t getClientCount() const;
+
+    /**
+     * @brief Gets a list of all connected client addresses
+     * @return Vector containing addresses of all connected clients
+     */
     std::vector<net::Address> getConnectedClients() const;
 
  private:
@@ -96,6 +145,9 @@ class GameServer {
     bool _running;
 
     // Client tracking
+    /**
+     * @brief Structure containing information about a connected client
+     */
     struct ClientInfo {
         net::Address address;
         uint32_t last_packet_time;
@@ -109,9 +161,27 @@ class GameServer {
     ClientConnectCallback _on_client_connect;
     ClientDisconnectCallback _on_client_disconnect;
 
+    /**
+     * @brief Updates server state for UDP protocol
+     * @param delta_time Time elapsed since last update in seconds
+     */
     void updateUDP(float delta_time);
+
+    /**
+     * @brief Updates server state for TCP protocol
+     * @param delta_time Time elapsed since last update in seconds
+     */
     void updateTCP(float delta_time);
+
+    /**
+     * @brief Checks for client timeouts and disconnects inactive clients
+     */
     void checkClientTimeouts();
+
+    /**
+     * @brief Gets the current system time in milliseconds
+     * @return Current time in milliseconds
+     */
     uint32_t getCurrentTimeMs() const;
 };
 
