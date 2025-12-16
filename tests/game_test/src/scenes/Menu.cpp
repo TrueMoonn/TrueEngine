@@ -101,7 +101,7 @@ void Menu::run(void) {
                 removeEntity(i);
             setECS(INGAME_ID);
             setEntities(INGAME_ID);
-            setEvent(te::event::System::ChangeScene);
+            setSystemEvent(te::event::System::ChangeScene, false);
         }
     }
 }

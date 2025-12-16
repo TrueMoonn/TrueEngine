@@ -39,6 +39,7 @@ class EventManager {
 
     eventContent getEventContent(System system) const;
     Events getEvents(void) const;
+    void setEvents(event::Events events);
 
     bool isEvent(System sys) const;
     void setSystemEvent(System sys, bool val);

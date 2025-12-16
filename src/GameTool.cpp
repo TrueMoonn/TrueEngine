@@ -12,6 +12,7 @@
 #include "GameTool.hpp"
 #include "ConfigReader.hpp"
 #include "ECS/Entity.hpp"
+#include "ECS/Registry.hpp"
 #include "event/EventManager.hpp"
 #include "maths/Vector.hpp"
 
@@ -48,6 +49,10 @@ void GameTool::createSystem(const te::plugin::sys_builder &f) {
 
 void GameTool::removeEntity(const ECS::Entity& e) {
     _reg.killEntity(e);
+}
+
+ECS::Registry GameTool::getRegistry(void) {
+    return _reg;
 }
 
 std::size_t GameTool::addMap(const std::string& path) {
@@ -105,6 +110,10 @@ bool GameTool::isEvent(te::event::System e) {
 event::EventManager::eventContent
     GameTool::getEventContent(event::System system) const {
     return _events.getEventContent(system);
+}
+
+void GameTool::setEvents(event::Events events) {
+    _events.setEvents(events);
 }
 
 event::Events GameTool::getEvents(void) const {

@@ -192,20 +192,27 @@ class GameTool {
     event::EventManager::eventContent
         getEventContent(event::System system) const;
 
+    /**
+     * @brief Set a SystemEvent in the event::EventManager
+     *
+     * @param system The system to change the state
+     * @param val The state to change to
+     */
     void setSystemEvent(event::System system, bool val);
 
-    ECS::Registry getRegistry() {
-        return this->_reg;
-    }
+    /**
+     * @brief Get the ECS::Registry stored in this class
+     *
+     * @return A copy of the ECS::Registry
+     */
+    ECS::Registry getRegistry(void);
 
-    // /**
-    //  * @brief Set the Events object of the event::EventManager
-    //  *
-    //  * @param events The Events that you want to set in the Events of EventManager
-    //  */
-    // void setEvent(event::Events events) {
-    //     _events.setEvent(events);
-    // }
+    /**
+     * @brief Set the Events object of the event::EventManager
+     *
+     * @param events The Events that you want to set in the Events of EventManager
+     */
+    void setEvents(event::Events events);
 
     /**
      * @brief Get the Events object of the event::EventManager

@@ -49,6 +49,10 @@ Events EventManager::getEvents(void) const {
     return _events;
 }
 
+void EventManager::setEvents(event::Events events) {
+    _events = events;
+}
+
 bool EventManager::isEvent(System sys) const {
     if (sys == System::KeyPressed && _events.keys.update)
         return true;
