@@ -30,116 +30,31 @@ class EventManager {
         std::optional<ECS::Entity>)> eventFunc;
 
  public:
-    EventManager() : _pollFunc(nullptr) {}
-    explicit EventManager(pollFunc func) : _pollFunc(func) {}
+    explicit EventManager();
+    explicit EventManager(pollFunc func);
     ~EventManager() = default;
 
-    void setPollFunc(pollFunc func) {
-        _pollFunc = func;
-    }
-    void pollEvents(ECS::Registry& reg) {
-        if (_pollFunc) {
-            _pollFunc(_events, reg);
-        }
-    }
+    void setPollFunc(pollFunc func);
+    void pollEvents(ECS::Registry& reg);
 
-    void addSubscription(System sys, eventFunc func) {
-        _subscription[sys].push_back(func);
-    }
+    eventContent getEventContent(System system) const;
+    Events getEvents(void) const;
+    void setEvents(event::Events events);
 
-    bool isEvent(System sys) {
-        if (sys == System::KeyPressed && _events.keys.update)
-            return true;
-        return _events.systems.at(sys);
-    }
+    bool isEvent(System sys) const;
+    void setSystemEvent(System sys, bool val);
 
-    eventContent getEvent(System system) {
-        if (system == System::KeyPressed || system == System::KeyReleased)
-            return _events.keys;
-        else if (system == System::MouseMoved
-                || system == System::MouseWheelMoved
-                || system == System::MouseWheelScrolled
-                || system == System::MouseButtonPressed
-                || system == System::MouseButtonReleased
-                || system == System::MouseEntered
-                || system == System::MouseQuit)
-            return _events.mouses;
-        else
-            return _events.systems.at(system);
-    }
-
-    void updateScene(int scene) {
-        _events.systems.at(System::ChangeScene) = true;
-    }
-
-    Events getEvent(void) {
-        return _events;
-    }
-
-    void setEvent(System sys) {
-        _events.systems.at(sys) = false;
-    }
-
+    void addSubscription(System sys, eventFunc func);
     void emit(ECS::Registry& reg,
-        std::optional<ECS::Entity> target_entity = std::nullopt) {
-        if (_events.keys.update) {
-            for (const auto &func : _subscription[System::KeyPressed]) {
-                func(reg, _events.keys, target_entity);
-            }
-        }
-        if (_events.mouses.update) {
-            for (const auto &func : _subscription[System::MouseButtonPressed]) {
-                func(reg, _events.mouses, target_entity);
-                _events.mouses.clear();
-            }
-        }
-        // for (auto& [sys, vect] : _subscription) {
-        //     if (_events.systems[sys]) {
-        //         for (const auto &func : vect) {
-        //             func(reg, true);
-        //         }
-        //     }
-        // }
-    }
-
-    Events getEvents() {
-        return _events;
-    }
-
-    void setEvents(Events events) {
-        _events = events;
-    }
+        std::optional<ECS::Entity> target_entity = std::nullopt);
 
  private:
     pollFunc _pollFunc;
 
     Events _events;
-    std::unordered_map<System, std::vector<eventFunc>> _subscription = {
-        {System::Closed, {}},
-        {System::Resized, {}},
-        {System::LostFocus, {}},
-        {System::GainedFocus, {}},
-        {System::TextEntered, {}},
-        {System::KeyPressed, {}},
-        {System::KeyReleased, {}},
-        {System::MouseWheelScrolled, {}},
-        {System::MouseButtonPressed, {}},
-        {System::MouseButtonReleased, {}},
-        {System::MouseMoved, {}},
-        {System::MouseEntered, {}},
-        {System::MouseQuit, {}},
-        {System::JoystickButtonPressed, {}},
-        {System::JoystickButtonReleased, {}},
-        {System::JoystickMoved, {}},
-        {System::JoystickConnected, {}},
-        {System::JoystickDisconnected, {}},
-        {System::TouchBegan, {}},
-        {System::TouchMoved, {}},
-        {System::TouchEnded, {}},
-        {System::SensorChanged, {}},
-        {System::ChangeScene, {}},
-        {System::LIMITSYSTEM, {}}
-    };
+
+    void fillSubscriptions(void);
+    std::unordered_map<System, std::vector<eventFunc>> _subscription;
 };
 
 }  // namespace event

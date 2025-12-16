@@ -227,9 +227,7 @@ struct KeysEvent {
 // };
     void clear() {
         update = false;
-        for (int i = 0; i != Key::LIMITKEY; i++) {
-            UniversalKey[static_cast<Key>(i)] = false;
-        }
+        UniversalKey.fill(false);
     }
 };
 
@@ -261,7 +259,7 @@ typedef std::array<MouseInfo, MouseButton::LIMITBUTTON> MouseEvents;
 
 /* SYSTEM EVENTS */
 enum System {
-    Closed,
+    Closed = 0,
     Resized,
     LostFocus,
     GainedFocus,
@@ -293,10 +291,10 @@ typedef std::array<bool, System::LIMITSYSTEM> SystemEvents;
 struct Events {
     KeysEvent keys;
     MouseEvent mouses;
-    SystemEvents systems = {};
+    SystemEvents systems;
 
     Events() {
-        memset(this, 0, sizeof(Events));
+        clear();
     }
 
     void clear() {

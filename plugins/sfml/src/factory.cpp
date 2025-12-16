@@ -16,6 +16,7 @@
 #include <toml++/toml.hpp>
 
 #include "Sfml.hpp"
+#include "event/events.hpp"
 #include "sfml/components/window.hpp"
 #include "sfml/events.hpp"
 #include "sfml/factory.hpp"
@@ -75,7 +76,8 @@ Sfml::Sfml(ECS::Registry& reg, te::event::EventManager& events)
 
                     if (spr.sp.getGlobalBounds().contains(translated)) {
                         if (i == 1)
-                            events.updateScene(9);
+                            events.setSystemEvent(
+                                te::event::System::ChangeScene, true);
                         i++;
                     }
                 }

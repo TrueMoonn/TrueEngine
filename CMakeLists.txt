@@ -55,6 +55,9 @@ add_library( ${PROJECT_NAME} STATIC
     # CONFIG
     ${TE_SRC_DIR}/ConfigReader.cpp
 
+    # EVENT
+    ${TE_SRC_DIR}/event/EventManager.cpp
+
     # GAME TOOL
     ${TE_SRC_DIR}/GameTool.cpp
 

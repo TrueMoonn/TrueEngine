@@ -12,6 +12,8 @@
 #include "GameTool.hpp"
 #include "ConfigReader.hpp"
 #include "ECS/Entity.hpp"
+#include "ECS/Registry.hpp"
+#include "event/EventManager.hpp"
 #include "maths/Vector.hpp"
 
 namespace te {
@@ -47,6 +49,10 @@ void GameTool::createSystem(const te::plugin::sys_builder &f) {
 
 void GameTool::removeEntity(const ECS::Entity& e) {
     _reg.killEntity(e);
+}
+
+ECS::Registry GameTool::getRegistry(void) {
+    return _reg;
 }
 
 std::size_t GameTool::addMap(const std::string& path) {
@@ -85,8 +91,8 @@ void GameTool::pollEvent() {
     _events.pollEvents(_reg);
 }
 
-void GameTool::setEvent(event::System sys) {
-    _events.setEvent(sys);
+void GameTool::setSystemEvent(event::System sys, bool val) {
+    _events.setSystemEvent(sys, val);
 }
 
 void GameTool::emit(std::optional<ECS::Entity> entity) {
@@ -101,8 +107,17 @@ bool GameTool::isEvent(te::event::System e) {
     return _events.isEvent(e);
 }
 
-event::EventManager::eventContent GameTool::getEvent(event::System system) {
-    return _events.getEvent(system);
+event::EventManager::eventContent
+    GameTool::getEventContent(event::System system) const {
+    return _events.getEventContent(system);
+}
+
+void GameTool::setEvents(event::Events events) {
+    _events.setEvents(events);
+}
+
+event::Events GameTool::getEvents(void) const {
+    return _events.getEvents();
 }
 
 mat::Vector2f GameTool::getMapTileSize(const toml::table *table) {
