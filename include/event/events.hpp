@@ -9,6 +9,7 @@
 
     #include <array>
     #include <map>
+    #include <cstring>
 
 namespace te {
 namespace event {
@@ -290,18 +291,17 @@ enum System {
 typedef std::array<bool, System::LIMITSYSTEM> SystemEvents;
 
 struct Events {
-    Events() {
-        keys.UniversalKey.fill(false);
-        mouses._MouseKey.fill(MouseInfo());
-        systems.fill(false);
-    }
     KeysEvent keys;
     MouseEvent mouses;
-    SystemEvents systems;
+    SystemEvents systems = {};
+
+    Events() {
+        memset(this, 0, sizeof(Events));
+    }
 
     void clear() {
-        keys.UniversalKey.fill(false);
-        mouses._MouseKey.fill(MouseInfo());
+        keys.clear();
+        mouses.clear();
         systems.fill(false);
     }
 };
