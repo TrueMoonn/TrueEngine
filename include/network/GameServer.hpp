@@ -6,6 +6,10 @@
 #include <vector>
 #include <string>
 #include <cstdint>
+#include <thread>
+#include <mutex>
+#include <atomic>
+#include <queue>
 
 #include <Network/Server.hpp>
 #include <Network/Address.hpp>
@@ -138,6 +142,30 @@ class GameServer {
      */
     std::vector<net::Address> getConnectedClients() const;
 
+    /**
+     * @brief Starts the network thread for asynchronous packet handling
+     */
+    void startNetworkThread();
+
+    /**
+     * @brief Stops the network thread
+     */
+    void stopNetworkThread();
+
+    /**
+     * @brief Queues a packet to be sent (thread-safe)
+     * @param client Target client address
+     * @param data Packet data to send
+     */
+    void queuePacket(const net::Address& client,
+        const std::vector<uint8_t>& data);
+
+    /**
+     * @brief Queues a broadcast packet (thread-safe)
+     * @param data Packet data to broadcast
+     */
+    void queueBroadcast(const std::vector<uint8_t>& data);
+
  private:
     std::unique_ptr<net::Server> _server;
     net::SocketType _protocol_type;
@@ -161,17 +189,61 @@ class GameServer {
     ClientConnectCallback _on_client_connect;
     ClientDisconnectCallback _on_client_disconnect;
 
-    /**
-     * @brief Updates server state for UDP protocol
-     * @param delta_time Time elapsed since last update in seconds
-     */
-    void updateUDP(float delta_time);
+    // Multithreading components
+    std::thread _network_thread;
+    std::atomic<bool> _network_running{false};
+
+    // Thread-safe incoming packet queue (received from clients)
+    struct IncomingPacket {
+        std::vector<uint8_t> data;
+        net::Address sender;
+    };
+    std::queue<IncomingPacket> _incoming_packets;
+    std::mutex _incoming_mutex;
+
+    // Thread-safe outgoing packet queue (server want to send)
+    struct OutgoingPacket {
+        std::vector<uint8_t> data;
+        net::Address client;
+        bool is_broadcast;
+    };
+    std::queue<OutgoingPacket> _outgoing_packets;
+    std::mutex _outgoing_mutex;
 
     /**
-     * @brief Updates server state for TCP protocol
-     * @param delta_time Time elapsed since last update in seconds
+     * @brief Network thread main loop
      */
-    void updateTCP(float delta_time);
+    void networkThreadLoop();
+
+    /**
+     * @brief Handle a new client connection
+     * @param addr Client address
+     * @param current_time Current timestamp
+     */
+    void handleNewClient(const net::Address& addr, uint32_t current_time);
+
+    /**
+     * @brief Queue incoming packets for processing
+     * @param packets List of packets
+     * @param sender Sender address
+     */
+    void queueIncomingPackets(const std::vector<std::vector<uint8_t>>& packets,
+        const net::Address& sender);
+
+    /**
+     * @brief Receive packets via UDP
+     */
+    void receiveUDP();
+
+    /**
+     * @brief Receive packets via TCP
+     */
+    void receiveTCP();
+
+    /**
+     * @brief Process and send all queued outgoing packets
+     */
+    void processOutgoingPackets();
 
     /**
      * @brief Checks for client timeouts and disconnects inactive clients
