@@ -89,7 +89,7 @@ class GameTool {
 
     /**
      * @brief Get a component type in ECS::Registry
-     * 
+     *
      * @tparam Component The type of the component to get
      */
     template <typename Component>
@@ -156,26 +156,27 @@ class GameTool {
 
     /**
      * @brief Poll events done by the user
-     * 
+     *
      */
     void pollEvent();
 
     /**
      * @brief Run all systems registered in the registry
-     * 
+     *
      */
     void runSystems();
 
     /**
      * @brief Execute functions subscribed to the events that were triggered as active
-     * 
+     *
+     * @param entity Optional entity ID to target specific entity. nullopt means all entities
      * @see event::EventManager
      */
-    void emit();
+    void emit(std::optional<ECS::Entity> entity = std::nullopt);
 
     /**
      * @brief Check if there is an event for the system
-     *  
+     *
      * @param system systtem that you want to check
      * @return true There's an event
      * @return false There isn't an event
@@ -184,11 +185,34 @@ class GameTool {
 
     /**
      * @brief Get the eventContent link to the system activated by the user.
-     * 
+     *
      * @param system System that you want to check
      * @return event::EventManager::eventContent The Event corresponding
      */
-    event::EventManager::eventContent getEvent(event::System system);
+    event::EventManager::eventContent
+        getEventContent(event::System system) const;
+
+    void setSystemEvent(event::System system, bool val);
+
+    ECS::Registry getRegistry() {
+        return this->_reg;
+    }
+
+    // /**
+    //  * @brief Set the Events object of the event::EventManager
+    //  *
+    //  * @param events The Events that you want to set in the Events of EventManager
+    //  */
+    // void setEvent(event::Events events) {
+    //     _events.setEvent(events);
+    // }
+
+    /**
+     * @brief Get the Events object of the event::EventManager
+     *
+     * @return event::Events The Events EventManager's member
+     */
+    event::Events getEvents(void) const;
 
  private:
     plugin::PluginManager _pmanager;

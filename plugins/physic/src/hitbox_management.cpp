@@ -15,6 +15,7 @@
 #include "physic/components/position.hpp"
 #include "physic/components/velocity.hpp"
 #include "physic/components/hitbox.hpp"
+#include "physic/components/movable.hpp"
 #include "physic/hitbox_management.hpp"
 
 namespace addon {
@@ -33,12 +34,13 @@ std::vector<ECS::Entity> entity_hit(ECS::Registry& reg,
 
     auto& positions = reg.getComponents<Position2>();
     auto& hitboxs = reg.getComponents<Hitbox>();
+    auto& stationary = reg.getComponents<Stationary>();
 
     auto& pos = positions[entity].value();
     auto hitbox = hitboxs[entity].value();
 
-    for (auto &&[e, obj_pos, obj_hitbox] :
-        ECS::IndexedZipper(positions, hitboxs)) {
+    for (auto &&[e, obj_pos, obj_hitbox, _] :
+        ECS::IndexedZipper(positions, hitboxs, stationary)) {
         if (e != entity) {
             if (square_hitbox(
                 mat::RectF(

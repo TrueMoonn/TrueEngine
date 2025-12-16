@@ -11,6 +11,7 @@
     #include <functional>
     #include <variant>
     #include <vector>
+    #include <optional>
 
     #include <ECS/Registry.hpp>
 
@@ -24,52 +25,35 @@ namespace event {
 class EventManager {
  public:
     typedef void(*pollFunc)(Events&, ECS::Registry&);
-    typedef std::variant<KeysEvent, MouseEvents, bool> eventContent;
-    typedef std::function<void(ECS::Registry&, const eventContent&)> eventFunc;
+    typedef std::variant<KeysEvent, MouseEvent, bool> eventContent;
+    typedef std::function<void(ECS::Registry&, const eventContent&,
+        std::optional<ECS::Entity>)> eventFunc;
 
  public:
-    explicit EventManager() = default;
+    explicit EventManager();
     explicit EventManager(pollFunc func);
     ~EventManager() = default;
 
     void setPollFunc(pollFunc func);
     void pollEvents(ECS::Registry& reg);
 
-    bool isEvent(System sys);
-    eventContent getEvent(System system) const;
+    eventContent getEventContent(System system) const;
+    Events getEvents(void) const;
+
+    bool isEvent(System sys) const;
+    void setSystemEvent(System sys, bool val);
 
     void addSubscription(System sys, eventFunc func);
-    void emit(ECS::Registry& reg);
+    void emit(ECS::Registry& reg,
+        std::optional<ECS::Entity> target_entity = std::nullopt);
 
  private:
     pollFunc _pollFunc;
 
     Events _events;
-    std::unordered_map<System, std::vector<eventFunc>> _subscription = {
-        {System::Closed, {}},
-        {System::Resized, {}},
-        {System::LostFocus, {}},
-        {System::GainedFocus, {}},
-        {System::TextEntered, {}},
-        {System::KeyPressed, {}},
-        {System::KeyReleased, {}},
-        {System::MouseWheelScrolled, {}},
-        {System::MouseButtonPressed, {}},
-        {System::MouseButtonReleased, {}},
-        {System::MouseMoved, {}},
-        {System::MouseEntered, {}},
-        {System::MouseQuit, {}},
-        {System::JoystickButtonPressed, {}},
-        {System::JoystickButtonReleased, {}},
-        {System::JoystickMoved, {}},
-        {System::JoystickConnected, {}},
-        {System::JoystickDisconnected, {}},
-        {System::TouchBegan, {}},
-        {System::TouchMoved, {}},
-        {System::TouchEnded, {}},
-        {System::SensorChanged, {}},
-        {System::LIMITSYSTEM, {}}
-    };
+
+    void fillSubscriptions(void);
+    std::unordered_map<System, std::vector<eventFunc>> _subscription;
 };
 
 }  // namespace event

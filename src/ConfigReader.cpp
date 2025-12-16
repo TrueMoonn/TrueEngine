@@ -56,21 +56,24 @@ void ConfigParser::readEntities(toml::table& table) {
         return;
     for (auto &&[name, entity] : *entities) {
         if (entity.is_table()) {
-            _eConfig.insert_or_assign(name.data(), *entity.as_table());
+            if (_eConfig.find(name.data()) != _eConfig.end()) {
+                for (auto &&[cname, content] : *entity.as_table()) {
+                    _eConfig[name.data()].insert_or_assign(cname, content);
+                }
+            } else {
+                _eConfig.insert_or_assign(name.data(), *entity.as_table());
+            }
         }
     }
 }
 
 std::size_t ConfigParser::readMap(const std::string& raw) {
     MapContent map;
-    map.layer_max = 0;
     for (auto& rawLine : optiSplit(raw, MAP_LINE_DELIMITER_KEY)) {
         std::vector<mtile_t> tiles;
         for (auto& rawTile : optiSplit(rawLine, MAP_TILE_DELIMITER_KEY)) {
             mtile_t tile;
             auto entities = optiSplit(rawTile, MAP_LAYER_DELIMITER_KEY);
-            if (entities.size() > map.layer_max)
-                map.layer_max = entities.size();
             for (auto& entity : entities) {
                 if (!entity.compare(MAP_DEFAULT_ENTITY_KEY))
                     tile.push_back(MAP_DEFAULT_ENTITY_NAME);

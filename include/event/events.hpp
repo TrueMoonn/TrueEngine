@@ -8,6 +8,8 @@
 #pragma once
 
     #include <array>
+    #include <map>
+    #include <cstring>
 
 namespace te {
 namespace event {
@@ -120,14 +122,117 @@ enum Key {
 
 struct KeysEvent {
     bool update = false;
-    std::array<bool, Key::LIMITKEY> keys = {false};
+    std::array<bool, Key::LIMITKEY> UniversalKey;
+//     std::map<Key, Key> Corelation = {{A, A},
+//     {B, B},
+//     {C, C},
+//     {D, D},
+//     {E, E},
+//     {F, F},
+//     {G, G},
+//     {H, H},
+//     {I, I},
+//     {J, J},
+//     {K, K},
+//     {L, L},
+//     {M, M},
+//     {N, N},
+//     {O, O},
+//     {P, P},
+//     {Q, Q},
+//     {R, R},
+//     {S, S},
+//     {T, T},
+//     {U, U},
+//     {V, V},
+//     {W, W},
+//     {X, X},
+//     {Y, Y},
+//     {Z, Z},
+//     {num0, num0},
+//     {num1, num1},
+//     {num2, num2},
+//     {num3, num3},
+//     {num4, num4},
+//     {num5, num5},
+//     {num6, num6},
+//     {num7, num7},
+//     {num8, num8},
+//     {num9, num9},
+//     {Escape, Escape},
+//     {LeftControl, LeftControl},
+//     {LeftShift, LeftShift},
+//     {LeftAlt, LeftAlt},
+//     {LeftSystem, LeftSystem},
+//     {RightControl, RightControl},
+//     {RightShift, RightShift},
+//     {RightAlt, RightAlt},
+//     {RightSystem, RightSystem},
+//     {Menu, Menu},
+//     {LBracket, LBracket},
+//     {RBracket, RBracket},
+//     {Semicolon, Semicolon},
+//     {Comma, Comma},
+//     {Period, Period},
+//     {Apostrophe, Apostrophe},
+//     {Slash, Slash},
+//     {Backslash, Backslash},
+//     {Grave, Grave},
+//     {Equal, Equal},
+//     {Hyphen, Hyphen},
+//     {Space, Space},
+//     {Enter, Enter},
+//     {Backspace, Backspace},
+//     {Tab, Tab},
+//     {PageUp, PageUp},
+//     {PageDown, PageDown},
+//     {End, End},
+//     {Home, Home},
+//     {Insert, Insert},
+//     {Delete, Delete},
+//     {Add, Add},
+//     {Subtract, Subtract},
+//     {Multiply, Multiply},
+//     {Divide, Divide},
+//     {Left, Left},
+//     {Right, Right},
+//     {Up, Up},
+//     {Down, Down},
+//     {Numpad0, Numpad0},
+//     {Numpad1, Numpad1},
+//     {Numpad2, Numpad2},
+//     {Numpad3, Numpad3},
+//     {Numpad4, Numpad4},
+//     {Numpad5, Numpad5},
+//     {Numpad6, Numpad6},
+//     {Numpad7, Numpad7},
+//     {Numpad8, Numpad8},
+//     {Numpad9, Numpad9},
+//     {F1, F1},
+//     {F2, F2},
+//     {F3, F3},
+//     {F4, F4},
+//     {F5, F5},
+//     {F6, F6},
+//     {F7, F7},
+//     {F8, F8},
+//     {F9, F9},
+//     {F10, F10},
+//     {F11, F11},
+//     {F12, F12},
+//     {F13, F13},
+//     {F14, F14},
+//     {F15, F15},
+//     {Pause, Pause}
+// };
     void clear() {
         update = false;
-        keys.fill(false);
+        UniversalKey.fill(false);
     }
 };
 
 /* MOUSE */
+
 enum MouseButton {
     MouseLeft = 0,
     MouseRight,
@@ -141,11 +246,20 @@ struct MouseInfo {
     float y;
 };
 
+struct MouseEvent {
+    bool update = false;
+    std::array<MouseInfo, MouseButton::LIMITBUTTON> _MouseKey = {false};
+    void clear() {
+        update = false;
+        _MouseKey.fill({false, 0, 0});
+    }
+};
+
 typedef std::array<MouseInfo, MouseButton::LIMITBUTTON> MouseEvents;
 
 /* SYSTEM EVENTS */
 enum System {
-    Closed,
+    Closed = 0,
     Resized,
     LostFocus,
     GainedFocus,
@@ -168,6 +282,7 @@ enum System {
     TouchMoved,
     TouchEnded,
     SensorChanged,
+    ChangeScene,
     LIMITSYSTEM,
 };
 
@@ -175,12 +290,16 @@ typedef std::array<bool, System::LIMITSYSTEM> SystemEvents;
 
 struct Events {
     KeysEvent keys;
-    MouseEvents mouses;
+    MouseEvent mouses;
     SystemEvents systems;
+
+    Events() {
+        clear();
+    }
 
     void clear() {
         keys.clear();
-        mouses.fill(MouseInfo());
+        mouses.clear();
         systems.fill(false);
     }
 };

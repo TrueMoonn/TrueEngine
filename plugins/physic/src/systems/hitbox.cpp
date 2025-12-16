@@ -5,6 +5,8 @@
 ** hitbox.cpp
 */
 
+#include <cmath>
+
 #include <ECS/Zipper.hpp>
 
 #include "physic/components/position.hpp"
@@ -26,32 +28,20 @@ void hitbox2_sys(ECS::Registry& reg) {
 
     for (auto &&[id, pos, vel, hit, mov]
         : ECS::IndexedZipper(positions, velocities, hitboxs, movable)) {
-        float centerX = pos.x + hit.size.x / 2;
-        float centerY = pos.y + hit.size.y / 2;
-
         for (ECS::Entity cmp : entity_hit(reg, id)) {
-            auto other_pos = reg.getComponents<Position2>()[cmp].value();
-            auto other_hit = reg.getComponents<Hitbox>()[cmp].value();
+            auto e_pos = reg.getComponents<Position2>()[cmp].value();
+            auto e_hit = reg.getComponents<Hitbox>()[cmp].value();
 
-            if (isBetWeen(centerY, other_pos.y,
-                other_pos.y + other_hit.size.y) &&
-                isBetWeen(centerY, other_pos.x,
-                other_pos.x + other_hit.size.x))
-                pos.x += 15;
-            if (isBetWeen(centerY, other_pos.y,
-                other_pos.y + other_hit.size.y)) {
-                if (other_pos.x < pos.x)
-                    pos.x = other_pos.x + other_hit.size.x;
-                if (other_pos.x > pos.x)
-                    pos.x = other_pos.x - hit.size.x;
-            }
-            if (isBetWeen(centerY, other_pos.x,
-                other_pos.x + other_hit.size.x)) {
-                if (other_pos.y < pos.y)
-                    pos.y = other_pos.y + other_hit.size.y;
-                if (other_pos.y > pos.y)
-                    pos.y = other_pos.y - hit.size.y;
-            }
+            float dx = (pos.x + hit.size.x / 2) - (e_pos.x + e_hit.size.x / 2);
+            float px = (hit.size.x / 2 + e_hit.size.x / 2) - std::fabs(dx);
+
+            float dy = (pos.y + hit.size.y / 2) - (e_pos.y + e_hit.size.y / 2);
+            float py = (hit.size.y / 2 + e_hit.size.y / 2) - std::fabs(dy);
+
+            if (px < py)
+                pos.x += (dx < 0 ? -px : px);
+            else
+                pos.y += (dy < 0 ? -py : py);
         }
     }
 }

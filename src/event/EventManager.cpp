@@ -13,7 +13,13 @@
 namespace te {
 namespace event {
 
-EventManager::EventManager(pollFunc func) : _pollFunc(func) {}
+EventManager::EventManager() : _events(), _pollFunc(nullptr) {
+    fillSubscriptions();
+}
+
+EventManager::EventManager(pollFunc func) : _events(), _pollFunc(func) {
+    fillSubscriptions();
+}
 
 void EventManager::setPollFunc(pollFunc func) {
     _pollFunc = func;
@@ -24,15 +30,7 @@ void EventManager::pollEvents(ECS::Registry& reg) {
         _pollFunc(_events, reg);
 }
 
-void EventManager::addSubscription(System sys, eventFunc func) {
-    _subscription[sys].push_back(func);
-}
-
-bool EventManager::isEvent(System sys) {
-    return _events.systems.at(sys);
-}
-
-EventManager::eventContent EventManager::getEvent(System system) const {
+EventManager::eventContent EventManager::getEventContent(System system) const {
     if (system == System::KeyPressed || system == System::KeyReleased)
         return _events.keys;
     else if (system == System::MouseMoved
@@ -47,10 +45,35 @@ EventManager::eventContent EventManager::getEvent(System system) const {
         return _events.systems.at(system);
 }
 
-void EventManager::emit(ECS::Registry& reg) {
+Events EventManager::getEvents(void) const {
+    return _events;
+}
+
+bool EventManager::isEvent(System sys) const {
+    if (sys == System::KeyPressed && _events.keys.update)
+        return true;
+    return _events.systems.at(sys);
+}
+
+void EventManager::setSystemEvent(System sys, bool val) {
+    _events.systems.at(sys) = val;
+}
+
+void EventManager::addSubscription(System sys, eventFunc func) {
+    _subscription[sys].push_back(func);
+}
+
+void EventManager::emit(ECS::Registry& reg,
+    std::optional<ECS::Entity> target_entity) {
     if (_events.keys.update) {
         for (const auto &func : _subscription[System::KeyPressed]) {
-            func(reg, _events.keys);
+            func(reg, _events.keys, target_entity);
+        }
+    }
+    if (_events.mouses.update) {
+        for (const auto &func : _subscription[System::MouseButtonPressed]) {
+            func(reg, _events.mouses, target_entity);
+            _events.mouses.clear();
         }
     }
     // for (auto& [sys, vect] : _subscription) {
@@ -60,6 +83,12 @@ void EventManager::emit(ECS::Registry& reg) {
     //         }
     //     }
     // }
+}
+
+void EventManager::fillSubscriptions(void) {
+    for (std::size_t sys = Closed; sys < LIMITSYSTEM; ++sys) {
+        _subscription[static_cast<System>(sys)] = {};
+    }
 }
 
 }  // namespace event
