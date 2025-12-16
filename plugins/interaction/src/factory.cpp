@@ -62,15 +62,15 @@ Interaction::Interaction(ECS::Registry& reg, te::event::EventManager& events)
 void Interaction::updateVel(const te::event::KeysEvent &event,
     addon::physic::Velocity2 &vel) {
     if (event.UniversalKey[te::event::Key::Up])
-        vel.y = -3.0;
+        vel.y = -170;
     else if (event.UniversalKey[te::event::Key::Down])
-        vel.y = 3.0;
+        vel.y = 170;
     else
         vel.y = 0.0;
     if (event.UniversalKey[te::event::Key::Left])
-        vel.x = -3.0;
+        vel.x = -170;
     else if (event.UniversalKey[te::event::Key::Right])
-        vel.x = 3.0;
+        vel.x = 170;
     else
         vel.x = 0.0;
 }
