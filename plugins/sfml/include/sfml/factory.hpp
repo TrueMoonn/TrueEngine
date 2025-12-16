@@ -12,6 +12,9 @@
     #include <ECS/Registry.hpp>
     #include "plugin/APlugin.hpp"
 
+    #define MENU_BEGIN 2
+    #define MENU_END (MENU_BEGIN + 10)
+
 namespace addon {
 namespace sfml {
 

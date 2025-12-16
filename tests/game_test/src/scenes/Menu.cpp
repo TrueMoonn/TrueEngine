@@ -64,8 +64,10 @@ void Menu::setEntities(int scene) {
     if (scene == MENU_ID) {
         addConfig("assets/configs/menu.toml");
         addConfig("assets/configs/buttonstart.toml");
+        addConfig("assets/configs/buttonquit.toml");
         createComponent("window", SYSTEM_ENTITY);
-        createEntity(ID_MENU_BACKGROUND + 1, "buttonstart", {500.f, 250.f});
+        createEntity(ID_MENU_BUTTON_QUIT, "buttonquit", {500.f, 400.f});
+        createEntity(ID_MENU_BUTTON_START, "buttonstart", {500.f, 250.f});
         createEntity(ID_MENU_BACKGROUND, "menu", {0.f, 0.f});
     }
     if (scene == INGAME_ID) {
@@ -97,7 +99,7 @@ void Menu::run(void) {
         runSystems();
         if (isEvent(te::event::System::ChangeScene)) {
             for (int i = static_cast<int>(ID_MENU_BACKGROUND);
-            i <= static_cast<int>(ID_MENU_BUTTON_START); i++)
+            i <= static_cast<int>(ID_MENU_BUTTON_QUIT); i++)
                 removeEntity(i);
             setECS(INGAME_ID);
             setEntities(INGAME_ID);
