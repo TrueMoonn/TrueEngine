@@ -5,7 +5,6 @@
 #include <memory>
 #include "network/GameServer.hpp"
 #include <Network/PacketSerializer.hpp>
-#include <Network/PacketFactory.hpp>
 
 namespace te {
 namespace network {
