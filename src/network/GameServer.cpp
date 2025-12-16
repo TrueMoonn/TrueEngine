@@ -146,7 +146,7 @@ std::vector<net::Address> GameServer::getConnectedClients() const {
 
 void GameServer::updateUDP(float delta_time) {
     try {
-        std::vector<net::Address> senders = _server->udpReceive(100, 100);
+        std::vector<net::Address> senders = _server->udpReceive(0, 100);
         for (const net::Address& sender : senders) {
             auto packets = _server->unpack(sender, -1);
 
