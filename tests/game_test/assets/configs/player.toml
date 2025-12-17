@@ -55,7 +55,7 @@
         layer = 2
 
         [ENTITIES.projectile.velocity2]
-        x = 5.0
+        x = 225.0
         y = 0.0
 
         [ENTITIES.projectile.fragile]
@@ -71,3 +71,21 @@
         frames = [
             [[0, 0], 2, 0.2, true]
         ]
+
+    [ENTITIES.flash]
+    drawable = true
+    position2 = true
+
+        [ENTITIES.flash.sprite]
+        path = "assets/flash.png"
+        size = [11, 19]
+        scale = [20, 40]
+        layer = 5
+
+        [ENTITIES.flash.animation]
+        frames = [
+            [[0, 0], 2, 0.025, true]
+        ]
+
+        [ENTITIES.flash.timeout]
+        duration = 0.05

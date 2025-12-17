@@ -9,6 +9,7 @@
 
 #include "entity_spec/components/health.hpp"
 #include "entity_spec/components/fragile.hpp"
+#include "entity_spec/components/timeout.hpp"
 
 #include "physic/hitbox_management.hpp"
 
@@ -21,6 +22,9 @@ void kill_entity(ECS::Registry& reg) {
             reg.killEntity(id);
     for (auto &&[id, fr] : ECS::IndexedZipper(reg.getComponents<Fragile>()))
         if (fr.destroyed)
+            reg.killEntity(id);
+    for (auto &&[id, to] : ECS::IndexedZipper(reg.getComponents<Timeout>()))
+        if (to.delta.checkDelay(false))
             reg.killEntity(id);
 }
 
