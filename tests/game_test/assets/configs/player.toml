@@ -55,7 +55,7 @@
         layer = 2
 
         [ENTITIES.projectile.velocity2]
-        x = 5.0
+        x = 225.0
         y = 0.0
 
         [ENTITIES.projectile.fragile]
