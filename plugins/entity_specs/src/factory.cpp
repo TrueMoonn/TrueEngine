@@ -49,6 +49,17 @@ EntitySpec::EntitySpec(ECS::Registry& reg, te::event::EventManager& events)
                 e.what() << std::endl;
         }
     };
+    reg.registerComponent<Timeout>();
+    _components["timeout"] = [](ECS::Registry& reg, const ECS::Entity& e,
+        const toml::table& params) {
+        try {
+            float delay = params["duration"].value_or<float>(0.f);
+            reg.createComponent<Timeout>(e, delay);
+        } catch (const std::bad_any_cast& e) {
+            std::cerr << "error(Plugin-timeout): " <<
+                e.what() << std::endl;
+        }
+    };
     reg.registerComponent<Pattern>();
     _components["pattern"] = [](ECS::Registry& reg, const ECS::Entity& e,
         const toml::table& params) {
