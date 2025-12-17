@@ -15,6 +15,7 @@
 
     #define PROJ_E 30000
     #define MAX_PROJ_E 31000
+    #define FLASH_E 31001
 
 enum IG_entities_e : ECS::Entity {
     MAIN_WINDOW = 0,

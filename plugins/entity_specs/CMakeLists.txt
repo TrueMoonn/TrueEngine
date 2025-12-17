@@ -7,6 +7,7 @@ add_library(${PROJECT_NAME} SHARED
     ${PROJECT_SOURCE_DIR}/src/components/damage.cpp
     ${PROJECT_SOURCE_DIR}/src/components/health.cpp
     ${PROJECT_SOURCE_DIR}/src/components/team.cpp
+    ${PROJECT_SOURCE_DIR}/src/components/timeout.cpp
     ${PROJECT_SOURCE_DIR}/src/components/pattern.cpp
 
     ${PROJECT_SOURCE_DIR}/src/systems/deal_damage.cpp

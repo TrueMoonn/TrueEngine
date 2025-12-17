@@ -14,6 +14,7 @@
 
 #include "interaction/components/player.hpp"
 #include "physic/components/position.hpp"
+#include "physic/components/velocity.hpp"
 
 Menu::Menu(void) : AScene() {
     loadPlugins();
@@ -38,7 +39,9 @@ void Menu::shootProjectile() {
     for (ECS::Entity e = 0; e < player.size() && e < position.size(); ++e) {
         if (player[e].has_value() && position[e].has_value()) {
             createEntity(entity_proj++, "projectile",
-                {position[e].value().x + 10, position[e].value().y});
+                {position[e].value().x + 30, position[e].value().y + 10});
+            createEntity(MAX_PROJ_E + 1, "flash",
+                {position[e].value().x + 30, position[e].value().y - 5});
         }
     }
 }
