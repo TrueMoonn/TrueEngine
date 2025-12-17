@@ -21,16 +21,40 @@ namespace network {
  */
 class GameClient {
  public:
+    /**
+     * @brief Constructs a GameClient with the specified protocol
+     * @param protocol Network protocol to use ("UDP" or "TCP"). Defaults to "UDP"
+     */
     explicit GameClient(const std::string& protocol = "UDP");
+
+    /**
+     * @brief Destructor that ensures proper cleanup and disconnection
+     */
     ~GameClient();
 
+    /**
+     * @brief Establishes a connection to the game server
+     * @param server_ip IP address of the server to connect to
+     * @param port Port number of the server
+     * @return true if connection was successful, false otherwise
+     */
     bool connect(const std::string& server_ip, uint16_t port);
+
+    /**
+     * @brief Disconnects from the server and cleans up resources
+     */
     void disconnect();
+
+    /**
+     * @brief Updates the client state and processes network events
+     * @param delta_time Time elapsed since last update in seconds
+     */
     void update(float delta_time);
 
-    // API for GAME LOGIC
     /**
      * @brief Send raw data to the server
+     * @param data Vector of bytes to send to the server
+     * @return true if data was sent successfully, false otherwise
      */
     bool send(const std::vector<uint8_t>& data);
 
@@ -63,19 +87,37 @@ class GameClient {
     void unregisterPacketHandler(uint8_t key);
 
     /**
-     * @brief Callback: called when connection is established
+     * @brief Callback type: called when connection is established
      */
     using ConnectCallback = std::function<void()>;
+
+    /**
+     * @brief Sets the callback to be invoked when connection is established
+     * @param callback Function to call upon successful connection
+     */
     void setConnectCallback(ConnectCallback callback);
 
     /**
-     * @brief Callback: called on disconnection
+     * @brief Callback type: called on disconnection
      */
     using DisconnectCallback = std::function<void()>;
+
+    /**
+     * @brief Sets the callback to be invoked when disconnection occurs
+     * @param callback Function to call upon disconnection
+     */
     void setDisconnectCallback(DisconnectCallback callback);
 
-    // Client Info
+    /**
+     * @brief Checks if the client is currently connected to a server
+     * @return true if connected, false otherwise
+     */
     bool isConnected() const;
+
+    /**
+     * @brief Gets the address of the connected server
+     * @return Reference to the server's network address
+     */
     const net::Address& getServerAddress() const { return _server_address; }
 
  private:

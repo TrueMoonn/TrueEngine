@@ -16,6 +16,7 @@
 #include <toml++/toml.hpp>
 
 #include "Sfml.hpp"
+#include "event/events.hpp"
 #include "sfml/components/window.hpp"
 #include "sfml/events.hpp"
 #include "sfml/factory.hpp"
@@ -67,15 +68,21 @@ Sfml::Sfml(ECS::Registry& reg, te::event::EventManager& events)
         int i = 0;
 
         for (auto && [win] : ECS::Zipper(window)) {
-            for (auto&& [spr] : ECS::Zipper(sprite)) {
+            for (auto&& [id, spr] : ECS::IndexedZipper(sprite)) {
                 if (event._MouseKey.at(te::event::MouseButton::MouseLeft)
                 .active) {
                     const auto &pos = sf::Mouse::getPosition(win);
                     const auto &translated = win.mapPixelToCoords(pos);
 
                     if (spr.sp.getGlobalBounds().contains(translated)) {
-                        if (i == 1)
-                            events.updateScene(9);
+                        if (i == 1) {
+                            if (id == MENU_BEGIN)
+                                events.setSystemEvent(
+                                    te::event::System::ChangeScene, true);
+                            if (id == (MENU_BEGIN + 1))
+                                events.setSystemEvent(
+                                    te::event::System::Closed, true);
+                        }
                         i++;
                     }
                 }

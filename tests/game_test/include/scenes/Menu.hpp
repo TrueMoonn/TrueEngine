@@ -26,10 +26,10 @@
     #define MENU_ID 0
     #define INGAME_ID 1
 
-    #define ID_MENU_BACKGROUND 2000
-    #define ID_MENU_BUTTON_START 2001
+    #define ID_MENU_BACKGROUND 1
+    #define ID_MENU_BUTTON_START 2
     #define ID_MENU_BUTTON_SETTINGS 2002
-    #define ID_MENU_BUTTON_QUIT 2003
+    #define ID_MENU_BUTTON_QUIT 3
 
 class Menu : public AScene {
  public:

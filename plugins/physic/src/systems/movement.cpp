@@ -5,6 +5,8 @@
 ** movement.cpp
 */
 
+#include <ECS/Zipper.hpp>
+#include "clock.hpp"
 #include "physic/components/position.hpp"
 #include "physic/components/velocity.hpp"
 
@@ -13,19 +15,17 @@
 namespace addon {
 namespace physic {
 
-
 void movement2_sys(ECS::Registry& reg) {
+    static te::Timestamp delta(0.f);
     auto& positions = reg.getComponents<Position2>();
     auto& velocities = reg.getComponents<Velocity2>();
 
-    for (ECS::Entity entity = 0; entity < positions.size() &&
-        entity < velocities.size(); ++entity) {
-        if (positions[entity].has_value() && velocities[entity].has_value()) {
-            auto& pos = positions[entity].value();
-            auto& vel = velocities[entity].value();
-            pos += vel;
-        }
+    float elapsed = delta.getElapsedTime();
+    for (auto&&[pos, vel] : ECS::Zipper(positions, velocities)) {
+        pos.x += vel.x * elapsed / 1000000;
+        pos.y += vel.y * elapsed / 1000000;
     }
+    delta.restart();
 }
 
 }  // namespace physic
