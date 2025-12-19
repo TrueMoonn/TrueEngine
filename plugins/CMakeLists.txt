@@ -13,14 +13,14 @@ execute_process(
     "
 )
 
-# # DISPLAY
-# add_subdirectory(${PROJECT_SOURCE_DIR}/display)
-# execute_process(
-#     COMMAND bash -c "
-#     rm -rf ${PROJECT_SOURCE_DIR}/../include/display ${PROJECT_SOURCE_DIR}/../include/Display.hpp
-#     cp -R ${PROJECT_SOURCE_DIR}/display/include/. ${PROJECT_SOURCE_DIR}/../include
-#     "
-# )
+# DISPLAY
+add_subdirectory(${PROJECT_SOURCE_DIR}/display)
+execute_process(
+    COMMAND bash -c "
+    rm -rf ${PROJECT_SOURCE_DIR}/../include/display ${PROJECT_SOURCE_DIR}/../include/Display.hpp
+    cp -R ${PROJECT_SOURCE_DIR}/display/include/. ${PROJECT_SOURCE_DIR}/../include
+    "
+)
 
 # ENTITY SPEC
 add_subdirectory(${PROJECT_SOURCE_DIR}/entity_specs)

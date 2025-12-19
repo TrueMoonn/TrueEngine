@@ -7,9 +7,6 @@ add_library(${PROJECT_NAME} SHARED
     #COMPONENTS
     ${PROJECT_SOURCE_DIR}/src/components/animation.cpp
     ${PROJECT_SOURCE_DIR}/src/components/parallax.cpp
-
-    #SYSTEMS
-    ${PROJECT_SOURCE_DIR}/src/systems/animate.cpp
 )
 add_library(addon::display ALIAS ${PROJECT_NAME})
 
