@@ -25,28 +25,6 @@ InGame::InGame() : AScene() {
     setEntities();
 }
 
-// void InGame::shootProjectile() {
-//     static te::Timestamp delay(0.2f);
-//     static std::size_t entity_proj = PROJ_E;
-
-//     if (!isEvent(te::event::KeyPressed) ||
-//         !getEvents().keys.UniversalKey[/*event map*/te::event::Space] ||
-//         !delay.checkDelay())
-//         return;
-
-//     const auto &player = getComponent<addon::intact::Player>();
-//     const auto &position = getComponent<addon::physic::Position2>();
-
-//     if (entity_proj > MAX_PROJ_E)
-//         entity_proj = PROJ_E;
-//     for (ECS::Entity e = 0; e < player.size() && e < position.size(); ++e) {
-//         if (player[e].has_value() && position[e].has_value()) {
-//             createEntity(entity_proj++, "projectile",
-//                 {position[e].value().x + 10, position[e].value().y});
-//         }
-//     }
-// }
-
 void InGame::setECS(void) {
     createSystem("poll_event");
     createSystem("apply_pattern");

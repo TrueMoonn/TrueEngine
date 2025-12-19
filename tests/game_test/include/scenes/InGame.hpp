@@ -36,8 +36,6 @@ class InGame : public AScene {
 
     void run() override;
 
-    void shootProjectile();
-
     GameState state;
 
  private:
