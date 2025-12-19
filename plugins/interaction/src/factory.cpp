@@ -30,32 +30,6 @@ Interaction::Interaction(ECS::Registry& reg, te::SignalManager& sig)
                 e.what() << std::endl;
         }
     };
-    // events.addSubscription(te::event::System::KeyPressed,
-    //     [](ECS::Registry& reg,
-    //     const te::event::EventManager::eventContent& content,
-    //     std::optional<ECS::Entity> target_entity) {
-    //     try {
-    //         auto& event = std::get<te::event::KeysEvent>(content);
-    //         auto& velocities = reg.getComponents<physic::Velocity2>();
-    //         auto& players = reg.getComponents<Player>();
-
-    //         if (!target_entity.has_value()) {
-    //             for (auto&& [vel, play] : ECS::Zipper(velocities, players)) {
-    //                 Interaction::updateVel(event, vel);
-    //             }
-    //         } else {
-    //             ECS::Entity entity_id = target_entity.value();
-    //             if (entity_id < velocities.size()
-    //                 && velocities[entity_id].has_value()) {
-    //                 auto& vel = velocities[entity_id].value();
-    //                 Interaction::updateVel(event, vel);
-    //             }
-    //         }
-    //     } catch (const std::bad_variant_access& e) {
-    //         std::cerr << "error(Plugin-Interaction): Bad variant access - "
-    //                   << e.what() << std::endl;
-    //     }
-    // });
 }
 
 }  // namespace intact
