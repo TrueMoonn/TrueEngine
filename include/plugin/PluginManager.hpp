@@ -17,7 +17,7 @@
     #include <toml++/toml.hpp>
 
     #include "Exception.hpp"
-#include "SignalManager.hpp"
+    #include "SignalManager.hpp"
     #include "plugin/DlManager.hpp"
     #include "plugin/APlugin.hpp"
 
