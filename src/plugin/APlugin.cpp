@@ -15,8 +15,8 @@
 namespace te {
 namespace plugin {
 
-APlugin::APlugin(ECS::Registry& reg, te::event::EventManager& events) :
-    _reg(reg), _events(events), _components(), _systems() {}
+APlugin::APlugin(ECS::Registry& reg, te::SignalManager& sig) :
+    _reg(reg), _sig(sig), _components(), _systems() {}
 
 void APlugin::createComponent(const std::string& name,
     const ECS::Entity& e, const toml::table& json) {

@@ -13,23 +13,23 @@ execute_process(
     "
 )
 
-# DISPLAY
-add_subdirectory(${PROJECT_SOURCE_DIR}/display)
-execute_process(
-    COMMAND bash -c "
-    rm -rf ${PROJECT_SOURCE_DIR}/../include/display ${PROJECT_SOURCE_DIR}/../include/Display.hpp
-    cp -R ${PROJECT_SOURCE_DIR}/display/include/. ${PROJECT_SOURCE_DIR}/../include
-    "
-)
+# # DISPLAY
+# add_subdirectory(${PROJECT_SOURCE_DIR}/display)
+# execute_process(
+#     COMMAND bash -c "
+#     rm -rf ${PROJECT_SOURCE_DIR}/../include/display ${PROJECT_SOURCE_DIR}/../include/Display.hpp
+#     cp -R ${PROJECT_SOURCE_DIR}/display/include/. ${PROJECT_SOURCE_DIR}/../include
+#     "
+# )
 
-# ENTITY SPEC
-add_subdirectory(${PROJECT_SOURCE_DIR}/entity_specs)
-execute_process(
-    COMMAND bash -c "
-    rm -rf ${PROJECT_SOURCE_DIR}/../include/entity_spec ${PROJECT_SOURCE_DIR}/../include/EntitySpec.hpp
-    cp -R ${PROJECT_SOURCE_DIR}/entity_specs/include/. ${PROJECT_SOURCE_DIR}/../include
-    "
-)
+# # ENTITY SPEC
+# add_subdirectory(${PROJECT_SOURCE_DIR}/entity_specs)
+# execute_process(
+#     COMMAND bash -c "
+#     rm -rf ${PROJECT_SOURCE_DIR}/../include/entity_spec ${PROJECT_SOURCE_DIR}/../include/EntitySpec.hpp
+#     cp -R ${PROJECT_SOURCE_DIR}/entity_specs/include/. ${PROJECT_SOURCE_DIR}/../include
+#     "
+# )
 
 # PHYSIC
 add_subdirectory(${PROJECT_SOURCE_DIR}/physic)
@@ -40,11 +40,11 @@ execute_process(
     "
 )
 
-# INTERACTION
-add_subdirectory(${PROJECT_SOURCE_DIR}/interaction)
-execute_process(
-    COMMAND bash -c "
-    rm -rf ${PROJECT_SOURCE_DIR}/../include/interaction ${PROJECT_SOURCE_DIR}/../include/Interaction.hpp
-    cp -R ${PROJECT_SOURCE_DIR}/interaction/include/. ${PROJECT_SOURCE_DIR}/../include
-    "
-)
+# # INTERACTION
+# add_subdirectory(${PROJECT_SOURCE_DIR}/interaction)
+# execute_process(
+#     COMMAND bash -c "
+#     rm -rf ${PROJECT_SOURCE_DIR}/../include/interaction ${PROJECT_SOURCE_DIR}/../include/Interaction.hpp
+#     cp -R ${PROJECT_SOURCE_DIR}/interaction/include/. ${PROJECT_SOURCE_DIR}/../include
+#     "
+# )
