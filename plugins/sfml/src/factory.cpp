@@ -5,6 +5,7 @@
 ** factory.cpp
 */
 
+#include <SFML/Window/Event.hpp>
 #include <unordered_map>
 #include <string>
 #include <iostream>
@@ -14,6 +15,7 @@
 #include <ECS/Zipper.hpp>
 #include <ECS/Registry.hpp>
 #include <toml++/toml.hpp>
+#include <events.hpp>
 
 #include "physic/components/position.hpp"
 #include "interaction/components/player.hpp"
@@ -134,12 +136,24 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
     _systems["poll_event"] = [&sig](ECS::Registry& reg) {
         reg.addSystem([&sig](ECS::Registry& reg) {
             auto& windows = reg.getComponents<Window>();
+            static te::Keys keys = {false};
 
             for (auto&& [win] : ECS::Zipper(windows)) {
                 while (std::optional<sf::Event> pevent = win.pollEvent()) {
-                    if (pevent->is<sf::Event::Closed>())
+                    if (pevent->is<sf::Event::KeyPressed>()) {
+                        keys[static_cast<te::Key>(
+                            pevent->getIf<sf::Event::KeyPressed>()->code)] = true;
+                    }
+                    if (pevent->is<sf::Event::KeyReleased>()) {
+                        keys[static_cast<te::Key>(
+                            pevent->getIf<sf::Event::KeyReleased>()->code)] = false;
+                    }
+                    if (pevent->is<sf::Event::Closed>()) {
+                        win.close();
                         sig.emit("closed");
+                    }
                 }
+                sig.emit("key_input", keys);
             }
         });
     };

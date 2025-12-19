@@ -13,5 +13,3 @@
     #include "entity_spec/components/team.hpp"
     #include "entity_spec/components/pattern.hpp"
     #include "entity_spec/components/timeout.hpp"
-
-    #include "entity_spec/hitbox.hpp"

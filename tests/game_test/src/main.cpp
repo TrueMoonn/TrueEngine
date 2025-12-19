@@ -5,14 +5,11 @@
 ** main.cpp
 */
 
-#include <memory>
-#include <array>
-
-#include "scenes/Menu.hpp"
+#include "scenes/InGame.hpp"
 
 int main(int, const char * const *) {
-    std::unique_ptr<IScene> scene = std::make_unique<Menu>();
+    InGame game;
 
-    scene->run();
+    game.run();
     return EXIT_SUCCESS;
 }

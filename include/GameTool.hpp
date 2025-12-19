@@ -175,7 +175,7 @@ class GameTool {
 
     template<typename... Args, typename Func>
     void sub(const std::string& name, Func&& func) {
-        _signals.sub<Args...>(func);
+        _signals.sub<Args...>(name, func);
     }
 
     template<typename... Args>
