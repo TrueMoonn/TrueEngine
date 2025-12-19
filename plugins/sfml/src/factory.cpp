@@ -5,10 +5,11 @@
 ** factory.cpp
 */
 
-#include <SFML/Window/Event.hpp>
 #include <unordered_map>
 #include <string>
 #include <iostream>
+
+#include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/System/Exception.hpp>
@@ -142,11 +143,13 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
                 while (std::optional<sf::Event> pevent = win.pollEvent()) {
                     if (pevent->is<sf::Event::KeyPressed>()) {
                         keys[static_cast<te::Key>(
-                            pevent->getIf<sf::Event::KeyPressed>()->code)] = true;
+                            pevent->getIf<sf::Event::KeyPressed>()->
+                            code)] = true;
                     }
                     if (pevent->is<sf::Event::KeyReleased>()) {
                         keys[static_cast<te::Key>(
-                            pevent->getIf<sf::Event::KeyReleased>()->code)] = false;
+                            pevent->getIf<sf::Event::KeyReleased>()->
+                            code)] = false;
                     }
                     if (pevent->is<sf::Event::Closed>()) {
                         win.close();

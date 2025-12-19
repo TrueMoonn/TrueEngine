@@ -6,6 +6,7 @@
 */
 
 #include <iostream>
+#include <vector>
 #include <string>
 #include <toml++/toml.hpp>
 
@@ -187,7 +188,8 @@ EntitySpec::EntitySpec(ECS::Registry& reg, te::SignalManager& sig)
             auto &position = reg.getComponents<physic::Position2>();
             auto &pattern = reg.getComponents<Pattern>();
 
-            for (auto &&[vel, _, pat] : ECS::Zipper(velocity, position, pattern))
+            for (auto &&[vel, _, pat] :
+                ECS::Zipper(velocity, position, pattern))
                 vel.y = pat.func(pat.frequency) * pat.amplitude;
         });
     };

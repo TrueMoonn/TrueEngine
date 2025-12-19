@@ -96,11 +96,15 @@ Physic::Physic(ECS::Registry& reg, te::SignalManager& sig)
                     auto e_pos = reg.getComponents<Position2>()[cmp].value();
                     auto e_hit = reg.getComponents<Hitbox>()[cmp].value();
 
-                    float dx = (pos.x + hit.size.x / 2) - (e_pos.x + e_hit.size.x / 2);
-                    float px = (hit.size.x / 2 + e_hit.size.x / 2) - std::fabs(dx);
+                    float dx = (pos.x + hit.size.x / 2) -
+                        (e_pos.x + e_hit.size.x / 2);
+                    float px = (hit.size.x / 2 + e_hit.size.x / 2) -
+                        std::fabs(dx);
 
-                    float dy = (pos.y + hit.size.y / 2) - (e_pos.y + e_hit.size.y / 2);
-                    float py = (hit.size.y / 2 + e_hit.size.y / 2) - std::fabs(dy);
+                    float dy = (pos.y + hit.size.y / 2) -
+                        (e_pos.y + e_hit.size.y / 2);
+                    float py = (hit.size.y / 2 + e_hit.size.y / 2) -
+                        std::fabs(dy);
 
                     if (px < py)
                         pos.x += (dx < 0 ? -px : px);

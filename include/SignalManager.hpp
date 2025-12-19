@@ -7,10 +7,12 @@
 
 #pragma once
 
+    #include <utility>
     #include <string>
     #include <vector>
     #include <unordered_map>
     #include <memory>
+    #include <iostream>
 
     #include "Exception.hpp"
 
@@ -63,6 +65,8 @@ class SignalManager {
     template<typename... Args>
     void emit(const std::string& name, Args&&... args) {
         if (_subs.find(name) == _subs.end()) {
+            std::cerr << "error: SignalManager: emition '" << name
+                << "' not found\n";
             return;
         }
         auto* list = static_cast<SignalList<Args...>*>(_subs.at(name).get());

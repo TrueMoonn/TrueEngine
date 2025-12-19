@@ -4,6 +4,7 @@
 ** File description:
 ** InGame.cpp
 */
+#include <iostream>
 
 #include <ECS/Zipper.hpp>
 #include <plugin/PluginManager.hpp>
@@ -63,7 +64,9 @@ void InGame::setEntities(void) {
 
 void InGame::run(void) {
     sub("closed", [this](){this->state = GameState::CLOSED;});
-    sub<ECS::Entity>("dead_entity", [](ECS::Entity e){std::cout << "CEST DEAD: " << e << std::endl;});
+    sub<ECS::Entity>("dead_entity", [](ECS::Entity e){
+        std::cout << "CEST DEAD: " << e << std::endl;
+    });
     sub<te::Keys>("key_input", [this](te::Keys keys){
         auto& players = this->getComponent<addon::intact::Player>();
         auto& velocities = this->getComponent<addon::physic::Velocity2>();

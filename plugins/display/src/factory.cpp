@@ -80,8 +80,10 @@ Display::Display(ECS::Registry& reg, te::SignalManager& sig)
                 if (an.timestamp.checkDelay(true)) {
                     an.increment();
                     auto rect = sp.sp.getTextureRect();
-                    rect.position.y = rect.size.y * an.getCurrentAnim().frameBEG.y;
-                    rect.position.x = (rect.size.x * an.getCurrentAnim().frameBEG.x)
+                    rect.position.y =
+                        rect.size.y * an.getCurrentAnim().frameBEG.y;
+                    rect.position.x =
+                        (rect.size.x * an.getCurrentAnim().frameBEG.x)
                         + (rect.size.x * an.curFrame);
                     sp.sp.setTextureRect(rect);
                 }
