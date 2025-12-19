@@ -40,11 +40,11 @@ execute_process(
     "
 )
 
-# # INTERACTION
-# add_subdirectory(${PROJECT_SOURCE_DIR}/interaction)
-# execute_process(
-#     COMMAND bash -c "
-#     rm -rf ${PROJECT_SOURCE_DIR}/../include/interaction ${PROJECT_SOURCE_DIR}/../include/Interaction.hpp
-#     cp -R ${PROJECT_SOURCE_DIR}/interaction/include/. ${PROJECT_SOURCE_DIR}/../include
-#     "
-# )
+# INTERACTION
+add_subdirectory(${PROJECT_SOURCE_DIR}/interaction)
+execute_process(
+    COMMAND bash -c "
+    rm -rf ${PROJECT_SOURCE_DIR}/../include/interaction ${PROJECT_SOURCE_DIR}/../include/Interaction.hpp
+    cp -R ${PROJECT_SOURCE_DIR}/interaction/include/. ${PROJECT_SOURCE_DIR}/../include
+    "
+)
