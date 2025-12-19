@@ -22,14 +22,14 @@ execute_process(
 #     "
 # )
 
-# # ENTITY SPEC
-# add_subdirectory(${PROJECT_SOURCE_DIR}/entity_specs)
-# execute_process(
-#     COMMAND bash -c "
-#     rm -rf ${PROJECT_SOURCE_DIR}/../include/entity_spec ${PROJECT_SOURCE_DIR}/../include/EntitySpec.hpp
-#     cp -R ${PROJECT_SOURCE_DIR}/entity_specs/include/. ${PROJECT_SOURCE_DIR}/../include
-#     "
-# )
+# ENTITY SPEC
+add_subdirectory(${PROJECT_SOURCE_DIR}/entity_specs)
+execute_process(
+    COMMAND bash -c "
+    rm -rf ${PROJECT_SOURCE_DIR}/../include/entity_spec ${PROJECT_SOURCE_DIR}/../include/EntitySpec.hpp
+    cp -R ${PROJECT_SOURCE_DIR}/entity_specs/include/. ${PROJECT_SOURCE_DIR}/../include
+    "
+)
 
 # PHYSIC
 add_subdirectory(${PROJECT_SOURCE_DIR}/physic)

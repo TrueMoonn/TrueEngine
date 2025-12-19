@@ -9,14 +9,22 @@
 #include <string>
 #include <toml++/toml.hpp>
 
+#include <ECS/Registry.hpp>
+#include <ECS/Zipper.hpp>
+
+#include "ECS/Entity.hpp"
+#include "physic/components/hitbox.hpp"
+#include "physic/components/velocity.hpp"
+#include "physic/components/position.hpp"
+
 #include "EntitySpec.hpp"
 #include "entity_spec/factory.hpp"
 
 namespace addon {
 namespace eSpec {
 
-EntitySpec::EntitySpec(ECS::Registry& reg, te::event::EventManager& events)
-    : te::plugin::APlugin(reg, events) {
+EntitySpec::EntitySpec(ECS::Registry& reg, te::SignalManager& sig)
+    : te::plugin::APlugin(reg, sig) {
     reg.registerComponent<Health>();
     _components["health"] = [](ECS::Registry& reg, const ECS::Entity& e,
         const toml::table& params) {
@@ -95,17 +103,74 @@ EntitySpec::EntitySpec(ECS::Registry& reg, te::event::EventManager& events)
                 e.what() << std::endl;
         }
     };
-    _systems["deal_damage"] = [](ECS::Registry& reg) {
-        reg.addSystem(&deal_damage);
+    _systems["deal_damage"] = [&sig](ECS::Registry& reg) {
+        reg.addSystem([&sig](ECS::Registry& reg) {
+            auto &hit = reg.getComponents<physic::Hitbox>();
+            auto &pos = reg.getComponents<physic::Position2>();
+            auto &health = reg.getComponents<Health>();
+            auto &damage = reg.getComponents<Damage>();
+            auto &team = reg.getComponents<Team>();
+
+            for (auto &&[id, _, __, hp, tm]
+                : ECS::IndexedZipper(hit, pos, health, team)) {
+                if (!hp.delay.isPaused()) {
+                    if (hp.delay.checkDelay())
+                        hp.delay.toggle();
+                    else
+                        continue;
+                }
+                for (auto &hit : entity_hit_team(reg, id)) {
+                    hp.reduceSafely(damage[hit].value().amount);
+                    hp.delay.toggle();
+                    if (hp.amount < 0)
+                        sig.emit("dead_entity", id);
+                    break;
+                }
+            }
+        });
+    };
+    sig.sub<ECS::Entity>("dead_entity", [&reg](ECS::Entity e){
+        reg.killEntity(e);
+    });
+    _systems["kill_timeout"] = [&sig](ECS::Registry& reg) {
+        reg.addSystem([&sig](ECS::Registry& reg) {
+            auto& timeouts = reg.getComponents<Timeout>();
+            for (auto &&[id, to] : ECS::IndexedZipper(timeouts))
+                if (to.delta.checkDelay(false))
+                    sig.emit("dead_entity", id);
+        });
     };
     _systems["apply_pattern"] = [](ECS::Registry& reg) {
-        reg.addSystem(&apply_pattern);
+        reg.addSystem([](ECS::Registry &reg) {
+            auto &velocity = reg.getComponents<physic::Velocity2>();
+            auto &position = reg.getComponents<physic::Position2>();
+            auto &pattern = reg.getComponents<Pattern>();
+
+            for (auto &&[vel, _, pat] : ECS::Zipper(velocity, position, pattern))
+                vel.y = pat.func(pat.frequency) * pat.amplitude;
+        });
     };
-    _systems["kill_entity"] = [](ECS::Registry& reg) {
-        reg.addSystem(&kill_entity);
-    };
-    _systems["apply_fragile"] = [](ECS::Registry& reg) {
-        reg.addSystem(&apply_fragile);
+    _systems["apply_fragile"] = [&sig](ECS::Registry& reg) {
+        reg.addSystem([&sig](ECS::Registry& reg){
+            auto &hitbox = reg.getComponents<physic::Hitbox>();
+            auto &position = reg.getComponents<physic::Position2>();
+            auto &fragile = reg.getComponents<Fragile>();
+            auto &robust = reg.getComponents<Robust>();
+
+            for (auto &&[e_id, e_pos, e_hit, e_frag]
+                    : ECS::IndexedZipper(position, hitbox, fragile)) {
+                auto e_truehit = true_hitbox(e_pos, e_hit);
+                for (auto &&[id, pos, hit, rob]
+                        : ECS::IndexedZipper(position, hitbox, robust)) {
+                    if (e_id == id || e_frag.priority >= rob.priority ||
+                        !square_hitbox(e_truehit, true_hitbox(pos, hit)))
+                        continue;
+                    e_frag.destroyed = true;
+                    sig.emit("dead_entity", e_id);
+                    break;
+                }
+            }
+        });
     };
 }
 
