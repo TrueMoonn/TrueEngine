@@ -10,19 +10,20 @@
 #include <string>
 
 #include "plugin/PluginManager.hpp"
+#include "SignalManager.hpp"
 
 namespace te {
 namespace plugin {
 
 void PluginManager::loadPlugins(ECS::Registry& reg,
-    event::EventManager& events, const std::string& dir) {
+    SignalManager& sig, const std::string& dir) {
     for (const auto &file : std::filesystem::directory_iterator(dir)) {
         if (file.path().extension() == ".so") {
             std::string pname = file.path().stem().string();
             _manager.load(file.path());
             try {
                 maker plugin = _manager.access<maker>(pname, ENDPOINT_NAME);
-                _plugins[pname] = plugin(reg, events);
+                _plugins[pname] = plugin(reg, sig);
                 setAccesser(pname);
             } catch (const std::runtime_error& e) {
                 std::cerr << e.what() << std::endl;
@@ -32,7 +33,7 @@ void PluginManager::loadPlugins(ECS::Registry& reg,
 }
 
 void PluginManager::loadPlugins(ECS::Registry& reg,
-    event::EventManager& events, const std::string& dir,
+    SignalManager& sig, const std::string& dir,
     std::vector<std::string> &pluginToLoad) {
     for (const auto &file : std::filesystem::directory_iterator(dir)) {
         if (file.path().extension() == ".so") {
@@ -44,7 +45,7 @@ void PluginManager::loadPlugins(ECS::Registry& reg,
                     try {
                         maker plugin = _manager.access<maker>(pname,
                             ENDPOINT_NAME);
-                        _plugins[pname] = plugin(reg, events);
+                        _plugins[pname] = plugin(reg, sig);
                         setAccesser(pname);
                     } catch (const std::runtime_error& e) {
                         std::cerr << e.what() << std::endl;

@@ -23,16 +23,19 @@ Window::Window(const std::string& winName, const mat::Vector2u& size,
     name(winName),
     framerate(framerate) {
     setFramerateLimit(this->framerate);
+    setKeyRepeatEnabled(false);
 }
 
 Window::Window(const Window& win): sf::RenderWindow(sf::VideoMode(
     sf::Vector2u(win.getSize().x, win.getSize().y)), win.name), name(win.name) {
     setFramerateLimit(framerate);
+    setKeyRepeatEnabled(false);
 }
 
 Window::Window(Window&& win) : sf::RenderWindow(std::move(win)),
     name(std::move(win.name)), framerate(std::move(win.framerate)) {
     setFramerateLimit(framerate);
+    setKeyRepeatEnabled(false);
 }
 void Window::push_back(const Sprite& sp) {
     if (draws.size() <= sp.layer) {

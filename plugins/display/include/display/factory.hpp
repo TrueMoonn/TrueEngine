@@ -10,14 +10,16 @@
     #include <memory>
 
     #include <ECS/Registry.hpp>
-    #include "plugin/APlugin.hpp"
+    #include <SignalManager.hpp>
+
+    #include <plugin/APlugin.hpp>
 
 namespace addon {
 namespace display {
 
 class Display : public te::plugin::APlugin {
  public:
-    explicit Display(ECS::Registry& reg, te::event::EventManager& events);
+    explicit Display(ECS::Registry& reg, te::SignalManager& sig);
 };
 
 }  // namespace display
@@ -25,7 +27,7 @@ class Display : public te::plugin::APlugin {
 
 extern "C" {
     std::unique_ptr<addon::display::Display> get_pfactory(
-        ECS::Registry& reg, te::event::EventManager& events) {
-        return std::make_unique<addon::display::Display>(reg, events);
+        ECS::Registry& reg, te::SignalManager& sig) {
+        return std::make_unique<addon::display::Display>(reg, sig);
     }
 }

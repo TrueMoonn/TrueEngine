@@ -16,7 +16,9 @@
 #include <ECS/Entity.hpp>
 #include <ECS/Registry.hpp>
 #include <ECS/Zipper.hpp>
-#include "maths/Vector.hpp"
+#include <maths/Vector.hpp>
+
+#include "sfml/components/sprite.hpp"
 
 #include "Display.hpp"
 #include "display/factory.hpp"
@@ -24,8 +26,8 @@
 namespace addon {
 namespace display {
 
-Display::Display(ECS::Registry& reg, te::event::EventManager& events)
-    : te::plugin::APlugin(reg, events) {
+Display::Display(ECS::Registry& reg, te::SignalManager& sig)
+    : te::plugin::APlugin(reg, sig) {
     reg.registerComponent<Parallax>();
     _components["parallax"] = [](ECS::Registry& reg, const ECS::Entity& e,
         const toml::table& params) {
@@ -68,27 +70,25 @@ Display::Display(ECS::Registry& reg, te::event::EventManager& events)
             std::cerr << e.what() << std::endl;
         }
     };
-    events.addSubscription(te::event::System::KeyPressed,
-        [](ECS::Registry& reg,
-        const te::event::EventManager::eventContent& content,
-        std::optional<ECS::Entity> e) {
-        static bool anim = 0;
-        auto& event = std::get<te::event::KeysEvent>(content);
-
-        auto& animations = reg.getComponents<Animation>();
-        for (auto&& [an] : ECS::Zipper(animations)) {
-            if (event.UniversalKey[te::event::Key::LeftControl])
-                an.pause();
-            if (event.UniversalKey[te::event::Key::Space])
-                an.unpause();
-            if (event.UniversalKey[te::event::Key::A]) {
-                anim = anim ? 0 : 1;
-                an.changeAnimation(anim);
-            }
-        }
-    });
     _systems["animate"] = [](ECS::Registry& reg) {
-        reg.addSystem(&animate);
+        reg.addSystem([](ECS::Registry& reg){
+            auto& animations = reg.getComponents<Animation>();
+            auto& sprites = reg.getComponents<sfml::Sprite>();
+            auto cur = NOW;
+
+            for (auto &&[an, sp] : ECS::Zipper(animations, sprites)) {
+                if (an.timestamp.checkDelay(true)) {
+                    an.increment();
+                    auto rect = sp.sp.getTextureRect();
+                    rect.position.y =
+                        rect.size.y * an.getCurrentAnim().frameBEG.y;
+                    rect.position.x =
+                        (rect.size.x * an.getCurrentAnim().frameBEG.x)
+                        + (rect.size.x * an.curFrame);
+                    sp.sp.setTextureRect(rect);
+                }
+            }
+        });
     };
 }
 
