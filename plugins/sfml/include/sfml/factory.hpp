@@ -10,7 +10,9 @@
     #include <memory>
 
     #include <ECS/Registry.hpp>
-    #include "plugin/APlugin.hpp"
+    #include <SignalManager.hpp>
+
+    #include <plugin/APlugin.hpp>
 
     #define MENU_BEGIN 2
     #define MENU_END (MENU_BEGIN + 10)
@@ -20,7 +22,7 @@ namespace sfml {
 
 class Sfml : public te::plugin::APlugin {
  public:
-    explicit Sfml(ECS::Registry& reg, te::event::EventManager& events);
+    explicit Sfml(ECS::Registry& reg, te::SignalManager& events);
 };
 
 }  // namespace sfml
@@ -28,7 +30,7 @@ class Sfml : public te::plugin::APlugin {
 
 extern "C" {
     std::unique_ptr<addon::sfml::Sfml> get_pfactory(ECS::Registry& reg,
-        te::event::EventManager& events) {
+        te::SignalManager& events) {
         return std::make_unique<addon::sfml::Sfml>(reg, events);
     }
 }

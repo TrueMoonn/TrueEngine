@@ -39,9 +39,6 @@
     drawable = true
     position2 = true
 
-        # [ENTITIES.projectile.fragile]
-        # priority = 0
-
         [ENTITIES.projectile.damage]
         amount = 2
 
@@ -60,6 +57,9 @@
 
         [ENTITIES.projectile.fragile]
         priority = 1
+
+        [ENTITIES.projectile.health]
+        amount = 1
 
         [ENTITIES.projectile.hitbox]
         left = 0.0

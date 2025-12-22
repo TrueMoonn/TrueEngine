@@ -7,17 +7,6 @@ add_library(${PROJECT_NAME} SHARED
     #COMPONENTS
     ${PROJECT_SOURCE_DIR}/src/components/sprite.cpp
     ${PROJECT_SOURCE_DIR}/src/components/window.cpp
-
-    #SYSTEMS
-    ${PROJECT_SOURCE_DIR}/src/systems/display.cpp
-    ${PROJECT_SOURCE_DIR}/src/systems/draw.cpp
-    ${PROJECT_SOURCE_DIR}/src/systems/view_player.cpp
-    ${PROJECT_SOURCE_DIR}/src/systems/parallax.cpp
-
-    #EVENTS
-    ${PROJECT_SOURCE_DIR}/src/events/pollEvent.cpp
-    ${PROJECT_SOURCE_DIR}/src/events/mouse.cpp
-    ${PROJECT_SOURCE_DIR}/src/events/keyboard.cpp
 )
 add_library(addon::sfml ALIAS ${PROJECT_NAME})
 

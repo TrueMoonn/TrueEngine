@@ -24,6 +24,11 @@ enum IG_entities_e : ECS::Entity {
     MAX_BG = MAP_MAX_ENTITY_BACKGROUND,
 };
 
+enum GameState {
+    CLOSED = 0,
+    RUN,
+};
+
 class InGame : public AScene {
  public:
     InGame();
@@ -31,7 +36,7 @@ class InGame : public AScene {
 
     void run() override;
 
-    void shootProjectile();
+    GameState state;
 
  private:
     void setECS(void);

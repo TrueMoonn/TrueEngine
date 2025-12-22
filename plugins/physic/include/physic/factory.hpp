@@ -10,14 +10,16 @@
     #include <memory>
 
     #include <ECS/Registry.hpp>
-    #include "plugin/APlugin.hpp"
+    #include <SignalManager.hpp>
+
+    #include <plugin/APlugin.hpp>
 
 namespace addon {
 namespace physic {
 
 class Physic : public te::plugin::APlugin {
  public:
-    explicit Physic(ECS::Registry& reg, te::event::EventManager& events);
+    explicit Physic(ECS::Registry& reg, te::SignalManager& sig);
 };
 
 }  // namespace physic
@@ -25,7 +27,7 @@ class Physic : public te::plugin::APlugin {
 
 extern "C" {
     std::unique_ptr<addon::physic::Physic> get_pfactory(ECS::Registry& reg,
-        te::event::EventManager& events) {
-        return std::make_unique<addon::physic::Physic>(reg, events);
+        te::SignalManager& sig) {
+        return std::make_unique<addon::physic::Physic>(reg, sig);
     }
 }

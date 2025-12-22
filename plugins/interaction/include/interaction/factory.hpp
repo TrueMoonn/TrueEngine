@@ -10,19 +10,16 @@
     #include <memory>
 
     #include <ECS/Registry.hpp>
-    #include "plugin/APlugin.hpp"
-    #include "physic/components/velocity.hpp"
+    #include <SignalManager.hpp>
+
+    #include <plugin/APlugin.hpp>
 
 namespace addon {
 namespace intact {
 
 class Interaction : public te::plugin::APlugin {
  public:
-    explicit Interaction(ECS::Registry& reg, te::event::EventManager& events);
-
- private:
-    static void updateVel(const te::event::KeysEvent &event,
-        addon::physic::Velocity2 &vel);
+    explicit Interaction(ECS::Registry& reg, te::SignalManager& sig);
 };
 
 }  // namespace intact
@@ -30,8 +27,7 @@ class Interaction : public te::plugin::APlugin {
 
 extern "C" {
     std::unique_ptr<addon::intact::Interaction> get_pfactory(
-        ECS::Registry& reg, te::event::EventManager& events) {
-        return std::make_unique<addon::intact::Interaction>(reg, events);
+        ECS::Registry& reg, te::SignalManager& sig) {
+        return std::make_unique<addon::intact::Interaction>(reg, sig);
     }
 }
-

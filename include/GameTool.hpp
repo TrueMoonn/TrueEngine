@@ -8,6 +8,7 @@
 #pragma once
 
     #include <string>
+    #include <utility>
     #include <toml++/toml.hpp>
 
     #include <ECS/Entity.hpp>
@@ -15,7 +16,7 @@
     #include <ECS/SparseArray.hpp>
 
     #include "maths/Vector.hpp"
-    #include "event/EventManager.hpp"
+    #include "SignalManager.hpp"
     #include "ConfigReader.hpp"
     #include "plugin/PluginManager.hpp"
 
@@ -167,59 +168,21 @@ class GameTool {
     void runSystems();
 
     /**
-     * @brief Execute functions subscribed to the events that were triggered as active
-     *
-     * @param entity Optional entity ID to target specific entity. nullopt means all entities
-     * @see event::EventManager
-     */
-    void emit(std::optional<ECS::Entity> entity = std::nullopt);
-
-    /**
-     * @brief Check if there is an event for the system
-     *
-     * @param system systtem that you want to check
-     * @return true There's an event
-     * @return false There isn't an event
-     */
-    bool isEvent(event::System system);
-
-    /**
-     * @brief Get the eventContent link to the system activated by the user.
-     *
-     * @param system System that you want to check
-     * @return event::EventManager::eventContent The Event corresponding
-     */
-    event::EventManager::eventContent
-        getEventContent(event::System system) const;
-
-    /**
-     * @brief Set a SystemEvent in the event::EventManager
-     *
-     * @param system The system to change the state
-     * @param val The state to change to
-     */
-    void setSystemEvent(event::System system, bool val);
-
-    /**
      * @brief Get the ECS::Registry stored in this class
      *
      * @return A copy of the ECS::Registry
      */
     ECS::Registry getRegistry(void);
 
-    /**
-     * @brief Set the Events object of the event::EventManager
-     *
-     * @param events The Events that you want to set in the Events of EventManager
-     */
-    void setEvents(event::Events events);
+    template<typename... Args, typename Func>
+    void sub(const std::string& name, Func&& func) {
+        _signals.sub<Args...>(name, func);
+    }
 
-    /**
-     * @brief Get the Events object of the event::EventManager
-     *
-     * @return event::Events The Events EventManager's member
-     */
-    event::Events getEvents(void) const;
+    template<typename... Args>
+    void emit(const std::string& name, Args&&... args) {
+        _signals.emit(name, std::forward(args)...);
+    }
 
  private:
     plugin::PluginManager _pmanager;
@@ -230,7 +193,7 @@ class GameTool {
     void createEntityComponents(const ECS::Entity& e, toml::table conf,
         const mat::Vector2f& pos);
 
-    event::EventManager _events;
+    SignalManager _signals;
 };
 
 }  // namespace te

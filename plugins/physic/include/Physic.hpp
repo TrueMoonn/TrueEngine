@@ -12,7 +12,4 @@
     #include "physic/components/position.hpp"
     #include "physic/components/velocity.hpp"
 
-    #include "physic/systems/hitbox.hpp"
-    #include "physic/systems/movement.hpp"
-
     #include "physic/hitbox_management.hpp"
