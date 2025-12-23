@@ -104,6 +104,10 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
                 (void)it->second.loadFromFile(path);
             auto& texture = it->second;
             const auto &layer = params["layer"].value_or(0);
+            auto s_origin = params["origin"].as_array();
+            sf::Vector2f origin = s_origin ?
+                sf::Vector2f{s_origin->at(0).value_or(0.0f),
+                s_origin->at(0).value_or(0.0f)} : sf::Vector2f{0.f, 0.f};
             const auto &t_size = params["size"].as_array();
             sf::Vector2i size = t_size ?
                 sf::Vector2i(t_size->at(0).value_or(1),
@@ -113,7 +117,7 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
                 sf::Vector2f{t_scale->at(0).value_or(1.0f) / size.x,
                 t_scale->at(1).value_or(1.0f) / size.y} : sf::Vector2f{1, 1};
             reg.createComponent<Sprite>(e, texture,
-                layer, size, scale);
+                layer, size, scale, origin);
         } catch (const std::out_of_range&) {
             std::cerr << "error(Plugin-Sprite): key not found" << std::endl;
         } catch (const sf::Exception& e) {
