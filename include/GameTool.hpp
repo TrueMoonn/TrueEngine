@@ -173,7 +173,7 @@ class GameTool {
      *
      * @return A copy of the ECS::Registry
      */
-    ECS::Registry getRegistry(void);
+    const ECS::Registry& getRegistry(void) const;
 
     template<typename... Args, typename Func>
     void sub(const std::string& name, Func&& func) {

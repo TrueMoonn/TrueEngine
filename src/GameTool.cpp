@@ -48,7 +48,7 @@ void GameTool::removeEntity(const ECS::Entity& e) {
     _reg.killEntity(e);
 }
 
-ECS::Registry GameTool::getRegistry(void) {
+const ECS::Registry& GameTool::getRegistry(void) const {
     return _reg;
 }
 
