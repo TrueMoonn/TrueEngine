@@ -13,8 +13,9 @@
 
     #include <ECS/Entity.hpp>
     #include <ECS/Registry.hpp>
-    #include <ECS/SparseArray.hpp>
+    #include <ECS/DenseSA.hpp>
 
+#include "ECS/DenseSA.hpp"
     #include "maths/Vector.hpp"
     #include "SignalManager.hpp"
     #include "ConfigReader.hpp"
@@ -94,7 +95,7 @@ class GameTool {
      * @tparam Component The type of the component to get
      */
     template <typename Component>
-    ECS::SparseArray<Component>& getComponent(void) {
+    ECS::DenseSparseArray<Component>& getComponent(void) {
         return _reg.getComponents<Component>();
     }
 

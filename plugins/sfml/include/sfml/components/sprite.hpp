@@ -20,6 +20,8 @@ struct Sprite {
         const sf::Vector2i& size, const sf::Vector2f& scale = {1.f, 1.f});
     Sprite(const Sprite&) = default;
     Sprite(Sprite&&) noexcept = default;
+    Sprite& operator=(const Sprite& other) = default;
+    Sprite& operator=(Sprite&& other) noexcept = default;
 
     sf::Sprite sp;
     std::size_t layer;

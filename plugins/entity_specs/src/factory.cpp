@@ -11,11 +11,12 @@
 #include <toml++/toml.hpp>
 
 #include <ECS/Registry.hpp>
-#include <ECS/Zipper.hpp>
+#include <ECS/DenseZipper.hpp>
 #include <ECS/Entity.hpp>
 #include <maths/Rect.hpp>
 #include <maths/Vector.hpp>
 
+#include "ECS/DenseSA.hpp"
 #include "physic/components/hitbox.hpp"
 #include "physic/components/velocity.hpp"
 #include "physic/components/position.hpp"
@@ -49,12 +50,12 @@ static std::vector<ECS::Entity> entity_hit_team(ECS::Registry& reg,
     auto& teams = reg.getComponents<Team>();
     auto& damage = reg.getComponents<Damage>();
 
-    auto e_hit = true_hitbox(positions[entity].value(),
-        hitboxs[entity].value());
-    auto& e_team = teams[entity].value();
+    auto e_hit = true_hitbox(GET_ENTITY_CMPT(positions, entity),
+        GET_ENTITY_CMPT(hitboxs, entity));
+    auto& e_team = GET_ENTITY_CMPT(teams, entity);
 
     for (auto &&[e, pos, hit, tm, _]
-        : ECS::IndexedZipper(positions, hitboxs, teams, damage)) {
+        : ECS::IndexedDenseZipper(positions, hitboxs, teams, damage)) {
         if (tm.name == e_team.name)
             continue;
         if (square_hitbox(e_hit, true_hitbox(pos, hit)))
@@ -153,7 +154,7 @@ EntitySpec::EntitySpec(ECS::Registry& reg, te::SignalManager& sig)
             std::vector<ECS::Entity> deads;
 
             for (auto &&[id, _, __, hp, tm]
-                : ECS::IndexedZipper(hit, pos, health, team)) {
+                : ECS::IndexedDenseZipper(hit, pos, health, team)) {
                 if (!hp.delay.isPaused()) {
                     if (hp.delay.checkDelay())
                         hp.delay.toggle();
@@ -161,7 +162,7 @@ EntitySpec::EntitySpec(ECS::Registry& reg, te::SignalManager& sig)
                         continue;
                 }
                 for (auto &hit : entity_hit_team(reg, id)) {
-                    hp.reduceSafely(damage[hit].value().amount);
+                    hp.reduceSafely(GET_ENTITY_CMPT(damage, hit).amount);
                     hp.delay.toggle();
                     if (hp.amount <= 0)
                         deads.push_back(id);
@@ -177,7 +178,7 @@ EntitySpec::EntitySpec(ECS::Registry& reg, te::SignalManager& sig)
     _systems["kill_timeout"] = [&sig](ECS::Registry& reg) {
         reg.addSystem([&sig](ECS::Registry& reg) {
             auto& timeouts = reg.getComponents<Timeout>();
-            for (auto &&[id, to] : ECS::IndexedZipper(timeouts))
+            for (auto &&[id, to] : ECS::IndexedDenseZipper(timeouts))
                 if (to.delta.checkDelay(false))
                     sig.emit("dead_entity", id);
         });
@@ -189,7 +190,7 @@ EntitySpec::EntitySpec(ECS::Registry& reg, te::SignalManager& sig)
             auto &pattern = reg.getComponents<Pattern>();
 
             for (auto &&[vel, _, pat] :
-                ECS::Zipper(velocity, position, pattern))
+                ECS::DenseZipper(velocity, position, pattern))
                 vel.y = pat.func(pat.frequency) * pat.amplitude;
         });
     };
@@ -202,10 +203,10 @@ EntitySpec::EntitySpec(ECS::Registry& reg, te::SignalManager& sig)
             std::vector<ECS::Entity> deads;
 
             for (auto &&[e_id, e_pos, e_hit, e_frag]
-                    : ECS::IndexedZipper(position, hitbox, fragile)) {
+                    : ECS::IndexedDenseZipper(position, hitbox, fragile)) {
                 auto e_truehit = true_hitbox(e_pos, e_hit);
                 for (auto &&[id, pos, hit, rob]
-                        : ECS::IndexedZipper(position, hitbox, robust)) {
+                        : ECS::IndexedDenseZipper(position, hitbox, robust)) {
                     if (e_id == id || e_frag.priority >= rob.priority ||
                         !square_hitbox(e_truehit, true_hitbox(pos, hit)))
                         continue;

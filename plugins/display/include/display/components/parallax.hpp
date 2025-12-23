@@ -17,6 +17,8 @@ struct Parallax {
     Parallax(std::size_t nb_iterations, const mat::Vector2i& reset);
     Parallax(const Parallax&) = default;
     Parallax(Parallax&&) = default;
+    Parallax& operator=(const Parallax& other) = default;
+    Parallax& operator=(Parallax&& other) noexcept = default;
 
     std::size_t iterations;
     mat::Vector2i reset;

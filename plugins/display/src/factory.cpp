@@ -15,7 +15,7 @@
 
 #include <ECS/Entity.hpp>
 #include <ECS/Registry.hpp>
-#include <ECS/Zipper.hpp>
+#include <ECS/DenseZipper.hpp>
 #include <maths/Vector.hpp>
 
 #include "sfml/components/sprite.hpp"
@@ -76,7 +76,7 @@ Display::Display(ECS::Registry& reg, te::SignalManager& sig)
             auto& sprites = reg.getComponents<sfml::Sprite>();
             auto cur = NOW;
 
-            for (auto &&[an, sp] : ECS::Zipper(animations, sprites)) {
+            for (auto &&[an, sp] : ECS::DenseZipper(animations, sprites)) {
                 if (an.timestamp.checkDelay(true)) {
                     an.increment();
                     auto rect = sp.sp.getTextureRect();
