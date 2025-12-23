@@ -64,11 +64,8 @@ class SignalManager {
 
     template<typename... Args>
     void emit(const std::string& name, Args&&... args) {
-        if (_subs.find(name) == _subs.end()) {
-            std::cerr << "error: SignalManager: emition '" << name
-                << "' not found\n";
+        if (_subs.find(name) == _subs.end())
             return;
-        }
         auto* list = static_cast<SignalList<Args...>*>(_subs.at(name).get());
         for (auto& signal : list->signals) {
             signal->call(std::forward<Args>(args)...);
