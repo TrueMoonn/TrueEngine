@@ -23,62 +23,61 @@ template <typename Numeric>
     requires arithmetic<Numeric>
 struct Vector2 {
     Vector2() = default;
-    Vector2(Numeric x, Numeric y) {
-        this->x = x;
-        this->y = y;
-    }
-    Vector2(const Vector2& vect) : x(vect.x), y(vect.y) {}
-    Vector2(Vector2&& vect) : x(std::move(vect.x)), y(std::move(vect.y)) {}
+    Vector2(Numeric x, Numeric y) : x(x), y(y) {}
+    Vector2(const Vector2& vect) = default;
+    Vector2(Vector2&& vect) = default;
+    Vector2& operator=(const Vector2&) = default;
+    Vector2& operator=(Vector2&&) = default;
     ~Vector2() = default;
 
     Vector2 operator+(const Vector2 &vect) const {
-        return Vector2f(this->x + vect.x, this->y + vect.y);
+        return Vector2(this->x + vect.x, this->y + vect.y);
     }
     void operator+=(const Vector2 &vect) {
         this->x += vect.x;
         this->y += vect.y;
     }
     Vector2 operator-(const Vector2 &vect) const {
-        return Vector2f(this->x - vect.x, this->y - vect.y);
+        return Vector2(this->x - vect.x, this->y - vect.y);
     }
     void operator-=(const Vector2 &vect) {
         this->x -= vect.x;
         this->y -= vect.y;
     }
     Vector2 operator*(const Vector2 &vect) const {
-        return Vector2f(this->x * vect.x, this->y * vect.y);
+        return Vector2(this->x * vect.x, this->y * vect.y);
     }
     void operator*=(const Vector2 &vect) {
         this->x *= vect.x;
         this->y *= vect.y;
     }
     Vector2 operator/(const Vector2 &vect) const {
-        return Vector2f(this->x / vect.x, this->y / vect.y);
+        return Vector2(this->x / vect.x, this->y / vect.y);
     }
     void operator/=(const Vector2 &vect) {
         this->x /= vect.x;
         this->y /= vect.y;
     }
-    Vector2 operator+(Numeric x) const {
-        return Vector2f(this->x + x, this->y + y);
+    Vector2 operator+(Numeric val) const {
+        return Vector2(this->x + val, this->y + val);
     }
-    void operator+=(Numeric x) {
-        this->x += x;
-        this->y += x;
+    void operator+=(Numeric val) {
+        this->x += val;
+        this->y += val;
     }
-    Vector2 operator*(Numeric x) const {
-        return Vector2f(this->x * x, this->y * y);
+    Vector2 operator*(Numeric val) const {
+        return Vector2(this->x * val, this->y * val);
     }
-    void operator*=(Numeric x) {
-        this->x *= x;
-        this->y *= y;
+    void operator*=(Numeric val) {
+        this->x *= val;
+        this->y *= val;
     }
-    Vector2 operator/(Numeric x) const {
-        return Vector2f(this->x / x, this->y / y);
+    Vector2 operator/(Numeric val) const {
+        return Vector2(this->x / val, this->y / val);
     }
-    void operator/=(Numeric x) {
-        this->x /= x;
-        this->y /= y;
+    void operator/=(Numeric val) {
+        this->x /= val;
+        this->y /= val;
     }
 
     Numeric x = 0;

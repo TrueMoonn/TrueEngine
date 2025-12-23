@@ -13,7 +13,7 @@
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/System/Exception.hpp>
-#include <ECS/Zipper.hpp>
+#include <ECS/DenseZipper.hpp>
 #include <ECS/Registry.hpp>
 #include <toml++/toml.hpp>
 #include <events.hpp>
@@ -71,8 +71,8 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
     //     auto& event = std::get<te::event::MouseEvent>(content);
     //     int i = 0;
 
-    //     for (auto && [win] : ECS::Zipper(window)) {
-    //         for (auto&& [id, spr] : ECS::IndexedZipper(sprite)) {
+    //     for (auto && [win] : ECS::DenseZipper(window)) {
+    //         for (auto&& [id, spr] : ECS::IndexedDenseZipper(sprite)) {
     //             if (event._MouseKey.at(te::event::MouseButton::MouseLeft)
     //             .active) {
     //                 const auto &pos = sf::Mouse::getPosition(win);
@@ -123,14 +123,14 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
     _systems["display"] = [](ECS::Registry& reg) {
         reg.addSystem([](ECS::Registry& reg) {
             auto& windows = reg.getComponents<Window>();
-            for (auto &&[win] : ECS::Zipper(windows)) {
+            for (auto &&[win] : ECS::DenseZipper(windows)) {
                 for (std::size_t i = 0; i < win.draws.size(); ++i) {
                     for (auto& sprite : win.draws[i])
-                        win.draw(sprite.sp);
+                        win.win->draw(sprite.sp);
                     win.draws[i].clear();
                 }
-                win.display();
-                win.clear();
+                win.win->display();
+                win.win->clear();
             }
         });
     };
@@ -139,20 +139,20 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
             auto& windows = reg.getComponents<Window>();
             static te::Keys keys = {false};
 
-            for (auto&& [win] : ECS::Zipper(windows)) {
-                while (std::optional<sf::Event> pevent = win.pollEvent()) {
-                    if (pevent->is<sf::Event::KeyPressed>()) {
+            for (auto&& [win] : ECS::DenseZipper(windows)) {
+                while (std::optional<sf::Event> ev = win.win->pollEvent()) {
+                    if (ev->is<sf::Event::KeyPressed>()) {
                         keys[static_cast<te::Key>(
-                            pevent->getIf<sf::Event::KeyPressed>()->
+                            ev->getIf<sf::Event::KeyPressed>()->
                             code)] = true;
                     }
-                    if (pevent->is<sf::Event::KeyReleased>()) {
+                    if (ev->is<sf::Event::KeyReleased>()) {
                         keys[static_cast<te::Key>(
-                            pevent->getIf<sf::Event::KeyReleased>()->
+                            ev->getIf<sf::Event::KeyReleased>()->
                             code)] = false;
                     }
-                    if (pevent->is<sf::Event::Closed>()) {
-                        win.close();
+                    if (ev->is<sf::Event::Closed>()) {
+                        win.win->close();
                         sig.emit("closed");
                     }
                 }
@@ -167,9 +167,9 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
             auto& positions = reg.getComponents<physic::Position2>();
             auto& windows = reg.getComponents<Window>();
 
-            for (auto &&[win] : ECS::Zipper(windows)) {
+            for (auto &&[win] : ECS::DenseZipper(windows)) {
                 for (auto &&[sprite, pos, drawable] :
-                    ECS::Zipper(sprites, positions, drawables)) {
+                    ECS::DenseZipper(sprites, positions, drawables)) {
                     sprite.sp.setPosition({pos.x, pos.y});
                     win.push_back(sprite);
                 }
@@ -182,10 +182,11 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
             auto& positions = reg.getComponents<physic::Position2>();
             auto& windows = reg.getComponents<Window>();
 
-            for (auto &&[win] : ECS::Zipper(windows)) {
-                for (auto &&[pos, player] : ECS::Zipper(positions, players)) {
-                    win.setView(sf::View({pos.x, pos.y},
-                        static_cast<sf::Vector2f>(win.getSize())));
+            for (auto &&[win] : ECS::DenseZipper(windows)) {
+                for (auto &&[pos, player] :
+                    ECS::DenseZipper(positions, players)) {
+                    win.win->setView(sf::View({pos.x, pos.y},
+                        static_cast<sf::Vector2f>(win.win->getSize())));
                 }
             }
         });
@@ -198,9 +199,10 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
             auto& drawables = reg.getComponents<Drawable>();
             auto& positions = reg.getComponents<physic::Position2>();
 
-            for (auto&& [win] : ECS::Zipper(windows)) {
+            for (auto&& [win] : ECS::DenseZipper(windows)) {
                 for (auto&& [para, sp, draw, pos] :
-                    ECS::Zipper(parallaxs, sprites, drawables, positions)) {
+                    ECS::DenseZipper(
+                        parallaxs, sprites, drawables, positions)) {
                     auto size = sp.sp.getTextureRect().size;
                     size.x *= sp.sp.getScale().x;
                     size.y *= sp.sp.getScale().y;

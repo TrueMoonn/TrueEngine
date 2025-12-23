@@ -6,7 +6,7 @@
 */
 #include <iostream>
 
-#include <ECS/Zipper.hpp>
+#include <ECS/DenseZipper.hpp>
 #include <plugin/PluginManager.hpp>
 
 #include "scenes/InGame.hpp"
@@ -71,7 +71,7 @@ void InGame::run(void) {
         auto& players = this->getComponent<addon::intact::Player>();
         auto& velocities = this->getComponent<addon::physic::Velocity2>();
 
-        for (auto &&[_, vel] : ECS::Zipper(players, velocities)) {
+        for (auto &&[_, vel] : ECS::DenseZipper(players, velocities)) {
             if (keys[te::Key::Z]) {
                 vel.y = -170.0;
             } else if (keys[te::Key::S]) {
@@ -95,16 +95,13 @@ void InGame::run(void) {
         if (!keys[te::Key::Space] || !delay.checkDelay())
             return;
 
-        const auto &player = getComponent<addon::intact::Player>();
-        const auto &position = getComponent<addon::physic::Position2>();
+        auto &player = getComponent<addon::intact::Player>();
+        auto &position = getComponent<addon::physic::Position2>();
 
         if (entity_proj > MAX_PROJ_E)
             entity_proj = PROJ_E;
-        for (ECS::Entity e = 0; e < player.size() && e < position.size(); ++e) {
-            if (player[e].has_value() && position[e].has_value()) {
-                createEntity(entity_proj++, "projectile",
-                    {position[e].value().x + 10, position[e].value().y});
-            }
+        for (auto&& [_, pos] : ECS::DenseZipper(player, position)) {
+            createEntity(entity_proj++, "projectile", {pos.x + 10, pos.y});
         }
     });
 

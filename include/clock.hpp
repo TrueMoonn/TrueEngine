@@ -53,6 +53,9 @@ class Timestamp {
         , ref(std::move(other.ref)), cur(std::move(other.cur))
         , active(std::move(other.active)) {}
 
+    Timestamp& operator=(const Timestamp& other) = default;
+    Timestamp& operator=(Timestamp&& other) noexcept = default;
+
     microsec getElapsedTime(void);
     bool checkDelay(bool restart = true);
     void restart(void);

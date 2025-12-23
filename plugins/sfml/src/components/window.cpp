@@ -5,6 +5,7 @@
 ** window.cpp
 */
 
+#include <memory>
 #include <utility>
 #include <string>
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -18,25 +19,41 @@ namespace addon {
 namespace sfml {
 
 Window::Window(const std::string& winName, const mat::Vector2u& size,
-    std::size_t framerate) :
-    sf::RenderWindow(sf::VideoMode(sf::Vector2u(size.x, size.y)), winName),
-    name(winName),
-    framerate(framerate) {
-    setFramerateLimit(this->framerate);
-    setKeyRepeatEnabled(false);
+    std::size_t framerate) : name(winName), framerate(framerate) {
+    win = std::make_unique<sf::RenderWindow>(
+        sf::VideoMode(sf::Vector2u(size.x, size.y)),
+        name
+    );
+    win->setFramerateLimit(framerate);
+    win->setKeyRepeatEnabled(false);
 }
 
-Window::Window(const Window& win): sf::RenderWindow(sf::VideoMode(
-    sf::Vector2u(win.getSize().x, win.getSize().y)), win.name), name(win.name) {
-    setFramerateLimit(framerate);
-    setKeyRepeatEnabled(false);
+Window::Window(const Window& other) :
+    name(other.name),
+    framerate(other.framerate) {
+    win = std::make_unique<sf::RenderWindow>(
+        sf::VideoMode(other.win->getSize()),
+        other.name
+    );
+    win->setFramerateLimit(framerate);
+    win->setKeyRepeatEnabled(false);
 }
 
-Window::Window(Window&& win) : sf::RenderWindow(std::move(win)),
-    name(std::move(win.name)), framerate(std::move(win.framerate)) {
-    setFramerateLimit(framerate);
-    setKeyRepeatEnabled(false);
+Window& Window::operator=(const Window& other) {
+    if (this != &other) {
+        name = other.name;
+        framerate = other.framerate;
+        draws = other.draws;
+        win = std::make_unique<sf::RenderWindow>(
+            sf::VideoMode(other.win->getSize()),
+            other.name
+        );
+        win->setFramerateLimit(other.framerate);
+        win->setKeyRepeatEnabled(false);
+    }
+    return *this;
 }
+
 void Window::push_back(const Sprite& sp) {
     if (draws.size() <= sp.layer) {
         draws.resize(sp.layer + 1);

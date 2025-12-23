@@ -5,7 +5,7 @@
 ** animate
 */
 
-#include <ECS/Zipper.hpp>
+#include <ECS/DenseZipper.hpp>
 
 #include "clock.hpp"
 
@@ -22,7 +22,7 @@ void animate(ECS::Registry& reg) {
     auto& sprites = reg.getComponents<sfml::Sprite>();
     auto cur = NOW;
 
-    for (auto &&[an, sp] : ECS::Zipper(animations, sprites)) {
+    for (auto &&[an, sp] : ECS::DenseZipper(animations, sprites)) {
         if (an.timestamp.checkDelay(true)) {
             an.increment();
             auto rect = sp.sp.getTextureRect();

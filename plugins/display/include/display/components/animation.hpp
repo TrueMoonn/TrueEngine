@@ -28,6 +28,11 @@ struct FrameData {
         : frameBEG(position), frameMAX(max)
         , frameDELAY(SEC_TO_MICRO(delay)), loop(loop) {}
 
+    FrameData(const FrameData&) = default;
+    FrameData(FrameData&&) noexcept = default;
+    FrameData& operator=(const FrameData& other) = default;
+    FrameData& operator=(FrameData&& other) noexcept = default;
+
     mat::Vector2<size_t> frameBEG;
     size_t frameMAX;
     size_t frameDELAY;
@@ -48,7 +53,7 @@ struct Animation {
      *
      */
     explicit Animation(const std::vector<FrameData> &frameInfos)
-        : frameInfos(std::move(frameInfos)), curAnim(0), curFrame(0)
+        : frameInfos(frameInfos), curAnim(0), curFrame(0)
         , timestamp(frameInfos.at(0).frameDELAY) {}
 
     Animation(const Animation &other) : frameInfos(other.frameInfos)
@@ -56,8 +61,11 @@ struct Animation {
         , timestamp(other.timestamp) {}
 
     Animation(Animation &&other) : frameInfos(std::move(other.frameInfos)),
-        curAnim(std::move(other.curAnim)), curFrame(std::move(other.curFrame)),
+        curAnim(other.curAnim), curFrame(other.curFrame),
         timestamp(std::move(other.timestamp)) {}
+
+    Animation& operator=(const Animation& other) = default;
+    Animation& operator=(Animation&& other) noexcept = default;
 
     ~Animation() = default;
 
@@ -69,7 +77,7 @@ struct Animation {
     void unpause() { if (timestamp.isPaused()) timestamp.toggle(); }
     void toggle() { this->timestamp.toggle(); }
 
-    const std::vector<FrameData> frameInfos;
+    std::vector<FrameData> frameInfos;
     std::size_t curAnim;
     std::size_t curFrame;
 

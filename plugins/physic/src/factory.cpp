@@ -10,9 +10,10 @@
 #include <ECS/Registry.hpp>
 #include <SignalManager.hpp>
 
-#include <ECS/Zipper.hpp>
+#include <ECS/DenseZipper.hpp>
 #include <clock.hpp>
 
+#include "ECS/DenseSA.hpp"
 #include "Physic.hpp"
 #include "physic/factory.hpp"
 
@@ -76,7 +77,7 @@ Physic::Physic(ECS::Registry& reg, te::SignalManager& sig)
             auto& velocities = reg.getComponents<Velocity2>();
 
             float elapsed = delta.getElapsedTime();
-            for (auto&&[pos, vel] : ECS::Zipper(positions, velocities)) {
+            for (auto&&[pos, vel] : ECS::DenseZipper(positions, velocities)) {
                 pos.x += vel.x * elapsed / 1000000;
                 pos.y += vel.y * elapsed / 1000000;
             }
@@ -91,10 +92,10 @@ Physic::Physic(ECS::Registry& reg, te::SignalManager& sig)
             auto& movable = reg.getComponents<Movable>();
 
             for (auto &&[id, pos, vel, hit, mov]
-                : ECS::IndexedZipper(positions, velocities, hitboxs, movable)) {
+                : ECS::IndexedDenseZipper(positions, velocities, hitboxs, movable)) {
                 for (ECS::Entity cmp : entity_hit(reg, id)) {
-                    auto e_pos = reg.getComponents<Position2>()[cmp].value();
-                    auto e_hit = reg.getComponents<Hitbox>()[cmp].value();
+                    auto e_pos = GET_ENTITY_CMPT(positions, cmp);
+                    auto e_hit = GET_ENTITY_CMPT(hitboxs, cmp);
 
                     float dx = (pos.x + hit.size.x / 2) -
                         (e_pos.x + e_hit.size.x / 2);
