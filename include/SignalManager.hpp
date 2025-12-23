@@ -8,6 +8,7 @@
 #pragma once
 
     #include <utility>
+    #include <tuple>
     #include <string>
     #include <unordered_map>
     #include <functional>
@@ -35,8 +36,10 @@ namespace te {
             if (_subs.find(name) == _subs.end()) {
                 _subs.emplace(name, std::make_unique<SignalList<Args...>>());
             }
-            auto* list = static_cast<SignalList<Args...>*>(_subs.at(name).get());
-            list->callbacks.push_back(std::function<void(Args...)>(std::forward<Func>(func)));
+            auto* list = static_cast<SignalList<Args...>*>(
+                _subs.at(name).get());
+            list->callbacks.push_back(std::function<void(Args...)>(
+                std::forward<Func>(func)));
         }
 
         template<typename... Args>
@@ -45,7 +48,8 @@ namespace te {
                 return;
 
             using DecayedArgs = std::tuple<std::decay_t<Args>...>;
-            auto* list = static_cast<SignalList<std::decay_t<Args>...>*>(_subs.at(name).get());
+            auto* list = static_cast<SignalList<std::decay_t<Args>...>*>(
+                _subs.at(name).get());
 
             for (auto& callback : list->callbacks) {
                 callback(std::forward<Args>(args)...);

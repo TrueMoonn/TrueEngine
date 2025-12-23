@@ -86,13 +86,13 @@ Physic::Physic(ECS::Registry& reg, te::SignalManager& sig)
     };
     _systems["bound_hitbox"] = [](ECS::Registry& reg) {
         reg.addSystem([](ECS::Registry& reg) {
-            auto& positions = reg.getComponents<Position2>();
-            auto& velocities = reg.getComponents<Velocity2>();
-            auto& hitboxs = reg.getComponents<Hitbox>();
-            auto& movable = reg.getComponents<Movable>();
+            auto& posis = reg.getComponents<Position2>();
+            auto& vels = reg.getComponents<Velocity2>();
+            auto& hboxs = reg.getComponents<Hitbox>();
+            auto& movables = reg.getComponents<Movable>();
 
             for (auto &&[id, pos, vel, hit, mov]
-                : ECS::IndexedDenseZipper(positions, velocities, hitboxs, movable)) {
+                : ECS::IndexedDenseZipper(posis, vels, hboxs, movables)) {
                 for (ECS::Entity cmp : entity_hit(reg, id)) {
                     auto e_pos = GET_ENTITY_CMPT(positions, cmp);
                     auto e_hit = GET_ENTITY_CMPT(hitboxs, cmp);

@@ -8,6 +8,7 @@
 #pragma once
 
     #include <vector>
+    #include <memory>
     #include <string>
     #include <SFML/Graphics/RenderWindow.hpp>
     #include <SFML/Window/VideoMode.hpp>

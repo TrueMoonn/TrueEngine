@@ -15,7 +15,6 @@
     #include <ECS/Registry.hpp>
     #include <ECS/DenseSA.hpp>
 
-#include "ECS/DenseSA.hpp"
     #include "maths/Vector.hpp"
     #include "SignalManager.hpp"
     #include "ConfigReader.hpp"

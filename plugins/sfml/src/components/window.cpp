@@ -22,8 +22,7 @@ Window::Window(const std::string& winName, const mat::Vector2u& size,
     std::size_t framerate) : name(winName), framerate(framerate) {
     win = std::make_unique<sf::RenderWindow>(
         sf::VideoMode(sf::Vector2u(size.x, size.y)),
-        name
-    );
+        name);
     win->setFramerateLimit(framerate);
     win->setKeyRepeatEnabled(false);
 }
@@ -33,8 +32,7 @@ Window::Window(const Window& other) :
     framerate(other.framerate) {
     win = std::make_unique<sf::RenderWindow>(
         sf::VideoMode(other.win->getSize()),
-        other.name
-    );
+        other.name);
     win->setFramerateLimit(framerate);
     win->setKeyRepeatEnabled(false);
 }
@@ -46,8 +44,7 @@ Window& Window::operator=(const Window& other) {
         draws = other.draws;
         win = std::make_unique<sf::RenderWindow>(
             sf::VideoMode(other.win->getSize()),
-            other.name
-        );
+            other.name);
         win->setFramerateLimit(other.framerate);
         win->setKeyRepeatEnabled(false);
     }
