@@ -115,9 +115,17 @@ void GameTool::createEntityComponents(const ECS::Entity& e,
     for (auto &&[cname, component] : conf) {
         if (component.is_table()) {
             const toml::table& compTable = *component.as_table();
-            _pmanager.loadComponent(cname.data(), e, compTable);
+            if (_local_components.find(cname.data()) != _local_components.end()) {
+                _local_components.at(cname.data())(e, compTable);
+            } else {
+                _pmanager.loadComponent(cname.data(), e, compTable);
+            }
         } else if (component.is_value()) {
-            _pmanager.loadComponent(cname.data(), e, {});
+            if (_local_components.find(cname.data()) != _local_components.end()) {
+                _local_components.at(cname.data())(e, {});
+            } else {
+                _pmanager.loadComponent(cname.data(), e, {});
+            }
         }
     }
 }

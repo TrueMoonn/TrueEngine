@@ -7,7 +7,10 @@
 
 #pragma once
 
-    #include <string>
+    #include <functional>
+#include <string>
+#include <toml++/impl/table.hpp>
+#include <unordered_map>
     #include <utility>
     #include <toml++/toml.hpp>
 
@@ -18,6 +21,7 @@
     #include "maths/Vector.hpp"
     #include "SignalManager.hpp"
     #include "ConfigReader.hpp"
+#include "plugin/APlugin.hpp"
     #include "plugin/PluginManager.hpp"
 
     #define DEFAULT_PLUGIN_RPATH "./plugins/"
@@ -41,6 +45,10 @@ namespace te {
  */
 class GameTool {
  public:
+    typedef std::function<void(ECS::Entity, const toml::table&)>
+        local_cmt_build;
+
+ public:
     GameTool() = default;
 
     /**
@@ -63,6 +71,13 @@ class GameTool {
     template <typename Component>
     void registerComponent(void) {
         _reg.registerComponent<Component>();
+    }
+
+    template <typename Component>
+    void registerComponent(const std::string& name,
+        const local_cmt_build& func) {
+        _reg.registerComponent<Component>();
+        _local_components.insert_or_assign(name, func);
     }
 
     /**
@@ -189,6 +204,7 @@ class GameTool {
     ECS::Registry _reg;
 
     ConfigParser _configs;
+    std::unordered_map<std::string, local_cmt_build> _local_components;
     mat::Vector2f getMapTileSize(const toml::table *table);
     void createEntityComponents(const ECS::Entity& e, toml::table conf,
         const mat::Vector2f& pos);
