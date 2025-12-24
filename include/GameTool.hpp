@@ -86,10 +86,11 @@ class GameTool {
      * @param e ECS::Entity index to create the component at
      * @param c The rvalued object to register
      */
-    template <typename Component>
-    void createComponent(const ECS::Entity& e, Component&&c) {
-        _reg.addComponent(e, c);
-    }
+     template <typename Component, typename... Args>
+     void createComponent(const ECS::Entity& e, Args&&... args) {
+         _reg.createComponent<Component>(e, std::forward<Args>(args)...);
+     }
+
     /**
      * @brief Create a component object for the ECS::Entity wanted
      * through a plugin using the toml++ library for parameters
