@@ -8,9 +8,8 @@
 #pragma once
 
     #include <functional>
-#include <string>
-#include <toml++/impl/table.hpp>
-#include <unordered_map>
+    #include <string>
+    #include <unordered_map>
     #include <utility>
     #include <toml++/toml.hpp>
 
@@ -21,7 +20,6 @@
     #include "maths/Vector.hpp"
     #include "SignalManager.hpp"
     #include "ConfigReader.hpp"
-#include "plugin/APlugin.hpp"
     #include "plugin/PluginManager.hpp"
 
     #define DEFAULT_PLUGIN_RPATH "./plugins/"
