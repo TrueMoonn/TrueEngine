@@ -169,7 +169,7 @@ EntitySpec::EntitySpec(ECS::Registry& reg, te::SignalManager& sig)
                 }
             }
             for (auto& e : deads)
-                sig.emit("dead_entity", e);
+                sig.emit("no_health_entity", e);
         });
     };
     _systems["kill_timeout"] = [&sig](ECS::Registry& reg) {
@@ -177,7 +177,7 @@ EntitySpec::EntitySpec(ECS::Registry& reg, te::SignalManager& sig)
             auto& timeouts = reg.getComponents<Timeout>();
             for (auto &&[id, to] : ECS::IndexedDenseZipper(timeouts))
                 if (to.delta.checkDelay(false))
-                    sig.emit("dead_entity", id);
+                    sig.emit("timout_entity", id);
         });
     };
     _systems["apply_pattern"] = [](ECS::Registry& reg) {
@@ -213,7 +213,7 @@ EntitySpec::EntitySpec(ECS::Registry& reg, te::SignalManager& sig)
                 }
             }
             for (auto& e : deads)
-                sig.emit("dead_entity", e);
+                sig.emit("broken_entity", e);
         });
     };
 }
