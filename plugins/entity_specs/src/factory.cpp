@@ -172,9 +172,6 @@ EntitySpec::EntitySpec(ECS::Registry& reg, te::SignalManager& sig)
                 sig.emit("dead_entity", e);
         });
     };
-    sig.sub<ECS::Entity>("dead_entity", [&reg](ECS::Entity e){
-        reg.killEntity(e);
-    });
     _systems["kill_timeout"] = [&sig](ECS::Registry& reg) {
         reg.addSystem([&sig](ECS::Registry& reg) {
             auto& timeouts = reg.getComponents<Timeout>();
