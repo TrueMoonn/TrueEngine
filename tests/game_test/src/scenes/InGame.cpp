@@ -64,8 +64,14 @@ void InGame::setEntities(void) {
 
 void InGame::run(void) {
     sub("closed", [this](){this->state = GameState::CLOSED;});
-    sub<ECS::Entity>("dead_entity", [](ECS::Entity e){
-        std::cout << "CEST DEAD: " << e << std::endl;
+    sub<ECS::Entity>("no_health_entity", [this](ECS::Entity e){
+        removeEntity(e);
+    });
+    sub<ECS::Entity>("broken_entity", [this](ECS::Entity e){
+        removeEntity(e);
+    });
+    sub<ECS::Entity>("timout_entity", [this](ECS::Entity e){
+        removeEntity(e);
     });
     sub<te::Keys>("key_input", [this](te::Keys keys){
         auto& players = this->getComponent<addon::intact::Player>();

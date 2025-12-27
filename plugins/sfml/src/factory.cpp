@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include <string>
 #include <iostream>
+#include <vector>
 
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/Texture.hpp>
@@ -23,11 +24,34 @@
 #include "display/components/parallax.hpp"
 
 #include "Sfml.hpp"
+#include "sfml/components/sprite.hpp"
 #include "sfml/components/window.hpp"
 #include "sfml/factory.hpp"
 
 namespace addon {
 namespace sfml {
+
+static int partition(std::vector<Sprite>& arr, int low, int high) {
+    float pivot = arr[high].sp.getPosition().y;
+    int i = low - 1;
+    for (int j = low; j <= high - 1; j++) {
+        if (arr[j].sp.getPosition().y < pivot) {
+            i++;
+            std::swap(arr[i], arr[j]);
+        }
+    }
+    std::swap(arr[i + 1], arr[high]);
+    return i + 1;
+}
+
+
+static void quickSortDraw(std::vector<Sprite>& arr, int low, int high) {
+    if (low < high) {
+        int piv = partition(arr, low, high);
+        quickSortDraw(arr, low, piv - 1);
+        quickSortDraw(arr, piv + 1, high);
+    }
+}
 
 Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
     : te::plugin::APlugin(reg, sig) {
@@ -128,10 +152,12 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
         reg.addSystem([](ECS::Registry& reg) {
             auto& windows = reg.getComponents<Window>();
             for (auto &&[win] : ECS::DenseZipper(windows)) {
-                for (std::size_t i = 0; i < win.draws.size(); ++i) {
-                    for (auto& sprite : win.draws[i])
+                for (std::size_t lay = 0; lay < win.draws.size(); ++lay) {
+                    quickSortDraw(win.draws[lay],
+                        0, win.draws[lay].size() - 1);
+                    for (auto& sprite : win.draws[lay])
                         win.win->draw(sprite.sp);
-                    win.draws[i].clear();
+                    win.draws[lay].clear();
                 }
                 win.win->display();
                 win.win->clear();
