@@ -195,7 +195,7 @@ class GameTool {
 
     template<typename... Args>
     void emit(const std::string& name, Args&&... args) {
-        _signals.emit(name, std::forward(args)...);
+        _signals.emit(name, std::forward<Args>(args)...);
     }
 
  private:
