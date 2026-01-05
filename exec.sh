@@ -19,7 +19,7 @@ then
     rm -rf ./build/ ./*.a ./plugins/*.so
     rm -rf include/ECS include/Network
     mkdir ./build/ && cd ./build/
-    cmake ..
+    cmake .. -DDEBUG_ALL=ON
     cmake --build . -j
     cd ..
     echo "------------END------------"
