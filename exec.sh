@@ -19,7 +19,7 @@ then
     rm -rf ./build/ ./*.a ./plugins/*.so
     rm -rf include/ECS include/Network
     mkdir ./build/ && cd ./build/
-    cmake .. -DDEBUG_ALL=ON
+    cmake ..
     cmake --build . -j
     cd ..
     echo "------------END------------"
@@ -31,7 +31,7 @@ then
     rm -rf ./build/ ./*.a ./plugins/*.so
     rm -rf include/ECS include/Network
     mkdir ./build/ && cd ./build/
-    cmake .. -DENABLE_TE_TESTS=ON -DENABLE_TE_COVERAGE=ON
+    cmake .. -DENABLE_TE_TESTS=ON -DENABLE_TE_COVERAGE=ON -DDEBUG_ALL=ON
     cmake --build . -j
     ctest --output-on-failure
     gcovr --root .. \
