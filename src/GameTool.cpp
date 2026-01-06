@@ -62,8 +62,8 @@ void GameTool::addConfig(const std::string& path) {
 
 void GameTool::createEntity(ECS::Entity e, const std::string& name,
     const mat::Vector2f& pos) {
-    DEBUG_GT("GameTool: Creating Entity: creating entity ({})\n\
-\tCalled '{}' at position x={} and y ={}", e, name, pos.x, pos.y);
+    DEBUG_GT("GameTool: Creating Entity: creating entity({})\n\
+\tCalled '{}' at position x{} y{}", e, name, pos.x, pos.y);
     toml::table entityConfig = _configs.getEntityConfig(name);
     createEntityComponents(e, entityConfig, pos);
 }
@@ -77,8 +77,8 @@ ECS::Entity GameTool::createMap(ECS::Entity fentity, std::size_t mapIndex) {
     for (std::size_t y = 0; y < map.map.size(); ++y) {
         for (std::size_t x = 0; x < map.map[y].size(); ++x) {
             for (std::size_t e = 0; e < map.map[y][x].size(); ++e) {
-                DEBUG_GT("GameTool: Creating Map: creating entity ({})\n\
-\tCalled '{}' at position x={} and y={}",
+                DEBUG_GT("GameTool: Creating Map: creating entity({})\n\
+\tCalled '{}' at position x{} y{}",
                     fentity + ientity, map.map[y][x][e],
                     tileSize.x * x, tileSize.y * y);
                 createEntityComponents(fentity + ientity,
