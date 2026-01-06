@@ -24,10 +24,9 @@ message("Updating project header from ECS and Network... DONE\n")
 option(ENABLE_TE_TESTS "Build tests along with the library" OFF)
 option(ENABLE_TE_COVERAGE "Enable coverage reporting" OFF)
 
-option(DEBUG_ALL "" OFF)
-option(DEBUG_SIGNALS "" OFF)
-option(DEBUG_SIGNALS_SUB "" OFF)
-option(DEBUG_SIGNALS_EMIT "" OFF)
+option(DEBUG_ALL "Print every log of the engine" OFF)
+option(DEBUG_SIGNALS "Print log for the signals" OFF)
+option(DEBUG_CONFIGS "Print log for the config manager" OFF)
 
 ########## DEBUG ##########
 if (DEBUG_ALL)
@@ -35,6 +34,9 @@ if (DEBUG_ALL)
 endif()
 if (DEBUG_SIGNALS)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDEBUG_SIGNALS")
+endif()
+if (DEBUG_CONFIGS)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDEBUG_CONFIGS")
 endif()
 
 ########## COVERAGE ##########

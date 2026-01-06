@@ -15,19 +15,25 @@
 namespace te {
 
 void ConfigParser::addConfig(const std::string& path) {
+    DEBUG_CONF("ConfigParser: Adding Config: from '{}'", path);
     toml::table file;
     try {
         file = toml::parse_file(path);
     } catch (const toml::parse_error& err) {
         return;
     }
+    DEBUG_CONF("ConfigParser: Adding Config: config parsed OK");
     readEntities(file);
 }
 
 std::size_t ConfigParser::addMap(const std::string& path) {
+    DEBUG_CONF("ConfigParser: Adding Map: from '{}'", path);
     std::ifstream file(path);
-    if (!file.is_open())
+    if (!file.is_open()) {
+        DEBUG_CONF("ConfigParser: Adding Map: file could not be openned");
         return 0;
+    }
+    DEBUG_CONF("ConfigParser: Adding Map: map openned");
     std::stringstream buffer;
     buffer << file.rdbuf();
     return readMap(buffer.str());
@@ -51,23 +57,29 @@ toml::table ConfigParser::getEntityConfig(const std::string& name) const {
 }
 
 void ConfigParser::readEntities(toml::table& table) {
+    DEBUG_CONF("ConfigParser: Reading Entities: reading entity config...");
     toml::table *entities = table[CONFIG_ENTITIES_TABLE_NAME].as_table();
     if (entities == nullptr)
         return;
     for (auto &&[name, entity] : *entities) {
         if (entity.is_table()) {
             if (_eConfig.find(name.data()) != _eConfig.end()) {
+                DEBUG_CONF("\tEntity Name (allready exist): '{}'", name.data());
                 for (auto &&[cname, content] : *entity.as_table()) {
+                    DEBUG_CONF("\t\tInsert or Overwrite '{}'", cname.data());
                     _eConfig[name.data()].insert_or_assign(cname, content);
                 }
             } else {
+                DEBUG_CONF("\tEntity Name (new): '{}'", name.data());
                 _eConfig.insert_or_assign(name.data(), *entity.as_table());
             }
         }
     }
+    DEBUG_CONF("ConfigParser: Reading Entities: DONE");
 }
 
 std::size_t ConfigParser::readMap(const std::string& raw) {
+    DEBUG_CONF("ConfigParser: Reading Map: reading map from raw...");
     MapContent map;
     for (auto& rawLine : optiSplit(raw, MAP_LINE_DELIMITER_KEY)) {
         std::vector<mtile_t> tiles;
@@ -86,6 +98,8 @@ std::size_t ConfigParser::readMap(const std::string& raw) {
         map.map.push_back(tiles);
     }
     _maps.push_back(map);
+    DEBUG_CONF("ConfigParser: Reading Map: readed and stored at index {}",
+        _maps.size() - 1);
     return _maps.size() - 1;
 }
 

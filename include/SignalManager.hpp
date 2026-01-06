@@ -9,9 +9,9 @@
 
 #if defined(DEBUG_ALL) || defined(DEBUG_SIGNALS)
     #include <print>
-    #define DEBUG std::println
+    #define DEBUG_SIG std::println
 #else
-    #define DEBUG(...) (void(0))
+    #define DEBUG_SIG(...) (void(0))
 #endif
 
     #include <utility>
@@ -40,37 +40,43 @@ namespace te {
      public:
         template<typename... Args, typename Func>
         void sub(const std::string& name, Func&& func) {
-            DEBUG("Signal: Subscription: to '{}'", name);
+            DEBUG_SIG("Signal: Subscription: to '{}'", name);
             if (_subs.find(name) == _subs.end()) {
-                DEBUG("Signal: Subscription: name not found");
+                DEBUG_SIG("Signal: Subscription: name not found");
                 _subs.emplace(name, std::make_unique<SignalList<Args...>>());
-                DEBUG("Signal: Subscription: new name emplaced OK");
+                DEBUG_SIG("Signal: Subscription: new name emplaced OK");
             }
             auto* list = static_cast<SignalList<Args...>*>(
                 _subs.at(name).get());
             list->callbacks.push_back(std::function<void(Args...)>(
                 std::forward<Func>(func)));
-            DEBUG("Signal: Subscription: subscription pushed back");
+            DEBUG_SIG("Signal: Subscription: subscription pushed back");
         }
 
         template<typename... Args>
         void emit(const std::string& name, Args&&... args) {
-            DEBUG("Signal: Emition: emit signal '{}'", name);
+            DEBUG_SIG("Signal: Emition: emit signal '{}'", name);
             if (_subs.find(name) == _subs.end()) {
-                DEBUG("Signal: Emition: name not found");
+                DEBUG_SIG("Signal: Emition: name not found");
                 return;
             }
 
             using DecayedArgs = std::tuple<std::decay_t<Args>...>;
             auto* list = static_cast<SignalList<std::decay_t<Args>...>*>(
                 _subs.at(name).get());
+#if defined(DEBUG_ALL) || defined(DEBUG_SIGNALS)
             std::size_t nb_emitions = 0;
-            DEBUG("Signal: Emition: sending emition...");
+#endif
+            DEBUG_SIG("Signal: Emition: sending emition...");
             for (auto& callback : list->callbacks) {
+#if defined(DEBUG_ALL) || defined(DEBUG_SIGNALS)
                 nb_emitions += 1;
+#endif
                 callback(std::forward<Args>(args)...);
             }
-            DEBUG("Signal: Emition: {} emitions sent", nb_emitions);
+#if defined(DEBUG_ALL) || defined(DEBUG_SIGNALS)
+            DEBUG_SIG("Signal: Emition: {} emitions sent", nb_emitions);
+#endif
         }
     };
 
