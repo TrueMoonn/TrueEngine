@@ -27,6 +27,7 @@ option(ENABLE_TE_COVERAGE "Enable coverage reporting" OFF)
 option(DEBUG_ALL "Print every log of the engine" OFF)
 option(DEBUG_SIGNALS "Print log for the signals" OFF)
 option(DEBUG_CONFIGS "Print log for the config manager" OFF)
+option(DEBUG_GAME_TOOL "Print log for the config manager" OFF)
 
 ########## DEBUG ##########
 if (DEBUG_ALL)
@@ -37,6 +38,9 @@ if (DEBUG_SIGNALS)
 endif()
 if (DEBUG_CONFIGS)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDEBUG_CONFIGS")
+endif()
+if (DEBUG_GAME_TOOL)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDEBUG_GAME_TOOL")
 endif()
 
 ########## COVERAGE ##########
