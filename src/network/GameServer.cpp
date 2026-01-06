@@ -2,7 +2,6 @@
 #include <chrono>
 #include <vector>
 #include <string>
-#include <memory>
 #include <queue>
 #include <thread>
 #include <mutex>
@@ -14,28 +13,27 @@ namespace network {
 
 GameServer::GameServer(uint16_t port,
     const std::string& protocol)
-    : _protocol_type(protocol == "TCP" ?
-        net::SocketType::TCP : net::SocketType::UDP)
+    : Server(protocol, port, net::ProtocolManager()),
+    _protocol_type(protocol == "TCP" ?
+    net::SocketType::TCP : net::SocketType::UDP)
     , _port(port)
     , _running(false) {
-    net::ProtocolManager proto;  // config/protocol.json
-    _server = std::make_unique<net::Server>(protocol, port, proto);
 }
 
 GameServer::~GameServer() {
     if (_running) {
-        stop();
+        stopGameServer();
     }
 }
 
-bool GameServer::start() {
-    if (!_server->start()) {
+bool GameServer::startGameServer() {
+    if (!start()) {
         std::cerr << "[GameServer] Failed to start server" << std::endl;
         return false;
     }
 
     // Set non-blocking mode for UDP/TCP
-    _server->setNonBlocking(true);
+    setNonBlocking(true);
 
     _running = true;
     std::cout << "[GameServer] Server started on port " << _port << std::endl;
@@ -44,10 +42,10 @@ bool GameServer::start() {
     return true;
 }
 
-void GameServer::stop() {
+void GameServer::stopGameServer() {
     stopNetworkThread();
 
-    _server->stop();
+    stop();
     _running = false;
     _clients.clear();
     std::cout << "[GameServer] Server stopped" << std::endl;
@@ -93,11 +91,11 @@ bool GameServer::sendTo(const net::Address& client,
 
     try {
         if (_protocol_type == net::SocketType::UDP) {
-            _server->udpSend(client, data);
+            udpSend(client, data);
         } else {
             auto it = _address_to_fd.find(client);
             if (it != _address_to_fd.end()) {
-                _server->tcpSend(it->second, data);
+                tcpSend(it->second, data);
             } else {
                 return false;
             }
@@ -127,9 +125,9 @@ void GameServer::receive(int timeout, int maxInputs) {
 
     try {
         if (_protocol_type == net::SocketType::UDP) {
-            _server->udpReceive(timeout, maxInputs);
+            udpReceive(timeout, maxInputs);
         } else {
-            _server->tcpReceive(timeout);
+            tcpReceive(timeout);
         }
     } catch (const std::exception& e) {
         std::cerr << "[GameServer] Receive failed: " << e.what() << std::endl;
@@ -200,11 +198,15 @@ void GameServer::queueIncomingPackets(
 }
 
 void GameServer::receiveUDP() {
-    std::vector<net::Address> senders = _server->udpReceive(0, 100);
+    std::vector<net::Address> senders = udpReceive(0, 100);
     uint32_t current_time = getCurrentTimeMs();
 
     for (const net::Address& sender : senders) {
-        auto packets = _server->unpack(sender, -1);
+        auto packets = unpack(sender, -1);
+
+        std::cout << "[GameServer] Received " << packets.size()
+                  << " packet(s) from " << sender.getIP() << ":"
+                  << sender.getPort() << std::endl;
 
         auto it = _clients.find(sender);
         if (it == _clients.end()) {
@@ -221,15 +223,15 @@ void GameServer::receiveTCP() {
     uint32_t current_time = getCurrentTimeMs();
 
     net::Address client_addr;
-    int new_fd = _server->acceptClient(client_addr, current_time);
+    int new_fd = acceptClient(client_addr, current_time);
     while (new_fd > 0) {
         handleNewClient(client_addr, current_time);
         _address_to_fd[client_addr] = new_fd;
         std::cout << "  (fd: " << new_fd << ")" << std::endl;
-        new_fd = _server->acceptClient(client_addr, current_time);
+        new_fd = acceptClient(client_addr, current_time);
     }
 
-    std::vector<int> ready_fds = _server->tcpReceive(0);
+    std::vector<int> ready_fds = tcpReceive(0);
     for (int fd : ready_fds) {
         std::optional<net::Address> client_addr_opt;
         for (const auto& [addr, client_fd] : _address_to_fd) {
@@ -242,8 +244,11 @@ void GameServer::receiveTCP() {
             continue;
 
         const net::Address& client_address = client_addr_opt.value();
-        auto packets = _server->unpack(client_address, -1);
+        auto packets = unpack(client_address, -1);
         if (!packets.empty()) {
+            std::cout << "[GameServer] Received " << packets.size()
+                      << " packet(s) from " << client_address.getIP() << ":"
+                      << client_address.getPort() << std::endl;
             auto it = _clients.find(client_address);
             if (it != _clients.end()) {
                 it->second.last_packet_time = current_time;
