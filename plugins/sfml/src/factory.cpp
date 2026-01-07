@@ -5,12 +5,14 @@
 ** factory.cpp
 */
 
+#include <utility>
 #include <unordered_map>
 #include <string>
 #include <iostream>
 #include <vector>
 
 #include <SFML/Window/Event.hpp>
+#include <SFML/Window/Mouse.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/System/Exception.hpp>
@@ -168,6 +170,7 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
         reg.addSystem([&sig](ECS::Registry& reg) {
             auto& windows = reg.getComponents<Window>();
             static te::Keys keys = {false};
+            static te::Mouse mouse;
 
             for (auto&& [win] : ECS::DenseZipper(windows)) {
                 while (std::optional<sf::Event> ev = win.win->pollEvent()) {
@@ -181,12 +184,27 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
                             ev->getIf<sf::Event::KeyReleased>()->
                             code)] = false;
                     }
+                    if (ev->is<sf::Event::MouseButtonPressed>()) {
+                        const auto& temp = ev->getIf<
+                            sf::Event::MouseButtonPressed>();
+                        mouse.type[static_cast<
+                            te::MouseEvent>(temp->button)] = true;
+                    }
+                    if (ev->is<sf::Event::MouseButtonReleased>()) {
+                        const auto& temp = ev->getIf<
+                            sf::Event::MouseButtonReleased>();
+                        mouse.type[static_cast<
+                            te::MouseEvent>(temp->button)] = false;
+                    }
+                    mouse.position.x = sf::Mouse::getPosition(*win.win).x;
+                    mouse.position.y = sf::Mouse::getPosition(*win.win).y;
                     if (ev->is<sf::Event::Closed>()) {
                         win.win->close();
                         sig.emit("closed");
                     }
                 }
                 sig.emit("key_input", keys);
+                sig.emit("mouse_input", mouse);
             }
         });
     };
