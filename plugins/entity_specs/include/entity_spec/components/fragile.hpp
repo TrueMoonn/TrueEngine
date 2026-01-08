@@ -7,7 +7,8 @@
 
 #pragma once
 
-#include <cstdint>
+    #include <cstdint>
+    #include <cstddef>
 
 namespace addon {
 namespace eSpec {

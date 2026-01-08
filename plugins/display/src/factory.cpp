@@ -56,7 +56,7 @@ Display::Display(ECS::Registry& reg, te::SignalManager& sig)
                     cur->at(0).as_array()->at(0).value_or<size_t>(0),
                     cur->at(0).as_array()->at(1).value_or<size_t>(0)
                 };
-                size_t max = cur->at(1).value_or(0);
+               std::size_t max = cur->at(1).value_or(0);
                 float delta = cur->at(2).value_or(0.1f);
                 bool loop = cur->at(3).value_or(true);
                 frames.push_back(FrameData{pos, max, delta, loop});

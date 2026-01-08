@@ -4,20 +4,24 @@ project(TrueEngine)
 ########## SETUP ##########
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR})
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -O3")
 set(TE_SRC_DIR "${PROJECT_SOURCE_DIR}/src")
 set(TE_HDR_DIR "${PROJECT_SOURCE_DIR}/include")
 include(FetchContent)
 
+if (UNIX)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -O3")
+endif()
+
 ########## HEADER UPDATE ##########
 message("\nUpdating project header from ECS and Network...")
-execute_process (
-    COMMAND bash -c "
-        rm -rf ${PROJECT_SOURCE_DIR}/include/ECS && rm -rf ${PROJECT_SOURCE_DIR}/include/Network
-        cp -R ${PROJECT_SOURCE_DIR}/ECS/include/. ${PROJECT_SOURCE_DIR}/include/
-        cp -R ${PROJECT_SOURCE_DIR}/Network/include/. ${PROJECT_SOURCE_DIR}/include/
-    "
+file(REMOVE_RECURSE 
+    ${PROJECT_SOURCE_DIR}/include/ECS
+    ${PROJECT_SOURCE_DIR}/include/Network
 )
+file(COPY ${PROJECT_SOURCE_DIR}/ECS/include/
+    DESTINATION ${PROJECT_SOURCE_DIR}/include/)
+file(COPY ${PROJECT_SOURCE_DIR}/Network/include/
+    DESTINATION ${PROJECT_SOURCE_DIR}/include/)
 message("Updating project header from ECS and Network... DONE\n")
 
 ########## OPTIONS ##########
@@ -57,10 +61,6 @@ add_library( ${PROJECT_NAME} STATIC
 
     # GAME TOOL
     ${TE_SRC_DIR}/GameTool.cpp
-
-    # NETWORK INTEGRATION
-    ${TE_SRC_DIR}/network/GameClient.cpp
-    ${TE_SRC_DIR}/network/GameServer.cpp
 )
 
 target_include_directories(${PROJECT_NAME}

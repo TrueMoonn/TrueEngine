@@ -20,10 +20,10 @@ void PluginManager::loadPlugins(ECS::Registry& reg,
     for (const auto &file : std::filesystem::directory_iterator(dir)) {
         if (file.path().extension() == ".so") {
             std::string pname = file.path().stem().string();
-            _manager.load(file.path());
+            _manager.load(file.path().string());
             try {
                 maker plugin = _manager.access<maker>(pname, ENDPOINT_NAME);
-                _plugins[pname] = plugin(reg, sig);
+                _plugins[pname] = std::unique_ptr<APlugin>(plugin(reg, sig));
                 setAccesser(pname);
             } catch (const std::runtime_error& e) {
                 std::cerr << e.what() << std::endl;
@@ -41,11 +41,12 @@ void PluginManager::loadPlugins(ECS::Registry& reg,
             for (auto &plugin : pluginToLoad) {
                 if (plugin.compare(pname) == 0) {
                     std::cout << plugin << std::endl;
-                    _manager.load(file.path());
+                    _manager.load(file.path().string());
                     try {
                         maker plugin = _manager.access<maker>(pname,
                             ENDPOINT_NAME);
-                        _plugins[pname] = plugin(reg, sig);
+                        _plugins[pname] = std::unique_ptr<APlugin>(
+                            plugin(reg, sig));
                         setAccesser(pname);
                     } catch (const std::runtime_error& e) {
                         std::cerr << e.what() << std::endl;
