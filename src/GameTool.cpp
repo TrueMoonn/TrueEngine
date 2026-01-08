@@ -38,6 +38,7 @@ void GameTool::createSystem(const std::string& name,
 }
 
 void GameTool::createSystem(const std::string& name) {
+    for (auto& [name, f] : )
     try {
         _pmanager.loadSystem(name);
     } catch (const plugin::PluginManager::NoPluginFound& e) {

@@ -51,6 +51,6 @@ class AScene {
         std::vector<std::string> _signals;
         std::vector<std::string> _systems;
         std::vector<SceneEntity> _entities;
-        std::unordered_map<std::string, std::vector<std::size_t>> mapimapoSystems;
-        std::unordered_map<std::string, std::vector<std::size_t>> mapimapoSignals;
+        // std::unordered_map<std::string, std::vector<std::size_t>> mapimapoSystems;
+        // std::unordered_map<std::string, std::vector<std::size_t>> mapimapoSignals;
 };

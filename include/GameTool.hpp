@@ -17,6 +17,7 @@
     #include <ECS/Registry.hpp>
     #include <ECS/DenseSA.hpp>
 
+    #include "AScene.hpp"
     #include "maths/Vector.hpp"
     #include "SignalManager.hpp"
     #include "ConfigReader.hpp"
@@ -200,6 +201,30 @@ class GameTool {
         _signals.emit(name, std::forward<Args>(args)...);
     }
 
+    std::size_t addScene(const AScene& scene) {
+        _scenes.emplace_back(scene);
+        return _scenes.size() - 1;
+    }
+
+    void switchScene(std::size_t idx, bool clear = true) {
+        if (idx >= _scenes.size())
+            return;
+        if (clear && _actual_scene < _scenes.size())
+            _scenes[_actual_scene].clear();
+        _actual_scene = idx;
+        _scenes[_actual_scene].setupe();
+    }
+
+    void clearScene(std::size_t idx) {
+        if (idx < _scenes.size())
+            _scenes[idx].clear();
+    }
+
+    void deleteScene(std::size_t idx) {
+        if (idx < _scenes.size())
+            std::erease(_scenes, _scenes[idx]);
+    }
+
  private:
     plugin::PluginManager _pmanager;
     ECS::Registry _reg;
@@ -211,6 +236,9 @@ class GameTool {
         const mat::Vector2f& pos);
 
     SignalManager _signals;
+
+    std::size_t _actual_scene = 0;
+    std::vector<AScene> _scenes;
 };
 
 }  // namespace te
