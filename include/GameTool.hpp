@@ -48,7 +48,7 @@ class GameTool {
         local_cmt_build;
 
  public:
-    GameTool() = default;
+    GameTool() : _scenes(this) {};
 
     /**
      * @brief Load the plugins from the folder given
@@ -210,19 +210,41 @@ class GameTool {
         if (idx >= _scenes.size())
             return;
         if (clear && _actual_scene < _scenes.size())
-            _scenes[_actual_scene].clear();
+            clearScene(_actual_scene);
+
+        for (auto& sys : _scenes[_actual_scene].systems) {
+            if (_sysMap.find(sys) == _sysMap.end()) {
+                _sysMap[sys] = {};
+            }
+            _sysMap[sys].push_back(sys);
+            createSystem(sys);
+        }
+
+        for (auto& e : _scenes[_actual_scene].entities) {
+            createEntity(e.idx, e.name, e.pos);
+        }
+
         _actual_scene = idx;
-        _scenes[_actual_scene].setupe();
     }
 
     void clearScene(std::size_t idx) {
-        if (idx < _scenes.size())
-            _scenes[idx].clear();
+        if (idx < _scenes.size()) {
+            for (auto& e : _scenes[idx].entities)
+                removeEntity(e.idx);
+            for (auto& sys : _scenes[idx].systems) {
+                std::erase(_sysMap.at(sys), _sysMap.at(sys).find(idx));
+                if (_sysMap.size() <= 0) {
+                    _reg.removeSystem(sys);
+                }
+            }
+        }
     }
 
     void deleteScene(std::size_t idx) {
-        if (idx < _scenes.size())
-            std::erease(_scenes, _scenes[idx]);
+        if (idx < _scenes.size()) {
+            clearScene(idx);
+            std::erase(_scenes, _scenes[idx]);
+        }
     }
 
  private:
@@ -239,6 +261,8 @@ class GameTool {
 
     std::size_t _actual_scene = 0;
     std::vector<AScene> _scenes;
+    std::unordered_map<std::string, std::vector<std::size_t>> _sysMap;
+    std::unordered_map<std::string, std::vector<std::size_t>> _sigMapoy;
 };
 
 }  // namespace te
