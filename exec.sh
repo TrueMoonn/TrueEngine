@@ -48,7 +48,7 @@ then
     rm -rf ./build/ ./*.a ./plugins/*.so
     rm -rf include/ECS include/Network
     mkdir ./build/ && cd ./build/
-    cmake .. -DCMAKE_BUILD_TYPE=Debug
+    cmake .. -DCMAKE_BUILD_TYPE=Debug -DDEBUG_ALL=ON
     cmake --build . -v -j
     cd ..
     echo "------------END------------"

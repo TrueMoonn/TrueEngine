@@ -62,11 +62,14 @@ void GameTool::addConfig(const std::string& path) {
 
 void GameTool::createEntity(ECS::Entity e, const std::string& name,
     const mat::Vector2f& pos) {
+    DEBUG_GT("GameTool: Creating Entity: creating entity({})\n\
+\tCalled '{}' at position x{} y{}", e, name, pos.x, pos.y);
     toml::table entityConfig = _configs.getEntityConfig(name);
     createEntityComponents(e, entityConfig, pos);
 }
 
 ECS::Entity GameTool::createMap(ECS::Entity fentity, std::size_t mapIndex) {
+    DEBUG_GT("GameTool: Creating Map: creating a map {}...", mapIndex);
     ECS::Entity ientity = 0;
     const ConfigParser::MapContent map = _configs.getMap(mapIndex);
     mat::Vector2f tileSize = getMapTileSize(
@@ -74,6 +77,10 @@ ECS::Entity GameTool::createMap(ECS::Entity fentity, std::size_t mapIndex) {
     for (std::size_t y = 0; y < map.map.size(); ++y) {
         for (std::size_t x = 0; x < map.map[y].size(); ++x) {
             for (std::size_t e = 0; e < map.map[y][x].size(); ++e) {
+                DEBUG_GT("GameTool: Creating Map: creating entity({})\n\
+\tCalled '{}' at position x{} y{}",
+                    fentity + ientity, map.map[y][x][e],
+                    tileSize.x * x, tileSize.y * y);
                 createEntityComponents(fentity + ientity,
                     _configs.getEntityConfig(map.map[y][x][e]),
                     mat::Vector2f{tileSize.x * x, tileSize.y * y});
@@ -113,6 +120,7 @@ void GameTool::createEntityComponents(const ECS::Entity& e,
         conf.insert_or_assign("position2", nPos);
     }
     for (auto &&[cname, component] : conf) {
+        DEBUG_GT("\t\tAdding component {}", cname.data());
         if (component.is_table()) {
             const toml::table& compTable = *component.as_table();
             if (_local_components.find(cname.data())
@@ -130,6 +138,7 @@ void GameTool::createEntityComponents(const ECS::Entity& e,
             }
         }
     }
+    DEBUG_GT("\tCreation DONE");
 }
 
 }  // namespace te
