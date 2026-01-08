@@ -48,7 +48,7 @@ void InGame::setEntities(void) {
     addConfig("assets/configs/enemy_2.toml");
     addConfig("assets/configs/player.toml");
 
-   std::size_t map1 = addMap("assets/maps/test1.ddmap");
+    std::size_t map1 = addMap("assets/maps/test1.ddmap");
     ECS::Entity endMap = createMap(MAP_ENTITY_BACKGROUND, map1);
 
     createEntity(++endMap, "player", {1920.f / 2, 1080.f / 2});

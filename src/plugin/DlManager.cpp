@@ -45,7 +45,7 @@ void DlManager::setHandler(const std::filesystem::path& path) {
     HMODULE handle = LoadLibraryA(path.string().c_str());
     if (handle == NULL) {
         DWORD error = GetLastError();
-        std::cerr << "Failed to load library: " << path.string() 
+        std::cerr << "Failed to load library: " << path.string()
                   << ". Error code: " << error << std::endl;
         return;
     }

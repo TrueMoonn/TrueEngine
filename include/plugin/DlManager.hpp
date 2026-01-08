@@ -43,7 +43,8 @@ class DlManager {
             static_cast<HMODULE>(it->second), syName.c_str()));
         if (sym == nullptr) {
             DWORD error = GetLastError();
-            throw std::runtime_error("Symbol not found. Error code: " + std::to_string(error));
+            throw std::runtime_error("Symbol not found. Error code: "
+                + std::to_string(error));
         }
 #else
         dlerror();
