@@ -6,7 +6,7 @@ then
     if [ ! -d "./build/" ]
     then
         mkdir ./build/ && cd ./build/
-        cmake ..
+        cmake -G "Unix Makefiles" ..
         cd ..
     fi
     cmake --build ./build/ -j
@@ -19,7 +19,7 @@ then
     rm -rf ./build/ ./*.a ./plugins/*.so
     rm -rf include/ECS include/Network
     mkdir ./build/ && cd ./build/
-    cmake ..
+    cmake -G "Unix Makefiles" ..
     cmake --build . -j
     cd ..
     echo "------------END------------"
@@ -31,7 +31,7 @@ then
     rm -rf ./build/ ./*.a ./plugins/*.so
     rm -rf include/ECS include/Network
     mkdir ./build/ && cd ./build/
-    cmake .. -DENABLE_TE_TESTS=ON -DENABLE_TE_COVERAGE=ON
+    cmake -G "Unix Makefiles" .. -DENABLE_TE_TESTS=ON -DENABLE_TE_COVERAGE=ON
     cmake --build . -j
     ctest --output-on-failure
     gcovr --root .. \
@@ -48,7 +48,7 @@ then
     rm -rf ./build/ ./*.a ./plugins/*.so
     rm -rf include/ECS include/Network
     mkdir ./build/ && cd ./build/
-    cmake .. -DCMAKE_BUILD_TYPE=Debug
+    cmake -G "Unix Makefiles" .. -DCMAKE_BUILD_TYPE=Debug
     cmake --build . -v -j
     cd ..
     echo "------------END------------"
@@ -73,7 +73,7 @@ then
     rm -rf ./build/ GameTest ./plugins/
     mkdir ./plugins/ && cp ../../plugins/*.so ./plugins/
     mkdir ./build/ && cd ./build/
-    cmake ..
+    cmake -G "Unix Makefiles" ..
     cmake --build . -j
     cd ..
     ./GameTest
