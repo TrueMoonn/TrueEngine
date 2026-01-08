@@ -20,8 +20,9 @@ struct SceneEntity {
     mat::Vector2f pos;
 };
 
-struct AScene {
+struct Scene {
     std::vector<std::string> signals;
     std::vector<std::string> systems;
     std::vector<SceneEntity> entities;
+    bool active = false;
 };

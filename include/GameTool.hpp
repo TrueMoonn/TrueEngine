@@ -17,7 +17,7 @@
     #include <ECS/Registry.hpp>
     #include <ECS/DenseSA.hpp>
 
-    #include "AScene.hpp"
+    #include "Scene.hpp"
     #include "maths/Vector.hpp"
     #include "SignalManager.hpp"
     #include "ConfigReader.hpp"
@@ -48,7 +48,7 @@ class GameTool {
         local_cmt_build;
 
  public:
-    GameTool() : _scenes(this) {};
+    GameTool() = default;
 
     /**
      * @brief Load the plugins from the folder given
@@ -201,38 +201,40 @@ class GameTool {
         _signals.emit(name, std::forward<Args>(args)...);
     }
 
-    std::size_t addScene(const AScene& scene) {
-        _scenes.emplace_back(scene);
+    std::size_t addScene(const Scene& scene) {
+        _scenes.push_back(scene);
         return _scenes.size() - 1;
     }
 
-    void switchScene(std::size_t idx, bool clear = true) {
+    void switchScene(std::size_t idx, bool clear = false) {
         if (idx >= _scenes.size())
             return;
-        if (clear && _actual_scene < _scenes.size())
-            clearScene(_actual_scene);
-
-        for (auto& sys : _scenes[_actual_scene].systems) {
-            if (_sysMap.find(sys) == _sysMap.end()) {
-                _sysMap[sys] = {};
+        for (std::size_t i = 0; clear && i < _scenes.size(); ++i) {
+            if (_scenes[i].active && i != idx)
+                clearScene(i);
+        }
+        if (!isSceneActive(idx)) {
+            for (auto& sys : _scenes[idx].systems) {
+                if (_sysMap.find(sys) == _sysMap.end()) {
+                    _sysMap[sys] = {};
+                }
+                _sysMap.at(sys).push_back(idx);
+                createSystem(sys);
             }
-            _sysMap[sys].push_back(sys);
-            createSystem(sys);
-        }
 
-        for (auto& e : _scenes[_actual_scene].entities) {
-            createEntity(e.idx, e.name, e.pos);
+            for (auto& e : _scenes[idx].entities) {
+                createEntity(e.idx, e.name, e.pos);
+            }
+            _scenes[idx].active = true;
         }
-
-        _actual_scene = idx;
     }
 
     void clearScene(std::size_t idx) {
-        if (idx < _scenes.size()) {
+        if (idx < _scenes.size() && isSceneActive(idx)) {
+            _scenes[idx].active = false;
             for (auto& e : _scenes[idx].entities)
-                removeEntity(e.idx);
+                _reg.killEntity(e.idx);
             for (auto& sys : _scenes[idx].systems) {
-                std::erase(_sysMap.at(sys), _sysMap.at(sys).find(idx));
                 if (_sysMap.size() <= 0) {
                     _reg.removeSystem(sys);
                 }
@@ -243,8 +245,15 @@ class GameTool {
     void deleteScene(std::size_t idx) {
         if (idx < _scenes.size()) {
             clearScene(idx);
-            std::erase(_scenes, _scenes[idx]);
+            _scenes.erase(_scenes.begin() + idx);
         }
+    }
+
+    bool isSceneActive(std::size_t idx) const {
+        if (idx < _scenes.size()) {
+            return _scenes[idx].active;
+        }
+        return false;
     }
 
  private:
@@ -259,8 +268,7 @@ class GameTool {
 
     SignalManager _signals;
 
-    std::size_t _actual_scene = 0;
-    std::vector<AScene> _scenes;
+    std::vector<Scene> _scenes;
     std::unordered_map<std::string, std::vector<std::size_t>> _sysMap;
     std::unordered_map<std::string, std::vector<std::size_t>> _sigMapoy;
 };

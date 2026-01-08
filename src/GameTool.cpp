@@ -38,7 +38,7 @@ void GameTool::createSystem(const std::string& name,
 }
 
 void GameTool::createSystem(const std::string& name) {
-    if (_reg.getSystem() != -1)
+    if (_reg.getSystem(name) != -1)
         return;
     try {
         _pmanager.loadSystem(name);
