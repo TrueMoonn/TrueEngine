@@ -115,9 +115,11 @@ class GameTool {
     /**
      * @brief Create a System directly to the ECS::Regitstry
      *
+     * @param name The name of the system
      * @param f The function to add as system
      */
-    void createSystem(const te::plugin::sys_builder &f);
+    void createSystem(const std::string& name,
+        const te::plugin::sys_builder &f);
     /**
      * @brief Create a System through a plugin
      *

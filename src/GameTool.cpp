@@ -32,16 +32,17 @@ void GameTool::createComponent(const std::string& name, const ECS::Entity& e,
     }
 }
 
+void GameTool::createSystem(const std::string& name,
+    const te::plugin::sys_builder &f) {
+    _reg.addSystem(name, f);
+}
+
 void GameTool::createSystem(const std::string& name) {
     try {
         _pmanager.loadSystem(name);
     } catch (const plugin::PluginManager::NoPluginFound& e) {
         std::cerr << e.what() << std::endl;
     }
-}
-
-void GameTool::createSystem(const te::plugin::sys_builder &f) {
-    _reg.addSystem(f);
 }
 
 void GameTool::removeEntity(const ECS::Entity& e) {

@@ -145,7 +145,7 @@ EntitySpec::EntitySpec(ECS::Registry& reg, te::SignalManager& sig)
         }
     };
     _systems["deal_damage"] = [&sig](ECS::Registry& reg) {
-        reg.addSystem([&sig](ECS::Registry& reg) {
+        reg.addSystem("deal_damage", [&sig](ECS::Registry& reg) {
             auto &hit = reg.getComponents<physic::Hitbox>();
             auto &pos = reg.getComponents<physic::Position2>();
             auto &health = reg.getComponents<Health>();
@@ -173,7 +173,7 @@ EntitySpec::EntitySpec(ECS::Registry& reg, te::SignalManager& sig)
         });
     };
     _systems["kill_timeout"] = [&sig](ECS::Registry& reg) {
-        reg.addSystem([&sig](ECS::Registry& reg) {
+        reg.addSystem("kill_timeout", [&sig](ECS::Registry& reg) {
             auto& timeouts = reg.getComponents<Timeout>();
             for (auto &&[id, to] : ECS::IndexedDenseZipper(timeouts))
                 if (to.delta.checkDelay(false))
@@ -181,7 +181,7 @@ EntitySpec::EntitySpec(ECS::Registry& reg, te::SignalManager& sig)
         });
     };
     _systems["apply_pattern"] = [](ECS::Registry& reg) {
-        reg.addSystem([](ECS::Registry &reg) {
+        reg.addSystem("apply_pattern", [](ECS::Registry &reg) {
             auto &velocity = reg.getComponents<physic::Velocity2>();
             auto &position = reg.getComponents<physic::Position2>();
             auto &pattern = reg.getComponents<Pattern>();
@@ -192,7 +192,7 @@ EntitySpec::EntitySpec(ECS::Registry& reg, te::SignalManager& sig)
         });
     };
     _systems["apply_fragile"] = [&sig](ECS::Registry& reg) {
-        reg.addSystem([&sig](ECS::Registry& reg){
+        reg.addSystem("apply_fragile", [&sig](ECS::Registry& reg){
             auto &hitbox = reg.getComponents<physic::Hitbox>();
             auto &position = reg.getComponents<physic::Position2>();
             auto &fragile = reg.getComponents<Fragile>();

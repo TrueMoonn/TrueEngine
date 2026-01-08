@@ -71,7 +71,7 @@ Display::Display(ECS::Registry& reg, te::SignalManager& sig)
         }
     };
     _systems["animate"] = [](ECS::Registry& reg) {
-        reg.addSystem([](ECS::Registry& reg){
+        reg.addSystem("animate", [](ECS::Registry& reg){
             auto& animations = reg.getComponents<Animation>();
             auto& sprites = reg.getComponents<sfml::Sprite>();
             auto cur = NOW;
