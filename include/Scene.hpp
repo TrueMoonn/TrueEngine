@@ -9,12 +9,13 @@
 
     #include <vector>
     #include <string>
-    #include <functional>
-    #include <set>
 
     #include <ECS/Entity.hpp>
 
+    #include "SignalManager.hpp"
     #include "maths/Vector.hpp"
+
+namespace te {
 
 struct Scene {
     enum class SceneState {
@@ -40,4 +41,8 @@ struct Scene {
         mat::Vector2f pos;
     };
     std::vector<SceneEntity> entities;
+
+    std::vector<SignalManager::CallbackId> signal_callbacks;
 };
+
+}  // namespace te

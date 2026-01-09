@@ -197,6 +197,21 @@ class GameTool {
         _signals.sub<Args...>(name, func);
     }
 
+    template<typename... Args, typename Func>
+    void subForScene(std::size_t scene_idx,
+        const std::string& name, Func&& func) {
+        if (scene_idx >= _scenes.size())
+            return;
+
+        SignalManager::CallbackId id =
+            _signals.sub<Args...>(name, std::forward<Func>(func));
+        _scenes[scene_idx].signal_callbacks.push_back(id);
+
+        if (_scenes[scene_idx].state != Scene::SceneState::ACTIVE) {
+            _signals.disableCallback(id);
+        }
+    }
+
     template<typename... Args>
     void emit(const std::string& name, Args&&... args) {
         _signals.emit(name, std::forward<Args>(args)...);
@@ -222,6 +237,8 @@ class GameTool {
     SignalManager _signals;
 
     void rebuildSystems();
+    void enableSceneCallbacks(std::size_t idx);
+    void disableSceneCallbacks(std::size_t idx);
     void createSceneEntities(std::size_t idx);
     void destroySceneEntities(std::size_t idx);
     std::vector<Scene> _scenes;

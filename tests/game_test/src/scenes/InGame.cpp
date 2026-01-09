@@ -28,7 +28,7 @@ InGame::InGame() : AScene() {
     addConfig("assets/configs/enemy_2.toml");
     addConfig("assets/configs/player.toml");
 
-    Scene game;
+    te::Scene game;
     game.systems = {{
         {"poll_event"},  // INPUT
         {"follow_player", "parallax_sys"},  // PRE UPDATE
@@ -55,7 +55,7 @@ InGame::InGame() : AScene() {
 
     activateScene(addScene(game));
 
-    Scene menu = {
+    te::Scene menu = {
         {},
         {{
             {"poll_event"},
@@ -82,7 +82,7 @@ void InGame::run(void) {
     sub<ECS::Entity>("timout_entity", [this](ECS::Entity e){
         removeEntity(e);
     });
-    sub<te::Keys>("key_input", [this](te::Keys keys){
+    subForScene<te::Keys>(0, "key_input", [this](te::Keys keys){
         auto& players = this->getComponent<addon::intact::Player>();
         auto& velocities = this->getComponent<addon::physic::Velocity2>();
 
@@ -103,7 +103,7 @@ void InGame::run(void) {
             }
         }
     });
-    sub<te::Keys>("key_input", [this](te::Keys keys) {
+    subForScene<te::Keys>(0, "key_input", [this](te::Keys keys) {
         static te::Timestamp delay(0.2f);
         static std::size_t entity_proj = PROJ_E;
 
