@@ -202,100 +202,16 @@ class GameTool {
         _signals.emit(name, std::forward<Args>(args)...);
     }
 
-    std::size_t addScene(const Scene& scene) {
-        _scenes.push_back(scene);
-        return _scenes.size() - 1;
-    }
-
-    bool isSystemLoaded(const std::string &sysName) {
-        if (_sysMap.find(sysName) != _sysMap.end())
-            return true;
-        return false;
-    }
-
-    const std::vector<std::size_t> getActiveScenes(FIELD_STATUS type) {
-        std::vector<std::size_t> active;
-
-        for (std::size_t i = 0; i < _scenes.size(); i++) {
-            if (_scenes[i].active[type])
-                active.push_back(i);
-        }
-        return active;
-    }
-
-    void reloadSystems() {
-        std::array<std::vector<std::string>, PHASES::PHASE_MAX> to_load;
-
-        _reg.clearSystems();
-        _sysMap.clear();
-
-        for (auto &scene_index : getActiveScenes(SYSTEM)) {
-            for (size_t i = 0; i < PHASES::PHASE_MAX; i++) {
-                for (auto &sys : _scenes[scene_index].systems[i]) {
-                    if (isSystemLoaded(sys)) {
-                        _sysMap.at(sys).push_back(scene_index);
-                        continue;
-                    }
-                    _sysMap[sys].push_back(scene_index);
-                    to_load[i].push_back(sys);
-                }
-            }
-        }
-        for (auto &phase : to_load)
-            for (auto &sys : phase)
-                createSystem(sys);
-    }
-
+    std::size_t addScene(const Scene& scene);
     void switchScene(std::size_t idx, bool clear_entities = false
-        , bool clear_systems = false) {
-        if (idx >= _scenes.size())
-            return;
+        , bool clear_systems = false);
+    void clearScene(std::size_t idx, bool clear_entities, bool clear_systems);
+    void deleteScene(std::size_t idx);
 
-        for (std::size_t i = 0; i < _scenes.size(); ++i)
-            if (i != idx)
-                clearScene(i, clear_entities, clear_systems);
-
-        if (!_scenes[idx].active[SYSTEM]) {
-            _scenes[idx].active[SYSTEM] = true;
-            reloadSystems();
-        }
-        if (!_scenes[idx].active[ENTITY]) {
-            _scenes[idx].active[ENTITY] = true;
-            for (auto& e : _scenes[idx].entities)
-                createEntity(e.idx, e.name, e.pos);
-        }
-    }
-
-    void clearScene(std::size_t idx, bool clear_entities, bool clear_systems) {
-        if (idx < _scenes.size()) {
-            if (clear_entities && _scenes[idx].active[ENTITY] == true) {
-                _scenes[idx].active[ENTITY] = false;
-                for (auto& e : _scenes[idx].entities)
-                    _reg.killEntity(e.idx);
-            }
-            if (clear_systems && _scenes[idx].active[SYSTEM] == true) {
-                _scenes[idx].active[SYSTEM] = false;
-                for (auto& phases : _scenes[idx].systems)
-                    for (auto &sys : phases)
-                        if (_sysMap[sys].size() <= 0)
-                            _reg.removeSystem(sys);
-            }
-        }
-    }
-
-    void deleteScene(std::size_t idx) {
-        if (idx < _scenes.size()) {
-            clearScene(idx, true, true);
-            _scenes.erase(_scenes.begin() + idx);
-        }
-    }
-
-    bool isSceneActive(std::size_t idx, FIELD_STATUS type) const {
-        if (idx < _scenes.size()) {
-            return _scenes[idx].active[type];
-        }
-        return false;
-    }
+    void reloadSystems();
+    bool isSceneActive(std::size_t idx, FIELD_STATUS type) const;
+    const std::vector<std::size_t> getActiveScenes(FIELD_STATUS type) const;
+    bool isSystemLoaded(const std::string &sysName) const;
 
  private:
     plugin::PluginManager _pmanager;
@@ -311,7 +227,6 @@ class GameTool {
 
     std::vector<Scene> _scenes;
     std::unordered_map<std::string, std::vector<std::size_t>> _sysMap;
-    std::unordered_map<std::string, std::vector<std::size_t>> _sigMapoy;
 };
 
 }  // namespace te

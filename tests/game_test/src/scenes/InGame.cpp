@@ -37,21 +37,6 @@ InGame::InGame() : AScene() {
         {"draw", "display"}  // RENDER
     }};
 
-    // Scene game;
-    // game.systems = {
-    //     {"poll_event", te::INPUT},
-    //     {"follow_player", te::PRE_UPDATE},
-    //     {"parallax_sys", te::PRE_UPDATE},
-    //     {"apply_pattern", te::UPDATE},
-    //     {"movement2", te::UPDATE},
-    //     {"animate", te::UPDATE},
-    //     {"deal_damage", te::UPDATE},
-    //     {"apply_fragile", te::UPDATE},
-    //     {"bound_hitbox", te::POST_UPDATE},
-    //     {"draw", te::RENDER},
-    //     {"display", te::RENDER}
-    // };
-
     size_t map1 = addMap("assets/maps/test1.ddmap");
     ECS::Entity endMap = createMap(MAP_ENTITY_BACKGROUND, map1);
 
