@@ -29,7 +29,7 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake .. -G "Unix Makefiles" -A x64
+          cmake .. -G "Unix Makefiles"
 
       - name: Build Project
         run: |
