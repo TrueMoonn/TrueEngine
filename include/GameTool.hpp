@@ -246,9 +246,6 @@ class GameTool {
                 createSystem(sys);
     }
 
-    // CLOCKS SARRETENT PAS
-    // LES SYSTEMES DE LA SCENE NE SE SUPPRIMENT QU'UNE FOIS
-
     void switchScene(std::size_t idx, bool clear_entities = false
         , bool clear_systems = false) {
         if (idx >= _scenes.size())
@@ -280,7 +277,7 @@ class GameTool {
                 _scenes[idx].active[SYSTEM] = false;
                 for (auto& phases : _scenes[idx].systems)
                     for (auto &sys : phases)
-                        if (_sysMap.size() <= 0)
+                        if (_sysMap[sys].size() <= 0)
                             _reg.removeSystem(sys);
             }
         }

@@ -137,7 +137,7 @@ void InGame::run(void) {
         if (keys[te::Key::P])
             switchScene(1, false, true);
         if (keys[te::Key::Escape])
-            switchScene(0, true);
+            switchScene(0, true, true);
     });
 
     state = GameState::RUN;
