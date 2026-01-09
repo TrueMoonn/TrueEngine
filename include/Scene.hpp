@@ -14,6 +14,21 @@
 
     #include "maths/Vector.hpp"
 
+
+/**
+ * @brief Phases responsible for system handling priority
+ *
+ * input -> pre_update -> update -> post_update -> render
+ */
+enum PHASES : std::size_t {
+    INPUT = 0,
+    PRE_UPDATE,
+    UPDATE,
+    POST_UPDATE,
+    RENDER,
+    PHASE_MAX
+};
+
 struct SceneEntity {
     ECS::Entity idx;
     std::string name;
@@ -22,7 +37,8 @@ struct SceneEntity {
 
 struct Scene {
     std::vector<std::string> signals;
-    std::vector<std::string> systems;
+    std::array<std::vector<std::string>, PHASES::PHASE_MAX> systems;
+    // std::vector<std::pair<std::string, te::PHASES>> systems;
     std::vector<SceneEntity> entities;
     bool active = false;
 };

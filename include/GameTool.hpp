@@ -39,7 +39,7 @@ namespace te {
  *  - ECS::Registry
  *  - te::PluginManager
  *  - te::MapLoader
- * ```
+ * ```createSystem
  *
  */
 class GameTool {
@@ -206,27 +206,60 @@ class GameTool {
         return _scenes.size() - 1;
     }
 
+    bool isSystemLoaded(const std::string &sysName) {
+        if (_sysMap.find(sysName) != _sysMap.end())
+            return true;
+        return false;
+    }
+
+    const std::vector<std::size_t> getActiveScenes() {
+        std::vector<std::size_t> active;
+
+        for (std::size_t i = 0; i < _scenes.size(); i++) {
+            if (_scenes[i].active)
+                active.push_back(i);
+        }
+        return active;
+    }
+
+    void reloadSystems() {
+        std::array<std::vector<std::string>, PHASES::PHASE_MAX> to_load;
+
+        _reg.clearSystems();
+        _sysMap.clear();
+
+        for (auto &scene_index : getActiveScenes()) {
+            for (size_t i = 0; i < PHASES::PHASE_MAX; i++) {
+                for (auto &sys : _scenes[scene_index].systems[i]) {
+                    if (isSystemLoaded(sys)) {
+                        _sysMap.at(sys).push_back(scene_index);
+                        continue;
+                    }
+                    _sysMap[sys].push_back(scene_index);
+                    to_load[i].push_back(sys);
+                }
+            }
+        }
+        for (auto &phase : to_load)
+            for (auto &sys : phase)
+                createSystem(sys);
+    }
+
     void switchScene(std::size_t idx, bool clear = false) {
         if (idx >= _scenes.size())
             return;
-        for (std::size_t i = 0; clear && i < _scenes.size(); ++i) {
+
+        for (std::size_t i = 0; clear && i < _scenes.size(); ++i)
             if (_scenes[i].active && i != idx)
                 clearScene(i);
-        }
-        if (!isSceneActive(idx)) {
-            for (auto& sys : _scenes[idx].systems) {
-                if (_sysMap.find(sys) == _sysMap.end()) {
-                    _sysMap[sys] = {};
-                }
-                _sysMap.at(sys).push_back(idx);
-                createSystem(sys);
-            }
 
-            for (auto& e : _scenes[idx].entities) {
+        if (isSceneActive(idx))
+            return;
+
+        _scenes[idx].active = true;
+        reloadSystems();
+        for (auto& e : _scenes[idx].entities)
                 createEntity(e.idx, e.name, e.pos);
-            }
-            _scenes[idx].active = true;
-        }
     }
 
     void clearScene(std::size_t idx) {
@@ -234,11 +267,10 @@ class GameTool {
             _scenes[idx].active = false;
             for (auto& e : _scenes[idx].entities)
                 _reg.killEntity(e.idx);
-            for (auto& sys : _scenes[idx].systems) {
-                if (_sysMap.size() <= 0) {
-                    _reg.removeSystem(sys);
-                }
-            }
+            for (auto& phases : _scenes[idx].systems)
+                for (auto &sys : phases)
+                    if (_sysMap.size() <= 0)
+                        _reg.removeSystem(sys);
         }
     }
 
