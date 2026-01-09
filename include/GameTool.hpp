@@ -10,6 +10,7 @@
     #include <functional>
     #include <string>
     #include <unordered_map>
+    #include <vector>
     #include <utility>
     #include <toml++/toml.hpp>
 
@@ -212,11 +213,11 @@ class GameTool {
         return false;
     }
 
-    const std::vector<std::size_t> getActiveScenes() {
+    const std::vector<std::size_t> getActiveScenes(FIELD_STATUS type) {
         std::vector<std::size_t> active;
 
         for (std::size_t i = 0; i < _scenes.size(); i++) {
-            if (_scenes[i].active)
+            if (_scenes[i].active[type])
                 active.push_back(i);
         }
         return active;
@@ -228,7 +229,7 @@ class GameTool {
         _reg.clearSystems();
         _sysMap.clear();
 
-        for (auto &scene_index : getActiveScenes()) {
+        for (auto &scene_index : getActiveScenes(SYSTEM)) {
             for (size_t i = 0; i < PHASES::PHASE_MAX; i++) {
                 for (auto &sys : _scenes[scene_index].systems[i]) {
                     if (isSystemLoaded(sys)) {
@@ -245,45 +246,56 @@ class GameTool {
                 createSystem(sys);
     }
 
-    void switchScene(std::size_t idx, bool clear = false) {
+    // CLOCKS SARRETENT PAS
+    // LES SYSTEMES DE LA SCENE NE SE SUPPRIMENT QU'UNE FOIS
+
+    void switchScene(std::size_t idx, bool clear_entities = false
+        , bool clear_systems = false) {
         if (idx >= _scenes.size())
             return;
 
-        for (std::size_t i = 0; clear && i < _scenes.size(); ++i)
-            if (_scenes[i].active && i != idx)
-                clearScene(i);
+        for (std::size_t i = 0; i < _scenes.size(); ++i)
+            if (i != idx)
+                clearScene(i, clear_entities, clear_systems);
 
-        if (isSceneActive(idx))
-            return;
-
-        _scenes[idx].active = true;
-        reloadSystems();
-        for (auto& e : _scenes[idx].entities)
+        if (!_scenes[idx].active[SYSTEM]) {
+            _scenes[idx].active[SYSTEM] = true;
+            reloadSystems();
+        }
+        if (!_scenes[idx].active[ENTITY]) {
+            _scenes[idx].active[ENTITY] = true;
+            for (auto& e : _scenes[idx].entities)
                 createEntity(e.idx, e.name, e.pos);
+        }
     }
 
-    void clearScene(std::size_t idx) {
-        if (idx < _scenes.size() && isSceneActive(idx)) {
-            _scenes[idx].active = false;
-            for (auto& e : _scenes[idx].entities)
-                _reg.killEntity(e.idx);
-            for (auto& phases : _scenes[idx].systems)
-                for (auto &sys : phases)
-                    if (_sysMap.size() <= 0)
-                        _reg.removeSystem(sys);
+    void clearScene(std::size_t idx, bool clear_entities, bool clear_systems) {
+        if (idx < _scenes.size()) {
+            if (clear_entities && _scenes[idx].active[ENTITY] == true) {
+                _scenes[idx].active[ENTITY] = false;
+                for (auto& e : _scenes[idx].entities)
+                    _reg.killEntity(e.idx);
+            }
+            if (clear_systems && _scenes[idx].active[SYSTEM] == true) {
+                _scenes[idx].active[SYSTEM] = false;
+                for (auto& phases : _scenes[idx].systems)
+                    for (auto &sys : phases)
+                        if (_sysMap.size() <= 0)
+                            _reg.removeSystem(sys);
+            }
         }
     }
 
     void deleteScene(std::size_t idx) {
         if (idx < _scenes.size()) {
-            clearScene(idx);
+            clearScene(idx, true, true);
             _scenes.erase(_scenes.begin() + idx);
         }
     }
 
-    bool isSceneActive(std::size_t idx) const {
+    bool isSceneActive(std::size_t idx, FIELD_STATUS type) const {
         if (idx < _scenes.size()) {
-            return _scenes[idx].active;
+            return _scenes[idx].active[type];
         }
         return false;
     }
