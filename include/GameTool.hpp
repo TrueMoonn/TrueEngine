@@ -203,15 +203,11 @@ class GameTool {
     }
 
     std::size_t addScene(const Scene& scene);
-    void switchScene(std::size_t idx, bool clear_entities = false
-        , bool clear_systems = false);
-    void clearScene(std::size_t idx, bool clear_entities, bool clear_systems);
-    void deleteScene(std::size_t idx);
-
-    void reloadSystems();
-    bool isSceneActive(std::size_t idx, FIELD_STATUS type) const;
-    const std::vector<std::size_t> getActiveScenes(FIELD_STATUS type) const;
-    bool isSystemLoaded(const std::string &sysName) const;
+    void activateScene(std::size_t idx);
+    void deactivateScene(std::size_t idx);
+    void pauseScene(std::size_t idx);
+    void resumeScene(std::size_t idx);
+    void deactivateAllScenes();
 
  private:
     plugin::PluginManager _pmanager;
@@ -225,8 +221,11 @@ class GameTool {
 
     SignalManager _signals;
 
+    void rebuildSystems();
+    void createSceneEntities(std::size_t idx);
+    void destroySceneEntities(std::size_t idx);
     std::vector<Scene> _scenes;
-    std::unordered_map<std::string, std::vector<std::size_t>> _sysMap;
+    std::unordered_map<std::string, bool> _paused_systems;
 };
 
 }  // namespace te

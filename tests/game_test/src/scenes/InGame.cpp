@@ -31,8 +31,9 @@ InGame::InGame() : AScene() {
     Scene game;
     game.systems = {{
         {"poll_event"},  // INPUT
-        {"follow_player", "parallax_sys",},  // PRE UPDATE
-        {"apply_pattern", "movement2", "animate", "deal_damage", "apply_fragile"},  // UPDATE
+        {"follow_player", "parallax_sys"},  // PRE UPDATE
+        {"apply_pattern", "movement2", "animate",
+            "deal_damage", "apply_fragile"},  // UPDATE
         {"bound_hitbox"},  // POST UPDATE
         {"draw", "display"}  // RENDER
     }};
@@ -52,7 +53,7 @@ InGame::InGame() : AScene() {
         {800, "background", {0.f, 0.f}}
     };
 
-    switchScene(addScene(game));
+    activateScene(addScene(game));
 
     Scene menu = {
         {},
@@ -119,10 +120,14 @@ void InGame::run(void) {
         }
     });
     sub<te::Keys>("key_input", [this](te::Keys keys) {
-        if (keys[te::Key::P])
-            switchScene(1, false, true);
-        if (keys[te::Key::Escape])
-            switchScene(0, true, true);
+        if (keys[te::Key::P]) {
+            pauseScene(0);
+            activateScene(1);
+        }
+        if (keys[te::Key::Escape]) {
+            resumeScene(0);
+            deactivateScene(1);
+        }
     });
 
     state = GameState::RUN;
