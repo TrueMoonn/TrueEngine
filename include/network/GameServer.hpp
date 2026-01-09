@@ -19,7 +19,7 @@ namespace network {
 
 /**
  * @brief Generic multiplayer server
- * 
+ *
  * Provides networking with callbacks for the game to handle
  * packet logic, client connections, and disconnections.
  */
@@ -80,7 +80,7 @@ class GameServer {
 
     /**
      * @brief Callback type: called when data is received from a client
-     * 
+     *
      * The game registers ONE callback that receives ALL data.
      * It's up to the game to dispatch based on packet type.
      */

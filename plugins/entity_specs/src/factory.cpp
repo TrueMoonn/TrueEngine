@@ -113,7 +113,7 @@ EntitySpec::EntitySpec(ECS::Registry& reg, te::SignalManager& sig)
     _components["pattern"] = [](ECS::Registry& reg, const ECS::Entity& e,
         const toml::table& params) {
         try {
-            size_t type = params["type"].value_or<size_t>(1);
+           std::size_t type = params["type"].value_or<size_t>(1);
             float amp = params["amplitude"].value_or<float>(1.f);
             float freq = params["frequency"].value_or<float>(1.f);
             reg.createComponent<Pattern>(e, type, amp, freq);

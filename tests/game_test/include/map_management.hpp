@@ -34,7 +34,7 @@
 
 /* Extention for map initialisation */
 static const char *MAP_EXTENTION(".ddmap");
-static const size_t MAP_EXTENTION_SIZE(7);
+static const std::size_t MAP_EXTENTION_SIZE(7);
 
 enum MAP_TYPES : char {
     MAP_WALL = 'X',

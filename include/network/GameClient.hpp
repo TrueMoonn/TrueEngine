@@ -15,7 +15,7 @@ namespace network {
 
 /**
  * @brief Generic multiplayer client
- * 
+ *
  * Provides networking with callbacks for the game to handle
  * packet logic, connection events, and disconnections.
  */
@@ -67,7 +67,7 @@ class GameClient {
 
     /**
      * @brief Callback type: called when data is received from the server
-     * 
+     *
      * The game registers callbacks for each type of packet.
      */
     using PacketCallback =

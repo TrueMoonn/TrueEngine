@@ -16,7 +16,7 @@ namespace eSpec {
 
 struct Health {
     explicit Health(const std::int64_t &amount, float delay);
-    explicit Health(const std::int64_t &amount, size_t delay);
+    explicit Health(const std::int64_t &amount, std::size_t delay);
     void reduceSafely(const std::int64_t &);
 
     std::int64_t amount;

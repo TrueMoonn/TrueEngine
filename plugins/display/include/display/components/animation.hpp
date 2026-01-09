@@ -23,7 +23,7 @@ namespace display {
  * @brief Animation frame data (duration and delay)
  */
 struct FrameData {
-    FrameData(const mat::Vector2<size_t> &position, size_t max,
+    FrameData(const mat::Vector2<size_t> &position, std::size_t max,
             float delay, bool loop = true)
         : frameBEG(position), frameMAX(max)
         , frameDELAY(SEC_TO_MICRO(delay)), loop(loop) {}
@@ -34,8 +34,8 @@ struct FrameData {
     FrameData& operator=(FrameData&& other) noexcept = default;
 
     mat::Vector2<size_t> frameBEG;
-    size_t frameMAX;
-    size_t frameDELAY;
+    std::size_t frameMAX;
+    std::size_t frameDELAY;
     bool loop;
 };
 

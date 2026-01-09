@@ -7,13 +7,18 @@
 
 #pragma once
 
+#ifdef _WIN32
+    #include <windows.h>
+#else
     #include <dlfcn.h>
-    #include <string>
-    #include <unordered_map>
-    #include <iostream>
-    #include <filesystem>
-    #include <optional>
-    #include <vector>
+#endif
+
+#include <string>
+#include <unordered_map>
+#include <iostream>
+#include <filesystem>
+#include <optional>
+#include <vector>
 
 namespace te {
 namespace plugin {
@@ -33,10 +38,20 @@ class DlManager {
         auto it = _handles.find(handName);
         if (it == _handles.end())
             throw std::runtime_error("handler not found");
+#ifdef _WIN32
+        void* sym = reinterpret_cast<void*>(GetProcAddress(
+            static_cast<HMODULE>(it->second), syName.c_str()));
+        if (sym == nullptr) {
+            DWORD error = GetLastError();
+            throw std::runtime_error("Symbol not found. Error code: "
+                + std::to_string(error));
+        }
+#else
         dlerror();
         void* sym = dlsym(it->second, syName.c_str());
         if (sym == nullptr)
             throw std::runtime_error(dlerror());
+#endif
         return reinterpret_cast<Symbol>(sym);
     }
 
