@@ -67,7 +67,7 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
             const auto& fps =
                 params["framelimit"].value_or(DEFAULT_FRAME_LIMIT);
             mat::Vector2u sizeVect(1280, 720);
-            if (!fullscreen && params["size"].std::is_array) {
+            if (!fullscreen && params["size"].is_array()) {
                 const auto& size = params["size"].as_array();
                 sizeVect.x = size->at(0).value_or(1280);
                 sizeVect.y = size->at(1).value_or(720);
