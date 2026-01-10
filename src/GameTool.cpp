@@ -98,6 +98,10 @@ ECS::Entity GameTool::createMap(ECS::Entity fentity, std::size_t mapIndex) {
 }
 
 void GameTool::runSystems() {
+    if (_updateSystems) {
+        rebuildSystems();
+        _updateSystems = false;
+    }
     _reg.runSystems();
 }
 
@@ -176,7 +180,7 @@ void GameTool::activateScene(std::size_t idx) {
     _scenes[idx].state = Scene::SceneState::ACTIVE;
     enableSceneCallbacks(idx);
     createSceneEntities(idx);
-    rebuildSystems();
+    _updateSystems = true;
 }
 
 void GameTool::deactivateScene(std::size_t idx) {
@@ -188,7 +192,7 @@ void GameTool::deactivateScene(std::size_t idx) {
     scene.state = Scene::SceneState::INACTIVE;
     disableSceneCallbacks(idx);
     destroySceneEntities(idx);
-    rebuildSystems();
+    _updateSystems = true;
 }
 
 void GameTool::pauseScene(std::size_t idx) {
@@ -199,7 +203,7 @@ void GameTool::pauseScene(std::size_t idx) {
     Scene& scene = _scenes[idx];
     scene.state = Scene::SceneState::PAUSED;
     disableSceneCallbacks(idx);
-    rebuildSystems();
+    _updateSystems = true;
 }
 
 void GameTool::resumeScene(std::size_t idx) {
@@ -210,7 +214,7 @@ void GameTool::resumeScene(std::size_t idx) {
     Scene& scene = _scenes[idx];
     scene.state = Scene::SceneState::ACTIVE;
     enableSceneCallbacks(idx);
-    rebuildSystems();
+    _updateSystems = true;
 }
 
 void GameTool::deactivateAllScenes() {
@@ -220,7 +224,7 @@ void GameTool::deactivateAllScenes() {
             deactivateScene(i);
         }
     }
-    rebuildSystems();
+    _updateSystems = true;
 }
 
 void GameTool::rebuildSystems() {

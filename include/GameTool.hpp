@@ -240,12 +240,14 @@ class GameTool {
     SignalManager _signals;
 
     void rebuildSystems();
+    bool _updateSystems = false;
     void enableSceneCallbacks(std::size_t idx);
     void disableSceneCallbacks(std::size_t idx);
     void createSceneEntities(std::size_t idx);
     void destroySceneEntities(std::size_t idx);
     std::vector<Scene> _scenes;
     std::unordered_map<std::string, bool> _paused_systems;
+
 };
 
 }  // namespace te
