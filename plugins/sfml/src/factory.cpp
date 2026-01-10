@@ -62,13 +62,14 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
         const ECS::Entity& e, const toml::table& params) {
         if (!params.empty()) {
             const auto& wName = params["name"].value_or(DEFAULT_WIN_NAME);
+            const auto& fullscreen = params["fullscreen"].value_or(false);
+            const auto& fps =
+                params["framelimit"].value_or(DEFAULT_FRAME_LIMIT);
             const auto& size = params["size"].as_array();
             mat::Vector2u sizeVect;
             sizeVect.x = size->at(0).value_or(1280);
             sizeVect.y = size->at(1).value_or(720);
-            const auto& fps =
-                params["framelimit"].value_or(DEFAULT_FRAME_LIMIT);
-            reg.createComponent<Window>(e, wName, sizeVect, fps);
+            reg.createComponent<Window>(e, wName, sizeVect, fps, fullscreen);
         } else  {
             reg.createComponent<Window>(e);
         }

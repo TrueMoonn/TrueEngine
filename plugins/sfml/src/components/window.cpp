@@ -19,10 +19,18 @@ namespace addon {
 namespace sfml {
 
 Window::Window(const std::string& winName, const mat::Vector2u& size,
-    std::size_t framerate) : name(winName), framerate(framerate) {
-    win = std::make_unique<sf::RenderWindow>(
-        sf::VideoMode(sf::Vector2u(size.x, size.y)),
-        name);
+    std::size_t framerate, bool fs) : name(winName), framerate(framerate) {
+    if (fs) {
+        win = std::make_unique<sf::RenderWindow>(
+            sf::VideoMode(sf::Vector2u(size.x, size.y)),
+            name,
+            sf::Style::Default,
+            sf::State::Fullscreen);
+    } else {
+        win = std::make_unique<sf::RenderWindow>(
+            sf::VideoMode(sf::Vector2u(size.x, size.y)),
+            name);
+    }
     win->setFramerateLimit(framerate);
     win->setKeyRepeatEnabled(false);
 }

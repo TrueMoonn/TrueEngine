@@ -26,7 +26,8 @@ namespace sfml {
 struct Window {
     Window(const std::string& name = DEFAULT_WIN_NAME,
         const mat::Vector2u& size = DEFAULT_WIN_SIZE,
-        std::size_t framerate = DEFAULT_FRAME_LIMIT);
+        std::size_t framerate = DEFAULT_FRAME_LIMIT,
+        bool fullscreen = false);
     Window(const Window&);
     Window(Window&&) noexcept = default;
     Window& operator=(const Window& other);
