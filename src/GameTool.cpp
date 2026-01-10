@@ -9,9 +9,10 @@
 #include <iostream>
 #include <toml++/toml.hpp>
 
+#include <ECS/Entity.hpp>
+#include <ECS/Registry.hpp>
+
 #include "GameTool.hpp"
-#include "ECS/Entity.hpp"
-#include "ECS/Registry.hpp"
 
 namespace te {
 
@@ -33,13 +34,22 @@ void GameTool::createComponent(const std::string& name, const ECS::Entity& e,
 }
 
 void GameTool::createSystem(const std::string& name,
-    const te::plugin::sys_builder &f) {
-    _reg.addSystem(name, f);
+    const te::plugin::sys_builder &f, bool to_load) {
+    _systems.insert_or_assign(name, f);
+    if (to_load) {
+        if (_reg.getSystem(name) != -1)
+            return;
+        _reg.addSystem(name, f);
+    }
 }
 
 void GameTool::createSystem(const std::string& name) {
     if (_reg.getSystem(name) != -1)
         return;
+    if (_systems.find(name) != _systems.end()) {
+        _reg.addSystem(name, _systems.at(name));
+        return;
+    }
     try {
         _pmanager.loadSystem(name);
     } catch (const plugin::PluginManager::NoPluginFound& e) {

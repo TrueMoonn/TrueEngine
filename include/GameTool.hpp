@@ -22,6 +22,7 @@
     #include "maths/Vector.hpp"
     #include "SignalManager.hpp"
     #include "ConfigReader.hpp"
+#include "plugin/APlugin.hpp"
     #include "plugin/PluginManager.hpp"
 
     #define DEFAULT_PLUGIN_RPATH "./plugins/"
@@ -121,7 +122,7 @@ class GameTool {
      * @param f The function to add as system
      */
     void createSystem(const std::string& name,
-        const te::plugin::sys_builder &f);
+        const te::plugin::sys_builder &f, bool to_load = true);
     /**
      * @brief Create a System through a plugin
      *
@@ -227,6 +228,8 @@ class GameTool {
  private:
     plugin::PluginManager _pmanager;
     ECS::Registry _reg;
+
+    std::unordered_map<std::string, te::plugin::sys_builder> _systems;
 
     ConfigParser _configs;
     std::unordered_map<std::string, local_cmt_build> _local_components;
