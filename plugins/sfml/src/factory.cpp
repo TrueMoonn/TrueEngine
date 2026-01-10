@@ -5,6 +5,7 @@
 ** factory.cpp
 */
 
+#include <type_traits>
 #include <utility>
 #include <unordered_map>
 #include <string>
@@ -65,10 +66,12 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
             const auto& fullscreen = params["fullscreen"].value_or(false);
             const auto& fps =
                 params["framelimit"].value_or(DEFAULT_FRAME_LIMIT);
-            const auto& size = params["size"].as_array();
-            mat::Vector2u sizeVect;
-            sizeVect.x = size->at(0).value_or(1280);
-            sizeVect.y = size->at(1).value_or(720);
+            mat::Vector2u sizeVect(1280, 720);
+            if (!fullscreen && params["size"].std::is_array) {
+                const auto& size = params["size"].as_array();
+                sizeVect.x = size->at(0).value_or(1280);
+                sizeVect.y = size->at(1).value_or(720);
+            }
             reg.createComponent<Window>(e, wName, sizeVect, fps, fullscreen);
         } else  {
             reg.createComponent<Window>(e);
