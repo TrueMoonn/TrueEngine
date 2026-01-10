@@ -151,7 +151,7 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
         }
     };
     _systems["display"] = [](ECS::Registry& reg) {
-        reg.addSystem([](ECS::Registry& reg) {
+        reg.addSystem("display", [](ECS::Registry& reg) {
             auto& windows = reg.getComponents<Window>();
             for (auto &&[win] : ECS::DenseZipper(windows)) {
                 for (std::size_t lay = 0; lay < win.draws.size(); ++lay) {
@@ -167,7 +167,7 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
         });
     };
     _systems["poll_event"] = [&sig](ECS::Registry& reg) {
-        reg.addSystem([&sig](ECS::Registry& reg) {
+        reg.addSystem("poll_event", [&sig](ECS::Registry& reg) {
             auto& windows = reg.getComponents<Window>();
             static te::Keys keys = {false};
             static te::Mouse mouse;
@@ -209,7 +209,7 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
         });
     };
     _systems["draw"] = [](ECS::Registry& reg) {
-        reg.addSystem([](ECS::Registry& reg) {
+        reg.addSystem("draw", [](ECS::Registry& reg) {
             auto& sprites = reg.getComponents<Sprite>();
             auto& drawables = reg.getComponents<Drawable>();
             auto& positions = reg.getComponents<physic::Position2>();
@@ -225,7 +225,7 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
         });
     };
     _systems["follow_player"] = [](ECS::Registry& reg) {
-        reg.addSystem([](ECS::Registry& reg) {
+        reg.addSystem("follow_player", [](ECS::Registry& reg) {
             auto& players = reg.getComponents<intact::Player>();
             auto& positions = reg.getComponents<physic::Position2>();
             auto& windows = reg.getComponents<Window>();
@@ -240,7 +240,7 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
         });
     };
     _systems["parallax_sys"] = [](ECS::Registry& reg) {
-        reg.addSystem([](ECS::Registry& reg){
+        reg.addSystem("parallax_sys", [](ECS::Registry& reg){
             auto& windows = reg.getComponents<Window>();
             auto& parallaxs = reg.getComponents<display::Parallax>();
             auto& sprites = reg.getComponents<Sprite>();

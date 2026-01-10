@@ -10,6 +10,7 @@
     #include <functional>
     #include <string>
     #include <unordered_map>
+    #include <vector>
     #include <utility>
     #include <toml++/toml.hpp>
 
@@ -17,6 +18,7 @@
     #include <ECS/Registry.hpp>
     #include <ECS/DenseSA.hpp>
 
+    #include "Scene.hpp"
     #include "maths/Vector.hpp"
     #include "SignalManager.hpp"
     #include "ConfigReader.hpp"
@@ -38,7 +40,7 @@ namespace te {
  *  - ECS::Registry
  *  - te::PluginManager
  *  - te::MapLoader
- * ```
+ * ```createSystem
  *
  */
 class GameTool {
@@ -115,9 +117,11 @@ class GameTool {
     /**
      * @brief Create a System directly to the ECS::Regitstry
      *
+     * @param name The name of the system
      * @param f The function to add as system
      */
-    void createSystem(const te::plugin::sys_builder &f);
+    void createSystem(const std::string& name,
+        const te::plugin::sys_builder &f);
     /**
      * @brief Create a System through a plugin
      *
@@ -193,10 +197,32 @@ class GameTool {
         _signals.sub<Args...>(name, func);
     }
 
+    template<typename... Args, typename Func>
+    void subForScene(std::size_t scene_idx,
+        const std::string& name, Func&& func) {
+        if (scene_idx >= _scenes.size())
+            return;
+
+        SignalManager::CallbackId id =
+            _signals.sub<Args...>(name, std::forward<Func>(func));
+        _scenes[scene_idx].signal_callbacks.push_back(id);
+
+        if (_scenes[scene_idx].state != Scene::SceneState::ACTIVE) {
+            _signals.disableCallback(id);
+        }
+    }
+
     template<typename... Args>
     void emit(const std::string& name, Args&&... args) {
         _signals.emit(name, std::forward<Args>(args)...);
     }
+
+    std::size_t addScene(const Scene& scene);
+    void activateScene(std::size_t idx);
+    void deactivateScene(std::size_t idx);
+    void pauseScene(std::size_t idx);
+    void resumeScene(std::size_t idx);
+    void deactivateAllScenes();
 
  private:
     plugin::PluginManager _pmanager;
@@ -209,6 +235,14 @@ class GameTool {
         const mat::Vector2f& pos);
 
     SignalManager _signals;
+
+    void rebuildSystems();
+    void enableSceneCallbacks(std::size_t idx);
+    void disableSceneCallbacks(std::size_t idx);
+    void createSceneEntities(std::size_t idx);
+    void destroySceneEntities(std::size_t idx);
+    std::vector<Scene> _scenes;
+    std::unordered_map<std::string, bool> _paused_systems;
 };
 
 }  // namespace te

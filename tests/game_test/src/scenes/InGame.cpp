@@ -22,44 +22,53 @@
 
 InGame::InGame() : AScene() {
     loadPlugins();
-    setECS();
-    setEntities();
-}
-
-void InGame::setECS(void) {
-    createSystem("poll_event");
-    createSystem("apply_pattern");
-    createSystem("movement2");
-    createSystem("bound_hitbox");
-    createSystem("follow_player");
-    createSystem("animate");
-    createSystem("deal_damage");
-    createSystem("apply_fragile");
-    createSystem("parallax_sys");
-    createSystem("draw");
-    createSystem("display");
-}
-
-void InGame::setEntities(void) {
     createComponent("window", SYSTEM_ENTITY);
-
     addConfig("assets/configs/base.toml");
     addConfig("assets/configs/enemy.toml");
     addConfig("assets/configs/enemy_2.toml");
     addConfig("assets/configs/player.toml");
 
+    te::Scene game;
+    game.systems = {{
+        {"poll_event"},  // INPUT
+        {"follow_player", "parallax_sys"},  // PRE UPDATE
+        {"apply_pattern", "movement2", "animate",
+            "deal_damage", "apply_fragile"},  // UPDATE
+        {"bound_hitbox"},  // POST UPDATE
+        {"draw", "display"}  // RENDER
+    }};
+
     size_t map1 = addMap("assets/maps/test1.ddmap");
     ECS::Entity endMap = createMap(MAP_ENTITY_BACKGROUND, map1);
 
-    createEntity(++endMap, "player", {1920.f / 2, 1080.f / 2});
-    createEntity(++endMap, "enemy", {500.f, 500.f});
-    createEntity(++endMap, "enemy", {1000.f, 500.f});
-    createEntity(++endMap, "enemy", {500.f, 1000.f});
-    createEntity(++endMap, "enemy", {600.f, 600.f});
-    createEntity(++endMap, "enemy", {1000.0f, 500.0f});
-    createEntity(++endMap, "enemy", {1050.0f, 500.0f});
-    createEntity(++endMap, "enemy", {1100.0f, 500.0f});
-    createEntity(800, "background");
+    game.entities = {
+        {++endMap, "player", {1920.f / 2, 1080.f / 2}},
+        {++endMap, "enemy", {500.f, 500.f}},
+        {++endMap, "enemy", {1000.f, 500.f}},
+        {++endMap, "enemy", {500.f, 1000.f}},
+        {++endMap, "enemy", {600.f, 600.f}},
+        {++endMap, "enemy", {1000.0f, 500.0f}},
+        {++endMap, "enemy", {1050.0f, 500.0f}},
+        {++endMap, "enemy", {1100.0f, 500.0}},
+        {800, "background", {0.f, 0.f}}
+    };
+
+    activateScene(addScene(game));
+
+    te::Scene menu = {
+        {},
+        {{
+            {"poll_event"},
+            {"parallax_sys"},
+            {},
+            {},
+            {"draw", "display"}
+        }},
+        {
+            {801, "background", {1920.f / 2, 1080.f / 2}}
+        }
+    };
+    addScene(menu);
 }
 
 void InGame::run(void) {
@@ -73,7 +82,7 @@ void InGame::run(void) {
     sub<ECS::Entity>("timout_entity", [this](ECS::Entity e){
         removeEntity(e);
     });
-    sub<te::Keys>("key_input", [this](te::Keys keys){
+    subForScene<te::Keys>(0, "key_input", [this](te::Keys keys){
         auto& players = this->getComponent<addon::intact::Player>();
         auto& velocities = this->getComponent<addon::physic::Velocity2>();
 
@@ -94,7 +103,7 @@ void InGame::run(void) {
             }
         }
     });
-    sub<te::Keys>("key_input", [this](te::Keys keys) {
+    subForScene<te::Keys>(0, "key_input", [this](te::Keys keys) {
         static te::Timestamp delay(0.2f);
         static std::size_t entity_proj = PROJ_E;
 
@@ -108,6 +117,16 @@ void InGame::run(void) {
             entity_proj = PROJ_E;
         for (auto&& [_, pos] : ECS::DenseZipper(player, position)) {
             createEntity(entity_proj++, "projectile", {pos.x + 10, pos.y});
+        }
+    });
+    sub<te::Keys>("key_input", [this](te::Keys keys) {
+        if (keys[te::Key::P]) {
+            pauseScene(0);
+            activateScene(1);
+        }
+        if (keys[te::Key::Escape]) {
+            resumeScene(0);
+            deactivateScene(1);
         }
     });
 

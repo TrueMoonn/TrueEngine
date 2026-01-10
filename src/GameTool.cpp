@@ -32,16 +32,19 @@ void GameTool::createComponent(const std::string& name, const ECS::Entity& e,
     }
 }
 
+void GameTool::createSystem(const std::string& name,
+    const te::plugin::sys_builder &f) {
+    _reg.addSystem(name, f);
+}
+
 void GameTool::createSystem(const std::string& name) {
+    if (_reg.getSystem(name) != -1)
+        return;
     try {
         _pmanager.loadSystem(name);
     } catch (const plugin::PluginManager::NoPluginFound& e) {
         std::cerr << e.what() << std::endl;
     }
-}
-
-void GameTool::createSystem(const te::plugin::sys_builder &f) {
-    _reg.addSystem(f);
 }
 
 void GameTool::removeEntity(const ECS::Entity& e) {
@@ -128,6 +131,126 @@ void GameTool::createEntityComponents(const ECS::Entity& e,
             } else {
                 _pmanager.loadComponent(cname.data(), e, {});
             }
+        }
+    }
+}
+
+void GameTool::enableSceneCallbacks(std::size_t idx) {
+    if (idx < _scenes.size()) {
+        for (auto callback_id : _scenes[idx].signal_callbacks) {
+            _signals.enableCallback(callback_id);
+        }
+    }
+}
+
+void GameTool::disableSceneCallbacks(std::size_t idx) {
+    if (idx < _scenes.size()) {
+        for (auto callback_id : _scenes[idx].signal_callbacks) {
+            _signals.disableCallback(callback_id);
+        }
+    }
+}
+
+std::size_t GameTool::addScene(const Scene& scene) {
+    Scene new_scene = scene;
+    new_scene.state = Scene::SceneState::INACTIVE;
+    _scenes.push_back(new_scene);
+    return _scenes.size() - 1;
+}
+
+void GameTool::activateScene(std::size_t idx) {
+    if (idx >= _scenes.size() ||
+        _scenes[idx].state == Scene::SceneState::ACTIVE)
+        return;
+
+    _scenes[idx].state = Scene::SceneState::ACTIVE;
+    enableSceneCallbacks(idx);
+    createSceneEntities(idx);
+    rebuildSystems();
+}
+
+void GameTool::deactivateScene(std::size_t idx) {
+    if (idx >= _scenes.size() ||
+        _scenes[idx].state == Scene::SceneState::INACTIVE)
+        return;
+
+    Scene& scene = _scenes[idx];
+    scene.state = Scene::SceneState::INACTIVE;
+    disableSceneCallbacks(idx);
+    destroySceneEntities(idx);
+    rebuildSystems();
+}
+
+void GameTool::pauseScene(std::size_t idx) {
+    if (idx >= _scenes.size() ||
+        _scenes[idx].state != Scene::SceneState::ACTIVE)
+        return;
+
+    Scene& scene = _scenes[idx];
+    scene.state = Scene::SceneState::PAUSED;
+    disableSceneCallbacks(idx);
+    rebuildSystems();
+}
+
+void GameTool::resumeScene(std::size_t idx) {
+    if (idx >= _scenes.size() ||
+        _scenes[idx].state != Scene::SceneState::PAUSED)
+        return;
+
+    Scene& scene = _scenes[idx];
+    scene.state = Scene::SceneState::ACTIVE;
+    enableSceneCallbacks(idx);
+    rebuildSystems();
+}
+
+void GameTool::deactivateAllScenes() {
+    for (std::size_t i = 0; i < _scenes.size(); ++i) {
+        if (_scenes[i].state != Scene::SceneState::INACTIVE) {
+            _scenes[i].state = Scene::SceneState::INACTIVE;
+            deactivateScene(i);
+        }
+    }
+    rebuildSystems();
+}
+
+void GameTool::rebuildSystems() {
+    _reg.clearSystems();
+
+    std::array<std::vector<std::string>,
+        Scene::PHASES::PHASE_MAX> uniq_sys;
+    for (const auto& scene : _scenes) {
+        if (scene.state == Scene::SceneState::ACTIVE) {
+            for (std::size_t phase = 0; phase <
+                Scene::PHASES::PHASE_MAX; ++phase) {
+                for (const auto& sys_name : scene.systems[phase]) {
+                    if (std::find(uniq_sys[phase].begin(),
+                        uniq_sys[phase].end(), sys_name) ==
+                        uniq_sys[phase].end())
+                        uniq_sys[phase].push_back(sys_name);
+                }
+            }
+        }
+    }
+
+    for (std::size_t phase = 0; phase < Scene::PHASES::PHASE_MAX; ++phase) {
+        for (const auto& sys_name : uniq_sys[phase]) {
+            createSystem(sys_name);
+        }
+    }
+}
+
+void GameTool::createSceneEntities(std::size_t idx) {
+    if (idx < _scenes.size()) {
+        for (auto& e : _scenes[idx].entities) {
+            createEntity(e.idx, e.name, e.pos);
+        }
+    }
+}
+
+void GameTool::destroySceneEntities(std::size_t idx) {
+    if (idx < _scenes.size()) {
+        for (auto& e : _scenes[idx].entities) {
+            removeEntity(e.idx);
         }
     }
 }
