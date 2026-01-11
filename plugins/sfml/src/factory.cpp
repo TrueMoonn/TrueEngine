@@ -22,6 +22,7 @@
 #include <toml++/toml.hpp>
 #include <events.hpp>
 
+#include "maths/Vector.hpp"
 #include "physic/components/position.hpp"
 #include "interaction/components/player.hpp"
 #include "display/components/parallax.hpp"
@@ -55,35 +56,6 @@ static void quickSortDraw(std::vector<Sprite>& arr, int low, int high) {
         quickSortDraw(arr, piv + 1, high);
     }
 }
-
-static bool keyUpdate(const te::Keys& keys) {
-    static te::Keys old_info = {false};
-    bool result = false;
-    for (std::size_t i = 0; i < keys.max_size(); ++i) {
-        if (keys[i] != old_info[i]) {
-            old_info[i] = keys[i];
-            result = true;
-        }
-    }
-    return result;
-};
-
-static bool mouseUpdate(const te::Mouse& mouse) {
-    static te::Mouse old_info;
-    bool result = false;
-    for (std::size_t i = 0; i < mouse.type.max_size(); ++i) {
-        if (mouse.type[i] != old_info.type[i]) {
-            old_info.type[i] = mouse.type[i];
-            result = true;
-        }
-    }
-    if (old_info.position.x != mouse.position.x &&
-        old_info.position.y != mouse.position.x) {
-        result = true;
-        old_info.position = mouse.position;
-    }
-    return result;
-};
 
 Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
     : te::plugin::APlugin(reg, sig) {
@@ -163,6 +135,9 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
             auto& windows = reg.getComponents<Window>();
             static te::Keys keys = {false};
             static te::Mouse mouse;
+            static mat::Vector2i old_mpos;
+            bool mouse_update = false;
+            bool key_update = false;
 
             for (auto&& [win] : ECS::DenseZipper(windows)) {
                 while (std::optional<sf::Event> ev = win.win->pollEvent()) {
@@ -170,33 +145,39 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
                         keys[static_cast<te::Key>(
                             ev->getIf<sf::Event::KeyPressed>()->
                             code)] = true;
+                        key_update = true;
                     }
                     if (ev->is<sf::Event::KeyReleased>()) {
                         keys[static_cast<te::Key>(
                             ev->getIf<sf::Event::KeyReleased>()->
                             code)] = false;
+                        key_update = true;
                     }
                     if (ev->is<sf::Event::MouseButtonPressed>()) {
                         const auto& temp = ev->getIf<
                             sf::Event::MouseButtonPressed>();
                         mouse.type[static_cast<
                             te::MouseEvent>(temp->button)] = true;
+                        mouse_update = true;
                     }
                     if (ev->is<sf::Event::MouseButtonReleased>()) {
                         const auto& temp = ev->getIf<
                             sf::Event::MouseButtonReleased>();
                         mouse.type[static_cast<
                             te::MouseEvent>(temp->button)] = false;
+                        mouse_update = true;
                     }
                     mouse.position.x = sf::Mouse::getPosition(*win.win).x;
                     mouse.position.y = sf::Mouse::getPosition(*win.win).y;
+                    if (old_mpos.x != mouse.position.x &&
+                        old_mpos.y != mouse.position.y) mouse_update = true;
                     if (ev->is<sf::Event::Closed>()) {
                         win.win->close();
                         sig.emit("closed");
                     }
                 }
-                if (keyUpdate(keys)) sig.emit("key_input", keys);
-                if (mouseUpdate(mouse)) sig.emit("mouse_input", mouse);
+                if (key_update) sig.emit("key_input", keys);
+                if (mouse_update) sig.emit("mouse_input", mouse);
             }
         });
     };
