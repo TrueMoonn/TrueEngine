@@ -56,7 +56,7 @@ struct PLUGIN_API Window {
     Window(Window&&) noexcept = default;
     Window& operator=(Window&& other) noexcept = default;
 
-    void push_back(const Sprite& sp);
+    PLUGIN_API void push_back(const Sprite& sp);
     std::vector<std::vector<Sprite>> draws;
     std::unique_ptr<sf::RenderWindow> win;
     std::string name;

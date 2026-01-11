@@ -10,10 +10,12 @@
     #include <cstddef>
     #include <maths/Vector.hpp>
 
+    #include "plugin/plugin_api.hpp"
+
 namespace addon {
 namespace display {
 
-struct Parallax {
+struct PLUGIN_API Parallax {
     Parallax(std::size_t nb_iterations, const mat::Vector2i& reset);
     Parallax(const Parallax&) = default;
     Parallax(Parallax&&) = default;
