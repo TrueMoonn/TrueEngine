@@ -66,11 +66,6 @@ Interaction::Interaction(ECS::Registry& reg, te::SignalManager& sig)
         }
     });
     sig.sub<te::Mouse>("mouse_input", [&reg, &sig](te::Mouse mouse) {
-        static mat::Vector2i check_moved = mouse.position;
-        if (check_moved.x == mouse.position.x &&
-            check_moved.y == mouse.position.y)
-            return;
-        check_moved = mouse.position;
         auto& poss = reg.getComponents<physic::Position2>();
         auto& hits = reg.getComponents<physic::Hitbox>();
         auto& hovers = reg.getComponents<Hoverable>();
@@ -82,7 +77,6 @@ Interaction::Interaction(ECS::Registry& reg, te::SignalManager& sig)
                 mouse.position.x + view.getCenter().x - view.getSize().x / 2,
                 mouse.position.y + view.getCenter().y - view.getSize().y / 2
             );
-            std::cout << mpos.x << " " << mpos.y << std::endl;
             for (auto&& [e, hit, pos, _] :
                 ECS::IndexedDenseZipper(hits, poss, hovers)) {
                 mat::Vector2f hpos = pos + hit.position;

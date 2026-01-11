@@ -56,6 +56,35 @@ static void quickSortDraw(std::vector<Sprite>& arr, int low, int high) {
     }
 }
 
+static bool keyUpdate(const te::Keys& keys) {
+    static te::Keys old_info = {false};
+    bool result = false;
+    for (std::size_t i = 0; i < keys.max_size(); ++i) {
+        if (keys[i] != old_info[i]) {
+            old_info[i] = keys[i];
+            result = true;
+        }
+    }
+    return result;
+};
+
+static bool mouseUpdate(const te::Mouse& mouse) {
+    static te::Mouse old_info;
+    bool result = false;
+    for (std::size_t i = 0; i < mouse.type.max_size(); ++i) {
+        if (mouse.type[i] != old_info.type[i]) {
+            old_info.type[i] = mouse.type[i];
+            result = true;
+        }
+    }
+    if (old_info.position.x != mouse.position.x &&
+        old_info.position.y != mouse.position.x) {
+        result = true;
+        old_info.position = mouse.position;
+    }
+    return result;
+};
+
 Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
     : te::plugin::APlugin(reg, sig) {
     reg.registerComponent<Window>();
@@ -166,8 +195,8 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
                         sig.emit("closed");
                     }
                 }
-                sig.emit("key_input", keys);
-                sig.emit("mouse_input", mouse);
+                if (keyUpdate(keys)) sig.emit("key_input", keys);
+                if (mouseUpdate(mouse)) sig.emit("mouse_input", mouse);
             }
         });
     };
