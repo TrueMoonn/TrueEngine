@@ -247,7 +247,6 @@ class GameTool {
     void destroySceneEntities(std::size_t idx);
     std::vector<Scene> _scenes;
     std::unordered_map<std::string, bool> _paused_systems;
-
 };
 
 }  // namespace te
