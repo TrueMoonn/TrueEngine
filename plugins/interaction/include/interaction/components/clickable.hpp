@@ -8,11 +8,11 @@
 #pragma once
 
 namespace addon {
-namespace sfml {
+namespace intact {
 
 struct Clickable {
     unsigned clickable = 1;
 };
 
-}  // namespace sfml
+}  // namespace intact
 }  // namespace addon

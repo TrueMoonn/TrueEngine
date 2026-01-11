@@ -129,6 +129,12 @@ void InGame::run(void) {
             deactivateScene(1);
         }
     });
+    sub<ECS::Entity>("clicked", [](ECS::Entity e) {
+        std::cout << "clicked " << e << std::endl;
+    });
+    sub<ECS::Entity>("hovered", [](ECS::Entity e) {
+        std::cout << "hovered " << e << std::endl;
+    });
 
     state = GameState::RUN;
     te::Timestamp delta(1.0f / 60);

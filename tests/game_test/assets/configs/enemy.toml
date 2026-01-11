@@ -2,6 +2,7 @@
     [ENTITIES.enemy]
     drawable = true
     position2 = true
+    hoverable = true
         [ENTITIES.enemy.health]
         amount = 2
 

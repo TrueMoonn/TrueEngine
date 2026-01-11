@@ -82,47 +82,6 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
         const ECS::Entity& e, const toml::table&) {
         reg.createComponent<Drawable>(e);
     };
-    reg.registerComponent<Clickable>();
-    _components["clickable"] = [](ECS::Registry& reg,
-        const ECS::Entity& e, const toml::table&) {
-        reg.createComponent<Clickable>(e);
-    };
-    reg.registerComponent<Hoverable>();
-    _components["hoverable"] = [](ECS::Registry& reg,
-        const ECS::Entity& e, const toml::table&) {
-        reg.createComponent<Hoverable>(e);
-    };
-    // events.addSubscription(te::event::System::MouseButtonPressed,
-    //     [&events](ECS::Registry& reg,
-    //     const te::SignalManager::eventContent& content,
-    //     std::optional<ECS::Entity> e){
-    //     auto &window = reg.getComponents<Window>();
-    //     auto &sprite = reg.getComponents<Sprite>();
-    //     auto& event = std::get<te::event::MouseEvent>(content);
-    //     int i = 0;
-
-    //     for (auto && [win] : ECS::DenseZipper(window)) {
-    //         for (auto&& [id, spr] : ECS::IndexedDenseZipper(sprite)) {
-    //             if (event._MouseKey.at(te::event::MouseButton::MouseLeft)
-    //             .active) {
-    //                 const auto &pos = sf::Mouse::getPosition(win);
-    //                 const auto &translated = win.mapPixelToCoords(pos);
-
-    //                 if (spr.sp.getGlobalBounds().contains(translated)) {
-    //                     if (i == 1) {
-    //                         if (id == MENU_BEGIN)
-    //                             events.setSystemEvent(
-    //                                 te::event::System::ChangeScene, true);
-    //                         if (id == (MENU_BEGIN + 1))
-    //                             events.setSystemEvent(
-    //                                 te::event::System::Closed, true);
-    //                     }
-    //                     i++;
-    //                 }
-    //             }
-    //         }
-    //     }
-    // });
     reg.registerComponent<Sprite>();
     _components["sprite"] = [](ECS::Registry& reg,
         const ECS::Entity& e, const toml::table& params) {

@@ -4,6 +4,7 @@
     player = true
     position2 = true
     movable = true
+    clickable = true
 
         [ENTITIES.player.health]
         amount = 5
