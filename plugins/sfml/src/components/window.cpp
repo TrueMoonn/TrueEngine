@@ -32,7 +32,7 @@ Window::Window(const std::string& winName, const mat::Vector2u& size,
     win->setKeyRepeatEnabled(false);
 }
 
-void Window::push_back(const Sprite& sp) {
+PLUGIN_API void Window::push_back(const Sprite& sp) {
     if (draws.size() <= sp.layer) {
         draws.resize(sp.layer + 1);
     }

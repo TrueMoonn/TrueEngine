@@ -71,12 +71,12 @@ struct PLUGIN_API Animation {
     ~Animation() = default;
 
     const FrameData &getCurrentAnim();
-    PLUGIN_API bool changeAnimation(size_t index);
-    PLUGIN_API void increment();
-    PLUGIN_API void decrement();
-    PLUGIN_API void pause() { if (!timestamp.isPaused()) timestamp.toggle(); }
-    PLUGIN_API void unpause() { if (timestamp.isPaused()) timestamp.toggle(); }
-    PLUGIN_API void toggle() { this->timestamp.toggle(); }
+    bool changeAnimation(size_t index);
+    void increment();
+    void decrement();
+    void pause() { if (!timestamp.isPaused()) timestamp.toggle(); }
+    void unpause() { if (timestamp.isPaused()) timestamp.toggle(); }
+    void toggle() { this->timestamp.toggle(); }
 
     std::vector<FrameData> frameInfos;
     std::size_t curAnim;

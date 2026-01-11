@@ -14,7 +14,7 @@ const FrameData &Animation::getCurrentAnim() {
     return frameInfos[curAnim];
 }
 
-bool Animation::changeAnimation(size_t index) {
+PLUGIN_API bool Animation::changeAnimation(size_t index) {
     if (index >= frameInfos.size())
         return false;
     curAnim = index;
@@ -24,13 +24,13 @@ bool Animation::changeAnimation(size_t index) {
     return true;
 }
 
-void Animation::increment() {
+PLUGIN_API void Animation::increment() {
     curFrame++;
     if (curFrame >= frameInfos[curAnim].frameMAX)
         curFrame = frameInfos[curAnim].loop ? 0 : curFrame - 1;
 }
 
-void Animation::decrement() {
+PLUGIN_API void Animation::decrement() {
     if (curFrame > 0)
         curFrame--;
 }
