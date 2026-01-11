@@ -13,6 +13,7 @@
     #include <SFML/Graphics/RenderWindow.hpp>
     #include <SFML/Window/VideoMode.hpp>
 
+    #include "plugin/plugin_api.hpp"
     #include "maths/Vector.hpp"
     #include "sfml/components/sprite.hpp"
 
@@ -23,14 +24,36 @@ namespace sfml {
 #define DEFAULT_WIN_NAME "TE-game"
 #define DEFAULT_WIN_SIZE {1280, 720}
 
-struct Window {
+struct PLUGIN_API Window {
     Window(const std::string& name = DEFAULT_WIN_NAME,
         const mat::Vector2u& size = DEFAULT_WIN_SIZE,
         std::size_t framerate = DEFAULT_FRAME_LIMIT,
         bool fullscreen = false);
-    Window(const Window&);
+
+    Window(const Window& other) :
+        name(other.name),
+        framerate(other.framerate) {
+        win = std::make_unique<sf::RenderWindow>(
+            sf::VideoMode(other.win->getSize()),
+            other.name);
+        win->setFramerateLimit(framerate);
+        win->setKeyRepeatEnabled(false);
+    }
+    Window& operator=(const Window& other) {
+        if (this != &other) {
+            name = other.name;
+            framerate = other.framerate;
+            draws = other.draws;
+            win = std::make_unique<sf::RenderWindow>(
+                sf::VideoMode(other.win->getSize()),
+                other.name);
+            win->setFramerateLimit(other.framerate);
+            win->setKeyRepeatEnabled(false);
+        }
+        return *this;
+    }
+
     Window(Window&&) noexcept = default;
-    Window& operator=(const Window& other);
     Window& operator=(Window&& other) noexcept = default;
 
     void push_back(const Sprite& sp);

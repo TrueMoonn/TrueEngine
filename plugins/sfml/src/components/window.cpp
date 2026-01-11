@@ -32,30 +32,6 @@ Window::Window(const std::string& winName, const mat::Vector2u& size,
     win->setKeyRepeatEnabled(false);
 }
 
-Window::Window(const Window& other) :
-    name(other.name),
-    framerate(other.framerate) {
-    win = std::make_unique<sf::RenderWindow>(
-        sf::VideoMode(other.win->getSize()),
-        other.name);
-    win->setFramerateLimit(framerate);
-    win->setKeyRepeatEnabled(false);
-}
-
-Window& Window::operator=(const Window& other) {
-    if (this != &other) {
-        name = other.name;
-        framerate = other.framerate;
-        draws = other.draws;
-        win = std::make_unique<sf::RenderWindow>(
-            sf::VideoMode(other.win->getSize()),
-            other.name);
-        win->setFramerateLimit(other.framerate);
-        win->setKeyRepeatEnabled(false);
-    }
-    return *this;
-}
-
 void Window::push_back(const Sprite& sp) {
     if (draws.size() <= sp.layer) {
         draws.resize(sp.layer + 1);

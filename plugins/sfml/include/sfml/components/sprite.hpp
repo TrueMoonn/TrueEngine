@@ -11,10 +11,12 @@
     #include <SFML/Graphics/Texture.hpp>
     #include <SFML/System/Vector2.hpp>
 
+    #include "plugin/plugin_api.hpp"
+
 namespace addon {
 namespace sfml {
 
-struct Sprite {
+struct PLUGIN_API Sprite {
     Sprite(sf::Texture& texture, std::size_t layer,
         const sf::Vector2f& scale = {1.f, 1.f},
         const sf::Vector2f& origin = {0.f, 0.f});

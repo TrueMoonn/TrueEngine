@@ -22,6 +22,8 @@ target_link_libraries(${PROJECT_NAME}
         tomlplusplus::tomlplusplus
 )
 
+target_compile_definitions(${PROJECT_NAME} PRIVATE BUILDING_PLUGIN)
+
 if (ENABLE_TE_COVERAGE)
     target_link_libraries(${PROJECT_NAME} PUBLIC gcov)
 endif ()

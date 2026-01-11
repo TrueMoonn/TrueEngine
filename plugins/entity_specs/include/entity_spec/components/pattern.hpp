@@ -14,6 +14,7 @@
 
 #include "clock.hpp"
 #include "maths/numeric.hpp"
+#include "plugin/plugin_api.hpp"
 
 #include "maths/Vector.hpp"
 
@@ -61,7 +62,7 @@ static const std::array<std::function<float(float)>, MAX_PATTERN> patterns {
  * @brief Pattern component, allows entities to follow a scripted path
  *        influenced by a mathematical formula
  */
-struct Pattern {
+struct PLUGIN_API Pattern {
     explicit Pattern(std::size_t index, float amplitude = 1,
         float frequency = 1);
 
