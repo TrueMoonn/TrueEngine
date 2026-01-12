@@ -11,6 +11,7 @@
 #include <map>
 #include <string>
 #include <cstdint>
+#include <vector>
 
 #include "GameClient.hpp"
 #include <Network/Address.hpp>
@@ -34,14 +35,15 @@ namespace net {
  * The game logic remains in your systems - AutoClient only handles networking.
  */
 class AutoClient : public te::network::GameClient {
-public:
+ public:
     /**
-     * @brief Construct an AutoClient with a reference to the game's ECS Registry
+     * @brief Construct an AutoClient with a reference to the game's Registry
      *
      * @param registry Reference to the ECS Registry containing game entities
      * @param protocol Network protocol ("UDP" or "TCP")
      */
-    AutoClient(ECS::Registry& registry, const std::string& protocol = "UDP");
+    explicit AutoClient(ECS::Registry& registry,
+        const std::string& protocol = "UDP");
 
     ~AutoClient() = default;
 
@@ -63,7 +65,8 @@ public:
      * @param username Player username
      * @return true if connection successful
      */
-    bool connectAndLogin(const std::string& server_ip, uint16_t port, const std::string& username);
+    bool connectAndLogin(const std::string& server_ip, uint16_t port,
+        const std::string& username);
 
     /**
      * @brief Logout and disconnect from server
@@ -187,17 +190,20 @@ public:
     std::function<void(std::uint32_t)> on_new_wave;
     std::function<void()> on_player_dead;
 
-    std::function<void(std::uint32_t player_id, float x, float y)> on_player_discovered;
+    std::function<void(std::uint32_t player_id, float x, float y)>
+        on_player_discovered;
 
-    std::function<void(std::uint32_t enemy_id, float x, float y)> on_enemy_discovered;
+    std::function<void(std::uint32_t enemy_id, float x, float y)>
+        on_enemy_discovered;
 
-    std::function<void(std::uint32_t proj_id, float x, float y, uint8_t type)> on_projectile_discovered;
+    std::function<void(std::uint32_t proj_id, float x, float y, uint8_t type)>
+        on_projectile_discovered;
 
     std::map<std::uint32_t, std::uint32_t> player_id_to_entity;
     std::map<std::uint32_t, std::uint32_t> enemy_id_to_entity;
     std::map<std::uint32_t, std::uint32_t> projectile_id_to_entity;
 
-private:
+ private:
     ECS::Registry& registry;
 
     bool logged_in;

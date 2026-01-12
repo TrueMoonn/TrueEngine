@@ -9,6 +9,7 @@
 
 #include <functional>
 #include <map>
+#include <vector>
 #include <string>
 #include <cstdint>
 
@@ -25,7 +26,7 @@ namespace ECS {
 namespace net {
 
 /**
- * @brief Automatic server that reads from ECS and syncs game state over network
+ * @brief Automatic server that reads from ECS and sync game state over network
  *
  * AutoServer automatically:
  * - Reads entities from the ECS Registry (players, enemies, projectiles)
@@ -36,16 +37,17 @@ namespace net {
  * The game logic remains in your systems - AutoServer only handles networking.
  */
 class AutoServer : public te::network::GameServer {
-public:
+ public:
     /**
-     * @brief Construct an AutoServer with a reference to the game's ECS Registry
+     * @brief Construct an AutoServer with a reference to the game's Registry
      *
      * @param registry Reference to the ECS Registry containing game entities
      * @param signals Reference to the SignalManager for emitting input events
      * @param port Port to listen on
      * @param protocol Network protocol ("UDP" or "TCP")
      */
-    AutoServer(ECS::Registry& registry, te::SignalManager& signals, uint16_t port, const std::string& protocol = "UDP");
+    AutoServer(ECS::Registry& registry, te::SignalManager& signals,
+        uint16_t port, const std::string& protocol = "UDP");
 
     ~AutoServer() = default;
 
@@ -108,7 +110,8 @@ public:
      *
      * @param callback Function(player_id, username)
      */
-    void onPlayerLogin(std::function<void(std::uint32_t, const std::string&)> callback) {
+    void onPlayerLogin(std::function<void(std::uint32_t,
+        const std::string&)> callback) {
         on_player_login = callback;
     }
 
@@ -126,13 +129,16 @@ public:
     /**
      * @brief Called when client sends input data
      *
-     * NOTE: AutoServer automatically emits "network_input" signal with (player_id, inputs)
-     * Use sub<uint32_t, te::Keys>("network_input", ...) to handle inputs in your systems.
+     * NOTE: AutoServer automatically emits "network_input" signal with
+     * (player_id, inputs)
+     * Use sub<uint32_t, te::Keys>("network_input", ...) to handle inputs
+     * in your systems.
      * This callback is optional for additional custom logic.
      *
      * @param callback Function(player_id, inputs_string)
      */
-    void onClientInputs(std::function<void(std::uint32_t, const std::string&)> callback) {
+    void onClientInputs(std::function<void(std::uint32_t,
+        const std::string&)> callback) {
         on_client_inputs = callback;
     }
 
@@ -141,7 +147,8 @@ public:
      *
      * @param callback Function(player_id, lobby_code)
      */
-    void onLobbyCreated(std::function<void(std::uint32_t, const std::string&)> callback) {
+    void onLobbyCreated(std::function<void(std::uint32_t,
+        const std::string&)> callback) {
         on_lobby_created = callback;
     }
 
@@ -150,7 +157,8 @@ public:
      *
      * @param callback Function(player_id, lobby_code)
      */
-    void onPlayerJoinedLobby(std::function<void(std::uint32_t, const std::string&)> callback) {
+    void onPlayerJoinedLobby(std::function<void(std::uint32_t,
+        const std::string&)> callback) {
         on_player_joined_lobby = callback;
     }
 
@@ -188,14 +196,14 @@ public:
      */
     void sendPlayerDead(std::uint32_t player_id);
 
-private:
+ private:
     ECS::Registry& registry;
     te::SignalManager& signals;
 
     std::uint32_t next_player_id;
-    std::map<::net::Address, std::string> logged_players;  // address -> username
-    std::map<::net::Address, std::uint32_t> addr_to_player;  // address -> player_id
-    std::map<std::uint32_t, ::net::Address> player_to_addr;  // player_id -> address
+    std::map<::net::Address, std::string> logged_players;
+    std::map<::net::Address, std::uint32_t> addr_to_player;
+    std::map<std::uint32_t, ::net::Address> player_to_addr;
 
     te::Timestamp last_players_state_send;
     te::Timestamp last_enemies_state_send;
@@ -217,16 +225,24 @@ private:
     std::function<void(std::uint32_t)> on_player_logout;
     std::function<void(std::uint32_t, const std::string&)> on_client_inputs;
     std::function<void(std::uint32_t, const std::string&)> on_lobby_created;
-    std::function<void(std::uint32_t, const std::string&)> on_player_joined_lobby;
+    std::function<void(std::uint32_t, const std::string&)>
+        on_player_joined_lobby;
     std::function<void(std::uint32_t)> on_game_starting;
 
-    void handleLogin(const std::vector<std::uint8_t>& data, const ::net::Address& sender);
-    void handleLogout(const std::vector<std::uint8_t>& data, const ::net::Address& sender);
-    void handleCreateLobby(const std::vector<std::uint8_t>& data, const ::net::Address& sender);
-    void handleJoinLobby(const std::vector<std::uint8_t>& data, const ::net::Address& sender);
-    void handleAdminStartGame(const std::vector<std::uint8_t>& data, const ::net::Address& sender);
-    void handleClientInputs(const std::vector<std::uint8_t>& data, const ::net::Address& sender);
-    void handlePing(const std::vector<std::uint8_t>& data, const ::net::Address& sender);
+    void handleLogin(const std::vector<std::uint8_t>& data,
+        const ::net::Address& sender);
+    void handleLogout(const std::vector<std::uint8_t>& data,
+        const ::net::Address& sender);
+    void handleCreateLobby(const std::vector<std::uint8_t>& data,
+        const ::net::Address& sender);
+    void handleJoinLobby(const std::vector<std::uint8_t>& data,
+        const ::net::Address& sender);
+    void handleAdminStartGame(const std::vector<std::uint8_t>& data,
+        const ::net::Address& sender);
+    void handleClientInputs(const std::vector<std::uint8_t>& data,
+        const ::net::Address& sender);
+    void handlePing(const std::vector<std::uint8_t>& data,
+        const ::net::Address& sender);
 
     void sendPlayersStates();
     void sendEnemiesStates();

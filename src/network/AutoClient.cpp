@@ -5,6 +5,11 @@
 ** AutoClient implementation - syncs network to ECS automatically
 */
 
+#include <string>
+#include <set>
+#include <iostream>
+#include <vector>
+
 #include "network/AutoClient.hpp"
 #include "Network/generated_messages.hpp"
 #include "ECS/Registry.hpp"
@@ -14,10 +19,6 @@
 #include "entity_spec/components/health.hpp"
 #include "entity_spec/components/team.hpp"
 #include "interaction/components/player.hpp"
-#include <iostream>
-#include <cstring>
-#include <set>
-#include <vector>
 
 namespace net {
 
@@ -29,8 +30,7 @@ AutoClient::AutoClient(ECS::Registry& reg, const std::string& protocol)
     , my_username("")
     , current_lobby_code("")
     , next_enemy_entity(1000)
-    , next_projectile_entity(2000)
-{
+    , next_projectile_entity(2000) {
     registerPacketHandler(1, [this](const std::vector<std::uint8_t>& data) {
         handleConnected(data);
     });
@@ -93,11 +93,13 @@ void AutoClient::update(float delta_time) {
     cleanupOldEntities();
 }
 
-bool AutoClient::connectAndLogin(const std::string& server_ip, uint16_t port, const std::string& username) {
+bool AutoClient::connectAndLogin(const std::string& server_ip, uint16_t port,
+    const std::string& username) {
     my_username = username;
 
     if (!connect(server_ip, port)) {
-        std::cerr << "[AutoClient] Failed to connect to " << server_ip << ":" << port << std::endl;
+        std::cerr << "[AutoClient] Failed to connect to " << server_ip << ":"
+            << port << std::endl;
         return false;
     }
 
@@ -118,13 +120,16 @@ void AutoClient::logoutAndDisconnect() {
     my_player_id = 0;
 }
 
-void AutoClient::sendInputs(const std::string& inputs) {
+void AutoClient::sendInputs(const te::Keys& keys) {
     if (!logged_in) {
         return;
     }
 
     ::net::CLIENT_INPUTS msg;
-    std::strncpy(msg.inputs, inputs.c_str(), 102);
+    msg.input_count = 102;
+    for (uint32_t i = 0; i < 102; ++i) {
+        msg.inputs[i] = keys[i] ? 1 : 0;
+    }
     send(msg.serialize());
 }
 
@@ -151,8 +156,6 @@ void AutoClient::leaveLobby() {
 
     ::net::LEAVE_LOBBY msg;
     send(msg.serialize());
-
-
 }
 
 void AutoClient::startGame() {
@@ -161,8 +164,6 @@ void AutoClient::startGame() {
 
     ::net::ADMIN_START_GAME msg;
     send(msg.serialize());
-
-
 }
 
 void AutoClient::pauseGame() {
@@ -182,12 +183,10 @@ void AutoClient::handleConnected(const std::vector<std::uint8_t>& data) {
 }
 
 void AutoClient::handleLoggedIn(const std::vector<std::uint8_t>& data) {
-
     ::net::LOGGED_IN msg = ::net::LOGGED_IN::deserialize(data);
 
     my_player_id = msg.id;
     logged_in = true;
-
 
     // This prevents linking issues with plugin components
     /*
@@ -202,9 +201,11 @@ void AutoClient::handleLoggedIn(const std::vector<std::uint8_t>& data) {
 
         player_id_to_entity[my_player_id] = entity;
 
-        std::cout << "[AutoClient] Created local player entity in ECS" << std::endl;
+        std::cout << "[AutoClient] Created local player entity in ECS"
+            << std::endl;
     } catch (const std::exception& e) {
-        std::cerr << "[AutoClient] Failed to create player entity: " << e.what() << std::endl;
+        std::cerr << "[AutoClient] Failed to create player entity: "
+            << e.what() << std::endl;
     }
     */
 
@@ -218,15 +219,13 @@ void AutoClient::handleLoggedOut(const std::vector<std::uint8_t>& data) {
 
     std::uint32_t player_id = msg.id;
 
-
-
     auto it = player_id_to_entity.find(player_id);
     if (it != player_id_to_entity.end()) {
         try {
             registry.killEntity(it->second);
-
         } catch (const std::exception& e) {
-            std::cerr << "[AutoClient] Failed to remove player entity: " << e.what() << std::endl;
+            std::cerr << "[AutoClient] Failed to remove player entity: "
+                << e.what() << std::endl;
         }
         player_id_to_entity.erase(it);
     }
@@ -234,7 +233,8 @@ void AutoClient::handleLoggedOut(const std::vector<std::uint8_t>& data) {
 
 void AutoClient::handlePlayersStates(const std::vector<std::uint8_t>& data) {
     if (data.size() < 5) {
-        std::cerr << "[AutoClient] PLAYERS_STATES packet too small: " << data.size() << " bytes" << std::endl;
+        std::cerr << "[AutoClient] PLAYERS_STATES packet too small: "
+            << data.size() << " bytes" << std::endl;
         return;
     }
 
@@ -242,61 +242,65 @@ void AutoClient::handlePlayersStates(const std::vector<std::uint8_t>& data) {
     try {
         msg = ::net::PLAYERS_STATES::deserialize(data);
     } catch (const std::exception& e) {
-        std::cerr << "[AutoClient] Failed to deserialize PLAYERS_STATES: " << e.what() << std::endl;
+        std::cerr << "[AutoClient] Failed to deserialize PLAYERS_STATES: "
+            << e.what() << std::endl;
         return;
     }
-
 
     for (const auto& player_state : msg.players) {
         std::uint32_t player_id = player_state.id;
         std::uint32_t entity;
 
-
         auto it = player_id_to_entity.find(player_id);
         if (it != player_id_to_entity.end()) {
-
             entity = it->second;
         } else {
-
             if (on_player_discovered) {
-
-                on_player_discovered(player_id, player_state.x, player_state.y);
+                on_player_discovered(player_id, player_state.x,
+                    player_state.y);
 
                 auto it2 = player_id_to_entity.find(player_id);
                 if (it2 != player_id_to_entity.end()) {
                     entity = it2->second;
 
                 } else {
-                    std::cerr << "[AutoClient] WARNING: on_player_discovered didn't register entity for player " << player_id << std::endl;
+                    std::cerr << "[AutoClient] WARNING: on_player_discovered "
+                    << "didn't register entity for player "
+                    << player_id << std::endl;
                     continue;
                 }
             } else {
-
                 continue;
             }
         }
 
         try {
-            auto& positions = registry.getComponents<addon::physic::Position2>();
+            auto& positions =
+                registry.getComponents<addon::physic::Position2>();
             auto& healths = registry.getComponents<addon::eSpec::Health>();
 
             if (PAGE(entity) >= positions.getSpar().size() ||
-                PAGE_INDEX(entity) >= positions.getSpar()[PAGE(entity)].size()) {
-                std::cerr << "[AutoClient] Player " << player_id << " entity " << entity
-                          << " out of bounds for position access" << std::endl;
+                PAGE_INDEX(entity) >=
+                positions.getSpar()[PAGE(entity)].size()) {
+                std::cerr << "[AutoClient] Player " << player_id << " entity "
+                    << entity
+                    << " out of bounds for position access" << std::endl;
                 continue;
             }
 
-            auto pos_opt = positions.getSpar()[PAGE(entity)][PAGE_INDEX(entity)];
-            auto health_opt = healths.getSpar()[PAGE(entity)][PAGE_INDEX(entity)];
+            auto pos_opt =
+                positions.getSpar()[PAGE(entity)][PAGE_INDEX(entity)];
+            auto health_opt =
+                healths.getSpar()[PAGE(entity)][PAGE_INDEX(entity)];
 
             if (pos_opt.has_value()) {
                 auto& pos = GET_ENTITY_CMPT(positions, entity);
                 pos.x = player_state.x;
                 pos.y = player_state.y;
             } else {
-                std::cerr << "[AutoClient] Player " << player_id << " entity " << entity
-                          << " has no Position component" << std::endl;
+                std::cerr << "[AutoClient] Player " << player_id
+                    << " entity " << entity
+                    << " has no Position component" << std::endl;
             }
 
             if (health_opt.has_value()) {
@@ -304,9 +308,11 @@ void AutoClient::handlePlayersStates(const std::vector<std::uint8_t>& data) {
                 health.amount = static_cast<std::int64_t>(player_state.health);
             }
         } catch (const std::exception& e) {
-            std::cerr << "[AutoClient] Exception updating player " << player_id << ": " << e.what() << std::endl;
+            std::cerr << "[AutoClient] Exception updating player "
+                << player_id << ": " << e.what() << std::endl;
         } catch (...) {
-            std::cerr << "[AutoClient] Unknown exception updating player " << player_id << std::endl;
+            std::cerr << "[AutoClient] Unknown exception updating player "
+                << player_id << std::endl;
         }
     }
 }
@@ -315,7 +321,7 @@ void AutoClient::handlePlayersInfo(const std::vector<std::uint8_t>& data) {
     ::net::PLAYERS_INFO msg = ::net::PLAYERS_INFO::deserialize(data);
 
     // Update player info (weapon, level, status)
-    // TODO: Implement when these components exist
+    // TODO(xxx): Implement when these components exist
 }
 
 void AutoClient::handleEnemiesStates(const std::vector<std::uint8_t>& data) {
@@ -354,7 +360,9 @@ void AutoClient::handleEnemiesStates(const std::vector<std::uint8_t>& data) {
                 if (it2 != enemy_id_to_entity.end()) {
                     entity = it2->second;
                 } else {
-                    std::cerr << "[AutoClient] WARNING: on_enemy_discovered didn't register entity for enemy " << enemy_id << std::endl;
+                    std::cerr << "[AutoClient] WARNING: on_enemy_discovered "
+                    << "didn't register entity for enemy " << enemy_id
+                    << std::endl;
                     continue;
                 }
             } else {
@@ -363,26 +371,32 @@ void AutoClient::handleEnemiesStates(const std::vector<std::uint8_t>& data) {
         }
 
         try {
-            auto& positions = registry.getComponents<addon::physic::Position2>();
+            auto& positions =
+                registry.getComponents<addon::physic::Position2>();
             auto& healths = registry.getComponents<addon::eSpec::Health>();
 
             if (PAGE(entity) >= positions.getSpar().size() ||
-                PAGE_INDEX(entity) >= positions.getSpar()[PAGE(entity)].size()) {
-                std::cerr << "[AutoClient] Enemy " << enemy_id << " entity " << entity
-                          << " out of bounds for position access" << std::endl;
+                PAGE_INDEX(entity) >=
+                positions.getSpar()[PAGE(entity)].size()) {
+                std::cerr << "[AutoClient] Enemy " << enemy_id << " entity "
+                    << entity
+                    << " out of bounds for position access" << std::endl;
                 continue;
             }
 
-            auto pos_opt = positions.getSpar()[PAGE(entity)][PAGE_INDEX(entity)];
-            auto health_opt = healths.getSpar()[PAGE(entity)][PAGE_INDEX(entity)];
+            auto pos_opt =
+                positions.getSpar()[PAGE(entity)][PAGE_INDEX(entity)];
+            auto health_opt =
+                healths.getSpar()[PAGE(entity)][PAGE_INDEX(entity)];
 
             if (pos_opt.has_value()) {
                 auto& pos = GET_ENTITY_CMPT(positions, entity);
                 pos.x = enemy_state.x;
                 pos.y = enemy_state.y;
             } else {
-                std::cerr << "[AutoClient] Enemy " << enemy_id << " entity " << entity
-                          << " has no Position component" << std::endl;
+                std::cerr << "[AutoClient] Enemy " << enemy_id << " entity "
+                    << entity
+                    << " has no Position component" << std::endl;
             }
 
             if (health_opt.has_value()) {
@@ -390,9 +404,11 @@ void AutoClient::handleEnemiesStates(const std::vector<std::uint8_t>& data) {
                 health.amount = static_cast<std::int64_t>(enemy_state.health);
             }
         } catch (const std::exception& e) {
-            std::cerr << "[AutoClient] Exception updating enemy " << enemy_id << ": " << e.what() << std::endl;
+            std::cerr << "[AutoClient] Exception updating enemy "
+                << enemy_id << ": " << e.what() << std::endl;
         } catch (...) {
-            std::cerr << "[AutoClient] Unknown exception updating enemy " << enemy_id << std::endl;
+            std::cerr << "[AutoClient] Unknown exception updating enemy "
+                << enemy_id << std::endl;
         }
     }
 }
@@ -401,7 +417,7 @@ void AutoClient::handleEnemiesInfo(const std::vector<std::uint8_t>& data) {
     ::net::ENEMIES_INFO msg = ::net::ENEMIES_INFO::deserialize(data);
 
     // Update enemy info (weapon, level, status)
-    // TODO: Implement when these components exist
+    // TODO(xxx): Implement when these components exist
 }
 
 void AutoClient::handleProjectilesPos(const std::vector<std::uint8_t>& data) {
@@ -440,7 +456,10 @@ void AutoClient::handleProjectilesPos(const std::vector<std::uint8_t>& data) {
                 if (it2 != projectile_id_to_entity.end()) {
                     entity = it2->second;
                 } else {
-                    std::cerr << "[AutoClient] WARNING: on_projectile_discovered didn't register entity for projectile " << proj_id << std::endl;
+                    std::cerr
+                        << "[AutoClient] WARNING: on_projectile_discovered "
+                        << "didn't register entity for projectile "
+                        << proj_id << std::endl;
                     continue;
                 }
             } else {
@@ -449,28 +468,35 @@ void AutoClient::handleProjectilesPos(const std::vector<std::uint8_t>& data) {
         }
 
         try {
-            auto& positions = registry.getComponents<addon::physic::Position2>();
+            auto& positions =
+                registry.getComponents<addon::physic::Position2>();
 
             if (PAGE(entity) >= positions.getSpar().size() ||
-                PAGE_INDEX(entity) >= positions.getSpar()[PAGE(entity)].size()) {
-                std::cerr << "[AutoClient] Projectile " << proj_id << " entity " << entity
-                          << " out of bounds for position access" << std::endl;
+                PAGE_INDEX(entity) >=
+                positions.getSpar()[PAGE(entity)].size()) {
+                std::cerr << "[AutoClient] Projectile " << proj_id
+                    << " entity " << entity
+                    << " out of bounds for position access" << std::endl;
                 continue;
             }
 
-            auto pos_opt = positions.getSpar()[PAGE(entity)][PAGE_INDEX(entity)];
+            auto pos_opt =
+                positions.getSpar()[PAGE(entity)][PAGE_INDEX(entity)];
             if (pos_opt.has_value()) {
                 auto& pos = GET_ENTITY_CMPT(positions, entity);
                 pos.x = proj.x;
                 pos.y = proj.y;
             } else {
-                std::cerr << "[AutoClient] Projectile " << proj_id << " entity " << entity
-                          << " has no Position component" << std::endl;
+                std::cerr << "[AutoClient] Projectile " << proj_id
+                    << " entity " << entity
+                    << " has no Position component" << std::endl;
             }
         } catch (const std::exception& e) {
-            std::cerr << "[AutoClient] Exception updating projectile " << proj_id << ": " << e.what() << std::endl;
+            std::cerr << "[AutoClient] Exception updating projectile "
+                << proj_id << ": " << e.what() << std::endl;
         } catch (...) {
-            std::cerr << "[AutoClient] Unknown exception updating projectile " << proj_id << std::endl;
+            std::cerr << "[AutoClient] Unknown exception updating projectile "
+                << proj_id << std::endl;
         }
     }
 }
@@ -479,8 +505,6 @@ void AutoClient::handleLobbyCreated(const std::vector<std::uint8_t>& data) {
     ::net::LOBBY_CREATED msg = ::net::LOBBY_CREATED::deserialize(data);
 
     current_lobby_code = std::string(msg.lobby_code, 6);
-
-
 
     if (on_lobby_created) {
         on_lobby_created(current_lobby_code);
@@ -526,7 +550,8 @@ void AutoClient::handlePong(const std::vector<std::uint8_t>& data) {
 }
 
 void AutoClient::cleanupOldEntities() {
-    // TODO: Implement cleanup of entities that haven't been updated in a while
+    // TODO(xxx): Implement cleanup of entities
+    // that haven't been updated in a while
 }
 
 }  // namespace net

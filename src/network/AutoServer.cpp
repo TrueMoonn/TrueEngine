@@ -5,6 +5,12 @@
 ** AutoServer implementation - automatically syncs ECS to network
 */
 
+#include <iostream>
+#include <cstring>
+#include <random>
+#include <vector>
+#include <string>
+
 #include "network/AutoServer.hpp"
 #include "Network/generated_messages.hpp"
 #include "ECS/Registry.hpp"
@@ -15,13 +21,11 @@
 #include "entity_spec/components/team.hpp"
 #include "interaction/components/player.hpp"
 #include "events.hpp"
-#include <iostream>
-#include <cstring>
-#include <random>
 
 namespace net {
 
-AutoServer::AutoServer(ECS::Registry& reg, te::SignalManager& sig, uint16_t port, const std::string& protocol)
+AutoServer::AutoServer(ECS::Registry& reg, te::SignalManager& sig,
+    uint16_t port, const std::string& protocol)
     : te::network::GameServer(port, protocol)
     , registry(reg)
     , signals(sig)
@@ -38,33 +42,39 @@ AutoServer::AutoServer(ECS::Registry& reg, te::SignalManager& sig, uint16_t port
     , enemies_info_interval(1.0f / 10.0f)
     , default_spawn_x(100.0f)
     , default_spawn_y(100.0f)
-    , default_player_health(100)
-{
-    registerPacketHandler(20, [this](const std::vector<std::uint8_t>& data, const ::net::Address& sender) {
+    , default_player_health(100) {
+    registerPacketHandler(20, [this](const std::vector<std::uint8_t>& data,
+        const ::net::Address& sender) {
         handleLogin(data, sender);
     });
 
-    registerPacketHandler(21, [this](const std::vector<std::uint8_t>& data, const ::net::Address& sender) {
+    registerPacketHandler(21, [this](const std::vector<std::uint8_t>& data,
+        const ::net::Address& sender) {
         handleLogout(data, sender);
     });
 
-    registerPacketHandler(32, [this](const std::vector<std::uint8_t>& data, const ::net::Address& sender) {
+    registerPacketHandler(32, [this](const std::vector<std::uint8_t>& data,
+        const ::net::Address& sender) {
         handleCreateLobby(data, sender);
     });
 
-    registerPacketHandler(30, [this](const std::vector<std::uint8_t>& data, const ::net::Address& sender) {
+    registerPacketHandler(30, [this](const std::vector<std::uint8_t>& data,
+        const ::net::Address& sender) {
         handleJoinLobby(data, sender);
     });
 
-    registerPacketHandler(35, [this](const std::vector<std::uint8_t>& data, const ::net::Address& sender) {
+    registerPacketHandler(35, [this](const std::vector<std::uint8_t>& data,
+        const ::net::Address& sender) {
         handleAdminStartGame(data, sender);
     });
 
-    registerPacketHandler(50, [this](const std::vector<std::uint8_t>& data, const ::net::Address& sender) {
+    registerPacketHandler(50, [this](const std::vector<std::uint8_t>& data,
+        const ::net::Address& sender) {
         handleClientInputs(data, sender);
     });
 
-    registerPacketHandler(6, [this](const std::vector<std::uint8_t>& data, const ::net::Address& sender) {
+    registerPacketHandler(6, [this](const std::vector<std::uint8_t>& data,
+        const ::net::Address& sender) {
         handlePing(data, sender);
     });
 }
@@ -73,7 +83,8 @@ void AutoServer::update(float delta_time) {
     static int update_count = 0;
     update_count++;
     if (update_count % 60 == 0) {
-        std::cout << "[AutoServer] Update called " << update_count << " times" << std::endl;
+        std::cout << "[AutoServer] Update called " << update_count
+            << " times" << std::endl;
     }
 
     te::network::GameServer::update(delta_time);
@@ -99,7 +110,8 @@ void AutoServer::update(float delta_time) {
     }
 }
 
-void AutoServer::handleLogin(const std::vector<std::uint8_t>& data, const ::net::Address& sender) {
+void AutoServer::handleLogin(const std::vector<std::uint8_t>& data,
+    const ::net::Address& sender) {
     std::cout << "[AutoServer] *** RECEIVED LOGIN MESSAGE ***" << std::endl;
 
     ::net::LOGIN login_msg = ::net::LOGIN::deserialize(data);
@@ -122,29 +134,33 @@ void AutoServer::handleLogin(const std::vector<std::uint8_t>& data, const ::net:
     ::net::LOGGED_IN response;
     response.id = player_id;
 
-    std::cout << "[AutoServer] Sending LOGGED_IN response to player '" << login_msg.username
-              << "' (ID: " << player_id << ")" << std::endl;
+    std::cout << "[AutoServer] Sending LOGGED_IN response to player '"
+        << login_msg.username
+        << "' (ID: " << player_id << ")" << std::endl;
 
     sendTo(sender, response.serialize());
 
     std::cout << "[AutoServer] Player '" << login_msg.username
-              << "' logged in (ID: " << player_id << ")" << std::endl;
+        << "' logged in (ID: " << player_id << ")" << std::endl;
 
-    // NOTE: Entity creation is handled by the game via on_player_login callback
+    // NOTE: Entity creation is handled by the game via on_player_login
     // This prevents linking issues with plugin components
     /*
     try {
         ECS::Entity entity = static_cast<ECS::Entity>(player_id);
 
         registry.addComponent(entity, addon::intact::Player{player_id});
-        registry.addComponent(entity, addon::physic::Position2(default_spawn_x, default_spawn_y));
+        registry.addComponent(entity,
+            addon::physic::Position2(default_spawn_x, default_spawn_y));
         registry.addComponent(entity, addon::physic::Velocity2(0.0f, 0.0f));
-        registry.addComponent(entity, addon::eSpec::Health(default_player_health, 1.0f));
+        registry.addComponent(entity,
+            addon::eSpec::Health(default_player_health, 1.0f));
         registry.addComponent(entity, addon::eSpec::Team("player"));
 
         std::cout << "[AutoServer] Created player entity in ECS" << std::endl;
     } catch (const std::exception& e) {
-        std::cerr << "[AutoServer] Failed to create player entity: " << e.what() << std::endl;
+        std::cerr << "[AutoServer] Failed to create player entity: "
+            << e.what() << std::endl;
     }
     */
 
@@ -152,11 +168,13 @@ void AutoServer::handleLogin(const std::vector<std::uint8_t>& data, const ::net:
         on_player_login(player_id, login_msg.username);
     }
 
-    std::cout << "[AutoServer] Sending initial PLAYERS_STATES to new client" << std::endl;
+    std::cout << "[AutoServer] Sending initial PLAYERS_STATES to new client"
+        << std::endl;
     sendPlayersStates();
 }
 
-void AutoServer::handleLogout(const std::vector<std::uint8_t>& data, const ::net::Address& sender) {
+void AutoServer::handleLogout(const std::vector<std::uint8_t>& data,
+    const ::net::Address& sender) {
     auto it = addr_to_player.find(sender);
     if (it == addr_to_player.end()) {
         return;
@@ -168,14 +186,17 @@ void AutoServer::handleLogout(const std::vector<std::uint8_t>& data, const ::net
     msg.id = player_id;
     broadcastToAll(msg.serialize());
 
-    std::cout << "[AutoServer] Player " << player_id << " logged out" << std::endl;
+    std::cout << "[AutoServer] Player " << player_id << " logged out"
+        << std::endl;
 
     try {
         ECS::Entity entity = static_cast<ECS::Entity>(player_id);
         registry.killEntity(entity);
-        std::cout << "[AutoServer] Removed player entity from ECS" << std::endl;
+        std::cout << "[AutoServer] Removed player entity from ECS"
+            << std::endl;
     } catch (const std::exception& e) {
-        std::cerr << "[AutoServer] Failed to remove player entity: " << e.what() << std::endl;
+        std::cerr << "[AutoServer] Failed to remove player entity: "
+            << e.what() << std::endl;
     }
 
     player_to_addr.erase(player_id);
@@ -187,7 +208,8 @@ void AutoServer::handleLogout(const std::vector<std::uint8_t>& data, const ::net
     }
 }
 
-void AutoServer::handleCreateLobby(const std::vector<std::uint8_t>& data, const ::net::Address& sender) {
+void AutoServer::handleCreateLobby(const std::vector<std::uint8_t>& data,
+    const ::net::Address& sender) {
     std::string lobby_code = generateLobbyCode();
 
     ::net::LOBBY_CREATED response;
@@ -202,10 +224,12 @@ void AutoServer::handleCreateLobby(const std::vector<std::uint8_t>& data, const 
     }
 }
 
-void AutoServer::handleJoinLobby(const std::vector<std::uint8_t>& data, const ::net::Address& sender) {
+void AutoServer::handleJoinLobby(const std::vector<std::uint8_t>& data,
+    const ::net::Address& sender) {
     ::net::JOIN_LOBBY msg = ::net::JOIN_LOBBY::deserialize(data);
 
-    std::cout << "[AutoServer] Player joined lobby: " << msg.lobby_code << std::endl;
+    std::cout << "[AutoServer] Player joined lobby: " << msg.lobby_code
+        << std::endl;
 
     auto it = addr_to_player.find(sender);
     if (it != addr_to_player.end() && on_player_joined_lobby) {
@@ -213,7 +237,8 @@ void AutoServer::handleJoinLobby(const std::vector<std::uint8_t>& data, const ::
     }
 }
 
-void AutoServer::handleAdminStartGame(const std::vector<std::uint8_t>& data, const ::net::Address& sender) {
+void AutoServer::handleAdminStartGame(const std::vector<std::uint8_t>& data,
+    const ::net::Address& sender) {
     ::net::GAME_STARTING msg;
     broadcastToAll(msg.serialize());
 
@@ -225,7 +250,8 @@ void AutoServer::handleAdminStartGame(const std::vector<std::uint8_t>& data, con
     }
 }
 
-void AutoServer::handleClientInputs(const std::vector<std::uint8_t>& data, const ::net::Address& sender) {
+void AutoServer::handleClientInputs(const std::vector<std::uint8_t>& data,
+    const ::net::Address& sender) {
     ::net::CLIENT_INPUTS msg = ::net::CLIENT_INPUTS::deserialize(data);
 
     auto it = addr_to_player.find(sender);
@@ -235,26 +261,20 @@ void AutoServer::handleClientInputs(const std::vector<std::uint8_t>& data, const
 
     std::uint32_t player_id = it->second;
 
-    // Decode input string (format: "ZQSD" for pressed keys)
-    std::string input_str(msg.inputs);
     te::Keys keys;
-    keys.fill(false);  // Initialize all keys to false
-
-    for (char c : input_str) {
-        if (c == 'Z') keys[te::Key::Z] = true;
-        else if (c == 'S') keys[te::Key::S] = true;
-        else if (c == 'Q') keys[te::Key::Q] = true;
-        else if (c == 'D') keys[te::Key::D] = true;
+    for (uint32_t i = 0; i < 102 && i < msg.input_count; ++i) {
+        keys[i] = (msg.inputs[i] != 0);
     }
 
     signals.emit("network_input", player_id, keys);
 
     if (on_client_inputs) {
-        on_client_inputs(player_id, input_str);
+        on_client_inputs(player_id, "");
     }
 }
 
-void AutoServer::handlePing(const std::vector<std::uint8_t>& data, const ::net::Address& sender) {
+void AutoServer::handlePing(const std::vector<std::uint8_t>& data,
+    const ::net::Address& sender) {
     ::net::PONG response;
     sendTo(sender, response.serialize());
 }
@@ -267,14 +287,15 @@ void AutoServer::sendPlayersStates() {
         auto& healths = registry.getComponents<addon::eSpec::Health>();
         auto& players = registry.getComponents<addon::intact::Player>();
 
-        for (auto&& [player, pos, health] : ECS::DenseZipper(players, positions, healths)) {
+        for (auto&& [player, pos, health] :
+            ECS::DenseZipper(players, positions, healths)) {
             ::net::PlayerState state;
             state.id = player.player;
             state.x = pos.x;
             state.y = pos.y;
             state.health = static_cast<double>(health.amount);
-            state.shield = 0.0;  // TODO: implement later
-            state.mana = 0.0;    // TODO: implement later
+            state.shield = 0.0;  // TODO(xxx): implement later
+            state.mana = 0.0;    // TODO(xxx): implement later
 
             msg.players.push_back(state);
         }
@@ -296,7 +317,8 @@ void AutoServer::sendEnemiesStates() {
         auto& healths = registry.getComponents<addon::eSpec::Health>();
         auto& teams = registry.getComponents<addon::eSpec::Team>();
 
-        for (auto&& [entity_id, team, pos, health] : ECS::IndexedDenseZipper(teams, positions, healths)) {
+        for (auto&& [entity_id, team, pos, health] :
+            ECS::IndexedDenseZipper(teams, positions, healths)) {
             if (team.name == "player" || team.name == "Player") {
                 continue;
             }
@@ -332,7 +354,8 @@ void AutoServer::sendProjectiles() {
         auto& teams = registry.getComponents<addon::eSpec::Team>();
         auto& players = registry.getComponents<addon::intact::Player>();
 
-        for (auto&& [entity_id, pos, team] : ECS::IndexedDenseZipper(positions, teams)) {
+        for (auto&& [entity_id, pos, team] :
+            ECS::IndexedDenseZipper(positions, teams)) {
             if (players.hasComponent(entity_id)) {
                 continue;
             }
@@ -365,9 +388,9 @@ void AutoServer::sendPlayersInfo() {
         for (auto&& [player] : ECS::DenseZipper(players)) {
             ::net::PlayerInfo info;
             info.id = player.player;
-            info.weapon = 0;   // TODO: implement later
-            info.level = 1;    // TODO: implement later
-            info.status = 0;   // TODO: implement later
+            info.weapon = 0;   // TODO(xxx): implement later
+            info.level = 1;    // TODO(xxx): implement later
+            info.status = 0;   // TODO(xxx): implement later
 
             msg.players.push_back(info);
         }
@@ -387,16 +410,17 @@ void AutoServer::sendEnemiesInfo() {
         auto& positions = registry.getComponents<addon::physic::Position2>();
         auto& teams = registry.getComponents<addon::eSpec::Team>();
 
-        for (auto&& [entity_id, team, pos] : ECS::IndexedDenseZipper(teams, positions)) {
+        for (auto&& [entity_id, team, pos] :
+            ECS::IndexedDenseZipper(teams, positions)) {
             if (team.name == "player" || team.name == "Player") {
                 continue;
             }
 
             ::net::EnemyInfo info;
             info.id = static_cast<std::uint32_t>(entity_id);
-            info.weapon = 0;   // TODO: implement later
-            info.level = 1;    // TODO: implement later
-            info.status = 0;   // TODO: implement later
+            info.weapon = 0;   // TODO(xxx): implement later
+            info.level = 1;    // TODO(xxx): implement later
+            info.status = 0;   // TODO(xxx): implement later
 
             msg.enemies.push_back(info);
         }
