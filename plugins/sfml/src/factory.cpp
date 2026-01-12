@@ -97,7 +97,7 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
             auto s_origin = params["origin"].as_array();
             sf::Vector2f origin = s_origin ?
                 sf::Vector2f{s_origin->at(0).value_or(0.0f),
-                s_origin->at(0).value_or(0.0f)} : sf::Vector2f{0.f, 0.f};
+                s_origin->at(1).value_or(0.0f)} : sf::Vector2f{0.f, 0.f};
             const auto &t_size = params["size"].as_array();
             sf::Vector2i size = t_size ?
                 sf::Vector2i(t_size->at(0).value_or(1),
