@@ -52,7 +52,7 @@ Interaction::Interaction(ECS::Registry& reg, te::SignalManager& sig)
                     mouse.position.x + view.getCenter().x - view.getSize().x / 2,
                     mouse.position.y + view.getCenter().y - view.getSize().y / 2
                 );
-                for (auto&& [e, hit, pos, _] :
+                for (auto&& [e, hit, pos, click] :
                     ECS::IndexedDenseZipper(hits, poss, clicks)) {
                     mat::Vector2f hpos = pos + hit.position;
                     if (click_pos.x > hpos.x &&
@@ -60,6 +60,7 @@ Interaction::Interaction(ECS::Registry& reg, te::SignalManager& sig)
                     click_pos.y > hpos.y &&
                     click_pos.y < hpos.y + hit.size.y) {
                         sig.emit("clicked", e);
+                        click.clicked = true;
                     }
                 }
             }
@@ -77,7 +78,7 @@ Interaction::Interaction(ECS::Registry& reg, te::SignalManager& sig)
                 mouse.position.x + view.getCenter().x - view.getSize().x / 2,
                 mouse.position.y + view.getCenter().y - view.getSize().y / 2
             );
-            for (auto&& [e, hit, pos, _] :
+            for (auto&& [e, hit, pos, hover] :
                 ECS::IndexedDenseZipper(hits, poss, hovers)) {
                 mat::Vector2f hpos = pos + hit.position;
                 if (mpos.x > hpos.x &&
@@ -85,6 +86,7 @@ Interaction::Interaction(ECS::Registry& reg, te::SignalManager& sig)
                 mpos.y > hpos.y &&
                 mpos.y < hpos.y + hit.size.y) {
                     sig.emit("hovered", e);
+                    hover.hovered = true;
                 }
             }
         }

@@ -11,7 +11,7 @@ namespace addon {
 namespace intact {
 
 struct Clickable {
-    unsigned clickable = 1;
+    bool clicked = false;
 };
 
 }  // namespace intact
