@@ -61,6 +61,8 @@ Interaction::Interaction(ECS::Registry& reg, te::SignalManager& sig)
                     click_pos.y < hpos.y + hit.size.y) {
                         sig.emit("clicked", e);
                         click.clicked = true;
+                    } else {
+                        click.clicked = false;
                     }
                 }
             }
@@ -87,6 +89,8 @@ Interaction::Interaction(ECS::Registry& reg, te::SignalManager& sig)
                 mpos.y < hpos.y + hit.size.y) {
                     sig.emit("hovered", e);
                     hover.hovered = true;
+                } else {
+                    hover.hovered = false;
                 }
             }
         }
