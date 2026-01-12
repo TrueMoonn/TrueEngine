@@ -62,6 +62,9 @@ add_library( ${PROJECT_NAME} STATIC
     # NETWORK INTEGRATION
     ${TE_SRC_DIR}/network/GameClient.cpp
     ${TE_SRC_DIR}/network/GameServer.cpp
+    ${TE_SRC_DIR}/network/generated_messages.cpp
+    ${TE_SRC_DIR}/network/AutoClient.cpp
+    ${TE_SRC_DIR}/network/AutoServer.cpp
 )
 
 target_include_directories(${PROJECT_NAME}

@@ -71,8 +71,7 @@ void GameClient::update(float delta_time) {
             if (packet_data.empty())
                 continue;
             uint8_t packet_code = packet_data[0];
-            std::vector<uint8_t> payload(packet_data.begin() + 1,
-                packet_data.end());
+            std::vector<uint8_t> payload = packet_data;
             auto it = _on_packet_received_map.find(packet_code);
             if (it != _on_packet_received_map.end()) {
                 it->second(payload);
