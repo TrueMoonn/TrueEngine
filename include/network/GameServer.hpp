@@ -19,11 +19,11 @@ namespace network {
 
 /**
  * @brief Generic multiplayer server
- * 
+ *
  * Provides networking with callbacks for the game to handle
  * packet logic, client connections, and disconnections.
  */
-class GameServer {
+class GameServer : public net::Server {
  public:
     /**
      * @brief Constructs a GameServer with the specified port and protocol
@@ -41,12 +41,12 @@ class GameServer {
      * @brief Starts the server and begins listening for connections
      * @return true if server started successfully, false otherwise
      */
-    bool start();
+    bool startGameServer();
 
     /**
      * @brief Stops the server and disconnects all clients
      */
-    void stop();
+    void stopGameServer();
 
     /**
      * @brief Updates the server state and processes network events
@@ -80,7 +80,7 @@ class GameServer {
 
     /**
      * @brief Callback type: called when data is received from a client
-     * 
+     *
      * The game registers ONE callback that receives ALL data.
      * It's up to the game to dispatch based on packet type.
      */
@@ -167,8 +167,6 @@ class GameServer {
     void queueBroadcast(const std::vector<uint8_t>& data);
 
  private:
-    std::unique_ptr<net::Server> _server;
-    net::SocketType _protocol_type;
     uint16_t _port;
     bool _running;
 

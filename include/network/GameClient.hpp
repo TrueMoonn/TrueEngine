@@ -1,6 +1,5 @@
 #pragma once
 
-#include <memory>
 #include <functional>
 #include <vector>
 #include <string>
@@ -15,17 +14,17 @@ namespace network {
 
 /**
  * @brief Generic multiplayer client
- * 
+ *
  * Provides networking with callbacks for the game to handle
  * packet logic, connection events, and disconnections.
  */
-class GameClient {
+class GameClient : public net::Client {
  public:
     /**
      * @brief Constructs a GameClient with the specified protocol
      * @param protocol Network protocol to use ("UDP" or "TCP"). Defaults to "UDP"
      */
-    explicit GameClient(const std::string& protocol = "UDP");
+    explicit GameClient(const std::string& protocol = "UDP", const std::string& path = "config/protocol.json");
 
     /**
      * @brief Destructor that ensures proper cleanup and disconnection
@@ -38,12 +37,12 @@ class GameClient {
      * @param port Port number of the server
      * @return true if connection was successful, false otherwise
      */
-    bool connect(const std::string& server_ip, uint16_t port);
+    bool connectToServer(const std::string& server_ip, uint16_t port);
 
     /**
      * @brief Disconnects from the server and cleans up resources
      */
-    void disconnect();
+    void disconnectClient();
 
     /**
      * @brief Updates the client state and processes network events
@@ -56,18 +55,18 @@ class GameClient {
      * @param data Vector of bytes to send to the server
      * @return true if data was sent successfully, false otherwise
      */
-    bool send(const std::vector<uint8_t>& data);
+    bool sendToServer(const std::vector<uint8_t>& data);
 
     /**
      * @brief Receive data from server (calls udpReceive or tcpReceive based on protocol)
      * @param timeout Timeout in milliseconds (0 for non-blocking)
      * @param maxInputs Maximum number of packets to receive (UDP only)
      */
-    void receive(int timeout = 0, int maxInputs = 10);
+    void receiveFromServer(int timeout = 0, int maxInputs = 10);
 
     /**
      * @brief Callback type: called when data is received from the server
-     * 
+     *
      * The game registers callbacks for each type of packet.
      */
     using PacketCallback =
@@ -109,23 +108,12 @@ class GameClient {
     void setDisconnectCallback(DisconnectCallback callback);
 
     /**
-     * @brief Checks if the client is currently connected to a server
-     * @return true if connected, false otherwise
-     */
-    bool isConnected() const;
-
-    /**
      * @brief Gets the address of the connected server
      * @return Reference to the server's network address
      */
-    const net::Address& getServerAddress() const { return _server_address; }
+    const net::Address& getServerAddress() const { return net::Client::getServerAddress(); }
 
  private:
-    std::unique_ptr<net::Client> _client;
-    net::SocketType _protocol_type;
-    net::Address _server_address;
-    bool _connected;
-
     // Game callbacks
     std::unordered_map<uint8_t, PacketCallback> _on_packet_received_map;
     ConnectCallback _on_connect;

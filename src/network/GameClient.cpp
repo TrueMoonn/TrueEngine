@@ -1,32 +1,26 @@
 #include <iostream>
-#include <memory>
 #include <string>
 #include <vector>
 #include "network/GameClient.hpp"
-
+#include <Network/Client.hpp>
 
 namespace te {
 namespace network {
 
-GameClient::GameClient(const std::string& protocol)
-    : _protocol_type(protocol == "TCP" ?
-        net::SocketType::TCP : net::SocketType::UDP)
-    , _connected(false) {
-    _client = std::make_unique<net::Client>(protocol);
+GameClient::GameClient(const std::string& protocol, const std::string& path)
+    : net::Client(protocol, path) {
 }
 
 GameClient::~GameClient() {
-    if (_connected) {
+    if (isConnected()) {
         disconnect();
     }
 }
 
-bool GameClient::connect(const std::string& server_ip, uint16_t port) {
-    _server_address = net::Address(server_ip, port);
+bool GameClient::connectToServer(const std::string& server_ip, uint16_t port) {
     try {
-        if (_client->connect(server_ip, port)) {
-            _client->setNonBlocking(true);
-            _connected = true;
+        if (connect(server_ip, port)) {
+            setNonBlocking(true);
             std::cout << "[GameClient] Connected to " <<
                 server_ip << ":" << port << std::endl;
 
@@ -44,11 +38,9 @@ bool GameClient::connect(const std::string& server_ip, uint16_t port) {
     return false;
 }
 
-void GameClient::disconnect() {
-    if (!_connected)
+void GameClient::disconnectClient() {
+    if (!isConnected())
         return;
-
-    _connected = false;
 
     // Notify game
     if (_on_disconnect) {
@@ -59,14 +51,14 @@ void GameClient::disconnect() {
 }
 
 void GameClient::update(float delta_time) {
-    if (!_connected)
+    if (!isConnected())
         return;
     try {
         // Receive data from server
-        receive(0, 10);
+        receiveFromServer(0, 10);
 
         // Extract and process packets from buffer
-        auto packets = _client->extractPacketsFromBuffer();
+        auto packets = extractPacketsFromBuffer();
         for (const auto& packet_data : packets) {
             if (packet_data.empty())
                 continue;
@@ -87,26 +79,26 @@ void GameClient::update(float delta_time) {
     }
 }
 
-bool GameClient::send(const std::vector<uint8_t>& data) {
-    if (!_connected || data.empty())
+bool GameClient::sendToServer(const std::vector<uint8_t>& data) {
+    if (!isConnected() || data.empty())
         return false;
     try {
-        return _client->send(data);
+        return send(data);
     } catch (const std::exception& e) {
         std::cerr << "[GameClient] Send failed: " << e.what() << std::endl;
         return false;
     }
 }
 
-void GameClient::receive(int timeout, int maxInputs) {
-    if (!_connected)
+void GameClient::receiveFromServer(int timeout, int maxInputs) {
+    if (!isConnected())
         return;
 
     try {
-        if (_protocol_type == net::SocketType::UDP) {
-            _client->udpReceive(timeout, maxInputs);
+        if (getProtocol() == net::SocketType::UDP) {
+            udpReceive(timeout, maxInputs);
         } else {
-            _client->tcpReceive(timeout);
+            tcpReceive(timeout);
         }
     } catch (const std::exception& e) {
         std::cerr << "[GameClient] Receive failed: " << e.what() << std::endl;
@@ -127,10 +119,6 @@ void GameClient::setConnectCallback(ConnectCallback callback) {
 
 void GameClient::setDisconnectCallback(DisconnectCallback callback) {
     _on_disconnect = callback;
-}
-
-bool GameClient::isConnected() const {
-    return _connected && _client && _client->isConnected();
 }
 
 }  // namespace network
