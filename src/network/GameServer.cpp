@@ -68,8 +68,7 @@ void GameServer::update(float delta_time) {
 
         if (!packet.data.empty()) {
             uint8_t packet_code = packet.data[0];
-            std::vector<uint8_t> payload(packet.data.begin() + 1,
-                packet.data.end());
+            std::vector<uint8_t> payload = packet.data;
 
             auto handler_it = _on_packet_received_map.find(packet_code);
             if (handler_it != _on_packet_received_map.end()) {
