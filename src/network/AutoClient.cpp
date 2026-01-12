@@ -19,6 +19,7 @@
 #include "entity_spec/components/health.hpp"
 #include "entity_spec/components/team.hpp"
 #include "interaction/components/player.hpp"
+#include "events.hpp"
 
 namespace net {
 

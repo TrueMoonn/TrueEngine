@@ -16,6 +16,7 @@
 #include "GameClient.hpp"
 #include <Network/Address.hpp>
 #include "clock.hpp"
+#include "events.hpp"
 
 namespace ECS {
     class Registry;
@@ -88,7 +89,7 @@ class AutoClient : public te::network::GameClient {
      *
      * @param inputs Input string (e.g., "WASD" for movement)
      */
-    void sendInputs(const std::string& inputs);
+    void sendInputs(const te::Keys& inputs);
 
     /**
      * @brief Create a new lobby
