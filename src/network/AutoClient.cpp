@@ -11,7 +11,7 @@
 #include <vector>
 
 #include "network/AutoClient.hpp"
-#include "Network/generated_messages.hpp"
+#include "network/generated_messages.hpp"
 #include "ECS/Registry.hpp"
 #include "ECS/DenseSA.hpp"
 #include "physic/components/position.hpp"

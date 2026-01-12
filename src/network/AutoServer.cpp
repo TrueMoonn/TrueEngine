@@ -12,7 +12,7 @@
 #include <string>
 
 #include "network/AutoServer.hpp"
-#include "Network/generated_messages.hpp"
+#include "network/generated_messages.hpp"
 #include "ECS/Registry.hpp"
 #include "ECS/DenseSA.hpp"
 #include "ECS/DenseZipper.hpp"

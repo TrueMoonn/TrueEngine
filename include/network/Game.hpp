@@ -42,7 +42,7 @@ class Game : public te::GameTool {
     void setGameState(GAME_STATE game_state);
 
  private:
-    GAME_STATE _game_state = GAME_WAITING;
+    GAME_STATE _game_state = 0;
 
  protected:
     std::size_t createMobWave(
