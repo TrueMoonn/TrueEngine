@@ -9,6 +9,35 @@ set(TE_SRC_DIR "${PROJECT_SOURCE_DIR}/src")
 set(TE_HDR_DIR "${PROJECT_SOURCE_DIR}/include")
 include(FetchContent)
 
+########## PROTOCOL GENERATION ##########
+set(NET_SRC_DIR "${PROJECT_SOURCE_DIR}/Network/src")
+set(NET_HDR_DIR "${PROJECT_SOURCE_DIR}/Network/include")
+set(GENERATED_HEADER "${NET_HDR_DIR}/generated_messages.hpp")
+set(GENERATED_SOURCE "${NET_SRC_DIR}/generated_messages.cpp")
+set(PROTOCOL_JSON "${PROJECT_SOURCE_DIR}/config/protocol.json")
+set(GENERATOR_SCRIPT "${PROJECT_SOURCE_DIR}/Network/tools/generate_protocol.py")
+
+find_package(Python3 COMPONENTS Interpreter REQUIRED)
+
+add_custom_command(
+    OUTPUT
+        ${GENERATED_HEADER}
+        ${GENERATED_SOURCE}
+    COMMAND ${Python3_EXECUTABLE} ${GENERATOR_SCRIPT} ${PROTOCOL_JSON}
+    DEPENDS
+        ${PROTOCOL_JSON}
+        ${GENERATOR_SCRIPT}
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/Network
+    COMMENT "Generated protocol messages from ${PROTOCOL_JSON}"
+    VERBATIM
+)
+
+add_custom_target(generate_protocol
+    DEPENDS
+        ${GENERATED_HEADER}
+        ${GENERATED_SOURCE}
+)
+
 ########## HEADER UPDATE ##########
 message("\nUpdating project header from ECS and Network...")
 execute_process (
@@ -35,6 +64,8 @@ endif()
 ########## LIBS ##########
 add_subdirectory(ECS)
 add_subdirectory(Network)
+
+add_dependencies(Network generate_protocol)
 
 ########## PLUGINS ##########
 add_subdirectory(plugins)
