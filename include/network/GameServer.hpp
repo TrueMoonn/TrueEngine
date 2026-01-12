@@ -125,12 +125,6 @@ class GameServer : public net::Server {
     void setClientDisconnectCallback(ClientDisconnectCallback callback);
 
     /**
-     * @brief Checks if the server is currently running
-     * @return true if server is running, false otherwise
-     */
-    bool isRunning() const;
-
-    /**
      * @brief Gets the number of currently connected clients
      * @return Number of active client connections
      */
