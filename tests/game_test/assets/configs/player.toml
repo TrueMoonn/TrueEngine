@@ -19,14 +19,15 @@
         path = "assets/projectile.png"
         size = [10, 10]
         scale = [30, 30]
-        # origin = [5, 10]
+        # origin = [5, 5]
         layer = 3
 
         [ENTITIES.player.text]
         font = "assets/fonts/TR Nasalization.ttf"
-        string = "I'm the player !"
+        string = "I'm the player :)"
         size = 30
-        offset = [-100, -50]
+        center = true
+        offset = [15, -35]
         color = [255, 0, 0, 255]
 
         [ENTITIES.player.velocity2]

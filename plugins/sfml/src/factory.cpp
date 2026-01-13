@@ -119,11 +119,17 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
     reg.registerComponent<Text>();
     _components["text"] = [](ECS::Registry& reg,
         const ECS::Entity& e, const toml::table& params) {
+        static std::unordered_map<std::string, sf::Font> fonts;
         try {
-            std::string fontpath = params["font"].value_or("");
-            if (fontpath == "") throw std::runtime_error("Invalid font path");
+            const auto& fontPath = params["font"].value_or("");
+            if (fontPath == "") throw std::runtime_error("Invalid font path");
+            auto [it, inserted] = fonts.try_emplace(fontPath);
+            if (inserted) (void)it->second.openFromFile(fontPath);
+            auto& font = it->second;
+
             std::string str = params["string"].value_or("");
             std::size_t size = params["size"].value_or(30UL);
+            bool center = params["center"].value_or<bool>(false);
             const auto &ofArr = params["offset"].as_array();
             mat::Vector2i offset = ofArr && ofArr->size() == 2 ? mat::Vector2i{
                 ofArr->at(0).value_or<int>(0), ofArr->at(1).value_or<int>(0)
@@ -135,7 +141,7 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
                 colArr->at(2).value_or<uint8_t>(0),
                 colArr->at(3).value_or<uint8_t>(255)
             } : sf::Color::White;
-            reg.createComponent<Text>(e, fontpath, str, offset, size, color);
+            reg.createComponent<Text>(e, font, str, offset, center, size, color);
         } catch (const std::out_of_range&) {
             std::cerr << "error(Plugin-Text): font not found" << std::endl;
         } catch (const sf::Exception& e) {
@@ -237,8 +243,14 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
 
             for (auto &&[win] : ECS::DenseZipper(windows)) {
                 for (auto &&[txt, pos] : ECS::DenseZipper(texts, positions)) {
-                    txt.setPosition({pos.x + txt.offset.x
-                        , pos.y + txt.offset.y});
+                    if (!txt.center) {
+                        txt.setPosition({pos.x + txt.offset.x
+                            , pos.y + txt.offset.y});
+                    } else {
+                        auto bounds = txt.getLocalBounds();
+                        txt.setPosition({pos.x - bounds.size.x / 2 + txt.offset.x
+                            , pos.y - bounds.size.y / 2 + txt.offset.y});
+                    }
                     win.texts.push_back(txt);
                 }
             }

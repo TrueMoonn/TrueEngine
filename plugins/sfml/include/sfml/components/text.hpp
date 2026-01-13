@@ -20,17 +20,21 @@
 namespace addon {
 namespace sfml {
 
+/**
+ * @brief Text component for the sfml plugin
+ *
+ * @param fontpath : the
+ */
 struct PLUGIN_API Text : sf::Text {
-    Text(const std::string &fontPath, const std::string &str
-        , const mat::Vector2i &offset, std::size_t size = 30
-        , const sf::Color &color = sf::Color::Black);
+    Text(const sf::Font &font, const std::string &str
+        , const mat::Vector2i &offset, bool center = false
+        , std::size_t size = 30 , const sf::Color &color = sf::Color::Black);
 
     std::string str;
     std::size_t charSize;
     mat::Vector2i offset;
     sf::Color color;
-
-    sf::Font font;
+    bool center;
 };
 
 }  // namespace sfml
