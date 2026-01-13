@@ -180,15 +180,17 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
             for (auto&& [win] : ECS::DenseZipper(windows)) {
                 while (std::optional<sf::Event> ev = win.win->pollEvent()) {
                     if (ev->is<sf::Event::KeyPressed>()) {
-                        keys[static_cast<te::Key>(
-                            ev->getIf<sf::Event::KeyPressed>()->
-                            code)] = true;
+                        if (static_cast<int>(ev->getIf
+                         <sf::Event::KeyPressed>()->code) != -1)
+                            keys[static_cast<te::Key>(ev->getIf
+                                <sf::Event::KeyPressed>()->code)] = true;
                         key_update = true;
                     }
                     if (ev->is<sf::Event::KeyReleased>()) {
-                        keys[static_cast<te::Key>(
-                            ev->getIf<sf::Event::KeyReleased>()->
-                            code)] = false;
+                        if (static_cast<int>(ev->getIf
+                            <sf::Event::KeyReleased>()->code) != -1)
+                            keys[static_cast<te::Key>(ev->getIf
+                                <sf::Event::KeyReleased>()->code)] = false;
                         key_update = true;
                     }
                     if (ev->is<sf::Event::MouseButtonPressed>()) {
@@ -243,6 +245,8 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
 
             for (auto &&[win] : ECS::DenseZipper(windows)) {
                 for (auto &&[txt, pos] : ECS::DenseZipper(texts, positions)) {
+                    if (txt.str != txt.getString())
+                        txt.setString(txt.str);
                     if (!txt.center) {
                         txt.setPosition({pos.x + txt.offset.x
                             , pos.y + txt.offset.y});
