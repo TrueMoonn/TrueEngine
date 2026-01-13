@@ -19,6 +19,7 @@
 #include "interaction/components/player.hpp"
 #include "physic/components/position.hpp"
 #include "physic/components/velocity.hpp"
+#include "sfml/components/text.hpp"
 
 InGame::InGame() : AScene() {
     loadPlugins();
@@ -117,6 +118,33 @@ void InGame::run(void) {
             entity_proj = PROJ_E;
         for (auto&& [_, pos] : ECS::DenseZipper(player, position)) {
             createEntity(entity_proj++, "projectile", {pos.x + 10, pos.y});
+        }
+    });
+    subForScene<te::Keys>(0, "key_input", [this](te::Keys keys) {
+        auto &player = getComponent<addon::intact::Player>();
+        auto &text = getComponent<addon::sfml::Text>();
+
+        for (auto&& [_, txt] : ECS::DenseZipper(player, text)) {
+
+        for (int key = te::A; key <= te::Z; key += 1)
+            if (keys[key])
+                txt.str.push_back(keys[te::LeftShift] ? 'A' : 'a' + key);
+
+        if (keys[te::Apostrophe]) txt.str.push_back('4');
+        if (keys[te::Hyphen]) txt.str.push_back('6');
+
+        for (int key = te::num0; key <= te::num9; key += 1)
+                if (keys[key])
+                    txt.str.push_back('0' + key - te::num0);
+
+        if (keys[te::Slash]) txt.str.push_back('/');
+        if (keys[te::Add]) txt.str.push_back('+');
+        if (keys[te::Multiply]) txt.str.push_back('*');
+        if (keys[te::Period]) txt.str.push_back('.');
+        if (keys[te::Comma]) txt.str.push_back(',');
+        if (keys[te::Space]) txt.str.push_back(' ');
+
+        if (keys[te::Backspace] && !txt.str.empty()) txt.str.pop_back();
         }
     });
     sub<te::Keys>("key_input", [this](te::Keys keys) {

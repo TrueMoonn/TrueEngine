@@ -24,6 +24,7 @@ message("Updating project header from ECS and Network... DONE\n")
 ########## OPTIONS ##########
 option(ENABLE_TE_TESTS "Build tests along with the library" OFF)
 option(ENABLE_TE_COVERAGE "Enable coverage reporting" OFF)
+option(USE_CUSTOM_PROTOCOL "Use custom protocol instead of AutoClient/AutoServer" OFF)
 
 ########## COVERAGE ##########
 if (ENABLE_TE_COVERAGE)
@@ -41,7 +42,7 @@ add_subdirectory(Network)
 add_subdirectory(plugins)
 
 ########## TRUE ENGINE ##########
-add_library( ${PROJECT_NAME} STATIC
+set(TE_SOURCES
     $<TARGET_OBJECTS:ECS>
     $<TARGET_OBJECTS:Network>
 
@@ -62,10 +63,18 @@ add_library( ${PROJECT_NAME} STATIC
     # NETWORK INTEGRATION
     ${TE_SRC_DIR}/network/GameClient.cpp
     ${TE_SRC_DIR}/network/GameServer.cpp
-    ${TE_SRC_DIR}/network/generated_messages.cpp
-    ${TE_SRC_DIR}/network/AutoClient.cpp
-    ${TE_SRC_DIR}/network/AutoServer.cpp
 )
+
+# Add AutoClient/AutoServer and default protocol only if NOT using custom protocol
+if(NOT USE_CUSTOM_PROTOCOL)
+    list(APPEND TE_SOURCES
+        ${TE_SRC_DIR}/network/generated_messages.cpp
+        ${TE_SRC_DIR}/network/AutoClient.cpp
+        ${TE_SRC_DIR}/network/AutoServer.cpp
+    )
+endif()
+
+add_library( ${PROJECT_NAME} STATIC ${TE_SOURCES})
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC
