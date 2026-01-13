@@ -35,7 +35,7 @@ InGame::InGame() : AScene() {
         {"apply_pattern", "movement2", "animate",
             "deal_damage", "apply_fragile"},  // UPDATE
         {"bound_hitbox"},  // POST UPDATE
-        {"draw", "display"}  // RENDER
+        {"draw", "draw_text", "display"}  // RENDER
     }};
 
     size_t map1 = addMap("assets/maps/test1.ddmap");

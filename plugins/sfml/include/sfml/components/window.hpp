@@ -16,6 +16,7 @@
     #include "plugin/plugin_api.hpp"
     #include "maths/Vector.hpp"
     #include "sfml/components/sprite.hpp"
+    #include "sfml/components/text.hpp"
 
 namespace addon {
 namespace sfml {
@@ -58,6 +59,7 @@ struct PLUGIN_API Window {
 
     void push_back(const Sprite& sp);
     std::vector<std::vector<Sprite>> draws;
+    std::vector<Text> texts;
     std::unique_ptr<sf::RenderWindow> win;
     std::string name;
     std::size_t framerate;

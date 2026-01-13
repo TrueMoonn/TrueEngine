@@ -9,4 +9,5 @@
 
 #include "sfml/components/drawable.hpp"
 #include "sfml/components/sprite.hpp"
+#include "sfml/components/text.hpp"
 #include "sfml/components/window.hpp"

@@ -11,7 +11,7 @@ namespace addon {
 namespace intact {
 
 struct Hoverable {
-    unsigned hoverable = 1;
+    bool hovered = false;
 };
 
 }  // namespace intact

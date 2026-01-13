@@ -12,6 +12,17 @@
         [ENTITIES.enemy.team]
         name = "bad_guy"
 
+        [ENTITIES.enemy.text]
+        string = "I'm evil >:)"
+        font = "assets/fonts/TR Nasalization.ttf"
+        offset = [0, -60]
+        center = true
+
+        [ENTITIES.enemy_3.pattern]
+        type = 1
+        amplitude = 3
+        frequency = 1
+
         [ENTITIES.enemy.sprite]
         path = "assets/bat.png"
         size = [32, 32]
