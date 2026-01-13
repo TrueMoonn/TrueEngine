@@ -90,7 +90,8 @@ struct Vector2 {
     }
 
     int distance(Vector2 Vec) {
-        return (std::sqrt(pow(abs(Vec.y - this->y), 2) + pow(abs(Vec.x - this->y)), 2));
+        return (std::sqrt(pow(abs(Vec.y - this->y), 2)
+            + pow(abs(Vec.x - this->y)), 2));
     }
 
     int length(void) {

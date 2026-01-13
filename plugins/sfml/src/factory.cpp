@@ -30,6 +30,7 @@
 #include "Sfml.hpp"
 #include "sfml/components/sprite.hpp"
 #include "sfml/components/window.hpp"
+#include "sfml/components/text.hpp"
 #include "sfml/factory.hpp"
 
 namespace addon {
@@ -114,6 +115,34 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
             std::cerr << e.what() << std::endl;
         }
     };
+
+    reg.registerComponent<Text>();
+    _components["text"] = [](ECS::Registry& reg,
+        const ECS::Entity& e, const toml::table& params) {
+        try {
+            std::string fontpath = params["font"].value_or("");
+            if (fontpath == "") throw std::runtime_error("Invalid font path");
+            std::string str = params["string"].value_or("");
+            std::size_t size = params["size"].value_or(30UL);
+            const auto &ofArr = params["offset"].as_array();
+            mat::Vector2i offset = ofArr && ofArr->size() == 2 ? mat::Vector2i{
+                ofArr->at(0).value_or<int>(0), ofArr->at(1).value_or<int>(0)
+            } : mat::Vector2i{0, 0};
+            const auto &colArr = params["color"].as_array();
+            sf::Color color = colArr && colArr->size() == 4 ? sf::Color {
+                colArr->at(0).value_or<uint8_t>(0),
+                colArr->at(1).value_or<uint8_t>(0),
+                colArr->at(2).value_or<uint8_t>(0),
+                colArr->at(3).value_or<uint8_t>(255)
+            } : sf::Color::White;
+            reg.createComponent<Text>(e, fontpath, str, offset, size, color);
+        } catch (const std::out_of_range&) {
+            std::cerr << "error(Plugin-Text): font not found" << std::endl;
+        } catch (const sf::Exception& e) {
+            std::cerr << e.what() << std::endl;
+        }
+    };
+
     _systems["display"] = [](ECS::Registry& reg) {
         reg.addSystem("display", [](ECS::Registry& reg) {
             auto& windows = reg.getComponents<Window>();
@@ -125,6 +154,9 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
                         win.win->draw(sprite.sp);
                     win.draws[lay].clear();
                 }
+                for (auto &txt : win.texts)
+                    win.win->draw(txt);
+                win.texts.clear();
                 win.win->display();
                 win.win->clear();
             }
@@ -193,6 +225,21 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
                     ECS::DenseZipper(sprites, positions, drawables)) {
                     sprite.sp.setPosition({pos.x, pos.y});
                     win.push_back(sprite);
+                }
+            }
+        });
+    };
+    _systems["draw_text"] = [](ECS::Registry& reg) {
+        reg.addSystem("draw_text", [](ECS::Registry& reg) {
+            auto& windows = reg.getComponents<Window>();
+            auto& positions = reg.getComponents<physic::Position2>();
+            auto& texts = reg.getComponents<Text>();
+
+            for (auto &&[win] : ECS::DenseZipper(windows)) {
+                for (auto &&[txt, pos] : ECS::DenseZipper(texts, positions)) {
+                    txt.setPosition({pos.x + txt.offset.x
+                        , pos.y + txt.offset.y});
+                    win.texts.push_back(txt);
                 }
             }
         });

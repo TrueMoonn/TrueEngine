@@ -49,8 +49,7 @@ Interaction::Interaction(ECS::Registry& reg, te::SignalManager& sig)
             const auto& view = win.win->getView();
             mat::Vector2i mpos(
                 mouse.position.x + view.getCenter().x - view.getSize().x / 2,
-                mouse.position.y + view.getCenter().y - view.getSize().y / 2
-            );
+                mouse.position.y + view.getCenter().y - view.getSize().y / 2);
             for (auto&& [e, hit, pos, hover] :
                 ECS::IndexedDenseZipper(hits, poss, hovers)) {
                 mat::Vector2f hpos = pos + hit.position;
