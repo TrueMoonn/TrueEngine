@@ -201,9 +201,9 @@ void GameTool::activateScene(std::size_t idx) {
     _scenes[idx].state = Scene::SceneState::ACTIVE;
     enableSceneCallbacks(idx);
     createSceneEntities(idx);
+    rebuildSystems();
     if (_scenes[idx].on_activate)
         _scenes[idx].on_activate();
-    rebuildSystems();
 }
 
 void GameTool::deactivateScene(std::size_t idx) {
@@ -216,6 +216,8 @@ void GameTool::deactivateScene(std::size_t idx) {
     disableSceneCallbacks(idx);
     destroySceneEntities(idx);
     rebuildSystems();
+    if (_scenes[idx].on_deactivate)
+        _scenes[idx].on_deactivate();
 }
 
 void GameTool::pauseScene(std::size_t idx) {
@@ -227,6 +229,8 @@ void GameTool::pauseScene(std::size_t idx) {
     scene.state = Scene::SceneState::PAUSED;
     disableSceneCallbacks(idx);
     rebuildSystems();
+    if (_scenes[idx].on_pause)
+        _scenes[idx].on_pause();
 }
 
 void GameTool::resumeScene(std::size_t idx) {
@@ -238,6 +242,8 @@ void GameTool::resumeScene(std::size_t idx) {
     scene.state = Scene::SceneState::ACTIVE;
     enableSceneCallbacks(idx);
     rebuildSystems();
+    if (_scenes[idx].on_resume)
+        _scenes[idx].on_resume();
 }
 
 void GameTool::deactivateAllScenes() {
