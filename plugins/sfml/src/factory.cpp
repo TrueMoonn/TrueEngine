@@ -11,6 +11,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <list>
 
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/Mouse.hpp>
@@ -31,6 +32,7 @@
 #include "sfml/components/sprite.hpp"
 #include "sfml/components/window.hpp"
 #include "sfml/components/text.hpp"
+#include "sfml/components/sound.hpp"
 #include "sfml/factory.hpp"
 
 namespace addon {
@@ -111,6 +113,33 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
                 layer, size, scale, origin);
         } catch (const std::out_of_range&) {
             std::cerr << "error(Plugin-Sprite): key not found" << std::endl;
+        } catch (const sf::Exception& e) {
+            std::cerr << e.what() << std::endl;
+        }
+    };
+
+    reg.registerComponent<Sound>();
+    _components["sound"] = [](ECS::Registry& reg,
+        const ECS::Entity& e, const toml::table& params) {
+        static std::map<std::string, sf::SoundBuffer> sounds;
+
+        try {
+            std::string soundPath = params["path"].value_or("");
+            if (soundPath == "") throw std::runtime_error("Invalid font path");
+
+            if (!sounds.contains(soundPath))
+                std::cout << "loaded new sound file" << std::endl;
+            if (!sounds.contains(soundPath))
+                sounds[soundPath] = sf::SoundBuffer(soundPath);
+            const auto &buff = sounds.at(soundPath);
+
+
+            bool loop = params["loop"].value_or<bool>(false);
+            bool play = params["play"].value_or<bool>(false);
+
+            reg.createComponent<Sound>(e, buff, loop, play);
+        } catch (const std::out_of_range&) {
+            std::cerr << "error(Plugin-Sound): file not found" << std::endl;
         } catch (const sf::Exception& e) {
             std::cerr << e.what() << std::endl;
         }
@@ -275,6 +304,29 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
             }
         });
     };
+
+    _systems["play_sound"] = [](ECS::Registry& reg) {
+        reg.addSystem("play_sound", [](ECS::Registry& reg) {
+            auto& sounds = reg.getComponents<Sound>();
+            for (auto &&[e, sound] : ECS::IndexedDenseZipper(sounds)) {
+                if (sound.isPlaying) {
+                    auto offset = sound.getPlayingOffset().asMicroseconds();
+                    std::cout << e << "| Off: " << offset << std::endl;
+                    std::cout << e << "| Cur: " << sound.curProgress << std::endl << std::endl;
+                    if (offset == 0) {
+                        sound.play();
+                        sound.setPlayingOffset(sf::microseconds(sound.curProgress));
+                    } else {
+                        sound.curProgress = offset;
+                    }
+                } else {
+                    if (sound.getPlayingOffset().asMicroseconds() != 0)
+                            sound.stop();
+                }
+            }
+        });
+    };
+
     _systems["parallax_sys"] = [](ECS::Registry& reg) {
         reg.addSystem("parallax_sys", [](ECS::Registry& reg){
             auto& windows = reg.getComponents<Window>();

@@ -45,9 +45,26 @@
             [[0, 0], 8, 0.1, true]
         ]
 
+        [ENTITIES.player.sound]
+        path = "assets/audio/at_dooms_gate.mp3"
+        loop = true
+        play = true
+
+    [ENTITIES.newEntity.sound]
+        path = "assets/audio/1up.mp3"
+
     [ENTITIES.projectile]
     drawable = true
     position2 = true
+
+        [ENTITIES.projectile.text]
+        string = "Pew"
+        font = "assets/fonts/TR Nasalization.ttf"
+
+        [ENTITIES.projectile.sound]
+        path = "assets/audio/coin.mp3"
+        # loop = true
+        play = true
 
         [ENTITIES.projectile.damage]
         amount = 2

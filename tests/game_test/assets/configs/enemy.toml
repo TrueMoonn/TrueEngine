@@ -6,6 +6,11 @@
         [ENTITIES.enemy.health]
         amount = 2
 
+        # [ENTITIES.enemy.sound]
+        # path = "assets/audio/thwomp.mp3"
+        # loop = true
+        # play = true
+
         [ENTITIES.enemy.damage]
         amount = 2
 

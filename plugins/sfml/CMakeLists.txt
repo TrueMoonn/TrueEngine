@@ -7,6 +7,7 @@ add_library(${PROJECT_NAME} SHARED
     #COMPONENTS
     ${PROJECT_SOURCE_DIR}/src/components/sprite.cpp
     ${PROJECT_SOURCE_DIR}/src/components/text.cpp
+    ${PROJECT_SOURCE_DIR}/src/components/sound.cpp
     ${PROJECT_SOURCE_DIR}/src/components/window.cpp
 )
 add_library(addon::sfml ALIAS ${PROJECT_NAME})
