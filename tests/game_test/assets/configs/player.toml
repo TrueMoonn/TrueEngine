@@ -46,8 +46,9 @@
         ]
 
         [ENTITIES.player.sound]
-        path = "assets/audio/at_dooms_gate.mp3"
-        loop = true
+        path = "assets/audio/coin.mp3"
+        # path = "assets/audio/at_dooms_gate.mp3"
+        # loop = true
         play = true
 
     [ENTITIES.newEntity.sound]

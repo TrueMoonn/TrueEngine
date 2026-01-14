@@ -125,14 +125,12 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
 
         try {
             std::string soundPath = params["path"].value_or("");
-            if (soundPath == "") throw std::runtime_error("Invalid font path");
+            if (soundPath == "")
+                throw std::runtime_error("Invalid font path");
 
-            if (!sounds.contains(soundPath))
-                std::cout << "loaded new sound file" << std::endl;
-            if (!sounds.contains(soundPath))
-                sounds[soundPath] = sf::SoundBuffer(soundPath);
-            const auto &buff = sounds.at(soundPath);
-
+            auto [it, inserted] = sounds.try_emplace(soundPath);
+            if (inserted) (void)it->second.loadFromFile(soundPath);
+            auto &buff = it->first;
 
             bool loop = params["loop"].value_or<bool>(false);
             bool play = params["play"].value_or<bool>(false);
@@ -150,8 +148,10 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
         const ECS::Entity& e, const toml::table& params) {
         static std::unordered_map<std::string, sf::Font> fonts;
         try {
-            const auto& fontPath = params["font"].value_or("");
-            if (fontPath == "") throw std::runtime_error("Invalid font path");
+            std::string fontPath = params["font"].value_or("");
+            if (fontPath == "")
+                throw std::runtime_error("font path not found");
+
             auto [it, inserted] = fonts.try_emplace(fontPath);
             if (inserted) (void)it->second.openFromFile(fontPath);
             auto& font = it->second;
@@ -311,8 +311,6 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
             for (auto &&[e, sound] : ECS::IndexedDenseZipper(sounds)) {
                 if (sound.isPlaying) {
                     auto offset = sound.getPlayingOffset().asMicroseconds();
-                    std::cout << e << "| Off: " << offset << std::endl;
-                    std::cout << e << "| Cur: " << sound.curProgress << std::endl << std::endl;
                     if (offset == 0) {
                         sound.play();
                         sound.setPlayingOffset(sf::microseconds(sound.curProgress));
