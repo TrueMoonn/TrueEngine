@@ -50,9 +50,9 @@ static std::vector<ECS::Entity> entity_hit_team(ECS::Registry& reg,
     auto& teams = reg.getComponents<Team>();
     auto& damage = reg.getComponents<Damage>();
 
-    auto e_hit = true_hitbox(GET_ENTITY_CMPT(positions, entity),
-        GET_ENTITY_CMPT(hitboxs, entity));
-    auto& e_team = GET_ENTITY_CMPT(teams, entity);
+    auto e_hit = true_hitbox(positions.getComponent(entity),
+        hitboxs.getComponent(entity));
+    auto& e_team = teams.getComponent(entity);
 
     for (auto &&[e, pos, hit, tm, _]
         : ECS::IndexedDenseZipper(positions, hitboxs, teams, damage)) {
@@ -162,7 +162,7 @@ EntitySpec::EntitySpec(ECS::Registry& reg, te::SignalManager& sig)
                         continue;
                 }
                 for (auto &hit : entity_hit_team(reg, id)) {
-                    hp.reduceSafely(GET_ENTITY_CMPT(damage, hit).amount);
+                    hp.reduceSafely(damage.getComponent(hit).amount);
                     hp.delay.toggle();
                     if (hp.amount <= 0)
                         deads.push_back(id);

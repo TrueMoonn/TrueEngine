@@ -295,7 +295,7 @@ void AutoClient::handlePlayersStates(const std::vector<std::uint8_t>& data) {
                 healths.getSpar()[PAGE(entity)][PAGE_INDEX(entity)];
 
             if (pos_opt.has_value()) {
-                auto& pos = GET_ENTITY_CMPT(positions, entity);
+                auto& pos = positions.getComponent(entity);
                 pos.x = player_state.x;
                 pos.y = player_state.y;
             } else {
@@ -305,7 +305,7 @@ void AutoClient::handlePlayersStates(const std::vector<std::uint8_t>& data) {
             }
 
             if (health_opt.has_value()) {
-                auto& health = GET_ENTITY_CMPT(healths, entity);
+                auto& health = healths.getComponent(entity);
                 health.amount = static_cast<std::int64_t>(player_state.health);
             }
         } catch (const std::exception& e) {
@@ -391,7 +391,7 @@ void AutoClient::handleEnemiesStates(const std::vector<std::uint8_t>& data) {
                 healths.getSpar()[PAGE(entity)][PAGE_INDEX(entity)];
 
             if (pos_opt.has_value()) {
-                auto& pos = GET_ENTITY_CMPT(positions, entity);
+                auto& pos = positions.getComponent(entity);
                 pos.x = enemy_state.x;
                 pos.y = enemy_state.y;
             } else {
@@ -401,7 +401,7 @@ void AutoClient::handleEnemiesStates(const std::vector<std::uint8_t>& data) {
             }
 
             if (health_opt.has_value()) {
-                auto& health = GET_ENTITY_CMPT(healths, entity);
+                auto& health = healths.getComponent(entity);
                 health.amount = static_cast<std::int64_t>(enemy_state.health);
             }
         } catch (const std::exception& e) {
@@ -484,7 +484,7 @@ void AutoClient::handleProjectilesPos(const std::vector<std::uint8_t>& data) {
             auto pos_opt =
                 positions.getSpar()[PAGE(entity)][PAGE_INDEX(entity)];
             if (pos_opt.has_value()) {
-                auto& pos = GET_ENTITY_CMPT(positions, entity);
+                auto& pos = positions.getComponent(entity);
                 pos.x = proj.x;
                 pos.y = proj.y;
             } else {

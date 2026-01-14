@@ -94,8 +94,8 @@ Physic::Physic(ECS::Registry& reg, te::SignalManager& sig)
             for (auto &&[id, pos, vel, hit, mov]
                 : ECS::IndexedDenseZipper(posis, vels, hboxs, movables)) {
                 for (ECS::Entity cmp : entity_hit(reg, id)) {
-                    auto e_pos = GET_ENTITY_CMPT(posis, cmp);
-                    auto e_hit = GET_ENTITY_CMPT(hboxs, cmp);
+                    auto e_pos = posis.getComponent(cmp);
+                    auto e_hit = hboxs.getComponent(cmp);
 
                     float dx = (pos.x + hit.size.x / 2) -
                         (e_pos.x + e_hit.size.x / 2);

@@ -37,8 +37,8 @@ std::vector<ECS::Entity> entity_hit(ECS::Registry& reg,
     auto& hitboxs = reg.getComponents<Hitbox>();
     auto& stationary = reg.getComponents<Stationary>();
 
-    auto& pos = GET_ENTITY_CMPT(positions, entity);
-    auto hitbox = GET_ENTITY_CMPT(hitboxs, entity);
+    auto& pos = positions.getComponent(entity);
+    auto hitbox = hitboxs.getComponent(entity);
 
     for (auto &&[e, obj_pos, obj_hitbox, _] :
         ECS::IndexedDenseZipper(positions, hitboxs, stationary)) {
