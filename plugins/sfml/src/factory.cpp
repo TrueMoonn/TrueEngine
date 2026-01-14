@@ -28,9 +28,6 @@
 #include "display/components/parallax.hpp"
 
 #include "Sfml.hpp"
-#include "sfml/components/sprite.hpp"
-#include "sfml/components/window.hpp"
-#include "sfml/components/text.hpp"
 #include "sfml/factory.hpp"
 
 namespace addon {
@@ -83,6 +80,11 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
     _components["drawable"] = [](ECS::Registry& reg,
         const ECS::Entity& e, const toml::table&) {
         reg.createComponent<Drawable>(e);
+    };
+    reg.registerComponent<Focus>();
+    _components["focus"] = [](ECS::Registry& reg,
+        const ECS::Entity& e, const toml::table&) {
+        reg.createComponent<Focus>(e);
     };
     reg.registerComponent<Sprite>();
     _components["sprite"] = [](ECS::Registry& reg,
