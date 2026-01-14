@@ -54,7 +54,7 @@ InGame::InGame() : AScene() {
         {800, "background", {0.f, 0.f}}
     };
 
-    activateScene(addScene(game));
+    updateScene(te::sStatus::ACTIVATE, addScene(game));
 
     te::Scene menu = {
         {},
@@ -125,36 +125,43 @@ void InGame::run(void) {
         auto &text = getComponent<addon::sfml::Text>();
 
         for (auto&& [_, txt] : ECS::DenseZipper(player, text)) {
+        std::string str = txt.getString();
 
         for (int key = te::A; key <= te::Z; key += 1)
             if (keys[key])
-                txt.str.push_back(keys[te::LeftShift] ? 'A' : 'a' + key);
+                str.push_back(keys[te::LeftShift] ? 'A' : 'a' + key);
 
-        if (keys[te::Apostrophe]) txt.str.push_back('4');
-        if (keys[te::Hyphen]) txt.str.push_back('6');
+        if (keys[te::Apostrophe]) str.push_back('4');
+        if (keys[te::Hyphen]) str.push_back('6');
 
         for (int key = te::num0; key <= te::num9; key += 1)
                 if (keys[key])
-                    txt.str.push_back('0' + key - te::num0);
+                    str.push_back('0' + key - te::num0);
 
-        if (keys[te::Slash]) txt.str.push_back('/');
-        if (keys[te::Add]) txt.str.push_back('+');
-        if (keys[te::Multiply]) txt.str.push_back('*');
-        if (keys[te::Period]) txt.str.push_back('.');
-        if (keys[te::Comma]) txt.str.push_back(',');
-        if (keys[te::Space]) txt.str.push_back(' ');
+        if (keys[te::Slash]) str.push_back('/');
+        if (keys[te::Add]) str.push_back('+');
+        if (keys[te::Multiply]) str.push_back('*');
+        if (keys[te::Period]) str.push_back('.');
+        if (keys[te::Comma]) str.push_back(',');
+        if (keys[te::Space]) str.push_back(' ');
 
-        if (keys[te::Backspace] && !txt.str.empty()) txt.str.pop_back();
+        if (keys[te::Backspace] && !str.empty()) str.pop_back();
+
+        txt.setString(str);
         }
     });
     sub<te::Keys>("key_input", [this](te::Keys keys) {
         if (keys[te::Key::P]) {
-            pauseScene(0);
-            activateScene(1);
+            updateScene(te::sStatus::PAUSE, 0);
+            updateScene(te::sStatus::ACTIVATE, 1);
+            // pauseScene(0);
+            // activateScene(1);
         }
         if (keys[te::Key::Escape]) {
-            resumeScene(0);
-            deactivateScene(1);
+            updateScene(te::sStatus::RESUME, 0);
+            updateScene(te::sStatus::DEACTIVATE, 1);
+            // resumeScene(0);
+            // deactivateScene(1);
         }
     });
     sub<ECS::Entity>("clicked", [](ECS::Entity e) {

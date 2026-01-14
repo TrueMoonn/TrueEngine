@@ -248,12 +248,6 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
 
             for (auto &&[win] : ECS::DenseZipper(windows)) {
                 for (auto &&[txt, pos] : ECS::DenseZipper(texts, positions)) {
-                    if (txt.str != txt.getString())
-                        txt.setString(txt.str);
-                    if (txt.color != txt.getFillColor())
-                        txt.setFillColor(txt.color);
-                    if (txt.charSize != txt.getCharacterSize())
-                        txt.setCharacterSize(txt.charSize);
                     if (!txt.center) {
                         txt.setPosition({pos.x + txt.offset.x
                             , pos.y + txt.offset.y});

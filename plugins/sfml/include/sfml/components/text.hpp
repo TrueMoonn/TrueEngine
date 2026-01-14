@@ -35,10 +35,7 @@ struct PLUGIN_API Text : sf::Text {
         , const mat::Vector2i &offset, bool center = false
         , std::size_t size = 30 , const sf::Color &color = sf::Color::Black);
 
-    std::string str;
-    std::size_t charSize;
     mat::Vector2i offset;
-    sf::Color color;
     bool center;
 };
 

@@ -18,7 +18,7 @@ namespace sfml {
 Text::Text(const sf::Font &font, const std::string &str
     , const mat::Vector2i &offset, bool center
     , std::size_t size, const sf::Color &color)
-        : str(str), center(center), offset(offset), color(color)
+        : center(center), offset(offset)
         , sf::Text(font, str, size) {
             this->setFillColor(color);
             this->setCharacterSize(size);
