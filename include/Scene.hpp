@@ -9,6 +9,7 @@
 
     #include <vector>
     #include <string>
+    #include <functional>
 
     #include <ECS/Entity.hpp>
 
@@ -43,6 +44,8 @@ struct Scene {
     std::vector<SceneEntity> entities;
 
     std::vector<SignalManager::CallbackId> signal_callbacks;
+
+    std::function<void()> on_activate = nullptr;
 };
 
 }  // namespace te

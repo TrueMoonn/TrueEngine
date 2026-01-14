@@ -199,6 +199,8 @@ void GameTool::activateScene(std::size_t idx) {
         return;
 
     _scenes[idx].state = Scene::SceneState::ACTIVE;
+    if (_scenes[idx].on_activate)
+        _scenes[idx].on_activate();
     enableSceneCallbacks(idx);
     createSceneEntities(idx);
     rebuildSystems();
