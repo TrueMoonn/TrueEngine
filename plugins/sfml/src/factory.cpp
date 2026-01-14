@@ -250,13 +250,19 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
                 for (auto &&[txt, pos] : ECS::DenseZipper(texts, positions)) {
                     if (txt.str != txt.getString())
                         txt.setString(txt.str);
+                    if (txt.color != txt.getFillColor())
+                        txt.setFillColor(txt.color);
+                    if (txt.charSize != txt.getCharacterSize())
+                        txt.setCharacterSize(txt.charSize);
                     if (!txt.center) {
                         txt.setPosition({pos.x + txt.offset.x
                             , pos.y + txt.offset.y});
                     } else {
                         auto bounds = txt.getLocalBounds();
-                        txt.setPosition({pos.x - bounds.size.x / 2 + txt.offset.x
-                            , pos.y - bounds.size.y / 2 + txt.offset.y});
+                        txt.setPosition({
+                            pos.x - bounds.size.x / 2 + txt.offset.x,
+                            pos.y - bounds.size.y / 2 + txt.offset.y
+                        });
                     }
                     win.texts.push_back(txt);
                 }
