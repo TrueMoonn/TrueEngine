@@ -83,8 +83,9 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
     };
     reg.registerComponent<Focus>();
     _components["focus"] = [](ECS::Registry& reg,
-        const ECS::Entity& e, const toml::table&) {
-        reg.createComponent<Focus>(e);
+        const ECS::Entity& e, const toml::table& params) {
+        bool status = params["status"].value_or(false);
+        reg.createComponent<Focus>(e, status);
     };
     reg.registerComponent<Sprite>();
     _components["sprite"] = [](ECS::Registry& reg,
