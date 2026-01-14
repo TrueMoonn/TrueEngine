@@ -30,6 +30,13 @@
 
 namespace te {
 
+enum class sStatus {
+    ACTIVATE,
+    DEACTIVATE,
+    PAUSE,
+    RESUME
+};
+
 /**
  * @brief GameTool class for the TrueEngine
  *
@@ -46,6 +53,10 @@ namespace te {
  */
 class GameTool {
  public:
+    struct SceneCommand {
+        sStatus action;
+        std::size_t idx;
+    };
     typedef std::function<void(ECS::Entity, const toml::table&)>
         local_cmt_build;
 
@@ -219,10 +230,7 @@ class GameTool {
     }
 
     std::size_t addScene(const Scene& scene);
-    void activateScene(std::size_t idx);
-    void deactivateScene(std::size_t idx);
-    void pauseScene(std::size_t idx);
-    void resumeScene(std::size_t idx);
+    void updateScene(sStatus act, std::size_t idx);
     void deactivateAllScenes();
 
  private:
@@ -239,14 +247,20 @@ class GameTool {
 
     SignalManager _signals;
 
+    void processSceneQueue();
+    std::vector<SceneCommand> _scene_action_queue;
+
+    void activateScene(std::size_t idx);
+    void deactivateScene(std::size_t idx);
+    void pauseScene(std::size_t idx);
+    void resumeScene(std::size_t idx);
     void rebuildSystems();
-    bool _updateSystems = false;
     void enableSceneCallbacks(std::size_t idx);
     void disableSceneCallbacks(std::size_t idx);
     void createSceneEntities(std::size_t idx);
     void destroySceneEntities(std::size_t idx);
+
     std::vector<Scene> _scenes;
-    std::unordered_map<std::string, bool> _paused_systems;
 };
 
 }  // namespace te
