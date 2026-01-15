@@ -46,6 +46,9 @@ struct Scene {
     std::vector<SignalManager::CallbackId> signal_callbacks;
 
     std::function<void()> on_activate = nullptr;
+    std::function<void()> on_resume = nullptr;
+    std::function<void()> on_pause = nullptr;
+    std::function<void()> on_deactivate = nullptr;
 };
 
 }  // namespace te
