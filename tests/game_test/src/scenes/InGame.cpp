@@ -20,6 +20,7 @@
 #include "physic/components/position.hpp"
 #include "physic/components/velocity.hpp"
 #include "sfml/components/text.hpp"
+#include "sfml/components/sound.hpp"
 
 InGame::InGame() : AScene() {
     loadPlugins();
@@ -34,7 +35,7 @@ InGame::InGame() : AScene() {
         {"poll_event"},  // INPUT
         {"follow_player", "parallax_sys"},  // PRE UPDATE
         {"apply_pattern", "movement2", "animate",
-            "deal_damage", "apply_fragile"},  // UPDATE
+            "deal_damage", "apply_fragile", "play_sound"},  // UPDATE
         {"bound_hitbox"},  // POST UPDATE
         {"draw", "draw_text", "display"}  // RENDER
     }};
@@ -103,6 +104,15 @@ void InGame::run(void) {
                 vel.x = 0.0;
             }
         }
+    });
+    subForScene<te::Keys>(0, "key_input", [this](te::Keys keys) {
+        auto &player = getComponent<addon::intact::Player>();
+        auto &sounds = getComponent<addon::sfml::Sound>();
+
+        if (keys[te::Key::H])
+            for (auto &&[sound, _] : ECS::DenseZipper(sounds, player)) {
+                sound.isPlaying = !sound.isPlaying;
+            }
     });
     subForScene<te::Keys>(0, "key_input", [this](te::Keys keys) {
         static te::Timestamp delay(0.2f);

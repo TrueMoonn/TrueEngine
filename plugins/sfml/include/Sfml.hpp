@@ -12,3 +12,4 @@
 #include "sfml/components/focus.hpp"
 #include "sfml/components/window.hpp"
 #include "sfml/components/text.hpp"
+#include "sfml/components/sound.hpp"

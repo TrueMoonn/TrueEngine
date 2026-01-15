@@ -11,6 +11,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <list>
 
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/Mouse.hpp>
@@ -119,13 +120,40 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
         }
     };
 
+    reg.registerComponent<Sound>();
+    _components["sound"] = [](ECS::Registry& reg,
+        const ECS::Entity& e, const toml::table& params) {
+        static std::map<std::string, sf::SoundBuffer> sounds;
+
+        try {
+            std::string soundPath = params["path"].value_or("");
+            if (soundPath == "")
+                throw std::runtime_error("Invalid font path");
+
+            auto [it, inserted] = sounds.try_emplace(soundPath);
+            if (inserted) (void)it->second.loadFromFile(soundPath);
+            auto &buff = it->first;
+
+            bool loop = params["loop"].value_or<bool>(false);
+            bool play = params["play"].value_or<bool>(false);
+
+            reg.createComponent<Sound>(e, buff, loop, play);
+        } catch (const std::out_of_range&) {
+            std::cerr << "error(Plugin-Sound): file not found" << std::endl;
+        } catch (const sf::Exception& e) {
+            std::cerr << e.what() << std::endl;
+        }
+    };
+
     reg.registerComponent<Text>();
     _components["text"] = [](ECS::Registry& reg,
         const ECS::Entity& e, const toml::table& params) {
         static std::unordered_map<std::string, sf::Font> fonts;
         try {
-            const auto& fontPath = params["font"].value_or("");
-            if (fontPath == "") throw std::runtime_error("Invalid font path");
+            std::string fontPath = params["font"].value_or("");
+            if (fontPath == "")
+                throw std::runtime_error("font path not found");
+
             auto [it, inserted] = fonts.try_emplace(fontPath);
             if (inserted) (void)it->second.openFromFile(fontPath);
             auto& font = it->second;
@@ -278,6 +306,27 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
             }
         });
     };
+
+    _systems["play_sound"] = [](ECS::Registry& reg) {
+        reg.addSystem("play_sound", [](ECS::Registry& reg) {
+            auto& sounds = reg.getComponents<Sound>();
+            for (auto &&[e, sound] : ECS::IndexedDenseZipper(sounds)) {
+                if (sound.isPlaying) {
+                    auto offset = sound.getPlayingOffset().asMicroseconds();
+                    if (offset == 0) {
+                        sound.play();
+                        sound.setPlayingOffset(sf::microseconds(sound.curProgress));
+                    } else {
+                        sound.curProgress = offset;
+                    }
+                } else {
+                    if (sound.getPlayingOffset().asMicroseconds() != 0)
+                            sound.stop();
+                }
+            }
+        });
+    };
+
     _systems["parallax_sys"] = [](ECS::Registry& reg) {
         reg.addSystem("parallax_sys", [](ECS::Registry& reg){
             auto& windows = reg.getComponents<Window>();
