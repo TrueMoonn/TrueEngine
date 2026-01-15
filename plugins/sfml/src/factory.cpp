@@ -132,7 +132,7 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
 
             auto [it, inserted] = sounds.try_emplace(soundPath);
             if (inserted) (void)it->second.loadFromFile(soundPath);
-            auto &buff = it->first;
+            auto &buff = it->second;
 
             bool loop = params["loop"].value_or<bool>(false);
             bool play = params["play"].value_or<bool>(false);
