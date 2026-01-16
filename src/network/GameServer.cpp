@@ -14,8 +14,10 @@ namespace te {
 namespace network {
 
 GameServer::GameServer(uint16_t port,
-    const std::string& protocol)
-    : net::Server(port, protocol) {
+    const std::string& protocol) :
+    net::Server(port, protocol)
+    , _port(port)
+    , _running(false) {
 }
 
 GameServer::~GameServer() {
