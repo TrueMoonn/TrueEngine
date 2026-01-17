@@ -26,8 +26,8 @@ class Interaction : public te::plugin::APlugin {
 }  // namespace addon
 
 extern "C" {
-    std::unique_ptr<addon::intact::Interaction> get_pfactory(
+    addon::intact::Interaction* get_pfactory(
         ECS::Registry& reg, te::SignalManager& sig) {
-        return std::make_unique<addon::intact::Interaction>(reg, sig);
+        return new addon::intact::Interaction(reg, sig);
     }
 }

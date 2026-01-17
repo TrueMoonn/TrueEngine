@@ -11,8 +11,8 @@
 #include <vector>
 #include <string>
 
-#include "network/AutoServer.hpp"
-#include "network/generated_messages.hpp"
+#include "network1/AutoServer.hpp"
+#include "network1/generated_messages.hpp"
 #include "ECS/Registry.hpp"
 #include "ECS/DenseSA.hpp"
 #include "ECS/DenseZipper.hpp"

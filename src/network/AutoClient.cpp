@@ -10,8 +10,8 @@
 #include <iostream>
 #include <vector>
 
-#include "network/AutoClient.hpp"
-#include "network/generated_messages.hpp"
+#include "network1/AutoClient.hpp"
+#include "network1/generated_messages.hpp"
 #include "ECS/Registry.hpp"
 #include "ECS/DenseSA.hpp"
 #include "physic/components/position.hpp"

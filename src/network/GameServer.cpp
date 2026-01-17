@@ -5,7 +5,7 @@
 #include <queue>
 #include <thread>
 #include <mutex>
-#include "network/GameServer.hpp"
+#include "network1/GameServer.hpp"
 #include "Network/ProtocolManager.hpp"
 #include "Network/Server.hpp"
 #include <Network/PacketSerializer.hpp>

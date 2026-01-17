@@ -5,20 +5,40 @@ project(TrueEngine)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR})
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -O3")
+
+if(MSVC)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /O2")
+else()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -O3")
+endif()
 set(TE_SRC_DIR "${PROJECT_SOURCE_DIR}/src")
 set(TE_HDR_DIR "${PROJECT_SOURCE_DIR}/include")
 include(FetchContent)
 
 ########## HEADER UPDATE ##########
 message("\nUpdating project header from ECS and Network...")
-execute_process (
-    COMMAND bash -c "
-        rm -rf ${PROJECT_SOURCE_DIR}/include/ECS && rm -rf ${PROJECT_SOURCE_DIR}/include/Network
-        cp -R ${PROJECT_SOURCE_DIR}/ECS/include/. ${PROJECT_SOURCE_DIR}/include/
-        cp -R ${PROJECT_SOURCE_DIR}/Network/include/. ${PROJECT_SOURCE_DIR}/include/
-    "
-)
+if(WIN32)
+    execute_process(
+        COMMAND ${CMAKE_COMMAND} -E remove_directory ${PROJECT_SOURCE_DIR}/include/ECS
+    )
+    execute_process(
+        COMMAND ${CMAKE_COMMAND} -E remove_directory ${PROJECT_SOURCE_DIR}/include/Network
+    )
+    execute_process(
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/ECS/include ${PROJECT_SOURCE_DIR}/include
+    )
+    execute_process(
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/Network/include ${PROJECT_SOURCE_DIR}/include
+    )
+else()
+    execute_process(
+        COMMAND bash -c "
+            rm -rf ${PROJECT_SOURCE_DIR}/include/ECS && rm -rf ${PROJECT_SOURCE_DIR}/include/Network
+            cp -R ${PROJECT_SOURCE_DIR}/ECS/include/. ${PROJECT_SOURCE_DIR}/include/
+            cp -R ${PROJECT_SOURCE_DIR}/Network/include/. ${PROJECT_SOURCE_DIR}/include/
+        "
+    )
+endif()
 message("Updating project header from ECS and Network... DONE\n")
 
 ########## OPTIONS ##########
