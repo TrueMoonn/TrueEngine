@@ -109,7 +109,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(tomlplusplus)
 target_link_libraries(${PROJECT_NAME}
-    PRIVATE
+    PUBLIC
         tomlplusplus::tomlplusplus
 )
 

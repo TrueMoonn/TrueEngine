@@ -4,6 +4,10 @@ project(plugins)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR})
 set(CMAKE_SHARED_LIBRARY_PREFIX "")
 
+if(WIN32)
+    set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+endif()
+
 # SFML
 add_subdirectory(${PROJECT_SOURCE_DIR}/sfml)
 if(WIN32)
