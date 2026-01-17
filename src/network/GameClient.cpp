@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "network/GameClient.hpp"
+#include "network1/GameClient.hpp"
 #include <Network/Client.hpp>
 
 namespace te {

@@ -30,14 +30,14 @@ namespace plugin {
  * @brief Plugin Manager class for TrueEngine
  *
  * This class load use DlManager class to load dynamic libraries and get
- * `std::unique_ptr<te::APlugin>(*)(ECS::Registry&)` symbol from an endpoint
+ * `te::APlugin*(*)(ECS::Registry&)` symbol from an endpoint
  *
  * Then the te::APlugin is used as a factory and will create components or
  * systems for the ECS::Registry associated with names
  *
  */
 class PluginManager {
-    typedef std::unique_ptr<APlugin>(*maker)(
+    typedef APlugin*(*maker)(
         ECS::Registry&, SignalManager&);
 
  public:
