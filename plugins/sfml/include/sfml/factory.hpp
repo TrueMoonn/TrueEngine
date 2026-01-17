@@ -29,6 +29,9 @@ class Sfml : public te::plugin::APlugin {
 }  // namespace addon
 
 extern "C" {
+    #ifdef _WIN32
+        __declspec(dllexport)
+    #endif
     addon::sfml::Sfml* get_pfactory(ECS::Registry& reg,
         te::SignalManager& events) {
         return new addon::sfml::Sfml(reg, events);
