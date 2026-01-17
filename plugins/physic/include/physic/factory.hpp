@@ -26,6 +26,9 @@ class Physic : public te::plugin::APlugin {
 }  // namespace addon
 
 extern "C" {
+    #ifdef _WIN32
+        __declspec(dllexport)
+    #endif
     addon::physic::Physic* get_pfactory(ECS::Registry& reg,
         te::SignalManager& sig) {
         return new addon::physic::Physic(reg, sig);

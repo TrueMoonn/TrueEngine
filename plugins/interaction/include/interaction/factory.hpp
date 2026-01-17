@@ -26,6 +26,9 @@ class Interaction : public te::plugin::APlugin {
 }  // namespace addon
 
 extern "C" {
+    #ifdef _WIN32
+        __declspec(dllexport)
+    #endif
     addon::intact::Interaction* get_pfactory(
         ECS::Registry& reg, te::SignalManager& sig) {
         return new addon::intact::Interaction(reg, sig);

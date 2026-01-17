@@ -26,6 +26,9 @@ class Display : public te::plugin::APlugin {
 }  // namespace addon
 
 extern "C" {
+    #ifdef _WIN32
+        __declspec(dllexport)
+    #endif
     addon::display::Display* get_pfactory(
         ECS::Registry& reg, te::SignalManager& sig) {
         return new addon::display::Display(reg, sig);
