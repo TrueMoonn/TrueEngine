@@ -8,6 +8,7 @@
 #pragma once
 
     #include <array>
+    #include "maths/Vector.hpp"
 
 namespace te {
 
@@ -117,5 +118,20 @@ enum Key {
 };
 
 typedef std::array<bool, Key::LIMITKEY> Keys;
+
+enum MouseEvent {
+    MouseLeft = 0,
+    MouseRight,
+    MouseMiddle,
+    LIMITBUTTON,
+};
+
+struct Mouse {
+    Mouse() : position(0, 0) {
+        type.fill(false);
+    }
+    std::array<bool, MouseEvent::LIMITBUTTON> type;
+    mat::Vector2i position;
+};
 
 }  // namespace te

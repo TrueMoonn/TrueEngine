@@ -16,7 +16,10 @@ target_link_libraries(${PROJECT_NAME}
     PUBLIC
         TrueEngine
         tomlplusplus::tomlplusplus
+        addon::sfml
 )
+
+target_compile_definitions(${PROJECT_NAME} PRIVATE BUILDING_PLUGIN)
 
 if (ENABLE_TE_COVERAGE)
     target_link_libraries(${PROJECT_NAME} PUBLIC gcov)

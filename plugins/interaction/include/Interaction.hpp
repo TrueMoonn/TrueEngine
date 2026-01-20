@@ -7,4 +7,6 @@
 
 #pragma once
 
+    #include "interaction/components/hoverable.hpp"
+    #include "interaction/components/clickable.hpp"
     #include "interaction/components/player.hpp"

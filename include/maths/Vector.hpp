@@ -7,7 +7,9 @@
 
 #pragma once
 
-    #include <iostream>
+    #include <cmath>
+#include <cstdlib>
+#include <iostream>
     #include <utility>
 
     #include "maths/numeric.hpp"
@@ -78,6 +80,22 @@ struct Vector2 {
     void operator/=(Numeric val) {
         this->x /= val;
         this->y /= val;
+    }
+
+    void normalize(void) {
+        int length = sqrt(this->x * this->x + this->y * this->y);
+
+        this->x /= length;
+        this->y /= length;
+    }
+
+    int distance(Vector2 Vec) {
+        return (std::sqrt(pow(abs(this->y - Vec.y), 2)
+            + pow(abs(this->y - Vec.x), 2)));
+    }
+
+    int length(void) {
+        return (sqrt(pow(this->x, 2) + pow(this->y, 2)));
     }
 
     Numeric x = 0;

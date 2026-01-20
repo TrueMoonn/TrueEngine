@@ -26,8 +26,11 @@ class EntitySpec : public te::plugin::APlugin {
 }  // namespace addon
 
 extern "C" {
-    std::unique_ptr<addon::eSpec::EntitySpec> get_pfactory(
+    #ifdef _WIN32
+        __declspec(dllexport)
+    #endif
+    addon::eSpec::EntitySpec* get_pfactory(
         ECS::Registry& reg, te::SignalManager& sig) {
-        return std::make_unique<addon::eSpec::EntitySpec>(reg, sig);
+        return new addon::eSpec::EntitySpec(reg, sig);
     }
 }

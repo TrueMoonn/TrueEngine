@@ -19,39 +19,20 @@ namespace addon {
 namespace sfml {
 
 Window::Window(const std::string& winName, const mat::Vector2u& size,
-    std::size_t framerate) : name(winName), framerate(framerate) {
-    win = std::make_unique<sf::RenderWindow>(
-        sf::VideoMode(sf::Vector2u(size.x, size.y)),
-        name);
-    win->setFramerateLimit(framerate);
-    win->setKeyRepeatEnabled(false);
-}
-
-Window::Window(const Window& other) :
-    name(other.name),
-    framerate(other.framerate) {
-    win = std::make_unique<sf::RenderWindow>(
-        sf::VideoMode(other.win->getSize()),
-        other.name);
-    win->setFramerateLimit(framerate);
-    win->setKeyRepeatEnabled(false);
-}
-
-Window& Window::operator=(const Window& other) {
-    if (this != &other) {
-        name = other.name;
-        framerate = other.framerate;
-        draws = other.draws;
+    std::size_t framerate, bool fs) : name(winName), framerate(framerate) {
+    if (fs) {
         win = std::make_unique<sf::RenderWindow>(
-            sf::VideoMode(other.win->getSize()),
-            other.name);
-        win->setFramerateLimit(other.framerate);
-        win->setKeyRepeatEnabled(false);
+            sf::VideoMode(), name, sf::Style::Default, sf::State::Fullscreen);
+    } else {
+        win = std::make_unique<sf::RenderWindow>(
+            sf::VideoMode(sf::Vector2u(size.x, size.y)),
+            name);
     }
-    return *this;
+    win->setFramerateLimit(framerate);
+    win->setKeyRepeatEnabled(false);
 }
 
-void Window::push_back(const Sprite& sp) {
+PLUGIN_API void Window::push_back(const Sprite& sp) {
     if (draws.size() <= sp.layer) {
         draws.resize(sp.layer + 1);
     }

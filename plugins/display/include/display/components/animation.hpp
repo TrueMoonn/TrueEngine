@@ -15,6 +15,7 @@
 
 #include "clock.hpp"
 #include "maths/Vector.hpp"
+#include "plugin/plugin_api.hpp"
 
 namespace addon {
 namespace display {
@@ -22,7 +23,7 @@ namespace display {
 /**
  * @brief Animation frame data (duration and delay)
  */
-struct FrameData {
+struct PLUGIN_API FrameData {
     FrameData(const mat::Vector2<size_t> &position, size_t max,
             float delay, bool loop = true)
         : frameBEG(position), frameMAX(max)
@@ -44,7 +45,7 @@ struct FrameData {
  *
  * Handles animations via a number of frames, 0 being the default
  */
-struct Animation {
+struct PLUGIN_API Animation {
     /**
      * @brief Animation Constructor
      *

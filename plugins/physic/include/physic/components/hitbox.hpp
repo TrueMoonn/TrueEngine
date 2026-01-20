@@ -8,11 +8,12 @@
 #pragma once
 
     #include "maths/Vector.hpp"
+    #include "plugin/plugin_api.hpp"
 
 namespace addon {
 namespace physic {
 
-struct Hitbox {
+struct PLUGIN_API Hitbox {
     Hitbox(const mat::Vector2f& position, const mat::Vector2f& size);
     Hitbox(float left, float top, float width, float height);
 

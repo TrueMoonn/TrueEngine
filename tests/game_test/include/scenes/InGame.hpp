@@ -37,8 +37,4 @@ class InGame : public AScene {
     void run() override;
 
     GameState state;
-
- private:
-    void setECS(void);
-    void setEntities(void);
 };

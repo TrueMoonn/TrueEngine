@@ -2,7 +2,7 @@
 ** EPITECH PROJECT, 2025
 ** ECS
 ** File description:
-** hoverable.hpp
+** focus.hpp
 */
 
 #pragma once
@@ -10,8 +10,9 @@
 namespace addon {
 namespace sfml {
 
-struct Hoverable {
-    unsigned hoverable = 1;
+struct Focus {
+    Focus(bool status) : focus(status) {};
+    bool focus = false;
 };
 
 }  // namespace sfml

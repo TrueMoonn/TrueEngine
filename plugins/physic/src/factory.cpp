@@ -71,7 +71,7 @@ Physic::Physic(ECS::Registry& reg, te::SignalManager& sig)
         reg.createComponent<Stationary>(e);
     };
     _systems["movement2"] = [](ECS::Registry& reg) {
-        reg.addSystem([](ECS::Registry& reg) {
+        reg.addSystem("movement2", [](ECS::Registry& reg) {
             static te::Timestamp delta(0.f);
             auto& positions = reg.getComponents<Position2>();
             auto& velocities = reg.getComponents<Velocity2>();
@@ -85,7 +85,7 @@ Physic::Physic(ECS::Registry& reg, te::SignalManager& sig)
         });
     };
     _systems["bound_hitbox"] = [](ECS::Registry& reg) {
-        reg.addSystem([](ECS::Registry& reg) {
+        reg.addSystem("bound_hitbox", [](ECS::Registry& reg) {
             auto& posis = reg.getComponents<Position2>();
             auto& vels = reg.getComponents<Velocity2>();
             auto& hboxs = reg.getComponents<Hitbox>();
@@ -94,8 +94,8 @@ Physic::Physic(ECS::Registry& reg, te::SignalManager& sig)
             for (auto &&[id, pos, vel, hit, mov]
                 : ECS::IndexedDenseZipper(posis, vels, hboxs, movables)) {
                 for (ECS::Entity cmp : entity_hit(reg, id)) {
-                    auto e_pos = GET_ENTITY_CMPT(posis, cmp);
-                    auto e_hit = GET_ENTITY_CMPT(hboxs, cmp);
+                    auto e_pos = posis.getComponent(cmp);
+                    auto e_hit = hboxs.getComponent(cmp);
 
                     float dx = (pos.x + hit.size.x / 2) -
                         (e_pos.x + e_hit.size.x / 2);

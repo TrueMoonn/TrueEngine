@@ -3,26 +3,48 @@ project(TrueEngine)
 
 ########## SETUP ##########
 set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR})
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -O3")
+
+if(MSVC)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /O2")
+else()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -O3")
+endif()
 set(TE_SRC_DIR "${PROJECT_SOURCE_DIR}/src")
 set(TE_HDR_DIR "${PROJECT_SOURCE_DIR}/include")
 include(FetchContent)
 
 ########## HEADER UPDATE ##########
 message("\nUpdating project header from ECS and Network...")
-execute_process (
-    COMMAND bash -c "
-        rm -rf ${PROJECT_SOURCE_DIR}/include/ECS && rm -rf ${PROJECT_SOURCE_DIR}/include/Network
-        cp -R ${PROJECT_SOURCE_DIR}/ECS/include/. ${PROJECT_SOURCE_DIR}/include/
-        cp -R ${PROJECT_SOURCE_DIR}/Network/include/. ${PROJECT_SOURCE_DIR}/include/
-    "
-)
+if(WIN32)
+    execute_process(
+        COMMAND ${CMAKE_COMMAND} -E remove_directory ${PROJECT_SOURCE_DIR}/include/ECS
+    )
+    execute_process(
+        COMMAND ${CMAKE_COMMAND} -E remove_directory ${PROJECT_SOURCE_DIR}/include/Network
+    )
+    execute_process(
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/ECS/include ${PROJECT_SOURCE_DIR}/include
+    )
+    execute_process(
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/Network/include ${PROJECT_SOURCE_DIR}/include
+    )
+else()
+    execute_process(
+        COMMAND bash -c "
+            rm -rf ${PROJECT_SOURCE_DIR}/include/ECS && rm -rf ${PROJECT_SOURCE_DIR}/include/Network
+            cp -R ${PROJECT_SOURCE_DIR}/ECS/include/. ${PROJECT_SOURCE_DIR}/include/
+            cp -R ${PROJECT_SOURCE_DIR}/Network/include/. ${PROJECT_SOURCE_DIR}/include/
+        "
+    )
+endif()
 message("Updating project header from ECS and Network... DONE\n")
 
 ########## OPTIONS ##########
 option(ENABLE_TE_TESTS "Build tests along with the library" OFF)
 option(ENABLE_TE_COVERAGE "Enable coverage reporting" OFF)
+option(USE_CUSTOM_PROTOCOL "Use custom protocol instead of AutoClient/AutoServer" OFF)
 
 option(DEBUG_ALL "Print every log of the engine" OFF)
 option(DEBUG_SIGNALS "Print log for the signals" OFF)
@@ -63,7 +85,7 @@ add_subdirectory(Network)
 add_subdirectory(plugins)
 
 ########## TRUE ENGINE ##########
-add_library( ${PROJECT_NAME} STATIC
+set(TE_SOURCES
     $<TARGET_OBJECTS:ECS>
     $<TARGET_OBJECTS:Network>
 
@@ -86,6 +108,17 @@ add_library( ${PROJECT_NAME} STATIC
     ${TE_SRC_DIR}/network/GameServer.cpp
 )
 
+# Add AutoClient/AutoServer and default protocol only if NOT using custom protocol
+if(NOT USE_CUSTOM_PROTOCOL)
+    list(APPEND TE_SOURCES
+        ${TE_SRC_DIR}/network/generated_messages.cpp
+        ${TE_SRC_DIR}/network/AutoClient.cpp
+        ${TE_SRC_DIR}/network/AutoServer.cpp
+    )
+endif()
+
+add_library( ${PROJECT_NAME} STATIC ${TE_SOURCES})
+
 target_include_directories(${PROJECT_NAME}
     PUBLIC
         ${TE_HDR_DIR}
@@ -99,7 +132,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(tomlplusplus)
 target_link_libraries(${PROJECT_NAME}
-    PRIVATE
+    PUBLIC
         tomlplusplus::tomlplusplus
 )
 

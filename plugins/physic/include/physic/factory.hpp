@@ -26,8 +26,11 @@ class Physic : public te::plugin::APlugin {
 }  // namespace addon
 
 extern "C" {
-    std::unique_ptr<addon::physic::Physic> get_pfactory(ECS::Registry& reg,
+    #ifdef _WIN32
+        __declspec(dllexport)
+    #endif
+    addon::physic::Physic* get_pfactory(ECS::Registry& reg,
         te::SignalManager& sig) {
-        return std::make_unique<addon::physic::Physic>(reg, sig);
+        return new addon::physic::Physic(reg, sig);
     }
 }

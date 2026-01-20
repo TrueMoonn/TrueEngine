@@ -26,8 +26,11 @@ class Display : public te::plugin::APlugin {
 }  // namespace addon
 
 extern "C" {
-    std::unique_ptr<addon::display::Display> get_pfactory(
+    #ifdef _WIN32
+        __declspec(dllexport)
+    #endif
+    addon::display::Display* get_pfactory(
         ECS::Registry& reg, te::SignalManager& sig) {
-        return std::make_unique<addon::display::Display>(reg, sig);
+        return new addon::display::Display(reg, sig);
     }
 }

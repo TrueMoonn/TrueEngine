@@ -10,10 +10,16 @@
 #include <cstddef>
 #include <functional>
 #include <array>
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
 #include <cmath>
 
 #include "clock.hpp"
 #include "maths/numeric.hpp"
+#include "plugin/plugin_api.hpp"
 
 #include "maths/Vector.hpp"
 
@@ -61,7 +67,7 @@ static const std::array<std::function<float(float)>, MAX_PATTERN> patterns {
  * @brief Pattern component, allows entities to follow a scripted path
  *        influenced by a mathematical formula
  */
-struct Pattern {
+struct PLUGIN_API Pattern {
     explicit Pattern(std::size_t index, float amplitude = 1,
         float frequency = 1);
 

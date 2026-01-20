@@ -5,13 +5,16 @@
 ** factory.cpp
 */
 
+#include <type_traits>
+#include <utility>
 #include <unordered_map>
 #include <string>
 #include <iostream>
 #include <vector>
-#include <utility>
+#include <list>
 
 #include <SFML/Window/Event.hpp>
+#include <SFML/Window/Mouse.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/System/Exception.hpp>
@@ -20,13 +23,12 @@
 #include <toml++/toml.hpp>
 #include <events.hpp>
 
+#include "maths/Vector.hpp"
 #include "physic/components/position.hpp"
 #include "interaction/components/player.hpp"
 #include "display/components/parallax.hpp"
 
 #include "Sfml.hpp"
-#include "sfml/components/sprite.hpp"
-#include "sfml/components/window.hpp"
 #include "sfml/factory.hpp"
 
 namespace addon {
@@ -61,13 +63,16 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
         const ECS::Entity& e, const toml::table& params) {
         if (!params.empty()) {
             const auto& wName = params["name"].value_or(DEFAULT_WIN_NAME);
-            const auto& size = params["size"].as_array();
-            mat::Vector2u sizeVect;
-            sizeVect.x = size->at(0).value_or(1280);
-            sizeVect.y = size->at(1).value_or(720);
+            const auto& fullscreen = params["fullscreen"].value_or(false);
             const auto& fps =
                 params["framelimit"].value_or(DEFAULT_FRAME_LIMIT);
-            reg.createComponent<Window>(e, wName, sizeVect, fps);
+            mat::Vector2u sizeVect(1280, 720);
+            if (!fullscreen && params["size"].is_array()) {
+                const auto& size = params["size"].as_array();
+                sizeVect.x = size->at(0).value_or(1280);
+                sizeVect.y = size->at(1).value_or(720);
+            }
+            reg.createComponent<Window>(e, wName, sizeVect, fps, fullscreen);
         } else  {
             reg.createComponent<Window>(e);
         }
@@ -77,47 +82,12 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
         const ECS::Entity& e, const toml::table&) {
         reg.createComponent<Drawable>(e);
     };
-    reg.registerComponent<Clickable>();
-    _components["clickable"] = [](ECS::Registry& reg,
-        const ECS::Entity& e, const toml::table&) {
-        reg.createComponent<Clickable>(e);
+    reg.registerComponent<Focus>();
+    _components["focus"] = [](ECS::Registry& reg,
+        const ECS::Entity& e, const toml::table& params) {
+        bool status = params["status"].value_or(false);
+        reg.createComponent<Focus>(e, status);
     };
-    reg.registerComponent<Hoverable>();
-    _components["hoverable"] = [](ECS::Registry& reg,
-        const ECS::Entity& e, const toml::table&) {
-        reg.createComponent<Hoverable>(e);
-    };
-    // events.addSubscription(te::event::System::MouseButtonPressed,
-    //     [&events](ECS::Registry& reg,
-    //     const te::SignalManager::eventContent& content,
-    //     std::optional<ECS::Entity> e){
-    //     auto &window = reg.getComponents<Window>();
-    //     auto &sprite = reg.getComponents<Sprite>();
-    //     auto& event = std::get<te::event::MouseEvent>(content);
-    //     int i = 0;
-
-    //     for (auto && [win] : ECS::DenseZipper(window)) {
-    //         for (auto&& [id, spr] : ECS::IndexedDenseZipper(sprite)) {
-    //             if (event._MouseKey.at(te::event::MouseButton::MouseLeft)
-    //             .active) {
-    //                 const auto &pos = sf::Mouse::getPosition(win);
-    //                 const auto &translated = win.mapPixelToCoords(pos);
-
-    //                 if (spr.sp.getGlobalBounds().contains(translated)) {
-    //                     if (i == 1) {
-    //                         if (id == MENU_BEGIN)
-    //                             events.setSystemEvent(
-    //                                 te::event::System::ChangeScene, true);
-    //                         if (id == (MENU_BEGIN + 1))
-    //                             events.setSystemEvent(
-    //                                 te::event::System::Closed, true);
-    //                     }
-    //                     i++;
-    //                 }
-    //             }
-    //         }
-    //     }
-    // });
     reg.registerComponent<Sprite>();
     _components["sprite"] = [](ECS::Registry& reg,
         const ECS::Entity& e, const toml::table& params) {
@@ -130,9 +100,6 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
             auto& texture = it->second;
             const auto &layer = params["layer"].value_or(0);
             auto s_origin = params["origin"].as_array();
-            sf::Vector2f origin = s_origin ?
-                sf::Vector2f{s_origin->at(0).value_or(0.0f),
-                s_origin->at(0).value_or(0.0f)} : sf::Vector2f{0.f, 0.f};
             const auto &t_size = params["size"].as_array();
             sf::Vector2i size = t_size ?
                 sf::Vector2i(t_size->at(0).value_or(1),
@@ -141,6 +108,11 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
             sf::Vector2f scale = t_scale ?
                 sf::Vector2f{t_scale->at(0).value_or(1.0f) / size.x,
                 t_scale->at(1).value_or(1.0f) / size.y} : sf::Vector2f{1, 1};
+            sf::Vector2f origin = s_origin ?
+                sf::Vector2f{s_origin->at(0).value_or(0.0f),
+                s_origin->at(1).value_or(0.0f)} : sf::Vector2f{0.f, 0.f};
+            if (params["center"].value_or<bool>(false) && origin.length() == 0)
+                origin = sf::Vector2f(size / 2);
             reg.createComponent<Sprite>(e, texture,
                 layer, size, scale, origin);
         } catch (const std::out_of_range&) {
@@ -149,8 +121,69 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
             std::cerr << e.what() << std::endl;
         }
     };
+
+    reg.registerComponent<Sound>();
+    _components["sound"] = [](ECS::Registry& reg,
+        const ECS::Entity& e, const toml::table& params) {
+        static std::map<std::string, sf::SoundBuffer> sounds;
+
+        try {
+            std::string soundPath = params["path"].value_or("");
+            if (soundPath == "")
+                throw std::runtime_error("Invalid font path");
+
+            auto [it, inserted] = sounds.try_emplace(soundPath);
+            if (inserted) (void)it->second.loadFromFile(soundPath);
+            auto &buff = it->second;
+
+            bool loop = params["loop"].value_or<bool>(false);
+            bool play = params["play"].value_or<bool>(false);
+
+            reg.createComponent<Sound>(e, buff, loop, play);
+        } catch (const std::out_of_range&) {
+            std::cerr << "error(Plugin-Sound): file not found" << std::endl;
+        } catch (const sf::Exception& e) {
+            std::cerr << e.what() << std::endl;
+        }
+    };
+
+    reg.registerComponent<Text>();
+    _components["text"] = [](ECS::Registry& reg,
+        const ECS::Entity& e, const toml::table& params) {
+        static std::unordered_map<std::string, sf::Font> fonts;
+        try {
+            std::string fontPath = params["font"].value_or("");
+            if (fontPath == "")
+                throw std::runtime_error("font path not found");
+
+            auto [it, inserted] = fonts.try_emplace(fontPath);
+            if (inserted) (void)it->second.openFromFile(fontPath);
+            auto& font = it->second;
+
+            std::string str = params["string"].value_or("");
+            std::size_t size = params["size"].value_or(30UL);
+            bool center = params["center"].value_or<bool>(false);
+            const auto &ofArr = params["offset"].as_array();
+            mat::Vector2i offset = ofArr && ofArr->size() == 2 ? mat::Vector2i{
+                ofArr->at(0).value_or<int>(0), ofArr->at(1).value_or<int>(0)
+            } : mat::Vector2i{0, 0};
+            const auto &colArr = params["color"].as_array();
+            sf::Color color = colArr && colArr->size() == 4 ? sf::Color {
+                colArr->at(0).value_or<uint8_t>(0),
+                colArr->at(1).value_or<uint8_t>(0),
+                colArr->at(2).value_or<uint8_t>(0),
+                colArr->at(3).value_or<uint8_t>(255)
+            } : sf::Color::White;
+            reg.createComponent<Text>(e, font, str, offset, center, size, color);
+        } catch (const std::out_of_range&) {
+            std::cerr << "error(Plugin-Text): font not found" << std::endl;
+        } catch (const sf::Exception& e) {
+            std::cerr << e.what() << std::endl;
+        }
+    };
+
     _systems["display"] = [](ECS::Registry& reg) {
-        reg.addSystem([](ECS::Registry& reg) {
+        reg.addSystem("display", [](ECS::Registry& reg) {
             auto& windows = reg.getComponents<Window>();
             for (auto &&[win] : ECS::DenseZipper(windows)) {
                 for (std::size_t lay = 0; lay < win.draws.size(); ++lay) {
@@ -160,39 +193,69 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
                         win.win->draw(sprite.sp);
                     win.draws[lay].clear();
                 }
+                for (auto &txt : win.texts)
+                    win.win->draw(txt);
+                win.texts.clear();
                 win.win->display();
                 win.win->clear();
             }
         });
     };
     _systems["poll_event"] = [&sig](ECS::Registry& reg) {
-        reg.addSystem([&sig](ECS::Registry& reg) {
+        reg.addSystem("poll_event", [&sig](ECS::Registry& reg) {
             auto& windows = reg.getComponents<Window>();
             static te::Keys keys = {false};
+            static te::Mouse mouse;
+            static mat::Vector2i old_mpos;
+            bool mouse_update = false;
+            bool key_update = false;
 
             for (auto&& [win] : ECS::DenseZipper(windows)) {
                 while (std::optional<sf::Event> ev = win.win->pollEvent()) {
                     if (ev->is<sf::Event::KeyPressed>()) {
-                        keys[static_cast<te::Key>(
-                            ev->getIf<sf::Event::KeyPressed>()->
-                            code)] = true;
+                        if (static_cast<int>(ev->getIf
+                         <sf::Event::KeyPressed>()->code) != -1)
+                            keys[static_cast<te::Key>(ev->getIf
+                                <sf::Event::KeyPressed>()->code)] = true;
+                        key_update = true;
                     }
                     if (ev->is<sf::Event::KeyReleased>()) {
-                        keys[static_cast<te::Key>(
-                            ev->getIf<sf::Event::KeyReleased>()->
-                            code)] = false;
+                        if (static_cast<int>(ev->getIf
+                            <sf::Event::KeyReleased>()->code) != -1)
+                            keys[static_cast<te::Key>(ev->getIf
+                                <sf::Event::KeyReleased>()->code)] = false;
+                        key_update = true;
                     }
+                    if (ev->is<sf::Event::MouseButtonPressed>()) {
+                        const auto& temp = ev->getIf<
+                            sf::Event::MouseButtonPressed>();
+                        mouse.type[static_cast<
+                            te::MouseEvent>(temp->button)] = true;
+                        mouse_update = true;
+                    }
+                    if (ev->is<sf::Event::MouseButtonReleased>()) {
+                        const auto& temp = ev->getIf<
+                            sf::Event::MouseButtonReleased>();
+                        mouse.type[static_cast<
+                            te::MouseEvent>(temp->button)] = false;
+                        mouse_update = true;
+                    }
+                    mouse.position.x = sf::Mouse::getPosition(*win.win).x;
+                    mouse.position.y = sf::Mouse::getPosition(*win.win).y;
+                    if (old_mpos.x != mouse.position.x &&
+                        old_mpos.y != mouse.position.y) mouse_update = true;
                     if (ev->is<sf::Event::Closed>()) {
                         win.win->close();
                         sig.emit("closed");
                     }
                 }
-                sig.emit("key_input", keys);
+                if (key_update) sig.emit("key_input", keys);
+                if (mouse_update) sig.emit("mouse_input", mouse);
             }
         });
     };
     _systems["draw"] = [](ECS::Registry& reg) {
-        reg.addSystem([](ECS::Registry& reg) {
+        reg.addSystem("draw", [](ECS::Registry& reg) {
             auto& sprites = reg.getComponents<Sprite>();
             auto& drawables = reg.getComponents<Drawable>();
             auto& positions = reg.getComponents<physic::Position2>();
@@ -207,8 +270,31 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
             }
         });
     };
+    _systems["draw_text"] = [](ECS::Registry& reg) {
+        reg.addSystem("draw_text", [](ECS::Registry& reg) {
+            auto& windows = reg.getComponents<Window>();
+            auto& positions = reg.getComponents<physic::Position2>();
+            auto& texts = reg.getComponents<Text>();
+
+            for (auto &&[win] : ECS::DenseZipper(windows)) {
+                for (auto &&[txt, pos] : ECS::DenseZipper(texts, positions)) {
+                    if (!txt.center) {
+                        txt.setPosition({pos.x + txt.offset.x
+                            , pos.y + txt.offset.y});
+                    } else {
+                        auto bounds = txt.getLocalBounds();
+                        txt.setPosition({
+                            pos.x - bounds.size.x / 2 + txt.offset.x,
+                            pos.y - bounds.size.y / 2 + txt.offset.y
+                        });
+                    }
+                    win.texts.push_back(txt);
+                }
+            }
+        });
+    };
     _systems["follow_player"] = [](ECS::Registry& reg) {
-        reg.addSystem([](ECS::Registry& reg) {
+        reg.addSystem("follow_player", [](ECS::Registry& reg) {
             auto& players = reg.getComponents<intact::Player>();
             auto& positions = reg.getComponents<physic::Position2>();
             auto& windows = reg.getComponents<Window>();
@@ -222,8 +308,29 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
             }
         });
     };
+
+    _systems["play_sound"] = [](ECS::Registry& reg) {
+        reg.addSystem("play_sound", [](ECS::Registry& reg) {
+            auto& sounds = reg.getComponents<Sound>();
+            for (auto &&[e, sound] : ECS::IndexedDenseZipper(sounds)) {
+                if (sound.isPlaying) {
+                    auto offset = sound.getPlayingOffset().asMicroseconds();
+                    if (offset == 0) {
+                        sound.play();
+                        sound.setPlayingOffset(sf::microseconds(sound.curProgress));
+                    } else {
+                        sound.curProgress = offset;
+                    }
+                } else {
+                    if (sound.getPlayingOffset().asMicroseconds() != 0)
+                            sound.stop();
+                }
+            }
+        });
+    };
+
     _systems["parallax_sys"] = [](ECS::Registry& reg) {
-        reg.addSystem([](ECS::Registry& reg){
+        reg.addSystem("parallax_sys", [](ECS::Registry& reg){
             auto& windows = reg.getComponents<Window>();
             auto& parallaxs = reg.getComponents<display::Parallax>();
             auto& sprites = reg.getComponents<Sprite>();
