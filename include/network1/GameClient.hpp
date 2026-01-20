@@ -24,7 +24,8 @@ class GameClient : public net::Client {
      * @brief Constructs a GameClient with the specified protocol
      * @param protocol Network protocol to use ("UDP" or "TCP"). Defaults to "UDP"
      */
-    explicit GameClient(const std::string& protocol = "UDP", const std::string& path = "config/protocol.json");
+    explicit GameClient(const std::string& protocol = "UDP",
+        const std::string& path = "config/protocol.json");
 
     /**
      * @brief Destructor that ensures proper cleanup and disconnection
@@ -111,7 +112,9 @@ class GameClient : public net::Client {
      * @brief Gets the address of the connected server
      * @return Reference to the server's network address
      */
-    const net::Address& getServerAddress() const { return net::Client::getServerAddress(); }
+    const net::Address& getServerAddress() const {
+        return net::Client::getServerAddress();
+    }
 
  private:
     // Game callbacks

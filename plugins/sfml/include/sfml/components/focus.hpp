@@ -11,7 +11,7 @@ namespace addon {
 namespace sfml {
 
 struct Focus {
-    Focus(bool status) : focus(status) {};
+    explicit Focus(bool status) : focus(status) {}
     bool focus = false;
 };
 

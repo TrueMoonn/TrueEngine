@@ -7,6 +7,13 @@
 
 #pragma once
 
+#if defined(DEBUG_ALL) || defined(DEBUG_PLUGINS)
+    #include <print>
+    #define DPLUGIN std::println
+#else
+    #define DPLUGIN(...) (void(0))
+#endif
+
     #include <memory>
     #include <filesystem>
     #include <functional>

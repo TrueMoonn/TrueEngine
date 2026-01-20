@@ -5,6 +5,7 @@
 ** InGame.cpp
 */
 #include <iostream>
+#include <string>
 
 #include <ECS/DenseZipper.hpp>
 #include <plugin/PluginManager.hpp>
@@ -109,10 +110,11 @@ void InGame::run(void) {
         auto &player = getComponent<addon::intact::Player>();
         auto &sounds = getComponent<addon::sfml::Sound>();
 
-        if (keys[te::Key::H])
+        if (keys[te::Key::H]) {
             for (auto &&[sound, _] : ECS::DenseZipper(sounds, player)) {
                 sound.isPlaying = !sound.isPlaying;
             }
+        }
     });
     subForScene<te::Keys>(0, "key_input", [this](te::Keys keys) {
         static te::Timestamp delay(0.2f);

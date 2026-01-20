@@ -41,7 +41,8 @@ class DlManager {
         if (it == _handles.end())
             throw std::runtime_error("handler not found");
 #ifdef _WIN32
-        void* sym = reinterpret_cast<void*>(GetProcAddress(it->second, syName.c_str()));
+        void* sym = reinterpret_cast<void*>(
+            GetProcAddress(it->second, syName.c_str()));
         if (sym == nullptr)
             throw std::runtime_error("Failed to get symbol: " + syName);
 #else

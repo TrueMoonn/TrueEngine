@@ -1,12 +1,105 @@
 # TrueEngine
 
-TrueEngine is a user friendly game engine using ECS as base implementation.
+**TrueEngine** is a modular C++ game engine designed to support real-time multiplayer games.
+It provides core systems such as an **Entity-Component-System (ECS)**, **networking**, **plugin management**, and **game utilities**, and is used as the foundation for projects like **TekLeague**.
 
-This engine offer you a fast learning experience in creating offline game
-as well as online game giving you easy access to Network and Plugin
-management.
+---
 
-## Short usage examples
+## Features
+
+* Modern C++23 codebase
+* Entity-Component-System (ECS) architecture
+* Client / Server networking layer
+* Plugin-based engine extensions (shared libraries)
+* Cross-platform support (Linux / Windows)
+* SFML integration for graphics, audio, and input
+* Config system using TOML
+* Optional unit tests and coverage reports
+
+---
+
+## Project Structure
+
+* `src/` – Engine source code
+* `include/` – Public engine headers
+* `ECS/` – Entity-Component-System core
+* `Network/` – Networking and protocol system
+* `plugins/` – Engine plugins (physics, display, interaction, etc.)
+* `tests/` – Unit tests and game tests
+* `build/` – Build directory (generated)
+
+---
+
+## Build Instructions
+
+The project uses **CMake** and a helper build script.
+
+### Build the engine
+
+```bash
+./build.sh --build
+```
+
+### Rebuild from scratch
+
+```bash
+./build.sh --re-build
+```
+
+### Debug build
+
+```bash
+./build.sh --debug-build
+```
+
+### Clean generated files
+
+```bash
+./build.sh --clear
+```
+
+---
+
+## Tests & Coverage
+
+### Build and run unit tests with coverage
+
+```bash
+./build.sh --build-tests
+```
+
+This generates an HTML coverage report.
+
+---
+
+## Documentation
+
+Generate local documentation using **Doxygen**:
+
+```bash
+./build.sh --doxygen
+```
+
+---
+
+## Plugins
+
+TrueEngine supports dynamic plugins compiled as shared libraries:
+
+* Physics
+* Display
+* Interaction
+* Entity specifications
+* SFML integration
+
+Plugins are automatically built and copied during compilation.
+
+---
+
+## Usage
+
+TrueEngine is intended to be used as a **library** and linked to game projects.
+It handles low-level engine systems, while game logic remains in the game project.
 
 Here you can follow a quick exemples of TrueEngine usage. Feel free to
 follow each steps to create your own game.
@@ -30,6 +123,7 @@ int main(void) {
     gtool.loadPlugins("path/to/plugin/folder/");
 
     // Create system from plugin
+    gtool.createSystem("poll_event");
     gtool.createSystem("draw");
     gtool.createSystem("display");
 
@@ -46,43 +140,19 @@ int main(void) {
     // or Create entity based on config
     gtool.createEntity(end_map_index + 1, "entity_name");
 
+    // Create a signal subscription to close the project
+    bool running = true;
+    gtool.sub("closed", [&running](){
+        running = false;
+    });
+    # The system "poll_event" will emit "closed" event when you quit the window
+
     /* Main loop */
-    while (!gtool.isEvent(te::event::System::Closed)) {
-        // Use function pollEvent from graphic lib plugin
-        gtool.pollEvent();
-        gtool.emit();
+    while (running) {
         // Run systems loaded
         gtool.runSystems();
     }
     return 0;
 }
 
-```
-
-### Main without GameTool
-
-```c++
-#include <iostream>
-
-#include "event/EventManager.hpp"
-#include <ECS/Registry.hpp>
-#include <plugin/PluginManager.hpp>
-
-int main(void) {
-    te::plugin::PluginManager pmanager;
-    te::event::EventManager emanager;
-    ECS::Registry reg;
-
-    pmanager.loadPlugins(reg, emanager, "./plugins/");
-    try {
-        pmanager.loadSystem("draw");
-        pmanager.loadSystem("display");
-    } catch (const te::plugin::PluginManager::NoPluginFound& e) {
-        std::cerr << e.what() << '\n';
-    }
-
-
-    return 0;
-}
-
-```
+---

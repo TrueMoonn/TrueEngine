@@ -22,5 +22,5 @@ Sound::Sound(const sf::SoundBuffer &buffer, bool loop, bool isPlaying)
     if (isPlaying) this->play();
 }
 
-} // namespace sfml
+}  // namespace sfml
 }  // namespace addon

@@ -6,6 +6,7 @@
 */
 
 #include <vector>
+#include <memory>
 #include <iostream>
 #include <string>
 
@@ -17,6 +18,7 @@ namespace plugin {
 
 void PluginManager::loadPlugins(ECS::Registry& reg,
     SignalManager& sig, const std::string& dir) {
+    DPLUGIN("PluginManager: Loading plugins: from directory '{}'", dir);
     for (const auto &file : std::filesystem::directory_iterator(dir)) {
 #ifdef _WIN32
         if (file.path().extension() == ".dll") {
@@ -24,13 +26,15 @@ void PluginManager::loadPlugins(ECS::Registry& reg,
         if (file.path().extension() == ".so") {
 #endif
             std::string pname = file.path().stem().string();
+            DPLUGIN("PluginManager: Loading plugins: loading '{}'", pname);
             _manager.load(file.path().string());
             try {
+                DPLUGIN("PluginManager: Loading plugins: loading '{}'", pname);
                 maker plugin = _manager.access<maker>(pname, ENDPOINT_NAME);
                 _plugins[pname] = std::unique_ptr<APlugin>(plugin(reg, sig));
                 setAccesser(pname);
             } catch (const std::runtime_error& e) {
-                std::cerr << e.what() << std::endl;
+                DPLUGIN("PluginManager: Loading plugins: symbol not found");
             }
         }
     }
@@ -39,6 +43,7 @@ void PluginManager::loadPlugins(ECS::Registry& reg,
 void PluginManager::loadPlugins(ECS::Registry& reg,
     SignalManager& sig, const std::string& dir,
     std::vector<std::string> &pluginToLoad) {
+    DPLUGIN("PluginManager: Loading plugins: from directory '{}'", dir);
     for (const auto &file : std::filesystem::directory_iterator(dir)) {
 #ifdef _WIN32
         if (file.path().extension() == ".dll") {
@@ -46,17 +51,22 @@ void PluginManager::loadPlugins(ECS::Registry& reg,
         if (file.path().extension() == ".so") {
 #endif
             std::string pname = file.path().stem().string();
+            DPLUGIN("PluginManager: Loading plugins: loading '{}'", pname);
             for (auto &plugin : pluginToLoad) {
                 if (plugin.compare(pname) == 0) {
                     std::cout << plugin << std::endl;
                     _manager.load(file.path().string());
                     try {
+                        DPLUGIN("PluginManager: Loading plugins:\
+loading '{}'", pname);
                         maker plugin = _manager.access<maker>(pname,
                             ENDPOINT_NAME);
-                        _plugins[pname] = std::unique_ptr<APlugin>(plugin(reg, sig));
+                        _plugins[pname] = std::unique_ptr<APlugin>(
+                            plugin(reg, sig));
                         setAccesser(pname);
                     } catch (const std::runtime_error& e) {
-                        std::cerr << e.what() << std::endl;
+                        DPLUGIN("PluginManager: Loading plugins:\
+symbol not found");
                     }
                 }
             }
@@ -79,8 +89,11 @@ void PluginManager::clear(void) {
 
 void PluginManager::loadComponent(const std::string& name,
     const ECS::Entity& e, const toml::table& params) {
+    DPLUGIN("PluginManager: Loading Component:\
+loading component '{}' at entity {}", name, e);
     if (_accesser.find(name) != _accesser.end()) {
         _plugins.at(_accesser.at(name))->createComponent(name, e, params);
+        DPLUGIN("PluginManager: Loading Component: component loaded OK");
     } else  {
         throw PluginManager::NoPluginFound(
             "no plugin found linked to '" + name + "'");
@@ -88,8 +101,10 @@ void PluginManager::loadComponent(const std::string& name,
 }
 
 void PluginManager::loadSystem(const std::string& name) {
+    DPLUGIN("PluginManager: Loading System: called '{}'", name);
     if (_accesser.find(name) != _accesser.end()) {
         _plugins.at(_accesser.at(name))->createSystem(name);
+        DPLUGIN("PluginManager: Loading System: system loaded OK");
     } else  {
         throw PluginManager::NoPluginFound(
             "no plugin found linked to '" + name + "'");

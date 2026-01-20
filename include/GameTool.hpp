@@ -7,6 +7,13 @@
 
 #pragma once
 
+#if defined(DEBUG_ALL) || defined(DEBUG_GAME_TOOL)
+    #include <print>
+    #define DEBUG_GT std::println
+#else
+    #define DEBUG_GT(...) (void(0))
+#endif
+
     #include <functional>
     #include <string>
     #include <unordered_map>

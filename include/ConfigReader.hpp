@@ -7,6 +7,13 @@
 
 #pragma once
 
+#if defined(DEBUG_ALL) || defined(DEBUG_CONFIGS)
+    #include <print>
+    #define DEBUG_CONF std::println
+#else
+    #define DEBUG_CONF(...) (void(0))
+#endif
+
     #include <string>
     #include <vector>
     #include <unordered_map>
