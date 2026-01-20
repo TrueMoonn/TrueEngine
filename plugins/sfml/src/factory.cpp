@@ -5,13 +5,12 @@
 ** factory.cpp
 */
 
-#include <type_traits>
 #include <utility>
+#include <map>
 #include <unordered_map>
 #include <string>
 #include <iostream>
 #include <vector>
-#include <list>
 
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/Mouse.hpp>
@@ -174,7 +173,8 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
                 colArr->at(2).value_or<uint8_t>(0),
                 colArr->at(3).value_or<uint8_t>(255)
             } : sf::Color::White;
-            reg.createComponent<Text>(e, font, str, offset, center, size, color);
+            reg.createComponent<Text>(e, font, str, offset,
+                center, size, color);
         } catch (const std::out_of_range&) {
             std::cerr << "error(Plugin-Text): font not found" << std::endl;
         } catch (const sf::Exception& e) {
@@ -317,7 +317,8 @@ Sfml::Sfml(ECS::Registry& reg, te::SignalManager& sig)
                     auto offset = sound.getPlayingOffset().asMicroseconds();
                     if (offset == 0) {
                         sound.play();
-                        sound.setPlayingOffset(sf::microseconds(sound.curProgress));
+                        sound.setPlayingOffset(
+                            sf::microseconds(sound.curProgress));
                     } else {
                         sound.curProgress = offset;
                     }

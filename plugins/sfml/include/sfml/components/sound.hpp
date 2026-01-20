@@ -7,8 +7,6 @@
 
 #pragma once
 
-    #include <string>
-
     #include <SFML/Audio/Sound.hpp>
     #include <SFML/Audio/SoundBuffer.hpp>
 
@@ -18,7 +16,8 @@ namespace addon {
 namespace sfml {
 
 struct PLUGIN_API Sound : sf::Sound {
-    Sound(const sf::SoundBuffer &buffer, bool loop = false, bool isPlaying = false);
+    explicit Sound(const sf::SoundBuffer &buffer, bool loop = false,
+        bool isPlaying = false);
 
     bool loop;
     bool isPlaying;

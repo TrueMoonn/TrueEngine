@@ -6,6 +6,7 @@
 */
 
 #include <vector>
+#include <memory>
 #include <iostream>
 #include <string>
 
@@ -60,7 +61,8 @@ void PluginManager::loadPlugins(ECS::Registry& reg,
 loading '{}'", pname);
                         maker plugin = _manager.access<maker>(pname,
                             ENDPOINT_NAME);
-                        _plugins[pname] = std::unique_ptr<APlugin>(plugin(reg, sig));
+                        _plugins[pname] = std::unique_ptr<APlugin>(
+                            plugin(reg, sig));
                         setAccesser(pname);
                     } catch (const std::runtime_error& e) {
                         DPLUGIN("PluginManager: Loading plugins:\
