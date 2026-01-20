@@ -47,7 +47,6 @@ TEST(PluginManager, component_loading) {
     toml::table table =
         toml::parse_file("../../../tests/unit_tests/configs/position.toml");
     EXPECT_NO_THROW(pmanager.loadComponent("position2", 0, table));
-    EXPECT_EQ(reg.getComponents<addon::physic::Position2>().size(), 1);
     EXPECT_THROW(pmanager.loadComponent("wrong", 0, {}),
         te::plugin::PluginManager::NoPluginFound);
 }

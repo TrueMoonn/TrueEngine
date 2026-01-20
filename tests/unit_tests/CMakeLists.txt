@@ -21,15 +21,16 @@ target_link_libraries(${PROJECT_NAME}
         tomlplusplus::tomlplusplus
         GTest::gtest_main
 )
+
 target_include_directories(${PROJECT_NAME}
     PRIVATE
-        ${HDR_DIR}
+        ${TE_HDR_DIR}
 )
 
-########## TESTS ##########
-include(GoogleTest)
-gtest_discover_tests(${PROJECT_NAME})
+add_dependencies(${PROJECT_NAME} addon::physic)
+add_dependencies(${PROJECT_NAME} addon::interaction)
 
+########## CUSTOM COMMANDS ##########
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_SOURCE_DIR}/tests/unit_tests/plugins
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
@@ -39,4 +40,13 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         ${CMAKE_SOURCE_DIR}/plugins/interaction.so
         ${CMAKE_SOURCE_DIR}/tests/unit_tests/plugins/interaction.so
     COMMAND ${CMAKE_COMMAND} -E echo "67" > ${CMAKE_SOURCE_DIR}/tests/unit_tests/plugins/wrong.so
+)
+
+########## TESTS ##########
+include(GoogleTest)
+gtest_discover_tests(${PROJECT_NAME}
+    DISCOVERY_MODE PRE_TEST
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    PROPERTIES
+        ENVIRONMENT "LD_LIBRARY_PATH=${CMAKE_SOURCE_DIR}/plugins:$ENV{LD_LIBRARY_PATH}"
 )
