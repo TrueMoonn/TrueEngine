@@ -151,11 +151,3 @@ int main(void) {
 }
 
 ---
-
-## License / Disclaimer
-
-This project is developed for educational and experimental purposes.
-It is not affiliated with any commercial game engine.
-
-
-```
