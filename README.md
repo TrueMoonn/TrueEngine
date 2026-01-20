@@ -123,6 +123,7 @@ int main(void) {
     gtool.loadPlugins("path/to/plugin/folder/");
 
     // Create system from plugin
+    gtool.createSystem("poll_event");
     gtool.createSystem("draw");
     gtool.createSystem("display");
 
@@ -139,11 +140,15 @@ int main(void) {
     // or Create entity based on config
     gtool.createEntity(end_map_index + 1, "entity_name");
 
+    // Create a signal subscription to close the project
+    bool running = true;
+    gtool.sub("closed", [&running](){
+        running = false;
+    });
+    # The system "poll_event" will emit "closed" event when you quit the window
+
     /* Main loop */
-    while (!gtool.isEvent(te::event::System::Closed)) {
-        // Use function pollEvent from graphic lib plugin
-        gtool.pollEvent();
-        gtool.emit();
+    while (running) {
         // Run systems loaded
         gtool.runSystems();
     }
