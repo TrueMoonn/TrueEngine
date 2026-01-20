@@ -31,45 +31,70 @@ class SignalManager {
  public:
     template<typename... Args, typename Func>
     CallbackId sub(const std::string& name, Func&& func) {
+#if defined(DEBUG_ALL) || defined(DEBUG_SIGNALS)
+        DEBUG_SIG("Signal: Subscribe: trying to sub to '{}'", name);
+#endif
         if (_subs.find(name) == _subs.end()) {
             _subs.emplace(name, std::make_unique<SignalList<Args...>>());
+#if defined(DEBUG_ALL) || defined(DEBUG_SIGNALS)
+            DEBUG_SIG("Signal: Subscribe: new subscription section created");
+#endif
         }
         auto* list = static_cast<SignalList<Args...>*>(
             _subs.at(name).get());
-
         CallbackId id = _next_callback_id++;
         list->callbacks.push_back({
             id,
             std::function<void(Args...)>(std::forward<Func>(func)),
             true
         });
+#if defined(DEBUG_ALL) || defined(DEBUG_SIGNALS)
+        DEBUG_SIG("Signal: Subscribe: subscription created at {}", id);
+#endif
         return id;
     }
 
     void enableCallback(CallbackId id) {
         for (auto& [name, signal_list] : _subs) {
+#if defined(DEBUG_ALL) || defined(DEBUG_SIGNALS)
+        DEBUG_SIG("Signal: EnableCallback: enabling callbacks '{}'", name);
+#endif
             signal_list->enableCallback(id);
         }
     }
 
     void disableCallback(CallbackId id) {
         for (auto& [name, signal_list] : _subs) {
+#if defined(DEBUG_ALL) || defined(DEBUG_SIGNALS)
+        DEBUG_SIG("Signal: DisableCallback: disabling callbacks '{}'", name);
+#endif
             signal_list->disableCallback(id);
         }
     }
 
     template<typename... Args>
     void emit(const std::string& name, Args&&... args) {
-        if (_subs.find(name) == _subs.end())
+#if defined(DEBUG_ALL) || defined(DEBUG_SIGNALS)
+        DEBUG_SIG("Signal: Emit: trying emiting '{}'", name);
+#endif
+        if (_subs.find(name) == _subs.end()) {
+#if defined(DEBUG_ALL) || defined(DEBUG_SIGNALS)
+        DEBUG_SIG("Signal: Emit: no subscription for this signal");
+#endif
             return;
+        }
 
         using DecayedArgs = std::tuple<std::decay_t<Args>...>;
         auto* list = static_cast<SignalList<std::decay_t<Args>...>*>(
             _subs.at(name).get());
 
         for (auto& callback : list->callbacks) {
-            if (callback.enabled)
+            if (callback.enabled) {
+#if defined(DEBUG_ALL) || defined(DEBUG_SIGNALS)
+        DEBUG_SIG("Signal: Emit: activate subscription '{}'", callback.id);
+#endif
                 callback.func(std::forward<Args>(args)...);
+            }
         }
     }
 
@@ -106,9 +131,6 @@ class SignalManager {
                     break;
                 }
             }
-#if defined(DEBUG_ALL) || defined(DEBUG_SIGNALS)
-            DEBUG_SIG("Signal: Emition: {} emitions sent", nb_emitions);
-#endif
         }
     };
 
