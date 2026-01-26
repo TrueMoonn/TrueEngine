@@ -37,25 +37,25 @@ The project uses **CMake** and a helper build script.
 ### Build the engine
 
 ```bash
-./build.sh --build
+./exec.sh --build
 ```
 
 ### Rebuild from scratch
 
 ```bash
-./build.sh --re-build
+./exec.sh --re-build
 ```
 
 ### Debug build
 
 ```bash
-./build.sh --debug-build
+./exec.sh --debug-build
 ```
 
 ### Clean generated files
 
 ```bash
-./build.sh --clear
+./exec.sh --clear
 ```
 
 ---
@@ -65,7 +65,7 @@ The project uses **CMake** and a helper build script.
 ### Build and run unit tests with coverage
 
 ```bash
-./build.sh --build-tests
+./exec.sh --build-tests
 ```
 
 This generates an HTML coverage report.
@@ -77,7 +77,7 @@ This generates an HTML coverage report.
 Generate local documentation using **Doxygen**:
 
 ```bash
-./build.sh --doxygen
+./exec.sh --doxygen
 ```
 
 ---
